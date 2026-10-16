@@ -4,6 +4,19 @@ import request from 'supertest';
 
 import { createTestApplication } from '../runner/app.factory';
 
+interface HealthResponseBody {
+  body: {
+    status: string;
+  };
+  errors: {
+    count: number;
+    items: unknown[];
+  };
+  lang: string;
+  requestId: string;
+  statusCode: number;
+}
+
 describe('Application smoke', () => {
   let app: INestApplication;
 
@@ -12,13 +25,26 @@ describe('Application smoke', () => {
   });
 
   afterAll(async () => {
-    await app.close();
+    if (app) await app.close();
   });
 
   it('responds to the health endpoint', async () => {
-    await request(app.getHttpServer() as Server)
+    const response = await request(app.getHttpServer() as Server)
       .get('/health')
-      .expect(200)
-      .expect({ status: 'ok' });
+      .expect(200);
+    const body = response.body as HealthResponseBody;
+
+    expect(body).toMatchObject({
+      body: {
+        status: 'ok',
+      },
+      errors: {
+        count: 0,
+        items: [],
+      },
+      lang: 'pt',
+      statusCode: 200,
+    });
+    expect(body.requestId).toEqual(expect.any(String));
   });
 });

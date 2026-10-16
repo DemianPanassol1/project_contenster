@@ -5,8 +5,8 @@
     "moduleResolution": "Node",
     "isolatedModules": true,
     "rootDir": ".",
-    "types": ["node", "jest"]
+    "types": ["node", "vitest/globals"]
   },
-  "include": ["src/**/*.ts", "test/**/*.ts", "jest.config.ts"],
+  "include": ["src/**/*.ts", "test/**/*.ts", "vitest.config.mts"],
   "exclude": ["dist", "node_modules"]
 }
