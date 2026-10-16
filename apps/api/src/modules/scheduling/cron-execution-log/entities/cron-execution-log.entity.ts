@@ -8,8 +8,7 @@ import {
 } from 'typeorm';
 
 import { CronExecutionStatus } from '@contenster/shared';
-
-type LogPayload = Record<string, unknown> | unknown[] | string | number | boolean | null;
+import type { SanitizedLogPayload } from '@/shared/utils/logger-redaction.util';
 
 @Index('idx_logs_execucoes_rotinas_nome_criado_em', ['taskName', 'createdAt'])
 @Index('idx_logs_execucoes_rotinas_status_criado_em', ['status', 'createdAt'])
@@ -51,7 +50,7 @@ export class CronExecutionLog {
   message!: string | null;
 
   @Column({ name: 'erro', nullable: true, type: 'jsonb' })
-  error!: LogPayload;
+  error!: SanitizedLogPayload;
 
   @CreateDateColumn({ name: 'criado_em', type: 'timestamp' })
   createdAt!: Date;

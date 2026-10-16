@@ -1,0 +1,80 @@
+import { Injectable, Logger } from '@nestjs/common';
+import { Cron } from '@nestjs/schedule';
+import { QueryFailedError } from 'typeorm';
+
+import { CronExecutionStatus } from '@contenster/shared';
+import { settings } from '@/infrastructure/config/app.config';
+import { FilesRepository } from '@/modules/media/files/files.repository';
+import { StorageService } from '@/modules/media/storage/storage.service';
+
+import { CronExecutionLogService } from '../cron-execution-log/cron-execution-log.service';
+
+@Injectable()
+export class FileCleanupService {
+  private readonly logger = new Logger(FileCleanupService.name);
+
+  constructor(
+    private readonly filesRepository: FilesRepository,
+    private readonly cronExecutionLogService: CronExecutionLogService,
+    private readonly storageService: StorageService,
+  ) {}
+
+  @Cron(settings.FILE_CLEANUP_CRON)
+  async cleanUnusedFiles(): Promise<void> {
+    const startedAt = new Date();
+    const createdBefore = new Date(
+      Date.now() - settings.FILE_CLEANUP_SAFETY_WINDOW_MINUTES * 60_000,
+    );
+    const candidates = await this.filesRepository.findCleanupCandidates(createdBefore);
+    let removed = 0;
+    let retained = 0;
+    let failed = 0;
+
+    for (const file of candidates) {
+      try {
+        await this.filesRepository.remove(file);
+      } catch (error) {
+        if (this.isForeignKeyViolation(error)) {
+          retained += 1;
+          continue;
+        }
+
+        failed += 1;
+        this.logger.error(`Failed to remove file metadata ${file.id}.`, error);
+        continue;
+      }
+
+      try {
+        await this.storageService.delete({
+          filePath: file.filePath,
+          storageConfiguration: file.storageConfiguration,
+          storageKey: file.storageKey,
+          storageProvider: file.storageProvider,
+        });
+        removed += 1;
+      } catch (error) {
+        failed += 1;
+        this.logger.error(
+          `Removed metadata but failed to delete storage object ${file.id}.`,
+          error,
+        );
+      }
+    }
+
+    this.cronExecutionLogService.record({
+      message: `Unused file cleanup completed. removed=${removed}; retained=${retained}; failed=${failed}.`,
+      startedAt,
+      status: failed > 0 ? CronExecutionStatus.partial : CronExecutionStatus.success,
+      taskName: 'file-cleanup',
+      totalError: failed,
+      totalProcessed: candidates.length,
+      totalSuccess: removed + retained,
+    });
+  }
+
+  private isForeignKeyViolation(error: unknown): boolean {
+    if (!(error instanceof QueryFailedError)) return false;
+
+    return (error.driverError as { code?: string } | undefined)?.code === '23503';
+  }
+}

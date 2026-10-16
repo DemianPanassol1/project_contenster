@@ -6,13 +6,9 @@ import {
 } from '@nestjs/common';
 import { map, type Observable } from 'rxjs';
 
-import type { ApiHttpRequest } from '@/common/types/http-context.type';
+import type { ApiHttpRequest, ApiHttpResponse } from '@/common/types/http-context.type';
 import { createApiResponse } from '@/shared/responses/api-response.helper';
 import type { ApiResponse } from '@/shared/responses/api-response.types';
-
-type HttpResponse = {
-  statusCode: number;
-};
 
 const isApiResponse = <TData>(value: TData | ApiResponse<TData>): value is ApiResponse<TData> => {
   if (!value || typeof value !== 'object') return false;
@@ -30,7 +26,7 @@ const isApiResponse = <TData>(value: TData | ApiResponse<TData>): value is ApiRe
 @Injectable()
 export class ApiResponseInterceptor<TData> implements NestInterceptor<TData, ApiResponse<TData>> {
   intercept(context: ExecutionContext, next: CallHandler<TData>): Observable<ApiResponse<TData>> {
-    const response = context.switchToHttp().getResponse<HttpResponse>();
+    const response = context.switchToHttp().getResponse<Pick<ApiHttpResponse, 'statusCode'>>();
     const request = context.switchToHttp().getRequest<ApiHttpRequest>();
 
     return next.handle().pipe(

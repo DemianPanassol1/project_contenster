@@ -4,6 +4,7 @@ import { I18nContext } from 'nestjs-i18n';
 
 import type { ApiHttpRequest } from '@/common/types/http-context.type';
 import { DEFAULT_API_LOCALE } from '@/i18n/i18n.config';
+import { millisecondsToString } from '@/shared/utils/duration.util';
 
 import type { ApiError, ApiResponse } from './api-response.types';
 
@@ -12,16 +13,6 @@ type ApiResponseInput<TData> = {
   request?: ApiHttpRequest;
   data?: TData | null;
   errors?: ApiError[];
-};
-
-const millisecondsToString = (durationMs: number): string => {
-  if (durationMs < 1000) return `${durationMs}ms`;
-  if (durationMs < 60_000) return `${(durationMs / 1000).toFixed(2)}s`;
-
-  const minutes = Math.floor(durationMs / 60_000);
-  const seconds = Math.floor((durationMs % 60_000) / 1000);
-
-  return `${minutes}m${seconds}s`;
 };
 
 export const createApiResponse = <TData = unknown>({

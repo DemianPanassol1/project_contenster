@@ -2,6 +2,7 @@ import { resolve } from 'node:path';
 import dotenv from 'dotenv';
 
 export const API_ROOT_PATH = resolve(__dirname, '..', '..', '..');
+export const WORKSPACE_ROOT_PATH = resolve(API_ROOT_PATH, '..', '..');
 
 const environmentFile = process.env.NODE_ENV === 'test' ? '.env.test' : '.env';
 dotenv.config({ path: resolve(API_ROOT_PATH, environmentFile), quiet: true });
@@ -56,6 +57,15 @@ export interface AppSettings {
   MAX_UPLOAD_FILE_SIZE_BYTES: number;
   UPLOADS_LOCAL_ROOT_PATH: string;
   UPLOADS_PUBLIC_BASE_URL: string;
+  STORAGE_CREDENTIALS_ENCRYPTION_KEY: string | null;
+  REQUEST_LOG_RETENTION_INFO_DAYS: number;
+  REQUEST_LOG_RETENTION_WARNING_DAYS: number;
+  REQUEST_LOG_RETENTION_ERROR_DAYS: number;
+  REQUEST_LOG_RETENTION_FATAL_DAYS: number;
+  CRON_LOG_CLEANUP_CRON: string;
+  CRON_LOG_RETENTION_DAYS: number;
+  FILE_CLEANUP_CRON: string;
+  FILE_CLEANUP_SAFETY_WINDOW_MINUTES: number;
 }
 
 const optionalString = (name: string): string | null => {
@@ -151,6 +161,22 @@ const sessionHmacSecretValue = (nodeEnv: NodeEnv): string | null => {
   return value;
 };
 
+const storageCredentialsEncryptionKeyValue = (nodeEnv: NodeEnv): string | null => {
+  const value = optionalString('STORAGE_CREDENTIALS_ENCRYPTION_KEY');
+
+  if (!value && nodeEnv !== 'production') return null;
+  if (!value) {
+    throw new Error('STORAGE_CREDENTIALS_ENCRYPTION_KEY must be configured in production.');
+  }
+
+  const key = Buffer.from(value, 'base64');
+  if (key.length !== 32) {
+    throw new Error('STORAGE_CREDENTIALS_ENCRYPTION_KEY must be a base64-encoded 32-byte key.');
+  }
+
+  return value;
+};
+
 const nodeEnv = enumValue('NODE_ENV', NODE_ENVS, 'development');
 
 export const settings: AppSettings = {
@@ -200,4 +226,22 @@ export const settings: AppSettings = {
   MAX_UPLOAD_FILE_SIZE_BYTES: positiveIntegerValue('MAX_UPLOAD_FILE_SIZE_BYTES', 26_214_400),
   UPLOADS_LOCAL_ROOT_PATH: stringValue('UPLOADS_LOCAL_ROOT_PATH', 'writable/uploads'),
   UPLOADS_PUBLIC_BASE_URL: stringValue('UPLOADS_PUBLIC_BASE_URL', '/uploads'),
+  STORAGE_CREDENTIALS_ENCRYPTION_KEY: storageCredentialsEncryptionKeyValue(nodeEnv),
+  REQUEST_LOG_RETENTION_INFO_DAYS: nonNegativeIntegerValue('REQUEST_LOG_RETENTION_INFO_DAYS', 7),
+  REQUEST_LOG_RETENTION_WARNING_DAYS: nonNegativeIntegerValue(
+    'REQUEST_LOG_RETENTION_WARNING_DAYS',
+    28,
+  ),
+  REQUEST_LOG_RETENTION_ERROR_DAYS: nonNegativeIntegerValue('REQUEST_LOG_RETENTION_ERROR_DAYS', 90),
+  REQUEST_LOG_RETENTION_FATAL_DAYS: nonNegativeIntegerValue(
+    'REQUEST_LOG_RETENTION_FATAL_DAYS',
+    180,
+  ),
+  CRON_LOG_CLEANUP_CRON: stringValue('CRON_LOG_CLEANUP_CRON', '30 */6 * * *'),
+  CRON_LOG_RETENTION_DAYS: nonNegativeIntegerValue('CRON_LOG_RETENTION_DAYS', 90),
+  FILE_CLEANUP_CRON: stringValue('FILE_CLEANUP_CRON', '0 */6 * * *'),
+  FILE_CLEANUP_SAFETY_WINDOW_MINUTES: nonNegativeIntegerValue(
+    'FILE_CLEANUP_SAFETY_WINDOW_MINUTES',
+    15,
+  ),
 };

@@ -11,8 +11,7 @@ import {
 import { RequestLogLevel } from '@contenster/shared';
 import { Client } from '@/modules/identity/clients/entities/client.entity';
 import { User } from '@/modules/identity/users/entities/user.entity';
-
-type SanitizedLogPayload = Record<string, unknown> | unknown[] | string | number | boolean | null;
+import type { SanitizedLogPayload } from '@/shared/utils/logger-redaction.util';
 
 @Index('idx_logs_requisicoes_nivel_criado_em', ['level', 'createdAt'])
 @Index('idx_logs_requisicoes_usuario_criado_em', ['user', 'createdAt'])

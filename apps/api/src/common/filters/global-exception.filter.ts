@@ -10,18 +10,17 @@ import type { ValidationError } from 'class-validator';
 import { I18nContext, I18nValidationException } from 'nestjs-i18n';
 
 import type { ApiHttpRequest, ApiHttpResponse } from '@/common/types/http-context.type';
+import type { HttpExceptionResponse } from '@/common/types/http-exception-response.type';
 import { settings } from '@/infrastructure/config/app.config';
+import { RequestLogService } from '@/modules/observability/request-logs/request-log.service';
 import { createApiResponse } from '@/shared/responses/api-response.helper';
 import type { ApiError } from '@/shared/responses/api-response.types';
-
-type HttpExceptionResponse = {
-  error?: string;
-  message?: string | string[];
-};
 
 @Catch()
 export class GlobalExceptionFilter implements ExceptionFilter {
   private readonly logger = new Logger(GlobalExceptionFilter.name);
+
+  constructor(private readonly requestLogService: RequestLogService) {}
 
   catch(exception: unknown, host: ArgumentsHost): void {
     const context = host.switchToHttp();
@@ -31,14 +30,25 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     const errors = this.getErrors(exception);
 
     this.logException(exception, request, statusCode);
-    response.status(statusCode).json(
-      createApiResponse({
-        statusCode,
+    const payload = createApiResponse({
+      statusCode,
+      request,
+      data: null,
+      errors,
+    });
+
+    if (!request.skipRequestLog) {
+      this.requestLogService.recordError(
         request,
-        data: null,
-        errors,
-      }),
-    );
+        response,
+        payload,
+        exception,
+        request.requestStartedAt ?? Date.now(),
+        statusCode,
+      );
+    }
+
+    response.status(statusCode).json(payload);
   }
 
   private getStatusCode(exception: unknown): number {
