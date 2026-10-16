@@ -1,0 +1,10 @@
+{
+    "scripts": {
+        "test": "jest --config jest.config.ts",
+        "test:unit": "jest --config jest.config.ts",
+        "test:integration": "jest --config test/jest-integration.json",
+        "test:e2e": "jest --config test/jest-e2e.json",
+        "test:smoke": "jest --config test/jest-e2e.json --testPathPattern=app.e2e-spec.ts",
+        "test:cov": "jest --config jest.config.ts --coverage"
+    }
+}
