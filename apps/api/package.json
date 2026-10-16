@@ -2,6 +2,9 @@
   "name": "api",
   "version": "0.0.0",
   "private": true,
+  "engines": {
+    "node": "24.20.0"
+  },
   "scripts": {
     "dev": "nest start --watch",
     "build": "nest build && tsc-alias -p tsconfig.build.json",
