@@ -1,1 +1,22 @@
-{}
+{
+  "common": {
+    "internal_server_error": "Se produjo un error interno en el servidor."
+  },
+  "media": {
+    "file_not_found": "Archivo no encontrado.",
+    "file_required": "Se requiere un archivo.",
+    "file_too_large": "El archivo supera el tamaño máximo permitido.",
+    "invalid_file_type": "El tipo de archivo no está permitido.",
+    "invalid_svg_content": "El contenido del archivo SVG no es válido.",
+    "file_upload_failed": "No se pudo cargar el archivo."
+  },
+  "storage": {
+    "rule_not_found": "No se encontró ninguna regla de almacenamiento activa para este tipo de archivo.",
+    "connection_test_failed": "No se pudo conectar al proveedor de almacenamiento.",
+    "credentials_required": "Se requieren las credenciales del proveedor de almacenamiento.",
+    "invalid_identifier": "El identificador de almacenamiento no es válido.",
+    "invalid_path": "La ruta de almacenamiento no es válida.",
+    "invalid_configuration": "La configuración de almacenamiento no es válida.",
+    "provider_not_implemented": "El proveedor de almacenamiento no se ha implementado."
+  }
+}

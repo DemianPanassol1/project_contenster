@@ -10,6 +10,7 @@ import { I18nService } from 'nestjs-i18n';
 import { Repository } from 'typeorm';
 
 import { StorageProvider } from '@contenster/shared';
+import type { I18nTranslations } from '@/i18n/translations';
 import { decryptStorageCredential } from '@/infrastructure/security/storage-credential-crypto.util';
 import type { StorageProviderConfiguration } from '@/modules/media/files/entities/storage-provider-configuration.entity';
 import { StorageProviderCredential } from '@/modules/media/files/entities/storage-provider-credential.entity';
@@ -42,7 +43,7 @@ export class CloudflareR2StorageService {
   constructor(
     @InjectRepository(StorageProviderCredential)
     private readonly credentials: Repository<StorageProviderCredential>,
-    private readonly i18n: I18nService,
+    private readonly i18n: I18nService<I18nTranslations>,
   ) {}
 
   async save(input: StorageUploadInput): Promise<StorageUploadResult> {
@@ -63,7 +64,7 @@ export class CloudflareR2StorageService {
         }),
       );
     } catch {
-      throw new InternalServerErrorException(this.i18n.t('errors.file_upload_failed'));
+      throw new InternalServerErrorException(this.i18n.t('errors.media.file_upload_failed'));
     }
 
     const publicUrl = buildStoragePublicUrl(configuration.publicBaseUrl, storageKey);
@@ -102,7 +103,7 @@ export class CloudflareR2StorageService {
         }),
       );
     } catch {
-      throw new BadRequestException(this.i18n.t('errors.storage_connection_test_failed'));
+      throw new BadRequestException(this.i18n.t('errors.storage.connection_test_failed'));
     }
   }
 
@@ -131,7 +132,7 @@ export class CloudflareR2StorageService {
     });
 
     if (!credential?.accessKeyIdEncrypted || !credential.secretAccessKeyEncrypted) {
-      throw new BadRequestException(this.i18n.t('errors.storage_credentials_required'));
+      throw new BadRequestException(this.i18n.t('errors.storage.credentials_required'));
     }
 
     try {
@@ -140,7 +141,7 @@ export class CloudflareR2StorageService {
         secretAccessKey: decryptStorageCredential(credential.secretAccessKeyEncrypted),
       };
     } catch {
-      throw new BadRequestException(this.i18n.t('errors.storage_credentials_required'));
+      throw new BadRequestException(this.i18n.t('errors.storage.credentials_required'));
     }
   }
 
@@ -148,7 +149,7 @@ export class CloudflareR2StorageService {
     const identifier = input.storageConfiguration.identifier?.trim();
 
     if (!identifier)
-      throw new BadRequestException(this.i18n.t('errors.invalid_storage_identifier'));
+      throw new BadRequestException(this.i18n.t('errors.storage.invalid_identifier'));
 
     try {
       const storageKey = buildStorageObjectKey(
@@ -161,7 +162,7 @@ export class CloudflareR2StorageService {
 
       return storageKey;
     } catch {
-      throw new BadRequestException(this.i18n.t('errors.invalid_storage_path'));
+      throw new BadRequestException(this.i18n.t('errors.storage.invalid_path'));
     }
   }
 
@@ -169,7 +170,7 @@ export class CloudflareR2StorageService {
     const bucketName = configuration.bucketName?.trim();
 
     if (!bucketName || !isValidCloudflareR2BucketName(bucketName)) {
-      throw new BadRequestException(this.i18n.t('errors.invalid_storage_configuration'));
+      throw new BadRequestException(this.i18n.t('errors.storage.invalid_configuration'));
     }
 
     return bucketName;
@@ -185,7 +186,7 @@ export class CloudflareR2StorageService {
 
     const accountId = configuration.accountId?.trim();
     if (!accountId || !isValidCloudflareR2AccountId(accountId)) {
-      throw new BadRequestException(this.i18n.t('errors.invalid_storage_configuration'));
+      throw new BadRequestException(this.i18n.t('errors.storage.invalid_configuration'));
     }
 
     return `https://${accountId}.r2.cloudflarestorage.com`;
@@ -199,7 +200,7 @@ export class CloudflareR2StorageService {
       !publicBaseUrl ||
       !isValidStoragePublicBaseUrl(publicBaseUrl)
     ) {
-      throw new BadRequestException(this.i18n.t('errors.invalid_storage_configuration'));
+      throw new BadRequestException(this.i18n.t('errors.storage.invalid_configuration'));
     }
   }
 }

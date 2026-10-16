@@ -1,1 +1,11 @@
-{}
+{
+  "id": "ID",
+  "name": "Nombre",
+  "email": "Correo electrónico",
+  "password": "Contraseña",
+  "clientId": "Cliente",
+  "profileId": "Perfil",
+  "file": "Archivo",
+  "mimeType": "Tipo de archivo",
+  "storageProvider": "Proveedor de almacenamiento"
+}

@@ -3,6 +3,7 @@ import { I18nService } from 'nestjs-i18n';
 import sharp from 'sharp';
 
 import { FileType, type StorageProvider } from '@contenster/shared';
+import type { I18nPath, I18nTranslations } from '@/i18n/translations';
 import { settings } from '@/infrastructure/config/app.config';
 import { Client } from '@/modules/identity/clients/entities/client.entity';
 import { User } from '@/modules/identity/users/entities/user.entity';
@@ -11,10 +12,20 @@ import { generateStoredFileName } from '@/modules/media/storage/utils/storage-pa
 
 import { File } from './entities/file.entity';
 import { StorageProviderConfiguration } from './entities/storage-provider-configuration.entity';
-import { type ValidatedFile, validateUploadedFile } from './helpers/file-validation.helper';
+import {
+  type FileValidationErrorCode,
+  type ValidatedFile,
+  validateUploadedFile,
+} from './helpers/file-validation.helper';
 import type { UploadedMultipartFile } from './types/uploaded-multipart-file.type';
 import { FilesRepository } from './files.repository';
 import { InvalidSvgContentError, SvgSanitizerService } from './svg-sanitizer.service';
+
+const fileValidationErrorKeys = {
+  file_required: 'errors.media.file_required',
+  file_too_large: 'errors.media.file_too_large',
+  invalid_file_type: 'errors.media.invalid_file_type',
+} as const satisfies Record<FileValidationErrorCode, I18nPath>;
 
 export interface StoredFileResponse {
   extension: string | null;
@@ -34,14 +45,14 @@ export class FilesService {
 
   constructor(
     private readonly filesRepository: FilesRepository,
-    private readonly i18n: I18nService,
+    private readonly i18n: I18nService<I18nTranslations>,
     private readonly storageService: StorageService,
     private readonly svgSanitizer: SvgSanitizerService,
   ) {}
 
   async findById(id: number, clientId: number): Promise<File> {
     const file = await this.filesRepository.findById(id, clientId);
-    if (!file) throw new NotFoundException(this.i18n.t('errors.file_not_found'));
+    if (!file) throw new NotFoundException(this.i18n.t('errors.media.file_not_found'));
 
     return file;
   }
@@ -52,14 +63,16 @@ export class FilesService {
     uploadedByUserId: number,
   ): Promise<StoredFileResponse> {
     const validation = validateUploadedFile(file, settings.MAX_UPLOAD_FILE_SIZE_BYTES);
-    if (!validation.ok) throw new BadRequestException(this.i18n.t(`errors.${validation.code}`));
+    if (!validation.ok) {
+      throw new BadRequestException(this.i18n.t(fileValidationErrorKeys[validation.code]));
+    }
 
     const rule = await this.filesRepository.findActiveStorageFileTypeRule(
       clientId,
       validation.file.fileType,
     );
     if (!rule?.storageConfiguration) {
-      throw new BadRequestException(this.i18n.t('errors.storage_rule_not_found'));
+      throw new BadRequestException(this.i18n.t('errors.storage.rule_not_found'));
     }
 
     const client = new Client();
@@ -145,7 +158,7 @@ export class FilesService {
       return { ...file, buffer, size: buffer.length };
     } catch (error) {
       if (error instanceof InvalidSvgContentError) {
-        throw new BadRequestException(this.i18n.t('errors.invalid_svg_content'));
+        throw new BadRequestException(this.i18n.t('errors.media.invalid_svg_content'));
       }
 
       throw error;
@@ -162,7 +175,7 @@ export class FilesService {
       const metadata = await sharp(buffer).metadata();
       return { height: metadata.height ?? null, width: metadata.width ?? null };
     } catch {
-      throw new BadRequestException(this.i18n.t('errors.invalid_file_type'));
+      throw new BadRequestException(this.i18n.t('errors.media.invalid_file_type'));
     }
   }
 }

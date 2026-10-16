@@ -5,6 +5,7 @@ import { I18nService } from 'nestjs-i18n';
 import { Repository } from 'typeorm';
 
 import { StorageProvider } from '@contenster/shared';
+import type { I18nTranslations } from '@/i18n/translations';
 import { decryptStorageCredential } from '@/infrastructure/security/storage-credential-crypto.util';
 import type { StorageProviderConfiguration } from '@/modules/media/files/entities/storage-provider-configuration.entity';
 import { StorageProviderCredential } from '@/modules/media/files/entities/storage-provider-credential.entity';
@@ -36,7 +37,7 @@ export class GoogleCloudStorageService {
   constructor(
     @InjectRepository(StorageProviderCredential)
     private readonly credentials: Repository<StorageProviderCredential>,
-    private readonly i18n: I18nService,
+    private readonly i18n: I18nService<I18nTranslations>,
   ) {}
 
   async save(input: StorageUploadInput): Promise<StorageUploadResult> {
@@ -52,7 +53,7 @@ export class GoogleCloudStorageService {
         .file(storageKey)
         .save(input.buffer, { contentType: input.mimeType, resumable: false });
     } catch {
-      throw new InternalServerErrorException(this.i18n.t('errors.file_upload_failed'));
+      throw new InternalServerErrorException(this.i18n.t('errors.media.file_upload_failed'));
     }
 
     const publicUrl = buildStoragePublicUrl(configuration.publicBaseUrl, storageKey);
@@ -85,7 +86,7 @@ export class GoogleCloudStorageService {
         .exists();
       if (!exists) throw new Error('Bucket not found.');
     } catch {
-      throw new BadRequestException(this.i18n.t('errors.storage_connection_test_failed'));
+      throw new BadRequestException(this.i18n.t('errors.storage.connection_test_failed'));
     }
   }
 
@@ -117,7 +118,7 @@ export class GoogleCloudStorageService {
     });
 
     if (!credential?.clientEmailEncrypted || !credential.privateKeyEncrypted) {
-      throw new BadRequestException(this.i18n.t('errors.storage_credentials_required'));
+      throw new BadRequestException(this.i18n.t('errors.storage.credentials_required'));
     }
 
     try {
@@ -128,14 +129,14 @@ export class GoogleCloudStorageService {
         ),
       };
     } catch {
-      throw new BadRequestException(this.i18n.t('errors.storage_credentials_required'));
+      throw new BadRequestException(this.i18n.t('errors.storage.credentials_required'));
     }
   }
 
   private buildStorageKey(input: StorageUploadInput): string {
     const identifier = input.storageConfiguration.identifier?.trim();
     if (!identifier)
-      throw new BadRequestException(this.i18n.t('errors.invalid_storage_identifier'));
+      throw new BadRequestException(this.i18n.t('errors.storage.invalid_identifier'));
 
     try {
       const storageKey = buildStorageObjectKey(
@@ -147,14 +148,14 @@ export class GoogleCloudStorageService {
 
       return storageKey;
     } catch {
-      throw new BadRequestException(this.i18n.t('errors.invalid_storage_path'));
+      throw new BadRequestException(this.i18n.t('errors.storage.invalid_path'));
     }
   }
 
   private getBucketName(configuration: StorageProviderConfiguration): string {
     const bucketName = configuration.bucketName?.trim();
     if (!bucketName || !isValidGoogleCloudStorageBucketName(bucketName)) {
-      throw new BadRequestException(this.i18n.t('errors.invalid_storage_configuration'));
+      throw new BadRequestException(this.i18n.t('errors.storage.invalid_configuration'));
     }
 
     return bucketName;
@@ -163,7 +164,7 @@ export class GoogleCloudStorageService {
   private getProjectId(configuration: StorageProviderConfiguration): string {
     const projectId = configuration.projectId?.trim();
     if (!projectId || !isValidGoogleCloudStorageProjectId(projectId)) {
-      throw new BadRequestException(this.i18n.t('errors.invalid_storage_configuration'));
+      throw new BadRequestException(this.i18n.t('errors.storage.invalid_configuration'));
     }
 
     return projectId;
@@ -176,7 +177,7 @@ export class GoogleCloudStorageService {
       !publicBaseUrl ||
       !isValidStoragePublicBaseUrl(publicBaseUrl)
     ) {
-      throw new BadRequestException(this.i18n.t('errors.invalid_storage_configuration'));
+      throw new BadRequestException(this.i18n.t('errors.storage.invalid_configuration'));
     }
   }
 

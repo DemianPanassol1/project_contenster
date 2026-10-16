@@ -4,6 +4,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
 
 import { FileType, StorageProvider } from '@contenster/shared';
+import type { I18nTranslations } from '@/i18n/translations';
 import type { StorageProviderConfiguration } from '@/modules/media/files/entities/storage-provider-configuration.entity';
 
 import type {
@@ -21,7 +22,7 @@ import {
 
 @Injectable()
 export class LocalStorageService {
-  constructor(private readonly i18n: I18nService) {}
+  constructor(private readonly i18n: I18nService<I18nTranslations>) {}
 
   async save(input: StorageUploadInput): Promise<StorageUploadResult> {
     const identifier = this.getIdentifier(input.storageConfiguration.identifier);
@@ -63,7 +64,7 @@ export class LocalStorageService {
     try {
       return validateStorageIdentifier(identifier);
     } catch {
-      throw new BadRequestException(this.i18n.t('errors.invalid_storage_identifier'));
+      throw new BadRequestException(this.i18n.t('errors.storage.invalid_identifier'));
     }
   }
 }

@@ -1,1 +1,22 @@
-{}
+{
+  "common": {
+    "internal_server_error": "An internal server error occurred."
+  },
+  "media": {
+    "file_not_found": "File not found.",
+    "file_required": "A file is required.",
+    "file_too_large": "The file exceeds the maximum allowed size.",
+    "invalid_file_type": "The file type is not allowed.",
+    "invalid_svg_content": "The SVG file content is invalid.",
+    "file_upload_failed": "The file could not be uploaded."
+  },
+  "storage": {
+    "rule_not_found": "No active storage rule was found for this file type.",
+    "connection_test_failed": "Could not connect to the storage provider.",
+    "credentials_required": "Storage provider credentials are required.",
+    "invalid_identifier": "The storage identifier is invalid.",
+    "invalid_path": "The storage path is invalid.",
+    "invalid_configuration": "The storage configuration is invalid.",
+    "provider_not_implemented": "The storage provider has not been implemented."
+  }
+}

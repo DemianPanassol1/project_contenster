@@ -11,6 +11,7 @@ import { I18nContext, I18nValidationException } from 'nestjs-i18n';
 
 import type { ApiHttpRequest, ApiHttpResponse } from '@/common/types/http-context.type';
 import type { HttpExceptionResponse } from '@/common/types/http-exception-response.type';
+import type { I18nTranslations } from '@/i18n/translations';
 import { settings } from '@/infrastructure/config/app.config';
 import { RequestLogService } from '@/modules/observability/request-logs/request-log.service';
 import { createApiResponse } from '@/shared/responses/api-response.helper';
@@ -97,14 +98,14 @@ export class GlobalExceptionFilter implements ExceptionFilter {
   }
 
   private createUnexpectedError(exception: unknown): ApiError {
-    const i18n = I18nContext.current();
+    const i18n = I18nContext.current<I18nTranslations>();
 
     if (settings.NODE_ENV !== 'production' && exception instanceof Error) {
       return { message: exception.message, code: exception.name };
     }
 
     return {
-      message: i18n?.t('errors.internal_server_error') ?? 'Internal server error.',
+      message: i18n?.t('errors.common.internal_server_error') ?? 'Internal server error.',
       code: 'InternalServerError',
     };
   }

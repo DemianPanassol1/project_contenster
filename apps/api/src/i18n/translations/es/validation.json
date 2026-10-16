@@ -1,1 +1,12 @@
-{}
+{
+  "required": "$t(fields.{property}) es obligatorio.",
+  "string": "$t(fields.{property}) debe ser un texto.",
+  "integer": "$t(fields.{property}) debe ser un número entero.",
+  "boolean": "$t(fields.{property}) debe ser verdadero o falso.",
+  "email": "$t(fields.{property}) debe ser un correo electrónico válido.",
+  "enum": "$t(fields.{property}) tiene un valor no válido.",
+  "min_length": "$t(fields.{property}) debe tener al menos {constraints.0} caracteres.",
+  "max_length": "$t(fields.{property}) debe tener como máximo {constraints.0} caracteres.",
+  "matches": "$t(fields.{property}) tiene un formato no válido.",
+  "array": "$t(fields.{property}) debe ser una lista."
+}

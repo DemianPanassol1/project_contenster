@@ -1,1 +1,12 @@
-{}
+{
+  "required": "$t(fields.{property}) is required.",
+  "string": "$t(fields.{property}) must be a string.",
+  "integer": "$t(fields.{property}) must be an integer.",
+  "boolean": "$t(fields.{property}) must be true or false.",
+  "email": "$t(fields.{property}) must be a valid email.",
+  "enum": "$t(fields.{property}) has an invalid value.",
+  "min_length": "$t(fields.{property}) must have at least {constraints.0} characters.",
+  "max_length": "$t(fields.{property}) must have at most {constraints.0} characters.",
+  "matches": "$t(fields.{property}) has an invalid format.",
+  "array": "$t(fields.{property}) must be a list."
+}

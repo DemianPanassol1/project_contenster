@@ -10,10 +10,32 @@ import type ptErrors from './pt/errors.json';
 import type ptFields from './pt/fields.json';
 import type ptValidation from './pt/validation.json';
 
-type ExactKeys<Source, Target extends Source> =
-  Exclude<keyof Target, keyof Source> extends never ? true : never;
+type TranslationLeafPath<Value, Prefix extends string = ''> = Value extends string
+  ? Prefix
+  : Value extends Record<string, unknown>
+    ? {
+        [Key in keyof Value & string]: TranslationLeafPath<
+          Value[Key],
+          `${Prefix}${Prefix extends '' ? '' : '.'}${Key}`
+        >;
+      }[keyof Value & string]
+    : never;
 
-type SameKeys<Source, Target extends Source> = ExactKeys<Source, Target>;
+type SameTranslationKeys<Reference, Candidate> =
+  Exclude<TranslationLeafPath<Reference>, TranslationLeafPath<Candidate>> extends never
+    ? Exclude<TranslationLeafPath<Candidate>, TranslationLeafPath<Reference>> extends never
+      ? true
+      : never
+    : never;
+
+type InvalidTranslationValue<Value> = Value extends string
+  ? never
+  : Value extends Record<string, unknown>
+    ? { [Key in keyof Value]: InvalidTranslationValue<Value[Key]> }[keyof Value]
+    : Value;
+
+type TranslationValuesAreStrings<Value> =
+  InvalidTranslationValue<Value> extends never ? true : never;
 
 export type I18nTranslations = {
   errors: typeof ptErrors;
@@ -21,24 +43,30 @@ export type I18nTranslations = {
   validation: typeof ptValidation;
 };
 
-export type I18nPath = Path<I18nTranslations>;
+export type I18nPath = Extract<Path<I18nTranslations>, TranslationLeafPath<I18nTranslations>>;
 
 export type I18nTranslationKeyParity = [
-  SameKeys<typeof ptErrors, typeof enErrors>,
-  SameKeys<typeof enErrors, typeof ptErrors>,
-  SameKeys<typeof ptErrors, typeof esErrors>,
-  SameKeys<typeof esErrors, typeof ptErrors>,
-  SameKeys<typeof ptFields, typeof enFields>,
-  SameKeys<typeof enFields, typeof ptFields>,
-  SameKeys<typeof ptFields, typeof esFields>,
-  SameKeys<typeof esFields, typeof ptFields>,
-  SameKeys<typeof ptValidation, typeof enValidation>,
-  SameKeys<typeof enValidation, typeof ptValidation>,
-  SameKeys<typeof ptValidation, typeof esValidation>,
-  SameKeys<typeof esValidation, typeof ptValidation>,
+  SameTranslationKeys<typeof ptErrors, typeof enErrors>,
+  SameTranslationKeys<typeof ptErrors, typeof esErrors>,
+  SameTranslationKeys<typeof ptFields, typeof enFields>,
+  SameTranslationKeys<typeof ptFields, typeof esFields>,
+  SameTranslationKeys<typeof ptValidation, typeof enValidation>,
+  SameTranslationKeys<typeof ptValidation, typeof esValidation>,
+  TranslationValuesAreStrings<typeof ptErrors>,
+  TranslationValuesAreStrings<typeof enErrors>,
+  TranslationValuesAreStrings<typeof esErrors>,
+  TranslationValuesAreStrings<typeof ptFields>,
+  TranslationValuesAreStrings<typeof enFields>,
+  TranslationValuesAreStrings<typeof esFields>,
+  TranslationValuesAreStrings<typeof ptValidation>,
+  TranslationValuesAreStrings<typeof enValidation>,
+  TranslationValuesAreStrings<typeof esValidation>,
 ];
 
 export const i18nTranslationKeyParity: I18nTranslationKeyParity = [
+  true,
+  true,
+  true,
   true,
   true,
   true,

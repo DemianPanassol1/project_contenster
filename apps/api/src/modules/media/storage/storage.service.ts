@@ -2,6 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
 
 import { StorageProvider } from '@contenster/shared';
+import type { I18nTranslations } from '@/i18n/translations';
 
 import type {
   StorageDeleteInput,
@@ -16,7 +17,7 @@ import { LocalStorageService } from './local-storage.service';
 @Injectable()
 export class StorageService {
   constructor(
-    private readonly i18n: I18nService,
+    private readonly i18n: I18nService<I18nTranslations>,
     private readonly localStorageService: LocalStorageService,
     private readonly cloudflareR2StorageService: CloudflareR2StorageService,
     private readonly googleCloudStorageService: GoogleCloudStorageService,
@@ -31,7 +32,7 @@ export class StorageService {
       case StorageProvider.googleCloudStorage:
         return this.googleCloudStorageService.save(input);
       default:
-        throw new BadRequestException(this.i18n.t('errors.storage_provider_not_implemented'));
+        throw new BadRequestException(this.i18n.t('errors.storage.provider_not_implemented'));
     }
   }
 
@@ -44,7 +45,7 @@ export class StorageService {
       case StorageProvider.googleCloudStorage:
         return this.googleCloudStorageService.delete(input);
       default:
-        throw new BadRequestException(this.i18n.t('errors.storage_provider_not_implemented'));
+        throw new BadRequestException(this.i18n.t('errors.storage.provider_not_implemented'));
     }
   }
 
@@ -57,7 +58,7 @@ export class StorageService {
       case StorageProvider.googleCloudStorage:
         return this.googleCloudStorageService.testConnection(input);
       default:
-        throw new BadRequestException(this.i18n.t('errors.storage_provider_not_implemented'));
+        throw new BadRequestException(this.i18n.t('errors.storage.provider_not_implemented'));
     }
   }
 }
