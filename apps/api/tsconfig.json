@@ -9,6 +9,7 @@
     "declaration": false,
     "sourceMap": true,
     "removeComments": true,
+    "exactOptionalPropertyTypes": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "esModuleInterop": true,

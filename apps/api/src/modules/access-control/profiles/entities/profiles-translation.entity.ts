@@ -18,7 +18,7 @@ import { Profile } from './profiles.entity';
 @Entity({ name: 'perfis_traducoes' })
 export class ProfileTranslation {
   @PrimaryGeneratedColumn({ name: 'id', type: 'integer' })
-  id!: number;
+  declare id: number;
 
   @ManyToOne(() => Profile, (profile) => profile.translations, {
     nullable: false,
@@ -26,21 +26,21 @@ export class ProfileTranslation {
     orphanedRowAction: 'delete',
   })
   @JoinColumn({ name: 'perfil_id' })
-  profile!: Profile;
+  declare profile: Profile;
 
   @ManyToOne(() => Language, { nullable: false, onDelete: 'RESTRICT' })
   @JoinColumn({ name: 'idioma_id' })
-  language!: Language;
+  declare language: Language;
 
   @Column({ length: 75, name: 'nome', type: 'varchar' })
-  name!: string;
+  declare name: string;
 
   @Column({ length: 255, name: 'descricao', nullable: true, type: 'varchar' })
-  description!: string | null;
+  declare description: string | null;
 
   @CreateDateColumn({ name: 'criado_em', type: 'timestamp' })
-  createdAt!: Date;
+  declare createdAt: Date;
 
   @UpdateDateColumn({ name: 'atualizado_em', type: 'timestamp' })
-  updatedAt!: Date;
+  declare updatedAt: Date;
 }

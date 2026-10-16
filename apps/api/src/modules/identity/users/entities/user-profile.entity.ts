@@ -20,15 +20,15 @@ import { User } from './user.entity';
 @Entity({ name: 'usuarios_perfis' })
 export class UserProfile {
   @PrimaryGeneratedColumn({ name: 'id', type: 'integer' })
-  id!: number;
+  declare id: number;
 
   @ManyToOne(() => User, (user) => user.userProfiles, { nullable: false, onDelete: 'CASCADE' })
   @JoinColumn({ name: 'usuario_id' })
-  user!: User;
+  declare user: User;
 
   @ManyToOne(() => Client, { nullable: false, onDelete: 'CASCADE' })
   @JoinColumn({ name: 'cliente_id' })
-  client!: Client;
+  declare client: Client;
 
   @ManyToOne(() => Profile, (profile) => profile.userProfiles, {
     nullable: false,
@@ -38,11 +38,11 @@ export class UserProfile {
     { name: 'perfil_id', referencedColumnName: 'id' },
     { name: 'cliente_id', referencedColumnName: 'clientId' },
   ])
-  profile!: Profile;
+  declare profile: Profile;
 
   @CreateDateColumn({ name: 'criado_em', type: 'timestamp' })
-  createdAt!: Date;
+  declare createdAt: Date;
 
   @UpdateDateColumn({ name: 'atualizado_em', type: 'timestamp' })
-  updatedAt!: Date;
+  declare updatedAt: Date;
 }

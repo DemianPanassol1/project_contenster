@@ -24,82 +24,82 @@ import { ClientLanguage } from './client-language.entity';
 @Entity({ name: 'clientes' })
 export class Client {
   @PrimaryGeneratedColumn({ name: 'id', type: 'integer' })
-  id!: number;
+  declare id: number;
 
   @ManyToOne(() => File, (file) => file.clients, { nullable: true, onDelete: 'RESTRICT' })
   @JoinColumn({ name: 'imagem_id' })
-  image!: File | null;
+  declare image: File | null;
 
   @Column({ length: 150, name: 'razao_social', type: 'varchar' })
-  corporateName!: string;
+  declare corporateName: string;
 
   @Column({ length: 150, name: 'nome_fantasia', type: 'varchar' })
-  tradeName!: string;
+  declare tradeName: string;
 
   @Index('idx_clientes_documento')
   @Column({ length: 30, name: 'documento', type: 'varchar' })
-  document!: string;
+  declare document: string;
 
   @Column({ enum: DocumentType, enumName: 'tipo_documento', name: 'tipo_documento', type: 'enum' })
-  documentType!: DocumentType;
+  declare documentType: DocumentType;
 
   @Column({ length: 150, name: 'email', type: 'varchar' })
-  email!: string;
+  declare email: string;
 
   @Column({ length: 30, name: 'telefone_principal', type: 'varchar' })
-  primaryPhone!: string;
+  declare primaryPhone: string;
 
   @Column({ length: 30, name: 'telefone_secundario', nullable: true, type: 'varchar' })
-  secondaryPhone!: string | null;
+  declare secondaryPhone: string | null;
 
   @Column({ length: 150, name: 'endereco', type: 'varchar' })
-  address!: string;
+  declare address: string;
 
   @Column({ length: 20, name: 'numero_endereco', type: 'varchar' })
-  addressNumber!: string;
+  declare addressNumber: string;
 
   @Column({ length: 10, name: 'cep', type: 'varchar' })
-  zipCode!: string;
+  declare zipCode: string;
 
   @Column({ length: 100, name: 'bairro', type: 'varchar' })
-  neighborhood!: string;
+  declare neighborhood: string;
 
   @Index('uq_clientes_slug', { unique: true })
   @Column({ length: 75, name: 'slug', type: 'varchar' })
-  slug!: string;
+  declare slug: string;
 
   @Index('idx_clientes_cidade')
   @ManyToOne(() => City, (city) => city.clients, { nullable: true, onDelete: 'RESTRICT' })
   @JoinColumn({ name: 'cidade_id' })
-  city!: City | null;
+  declare city: City | null;
 
   @Column({ default: true, name: 'eh_ativo', type: 'boolean' })
-  isActive!: boolean;
+  declare isActive: boolean;
 
   @CreateDateColumn({ name: 'criado_em', type: 'timestamp' })
-  createdAt!: Date;
+  declare createdAt: Date;
 
   @UpdateDateColumn({ name: 'atualizado_em', type: 'timestamp' })
-  updatedAt!: Date;
+  declare updatedAt: Date;
 
   @DeleteDateColumn({ name: 'deletado_em', nullable: true, type: 'timestamp' })
-  deletedAt!: Date | null;
+  declare deletedAt: Date | null;
 
   @OneToMany(() => Profile, (profile) => profile.client)
-  profiles!: Profile[];
+  declare profiles: Profile[];
 
   @OneToMany(() => Functionality, (functionality) => functionality.client)
-  functionalities!: Functionality[];
+  declare functionalities: Functionality[];
 
   @OneToMany(() => File, (file) => file.client)
-  files!: File[];
+  declare files: File[];
 
   @OneToMany(() => StorageProviderConfiguration, (configuration) => configuration.client)
-  storageConfigurations!: StorageProviderConfiguration[];
+  declare storageConfigurations: StorageProviderConfiguration[];
 
   @OneToMany(() => StorageFileTypeRule, (rule) => rule.client)
-  storageFileTypeRules!: StorageFileTypeRule[];
+  declare storageFileTypeRules: StorageFileTypeRule[];
 
   @OneToMany(() => ClientLanguage, (link) => link.client)
-  availableLanguageLinks!: ClientLanguage[];
+  declare availableLanguageLinks: ClientLanguage[];
 }

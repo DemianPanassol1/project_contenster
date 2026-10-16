@@ -24,22 +24,22 @@ import { StorageProviderConfiguration } from './storage-provider-configuration.e
 @Entity({ name: 'arquivos' })
 export class File {
   @PrimaryGeneratedColumn({ name: 'id', type: 'integer' })
-  id!: number;
+  declare id: number;
 
   @Column({ enum: FileType, enumName: 'tipo_arquivo', name: 'tipo_arquivo', type: 'enum' })
-  fileType!: FileType;
+  declare fileType: FileType;
 
   @Column({ length: 150, name: 'nome_original', type: 'varchar' })
-  originalName!: string;
+  declare originalName: string;
 
   @Column({ length: 150, name: 'nome_armazenado', type: 'varchar' })
-  storedName!: string;
+  declare storedName: string;
 
   @Column({ length: 255, name: 'caminho_arquivo', type: 'varchar' })
-  filePath!: string;
+  declare filePath: string;
 
   @Column({ length: 255, name: 'chave_storage', type: 'varchar' })
-  storageKey!: string;
+  declare storageKey: string;
 
   @Column({
     enum: StorageProvider,
@@ -47,53 +47,53 @@ export class File {
     name: 'provedor_storage',
     type: 'enum',
   })
-  storageProvider!: StorageProvider;
+  declare storageProvider: StorageProvider;
 
   @Column({ length: 500, name: 'url_publica', nullable: true, type: 'varchar' })
-  publicUrl!: string | null;
+  declare publicUrl: string | null;
 
   @Column({ length: 100, name: 'tipo_mime', type: 'varchar' })
-  mimeType!: string;
+  declare mimeType: string;
 
   @Column({ length: 20, name: 'extensao', nullable: true, type: 'varchar' })
-  extension!: string | null;
+  declare extension: string | null;
 
   @Column({ name: 'tamanho_bytes', type: 'integer' })
-  sizeInBytes!: number;
+  declare sizeInBytes: number;
 
   @Column({ name: 'largura', nullable: true, type: 'integer' })
-  width!: number | null;
+  declare width: number | null;
 
   @Column({ name: 'altura', nullable: true, type: 'integer' })
-  height!: number | null;
+  declare height: number | null;
 
   @ManyToOne(() => Client, (client) => client.files, { nullable: false, onDelete: 'RESTRICT' })
   @JoinColumn({ name: 'cliente_id' })
-  client!: Client;
+  declare client: Client;
 
   @ManyToOne(() => User, (user) => user.uploadedFiles, { nullable: true, onDelete: 'SET NULL' })
   @JoinColumn({ name: 'usuario_upload_id' })
-  uploadedBy!: User | null;
+  declare uploadedBy: User | null;
 
   @ManyToOne(() => StorageProviderConfiguration, (configuration) => configuration.files, {
     nullable: true,
     onDelete: 'SET NULL',
   })
   @JoinColumn({ name: 'configuracao_storage_id' })
-  storageConfiguration!: StorageProviderConfiguration | null;
+  declare storageConfiguration: StorageProviderConfiguration | null;
 
   @OneToMany(() => Language, (language) => language.icon)
-  languages!: Language[];
+  declare languages: Language[];
 
   @OneToMany(() => Client, (client) => client.image)
-  clients!: Client[];
+  declare clients: Client[];
 
   @OneToMany(() => User, (user) => user.image)
-  users!: User[];
+  declare users: User[];
 
   @CreateDateColumn({ name: 'criado_em', type: 'timestamp' })
-  createdAt!: Date;
+  declare createdAt: Date;
 
   @UpdateDateColumn({ name: 'atualizado_em', type: 'timestamp' })
-  updatedAt!: Date;
+  declare updatedAt: Date;
 }

@@ -15,21 +15,21 @@ import { ActionTranslation } from './action-translation.entity';
 @Entity({ name: 'acoes' })
 export class Action {
   @PrimaryGeneratedColumn({ name: 'id', type: 'integer' })
-  id!: number;
+  declare id: number;
 
   @Index('uq_acoes_tipo', { unique: true })
   @Column({ enum: ActionType, enumName: 'tipo_acao', name: 'tipo', type: 'enum' })
-  type!: ActionType;
+  declare type: ActionType;
 
   @CreateDateColumn({ name: 'criado_em', type: 'timestamp' })
-  createdAt!: Date;
+  declare createdAt: Date;
 
   @UpdateDateColumn({ name: 'atualizado_em', type: 'timestamp' })
-  updatedAt!: Date;
+  declare updatedAt: Date;
 
   @OneToMany(() => ActionTranslation, (translation) => translation.action)
-  translations!: ActionTranslation[];
+  declare translations: ActionTranslation[];
 
   @OneToMany(() => ProfilePermission, (permission) => permission.action)
-  profilePermissions!: ProfilePermission[];
+  declare profilePermissions: ProfilePermission[];
 }

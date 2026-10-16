@@ -18,28 +18,28 @@ import { Action } from './action.entity';
 @Entity({ name: 'acoes_traducoes' })
 export class ActionTranslation {
   @PrimaryGeneratedColumn({ name: 'id', type: 'integer' })
-  id!: number;
+  declare id: number;
 
   @ManyToOne(() => Action, (action) => action.translations, {
     nullable: false,
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'acao_id' })
-  action!: Action;
+  declare action: Action;
 
   @ManyToOne(() => Language, { nullable: false, onDelete: 'RESTRICT' })
   @JoinColumn({ name: 'idioma_id' })
-  language!: Language;
+  declare language: Language;
 
   @Column({ length: 75, name: 'nome', type: 'varchar' })
-  name!: string;
+  declare name: string;
 
   @Column({ length: 255, name: 'descricao', nullable: true, type: 'varchar' })
-  description!: string | null;
+  declare description: string | null;
 
   @CreateDateColumn({ name: 'criado_em', type: 'timestamp' })
-  createdAt!: Date;
+  declare createdAt: Date;
 
   @UpdateDateColumn({ name: 'atualizado_em', type: 'timestamp' })
-  updatedAt!: Date;
+  declare updatedAt: Date;
 }

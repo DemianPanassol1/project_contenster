@@ -23,27 +23,27 @@ import { CityTranslation } from './city-translation.entity';
 @Entity({ name: 'cidades' })
 export class City {
   @PrimaryGeneratedColumn({ name: 'id', type: 'integer' })
-  id!: number;
+  declare id: number;
 
   @ManyToOne(() => State, (state) => state.cities, { nullable: false, onDelete: 'RESTRICT' })
   @JoinColumn({ name: 'estado_id' })
-  state!: State;
+  declare state: State;
 
   @Column({ length: 20, name: 'codigo_ibge', nullable: true, type: 'varchar' })
-  ibgeCode!: string | null;
+  declare ibgeCode: string | null;
 
   @Column({ default: true, name: 'eh_ativo', type: 'boolean' })
-  isActive!: boolean;
+  declare isActive: boolean;
 
   @CreateDateColumn({ name: 'criado_em', type: 'timestamp' })
-  createdAt!: Date;
+  declare createdAt: Date;
 
   @UpdateDateColumn({ name: 'atualizado_em', type: 'timestamp' })
-  updatedAt!: Date;
+  declare updatedAt: Date;
 
   @OneToMany(() => CityTranslation, (translation) => translation.city, { cascade: true })
-  translations!: CityTranslation[];
+  declare translations: CityTranslation[];
 
   @OneToMany(() => Client, (client) => client.city)
-  clients!: Client[];
+  declare clients: Client[];
 }

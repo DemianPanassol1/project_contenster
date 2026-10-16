@@ -31,17 +31,16 @@ export function configureApp(app: INestApplication): void {
 
   app.use(
     helmet({
-      contentSecurityPolicy:
-        settings.NODE_ENV === 'production'
-          ? undefined
-          : {
-              useDefaults: true,
-              directives: {
-                'img-src': ["'self'", 'data:'],
-                'script-src': ["'self'", "'unsafe-inline'"],
-                'style-src': ["'self'", "'unsafe-inline'"],
-              },
-            },
+      ...(settings.NODE_ENV !== 'production' && {
+        contentSecurityPolicy: {
+          useDefaults: true,
+          directives: {
+            'img-src': ["'self'", 'data:'],
+            'script-src': ["'self'", "'unsafe-inline'"],
+            'style-src': ["'self'", "'unsafe-inline'"],
+          },
+        },
+      }),
       crossOriginResourcePolicy: {
         policy: 'cross-origin',
       },
@@ -56,7 +55,9 @@ export function configureApp(app: INestApplication): void {
       whitelist: true,
     }),
   );
+
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
+
   app.useGlobalFilters(app.get(GlobalExceptionFilter));
   app.useGlobalInterceptors(new ApiResponseInterceptor());
 

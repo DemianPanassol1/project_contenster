@@ -19,32 +19,32 @@ import { Action } from '@/modules/authorization/actions/entities/action.entity';
 @Entity({ name: 'perfis_permissoes' })
 export class ProfilePermission {
   @PrimaryGeneratedColumn({ name: 'id', type: 'integer' })
-  id!: number;
+  declare id: number;
 
   @ManyToOne(() => Profile, (profile) => profile.permissions, {
     nullable: false,
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'perfil_id' })
-  profile!: Profile;
+  declare profile: Profile;
 
   @ManyToOne(() => Functionality, (functionality) => functionality.profilePermissions, {
     nullable: false,
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'funcionalidade_id' })
-  functionality!: Functionality;
+  declare functionality: Functionality;
 
   @ManyToOne(() => Action, (action) => action.profilePermissions, {
     nullable: false,
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'acao_id' })
-  action!: Action;
+  declare action: Action;
 
   @CreateDateColumn({ name: 'criado_em', type: 'timestamp' })
-  createdAt!: Date;
+  declare createdAt: Date;
 
   @UpdateDateColumn({ name: 'atualizado_em', type: 'timestamp' })
-  updatedAt!: Date;
+  declare updatedAt: Date;
 }

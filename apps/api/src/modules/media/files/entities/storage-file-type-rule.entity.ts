@@ -22,31 +22,31 @@ import { StorageProviderConfiguration } from './storage-provider-configuration.e
 @Entity({ name: 'regras_storage_tipo_arquivo' })
 export class StorageFileTypeRule {
   @PrimaryGeneratedColumn({ name: 'id', type: 'integer' })
-  id!: number;
+  declare id: number;
 
   @ManyToOne(() => Client, (client) => client.storageFileTypeRules, {
     nullable: false,
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'cliente_id' })
-  client!: Client;
+  declare client: Client;
 
   @Column({ enum: FileType, enumName: 'tipo_arquivo', name: 'tipo_arquivo', type: 'enum' })
-  fileType!: FileType;
+  declare fileType: FileType;
 
   @ManyToOne(() => StorageProviderConfiguration, (configuration) => configuration.fileTypeRules, {
     nullable: false,
     onDelete: 'RESTRICT',
   })
   @JoinColumn({ name: 'configuracao_storage_id' })
-  storageConfiguration!: StorageProviderConfiguration;
+  declare storageConfiguration: StorageProviderConfiguration;
 
   @Column({ default: true, name: 'eh_ativo', type: 'boolean' })
-  isActive!: boolean;
+  declare isActive: boolean;
 
   @CreateDateColumn({ name: 'criado_em', type: 'timestamp' })
-  createdAt!: Date;
+  declare createdAt: Date;
 
   @UpdateDateColumn({ name: 'atualizado_em', type: 'timestamp' })
-  updatedAt!: Date;
+  declare updatedAt: Date;
 }

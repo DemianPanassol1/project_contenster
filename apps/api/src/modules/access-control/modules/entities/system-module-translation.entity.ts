@@ -19,7 +19,7 @@ import { SystemModule } from './system-module.entity';
 @Entity({ name: 'modulos_traducoes' })
 export class SystemModuleTranslation {
   @PrimaryGeneratedColumn({ name: 'id', type: 'integer' })
-  id!: number;
+  declare id: number;
 
   @ManyToOne(() => SystemModule, (module) => module.translations, {
     nullable: false,
@@ -27,21 +27,21 @@ export class SystemModuleTranslation {
     orphanedRowAction: 'delete',
   })
   @JoinColumn({ name: 'modulo_id' })
-  module!: SystemModule;
+  declare module: SystemModule;
 
   @ManyToOne(() => Language, { nullable: false, onDelete: 'RESTRICT' })
   @JoinColumn({ name: 'idioma_id' })
-  language!: Language;
+  declare language: Language;
 
   @Column({ length: 75, name: 'nome', type: 'varchar' })
-  name!: string;
+  declare name: string;
 
   @Column({ length: 255, name: 'descricao', nullable: true, type: 'varchar' })
-  description!: string | null;
+  declare description: string | null;
 
   @CreateDateColumn({ name: 'criado_em', type: 'timestamp' })
-  createdAt!: Date;
+  declare createdAt: Date;
 
   @UpdateDateColumn({ name: 'atualizado_em', type: 'timestamp' })
-  updatedAt!: Date;
+  declare updatedAt: Date;
 }

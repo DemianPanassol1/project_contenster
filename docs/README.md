@@ -14,6 +14,7 @@ Código, migrations, contratos e testes são a evidência executável. A documen
 ## Desenvolvimento
 
 - [Convenções](./desenvolvimento/convencoes.md): organização e responsabilidades de código.
+- [Nulidade e inicialização](./desenvolvimento/nulidade-e-inicializacao.md): uso de `null`, `undefined` e `declare` na API.
 - [Testes](./desenvolvimento/testes.md): unitários, integração, e2e e smoke.
 - [Validação](./desenvolvimento/validacao.md): comandos e significado das evidências.
 

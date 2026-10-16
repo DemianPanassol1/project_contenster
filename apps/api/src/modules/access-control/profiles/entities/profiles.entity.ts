@@ -22,30 +22,30 @@ import { ProfileTranslation } from './profiles-translation.entity';
 @Entity({ name: 'perfis' })
 export class Profile {
   @PrimaryGeneratedColumn({ name: 'id', type: 'integer' })
-  id!: number;
+  declare id: number;
 
   @Column({ name: 'cliente_id', type: 'integer' })
-  clientId!: number;
+  declare clientId: number;
 
   @ManyToOne(() => Client, (client) => client.profiles, { nullable: false, onDelete: 'CASCADE' })
   @JoinColumn({ name: 'cliente_id' })
-  client!: Client;
+  declare client: Client;
 
   @Column({ default: true, name: 'eh_ativo', type: 'boolean' })
-  isActive!: boolean;
+  declare isActive: boolean;
 
   @CreateDateColumn({ name: 'criado_em', type: 'timestamp' })
-  createdAt!: Date;
+  declare createdAt: Date;
 
   @UpdateDateColumn({ name: 'atualizado_em', type: 'timestamp' })
-  updatedAt!: Date;
+  declare updatedAt: Date;
 
   @OneToMany(() => ProfileTranslation, (translation) => translation.profile, { cascade: true })
-  translations!: ProfileTranslation[];
+  declare translations: ProfileTranslation[];
 
   @OneToMany(() => UserProfile, (userProfile) => userProfile.profile)
-  userProfiles!: UserProfile[];
+  declare userProfiles: UserProfile[];
 
   @OneToMany(() => ProfilePermission, (permission) => permission.profile)
-  permissions!: ProfilePermission[];
+  declare permissions: ProfilePermission[];
 }

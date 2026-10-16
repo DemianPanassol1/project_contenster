@@ -17,7 +17,7 @@ export class RedisClientService implements OnModuleInit, OnModuleDestroy {
     this.client = createClient({
       database: settings.REDIS_DATABASE,
       disableOfflineQueue: true,
-      password: settings.REDIS_PASSWORD ?? undefined,
+      ...(settings.REDIS_PASSWORD ? { password: settings.REDIS_PASSWORD } : {}),
       socket: {
         connectTimeout: settings.REDIS_CONNECT_TIMEOUT_MS,
         host: settings.REDIS_HOST,
@@ -31,7 +31,7 @@ export class RedisClientService implements OnModuleInit, OnModuleDestroy {
               ),
         ...(settings.REDIS_TLS ? { servername: settings.REDIS_HOST, tls: true } : {}),
       },
-      username: settings.REDIS_USERNAME ?? undefined,
+      ...(settings.REDIS_USERNAME ? { username: settings.REDIS_USERNAME } : {}),
     });
     this.client.on('error', () => this.logger.error('Redis operation failed.'));
   }

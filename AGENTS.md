@@ -82,15 +82,16 @@ o que foi efetivamente executado.
 
 ## Dicionário da documentação
 
-| Documento                                                                                            | Consulte quando precisar entender                        |
-| ---------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
-| [docs/README.md](./docs/README.md)                                                                   | O mapa completo da documentação                          |
-| [docs/contexto-e-escopo.md](./docs/contexto-e-escopo.md)                                             | O que pertence ou não ao Core                            |
-| [docs/arquitetura/visao-geral.md](./docs/arquitetura/visao-geral.md)                                 | Limites entre API, Shared e Web                          |
-| [docs/arquitetura/identidade-rbac-e-contexto.md](./docs/arquitetura/identidade-rbac-e-contexto.md)   | Login, sessão, contexto, perfis e isolamento por cliente |
-| [docs/arquitetura/catalogo-de-funcionalidades.md](./docs/arquitetura/catalogo-de-funcionalidades.md) | Identidade, materialização e uso das funcionalidades     |
-| [docs/arquitetura/persistencia.md](./docs/arquitetura/persistencia.md)                               | Banco, ownership, migrations, seeds e exclusão lógica    |
-| [docs/desenvolvimento/convencoes.md](./docs/desenvolvimento/convencoes.md)                           | Organização de módulos e responsabilidades de código     |
-| [docs/desenvolvimento/testes.md](./docs/desenvolvimento/testes.md)                                   | Unitários, integração, e2e e smoke                       |
-| [docs/desenvolvimento/validacao.md](./docs/desenvolvimento/validacao.md)                             | Evidências de validação esperadas                        |
-| [docs/decisoes-em-aberto.md](./docs/decisoes-em-aberto.md)                                           | Questões que não devem virar regra implícita             |
+| Documento                                                                                              | Consulte quando precisar entender                        |
+| ------------------------------------------------------------------------------------------------------ | -------------------------------------------------------- |
+| [docs/README.md](./docs/README.md)                                                                     | O mapa completo da documentação                          |
+| [docs/contexto-e-escopo.md](./docs/contexto-e-escopo.md)                                               | O que pertence ou não ao Core                            |
+| [docs/arquitetura/visao-geral.md](./docs/arquitetura/visao-geral.md)                                   | Limites entre API, Shared e Web                          |
+| [docs/arquitetura/identidade-rbac-e-contexto.md](./docs/arquitetura/identidade-rbac-e-contexto.md)     | Login, sessão, contexto, perfis e isolamento por cliente |
+| [docs/arquitetura/catalogo-de-funcionalidades.md](./docs/arquitetura/catalogo-de-funcionalidades.md)   | Identidade, materialização e uso das funcionalidades     |
+| [docs/arquitetura/persistencia.md](./docs/arquitetura/persistencia.md)                                 | Banco, ownership, migrations, seeds e exclusão lógica    |
+| [docs/desenvolvimento/convencoes.md](./docs/desenvolvimento/convencoes.md)                             | Organização de módulos e responsabilidades de código     |
+| [docs/desenvolvimento/nulidade-e-inicializacao.md](./docs/desenvolvimento/nulidade-e-inicializacao.md) | Uso de `null`, `undefined` e `declare` na API            |
+| [docs/desenvolvimento/testes.md](./docs/desenvolvimento/testes.md)                                     | Unitários, integração, e2e e smoke                       |
+| [docs/desenvolvimento/validacao.md](./docs/desenvolvimento/validacao.md)                               | Evidências de validação esperadas                        |
+| [docs/decisoes-em-aberto.md](./docs/decisoes-em-aberto.md)                                             | Questões que não devem virar regra implícita             |

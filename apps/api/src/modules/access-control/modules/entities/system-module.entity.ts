@@ -14,23 +14,23 @@ import { SystemModuleTranslation } from './system-module-translation.entity';
 @Entity({ name: 'modulos' })
 export class SystemModule {
   @PrimaryGeneratedColumn({ name: 'id', type: 'integer' })
-  id!: number;
+  declare id: number;
 
   @Column({ default: 0, name: 'ordem', type: 'integer' })
-  order!: number;
+  declare order: number;
 
   @Column({ default: true, name: 'eh_ativo', type: 'boolean' })
-  isActive!: boolean;
+  declare isActive: boolean;
 
   @CreateDateColumn({ name: 'criado_em', type: 'timestamp' })
-  createdAt!: Date;
+  declare createdAt: Date;
 
   @UpdateDateColumn({ name: 'atualizado_em', type: 'timestamp' })
-  updatedAt!: Date;
+  declare updatedAt: Date;
 
   @OneToMany(() => SystemModuleTranslation, (translation) => translation.module, { cascade: true })
-  translations!: SystemModuleTranslation[];
+  declare translations: SystemModuleTranslation[];
 
   @OneToMany(() => Functionality, (functionality) => functionality.module)
-  functionalities!: Functionality[];
+  declare functionalities: Functionality[];
 }

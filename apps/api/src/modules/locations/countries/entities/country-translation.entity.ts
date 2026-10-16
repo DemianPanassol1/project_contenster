@@ -19,7 +19,7 @@ import { Country } from './country.entity';
 @Entity({ name: 'paises_traducoes' })
 export class CountryTranslation {
   @PrimaryGeneratedColumn({ name: 'id', type: 'integer' })
-  id!: number;
+  declare id: number;
 
   @ManyToOne(() => Country, (country) => country.translations, {
     nullable: false,
@@ -27,18 +27,18 @@ export class CountryTranslation {
     orphanedRowAction: 'delete',
   })
   @JoinColumn({ name: 'pais_id' })
-  country!: Country;
+  declare country: Country;
 
   @ManyToOne(() => Language, { nullable: false, onDelete: 'RESTRICT' })
   @JoinColumn({ name: 'idioma_id' })
-  language!: Language;
+  declare language: Language;
 
   @Column({ length: 100, name: 'nome', type: 'varchar' })
-  name!: string;
+  declare name: string;
 
   @CreateDateColumn({ name: 'criado_em', type: 'timestamp' })
-  createdAt!: Date;
+  declare createdAt: Date;
 
   @UpdateDateColumn({ name: 'atualizado_em', type: 'timestamp' })
-  updatedAt!: Date;
+  declare updatedAt: Date;
 }

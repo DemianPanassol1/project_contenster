@@ -21,26 +21,26 @@ import { Functionality } from './functionality.entity';
 @Entity({ name: 'funcionalidades_clientes_idiomas' })
 export class FunctionalityClientLanguage {
   @PrimaryGeneratedColumn({ name: 'id', type: 'integer' })
-  id!: number;
+  declare id: number;
 
   @ManyToOne(() => Client, { nullable: false, onDelete: 'CASCADE' })
   @JoinColumn({ name: 'cliente_id' })
-  client!: Client;
+  declare client: Client;
 
   @ManyToOne(() => Functionality, (functionality) => functionality.enabledLanguageLinks, {
     nullable: false,
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'funcionalidade_id' })
-  functionality!: Functionality;
+  declare functionality: Functionality;
 
   @ManyToOne(() => Language, { nullable: false, onDelete: 'RESTRICT' })
   @JoinColumn({ name: 'idioma_id' })
-  language!: Language;
+  declare language: Language;
 
   @CreateDateColumn({ name: 'criado_em', type: 'timestamp' })
-  createdAt!: Date;
+  declare createdAt: Date;
 
   @UpdateDateColumn({ name: 'atualizado_em', type: 'timestamp' })
-  updatedAt!: Date;
+  declare updatedAt: Date;
 }

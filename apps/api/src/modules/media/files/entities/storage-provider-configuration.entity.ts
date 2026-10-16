@@ -21,14 +21,14 @@ import { StorageProviderCredential } from './storage-provider-credential.entity'
 @Entity({ name: 'configuracoes_storage_provedor' })
 export class StorageProviderConfiguration {
   @PrimaryGeneratedColumn({ name: 'id', type: 'integer' })
-  id!: number;
+  declare id: number;
 
   @ManyToOne(() => Client, (client) => client.storageConfigurations, {
     nullable: false,
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'cliente_id' })
-  client!: Client;
+  declare client: Client;
 
   @Column({
     enum: StorageProvider,
@@ -36,50 +36,50 @@ export class StorageProviderConfiguration {
     name: 'provedor',
     type: 'enum',
   })
-  provider!: StorageProvider;
+  declare provider: StorageProvider;
 
   @Column({ length: 100, name: 'nome', type: 'varchar' })
-  name!: string;
+  declare name: string;
 
   @Column({ length: 150, name: 'identificador', nullable: true, type: 'varchar' })
-  identifier!: string | null;
+  declare identifier: string | null;
 
   @Column({ length: 150, name: 'nome_bucket', nullable: true, type: 'varchar' })
-  bucketName!: string | null;
+  declare bucketName: string | null;
 
   @Column({ length: 150, name: 'id_conta', nullable: true, type: 'varchar' })
-  accountId!: string | null;
+  declare accountId: string | null;
 
   @Column({ length: 150, name: 'id_projeto', nullable: true, type: 'varchar' })
-  projectId!: string | null;
+  declare projectId: string | null;
 
   @Column({ length: 255, name: 'endpoint', nullable: true, type: 'varchar' })
-  endpoint!: string | null;
+  declare endpoint: string | null;
 
   @Column({ length: 255, name: 'url_publica_base', nullable: true, type: 'varchar' })
-  publicBaseUrl!: string | null;
+  declare publicBaseUrl: string | null;
 
   @Column({ default: false, name: 'usar_urls_assinadas', type: 'boolean' })
-  useSignedUrls!: boolean;
+  declare useSignedUrls: boolean;
 
   @Column({ name: 'tempo_expiracao_url_assinada_segundos', nullable: true, type: 'integer' })
-  signedUrlExpiresInSeconds!: number | null;
+  declare signedUrlExpiresInSeconds: number | null;
 
   @Column({ default: true, name: 'eh_ativo', type: 'boolean' })
-  isActive!: boolean;
+  declare isActive: boolean;
 
   @CreateDateColumn({ name: 'criado_em', type: 'timestamp' })
-  createdAt!: Date;
+  declare createdAt: Date;
 
   @UpdateDateColumn({ name: 'atualizado_em', type: 'timestamp' })
-  updatedAt!: Date;
+  declare updatedAt: Date;
 
   @OneToMany(() => StorageFileTypeRule, (rule) => rule.storageConfiguration)
-  fileTypeRules!: StorageFileTypeRule[];
+  declare fileTypeRules: StorageFileTypeRule[];
 
   @OneToOne(() => StorageProviderCredential, (credential) => credential.storageConfiguration)
-  credential!: StorageProviderCredential | null;
+  declare credential: StorageProviderCredential | null;
 
   @OneToMany(() => File, (file) => file.storageConfiguration)
-  files!: File[];
+  declare files: File[];
 }

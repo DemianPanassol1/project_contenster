@@ -15,10 +15,10 @@ import type { SanitizedLogPayload } from '@/shared/utils/logger-redaction.util';
 @Entity({ name: 'logs_execucoes_rotinas' })
 export class CronExecutionLog {
   @PrimaryGeneratedColumn({ name: 'id', type: 'integer' })
-  id!: number;
+  declare id: number;
 
   @Column({ length: 100, name: 'nome_rotina', type: 'varchar' })
-  taskName!: string;
+  declare taskName: string;
 
   @Column({
     enum: CronExecutionStatus,
@@ -26,35 +26,35 @@ export class CronExecutionLog {
     name: 'status',
     type: 'enum',
   })
-  status!: CronExecutionStatus;
+  declare status: CronExecutionStatus;
 
   @Column({ name: 'iniciou_em', type: 'timestamp' })
-  startedAt!: Date;
+  declare startedAt: Date;
 
   @Column({ name: 'finalizou_em', nullable: true, type: 'timestamp' })
-  finishedAt!: Date | null;
+  declare finishedAt: Date | null;
 
   @Column({ name: 'duracao_ms', nullable: true, type: 'integer' })
-  durationMs!: number | null;
+  declare durationMs: number | null;
 
   @Column({ name: 'total_processado', nullable: true, type: 'integer' })
-  totalProcessed!: number | null;
+  declare totalProcessed: number | null;
 
   @Column({ name: 'total_sucesso', nullable: true, type: 'integer' })
-  totalSuccess!: number | null;
+  declare totalSuccess: number | null;
 
   @Column({ name: 'total_erro', nullable: true, type: 'integer' })
-  totalError!: number | null;
+  declare totalError: number | null;
 
   @Column({ name: 'mensagem', nullable: true, type: 'text' })
-  message!: string | null;
+  declare message: string | null;
 
   @Column({ name: 'erro', nullable: true, type: 'jsonb' })
-  error!: SanitizedLogPayload;
+  declare error: SanitizedLogPayload;
 
   @CreateDateColumn({ name: 'criado_em', type: 'timestamp' })
-  createdAt!: Date;
+  declare createdAt: Date;
 
   @UpdateDateColumn({ name: 'atualizado_em', type: 'timestamp' })
-  updatedAt!: Date;
+  declare updatedAt: Date;
 }

@@ -14,30 +14,30 @@ import { StorageProviderConfiguration } from './storage-provider-configuration.e
 @Entity({ name: 'credenciais_storage_provedor' })
 export class StorageProviderCredential {
   @PrimaryGeneratedColumn({ name: 'id', type: 'integer' })
-  id!: number;
+  declare id: number;
 
   @OneToOne(() => StorageProviderConfiguration, (configuration) => configuration.credential, {
     nullable: false,
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'configuracao_storage_id' })
-  storageConfiguration!: StorageProviderConfiguration;
+  declare storageConfiguration: StorageProviderConfiguration;
 
   @Column({ name: 'access_key_id_criptografado', nullable: true, type: 'text' })
-  accessKeyIdEncrypted!: string | null;
+  declare accessKeyIdEncrypted: string | null;
 
   @Column({ name: 'secret_access_key_criptografado', nullable: true, type: 'text' })
-  secretAccessKeyEncrypted!: string | null;
+  declare secretAccessKeyEncrypted: string | null;
 
   @Column({ name: 'client_email_criptografado', nullable: true, type: 'text' })
-  clientEmailEncrypted!: string | null;
+  declare clientEmailEncrypted: string | null;
 
   @Column({ name: 'private_key_criptografada', nullable: true, type: 'text' })
-  privateKeyEncrypted!: string | null;
+  declare privateKeyEncrypted: string | null;
 
   @CreateDateColumn({ name: 'criado_em', type: 'timestamp' })
-  createdAt!: Date;
+  declare createdAt: Date;
 
   @UpdateDateColumn({ name: 'atualizado_em', type: 'timestamp' })
-  updatedAt!: Date;
+  declare updatedAt: Date;
 }

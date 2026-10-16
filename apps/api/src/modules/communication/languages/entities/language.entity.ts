@@ -20,28 +20,28 @@ import { File } from '@/modules/media/files/entities/file.entity';
 @Entity({ name: 'idiomas' })
 export class Language {
   @PrimaryGeneratedColumn({ name: 'id', type: 'integer' })
-  id!: number;
+  declare id: number;
 
   @ManyToOne(() => File, (file) => file.languages, { nullable: true, onDelete: 'RESTRICT' })
   @JoinColumn({ name: 'icone_id' })
-  icon!: File | null;
+  declare icon: File | null;
 
   @Column({ name: 'nome', type: 'varchar', length: 75 })
-  name!: string;
+  declare name: string;
 
   @Column({ name: 'codigo_idioma', type: 'varchar', length: 2 })
-  languageCode!: string;
+  declare languageCode: string;
 
   @Column({ name: 'codigo_regiao', type: 'varchar', length: 2 })
-  regionCode!: string;
+  declare regionCode: string;
 
   get locale(): string {
     return `${this.languageCode}-${this.regionCode}`;
   }
 
   @CreateDateColumn({ name: 'criado_em', type: 'timestamp' })
-  createdAt!: Date;
+  declare createdAt: Date;
 
   @UpdateDateColumn({ name: 'atualizado_em', type: 'timestamp' })
-  updatedAt!: Date;
+  declare updatedAt: Date;
 }
