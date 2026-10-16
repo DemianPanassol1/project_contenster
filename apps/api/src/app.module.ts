@@ -8,6 +8,7 @@ import { createI18nOptions } from '@/i18n/i18n.config';
 import { settings } from '@/infrastructure/config/app.config';
 import { DatabaseModule } from '@/infrastructure/database/database.module';
 import { HealthController } from '@/infrastructure/health/health.controller';
+import { RedisModule } from '@/infrastructure/redis';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { HealthController } from '@/infrastructure/health/health.controller';
     ]),
     I18nModule.forRoot(createI18nOptions()),
     DatabaseModule,
+    RedisModule,
   ],
   controllers: [HealthController],
   providers: [

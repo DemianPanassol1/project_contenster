@@ -6,6 +6,8 @@ import { settings } from '@/infrastructure/config/app.config';
 
 const entitiesPath = join(__dirname, '..', '..', 'modules', '**', 'entities', '*.entity.{ts,js}');
 const migrationsPath = join(__dirname, '..', '..', 'database', 'migrations', '*{.ts,.js}');
+const entities = process.env.VITEST ? [] : [entitiesPath];
+const migrations = process.env.VITEST ? [] : [migrationsPath];
 
 export const createDataSourceOptions = (): DataSourceOptions => ({
   type: 'postgres',
@@ -18,8 +20,8 @@ export const createDataSourceOptions = (): DataSourceOptions => ({
   ssl: settings.DATABASE_SSL ? { rejectUnauthorized: false } : false,
   logging: settings.DATABASE_LOGGING,
   synchronize: false,
-  entities: [entitiesPath],
-  migrations: [migrationsPath],
+  entities,
+  migrations,
   extra: {
     max: settings.DATABASE_POOL_MAX,
   },

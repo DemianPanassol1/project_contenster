@@ -3,7 +3,8 @@ import dotenv from 'dotenv';
 
 export const API_ROOT_PATH = resolve(__dirname, '..', '..', '..');
 
-dotenv.config({ path: resolve(API_ROOT_PATH, '.env'), quiet: true });
+const environmentFile = process.env.NODE_ENV === 'test' ? '.env.test' : '.env';
+dotenv.config({ path: resolve(API_ROOT_PATH, environmentFile), quiet: true });
 
 const NODE_ENVS = ['development', 'production', 'test'] as const;
 const LOG_LEVELS = ['debug', 'info', 'log', 'warn', 'error'] as const;
