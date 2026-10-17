@@ -8,5 +8,8 @@
   "min_length": "$t(fields.{property}) deve ter no mínimo {constraints.0} caracteres.",
   "max_length": "$t(fields.{property}) deve ter no máximo {constraints.0} caracteres.",
   "matches": "$t(fields.{property}) possui um formato inválido.",
-  "array": "$t(fields.{property}) deve ser uma lista."
+  "array": "$t(fields.{property}) deve ser uma lista.",
+  "min": "$t(fields.{property}) deve ser maior ou igual a {constraints.0}.",
+  "max": "$t(fields.{property}) deve ser menor ou igual a {constraints.0}.",
+  "invalid_delete_request": "Informe exatamente um identificador ou uma lista de identificadores."
 }

@@ -2,6 +2,10 @@
   "common": {
     "internal_server_error": "Se produjo un error interno en el servidor."
   },
+  "translations": {
+    "language_not_found": "No se encontró uno de los idiomas informados.",
+    "translation_language_duplicate": "Un idioma no puede informarse más de una vez."
+  },
   "media": {
     "file_not_found": "Archivo no encontrado.",
     "file_required": "Se requiere un archivo.",

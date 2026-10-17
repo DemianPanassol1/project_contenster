@@ -1,11 +1,11 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
-import { QueryFailedError } from 'typeorm';
 
 import { CronExecutionStatus } from '@contenster/shared';
 import { settings } from '@/infrastructure/config/app.config';
 import { FilesRepository } from '@/modules/media/files/files.repository';
 import { StorageService } from '@/modules/media/storage/storage.service';
+import { isPostgreSqlForeignKeyViolation } from '@/shared/database/postgres-error.helper';
 
 import { CronExecutionLogService } from '../cron-execution-log/cron-execution-log.service';
 
@@ -34,7 +34,7 @@ export class FileCleanupService {
       try {
         await this.filesRepository.remove(file);
       } catch (error) {
-        if (this.isForeignKeyViolation(error)) {
+        if (isPostgreSqlForeignKeyViolation(error)) {
           retained += 1;
           continue;
         }
@@ -70,11 +70,5 @@ export class FileCleanupService {
       totalProcessed: candidates.length,
       totalSuccess: removed + retained,
     });
-  }
-
-  private isForeignKeyViolation(error: unknown): boolean {
-    if (!(error instanceof QueryFailedError)) return false;
-
-    return (error.driverError as { code?: string } | undefined)?.code === '23503';
   }
 }
