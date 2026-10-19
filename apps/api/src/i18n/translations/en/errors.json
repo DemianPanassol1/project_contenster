@@ -1,6 +1,7 @@
 {
   "common": {
-    "internal_server_error": "An internal server error occurred."
+    "internal_server_error": "An internal server error occurred.",
+    "record_not_found": "Record not found."
   },
   "authentication": {
     "invalid_credentials": "Invalid username or password.",

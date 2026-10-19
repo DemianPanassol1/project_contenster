@@ -30,6 +30,7 @@ export class FunctionalityClientLanguage {
   @ManyToOne(() => Functionality, (functionality) => functionality.enabledLanguageLinks, {
     nullable: false,
     onDelete: 'CASCADE',
+    orphanedRowAction: 'delete',
   })
   @JoinColumn({ name: 'funcionalidade_id' })
   declare functionality: Functionality;

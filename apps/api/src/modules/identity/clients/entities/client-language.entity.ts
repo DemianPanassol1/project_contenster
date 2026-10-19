@@ -24,6 +24,7 @@ export class ClientLanguage {
   @ManyToOne(() => Client, (client) => client.availableLanguageLinks, {
     nullable: false,
     onDelete: 'CASCADE',
+    orphanedRowAction: 'delete',
   })
   @JoinColumn({ name: 'cliente_id' })
   declare client: Client;

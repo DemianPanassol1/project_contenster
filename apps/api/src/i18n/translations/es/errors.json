@@ -1,6 +1,7 @@
 {
   "common": {
-    "internal_server_error": "Se produjo un error interno en el servidor."
+    "internal_server_error": "Se produjo un error interno en el servidor.",
+    "record_not_found": "Registro no encontrado."
   },
   "authentication": {
     "invalid_credentials": "El usuario o la contraseña no son válidos.",

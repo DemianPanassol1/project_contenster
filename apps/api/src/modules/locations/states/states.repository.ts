@@ -92,31 +92,7 @@ export class StatesRepository {
   async save(
     state: DeepPartial<State> & { translations: DeepPartial<StateTranslation>[] },
   ): Promise<State> {
-    return this.states.manager.transaction(async (manager) => {
-      let current: StateTranslation[] = [];
-
-      if (state.id) {
-        current = await manager.find(StateTranslation, {
-          where: { state: { id: state.id } },
-          relations: { language: true },
-        });
-      }
-
-      const ids = new Map(current.map((item) => [item.language.id, item.id]));
-
-      return manager.save(State, {
-        ...state,
-        translations: state.translations.map((translation) => {
-          const id = ids.get(translation.language?.id ?? 0);
-
-          if (id === undefined) {
-            return translation;
-          }
-
-          return { ...translation, id };
-        }),
-      });
-    });
+    return this.states.save(state);
   }
 
   async delete(states: State[]): Promise<number[]> {

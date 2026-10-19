@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 
 import { ActionType } from '@contenster/shared';
-import { ProfilePermission } from '@/modules/authorization/profile-permissions/entities/profile-permission.entity';
+import { ProfilePermission } from '@/modules/access-control/profiles/entities/profile-permission.entity';
 
 import { ActionTranslation } from './action-translation.entity';
 @Entity({ name: 'acoes' })
@@ -27,7 +27,7 @@ export class Action {
   @UpdateDateColumn({ name: 'atualizado_em', type: 'timestamp' })
   declare updatedAt: Date;
 
-  @OneToMany(() => ActionTranslation, (translation) => translation.action)
+  @OneToMany(() => ActionTranslation, (translation) => translation.action, { cascade: true })
   declare translations: ActionTranslation[];
 
   @OneToMany(() => ProfilePermission, (permission) => permission.action)

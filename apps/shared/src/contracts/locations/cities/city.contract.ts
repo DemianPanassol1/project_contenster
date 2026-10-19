@@ -1,9 +1,14 @@
 export interface CityTranslationInput {
+  id: number | null;
   locale: string;
   name: string;
 }
 
-export type CityTranslationResponse = CityTranslationInput;
+export interface CityTranslationResponse {
+  id: number;
+  locale: string;
+  name: string;
+}
 
 export interface SaveCityRequest {
   id: number | null;

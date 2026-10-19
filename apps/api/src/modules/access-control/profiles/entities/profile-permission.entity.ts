@@ -10,8 +10,10 @@ import {
 } from 'typeorm';
 
 import { Functionality } from '@/modules/access-control/functionalities/entities/functionality.entity';
-import { Profile } from '@/modules/access-control/profiles/entities/profiles.entity';
 import { Action } from '@/modules/authorization/actions/entities/action.entity';
+
+import { Profile } from './profiles.entity';
+
 @Index('idx_perfis_permissoes_perfil', ['profile'])
 @Index('idx_perfis_permissoes_funcionalidade', ['functionality'])
 @Index('idx_perfis_permissoes_acao', ['action'])
@@ -24,6 +26,7 @@ export class ProfilePermission {
   @ManyToOne(() => Profile, (profile) => profile.permissions, {
     nullable: false,
     onDelete: 'CASCADE',
+    orphanedRowAction: 'delete',
   })
   @JoinColumn({ name: 'perfil_id' })
   declare profile: Profile;

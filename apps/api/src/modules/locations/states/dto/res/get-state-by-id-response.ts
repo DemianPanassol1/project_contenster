@@ -7,6 +7,10 @@ import { StateListItemResponseDto } from './state-list-item-response.js';
 class StateTranslationResponseDto {
   @Expose()
   @ApiProperty()
+  declare id: number;
+
+  @Expose()
+  @ApiProperty()
   declare locale: string;
 
   @Expose()

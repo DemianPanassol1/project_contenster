@@ -51,6 +51,7 @@ export class CountriesService {
       currencyCode: country.currencyCode,
       locale: country.locale,
       translations: country.translations.map((translation) => ({
+        id: translation.id,
         locale: translation.language.languageCode,
         name: translation.name,
       })),
@@ -74,6 +75,7 @@ export class CountriesService {
       locale: request.locale,
       isActive: request.isActive,
       translations: request.translations.map((translation) => ({
+        ...(translation.id === null ? {} : { id: translation.id }),
         language: languageByCode.get(translation.locale) as Language,
         name: translation.name,
       })),

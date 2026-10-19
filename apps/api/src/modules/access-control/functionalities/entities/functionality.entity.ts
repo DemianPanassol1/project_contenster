@@ -10,7 +10,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-import { ProfilePermission } from '@/modules/authorization/profile-permissions/entities/profile-permission.entity';
+import { ProfilePermission } from '@/modules/access-control/profiles/entities/profile-permission.entity';
 import { Client } from '@/modules/identity/clients/entities/client.entity';
 
 import { SystemModule } from '../../modules/entities/system-module.entity';
@@ -27,11 +27,11 @@ export class Functionality {
   declare id: number;
 
   @ManyToOne(() => Client, (client) => client.functionalities, {
-    nullable: true,
+    nullable: false,
     onDelete: 'RESTRICT',
   })
   @JoinColumn({ name: 'cliente_id' })
-  declare client: Client | null;
+  declare client: Client;
 
   @ManyToOne(() => SystemModule, (module) => module.functionalities, {
     nullable: false,
@@ -76,7 +76,7 @@ export class Functionality {
   })
   declare translations: FunctionalityTranslation[];
 
-  @OneToMany(() => FunctionalityClientLanguage, (link) => link.functionality)
+  @OneToMany(() => FunctionalityClientLanguage, (link) => link.functionality, { cascade: true })
   declare enabledLanguageLinks: FunctionalityClientLanguage[];
 
   @OneToMany(() => ProfilePermission, (permission) => permission.functionality)

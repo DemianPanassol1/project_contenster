@@ -23,6 +23,10 @@ export class GetUserByIdResponseDto extends UserListItemResponseDto implements G
 
   @Expose()
   @ApiProperty()
+  declare userProfileId: number;
+
+  @Expose()
+  @ApiProperty()
   declare profileId: number;
 
   @Expose()

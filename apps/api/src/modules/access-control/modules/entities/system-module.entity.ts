@@ -2,12 +2,15 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
 import { Functionality } from '@/modules/access-control/functionalities/entities/functionality.entity';
+import { Client } from '@/modules/identity/clients/entities/client.entity';
 
 import { SystemModuleTranslation } from './system-module-translation.entity';
 
@@ -15,6 +18,13 @@ import { SystemModuleTranslation } from './system-module-translation.entity';
 export class SystemModule {
   @PrimaryGeneratedColumn({ name: 'id', type: 'integer' })
   declare id: number;
+
+  @Column({ name: 'cliente_id', type: 'integer' })
+  declare clientId: number;
+
+  @ManyToOne(() => Client, { nullable: false, onDelete: 'RESTRICT' })
+  @JoinColumn({ name: 'cliente_id' })
+  declare client: Client;
 
   @Column({ default: 0, name: 'ordem', type: 'integer' })
   declare order: number;

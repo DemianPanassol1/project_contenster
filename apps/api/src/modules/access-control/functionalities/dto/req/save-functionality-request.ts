@@ -17,11 +17,16 @@ import {
   toInteger,
   toLowercaseString,
   toNumber,
-  toNumberArray,
   toString,
 } from '@/shared/transformers/dto';
 
 class TranslationRequestDto {
+  @Transform(toNumber)
+  @IsOptional()
+  @IsInt({ message: i18n('validation.integer') })
+  @ApiPropertyOptional({ nullable: true })
+  declare id: number | null;
+
   @Transform(toLowercaseString)
   @IsNotEmpty({ message: i18n('validation.required') })
   @IsString({ message: i18n('validation.string') })
@@ -41,7 +46,7 @@ class TranslationRequestDto {
   declare description: string | null;
 }
 
-export class SaveFunctionalityRequestDto implements SaveFunctionalityRequest {
+class FunctionalityLanguageRequestDto {
   @Transform(toNumber)
   @IsOptional()
   @IsInt({ message: i18n('validation.integer') })
@@ -49,10 +54,17 @@ export class SaveFunctionalityRequestDto implements SaveFunctionalityRequest {
   declare id: number | null;
 
   @Transform(toNumber)
+  @IsInt({ message: i18n('validation.integer') })
+  @ApiProperty()
+  declare languageId: number;
+}
+
+export class SaveFunctionalityRequestDto implements SaveFunctionalityRequest {
+  @Transform(toNumber)
   @IsOptional()
   @IsInt({ message: i18n('validation.integer') })
   @ApiPropertyOptional({ nullable: true })
-  declare clientId: number | null;
+  declare id: number | null;
 
   @Transform(toInteger)
   @IsInt({ message: i18n('validation.integer') })
@@ -98,8 +110,9 @@ export class SaveFunctionalityRequestDto implements SaveFunctionalityRequest {
   @ApiProperty({ type: [TranslationRequestDto] })
   declare translations: TranslationRequestDto[];
 
-  @Transform(toNumberArray)
   @IsArray({ message: i18n('validation.array') })
-  @ApiProperty({ type: [Number] })
-  declare languageIds: number[];
+  @ValidateNested({ each: true })
+  @Type(() => FunctionalityLanguageRequestDto)
+  @ApiProperty({ type: [FunctionalityLanguageRequestDto] })
+  declare languageLinks: FunctionalityLanguageRequestDto[];
 }

@@ -70,31 +70,7 @@ export class CountriesRepository {
   async save(
     country: DeepPartial<Country> & { translations: DeepPartial<CountryTranslation>[] },
   ): Promise<Country> {
-    return this.countries.manager.transaction(async (manager) => {
-      let existing: CountryTranslation[] = [];
-
-      if (country.id) {
-        existing = await manager.find(CountryTranslation, {
-          where: { country: { id: country.id } },
-          relations: { language: true },
-        });
-      }
-
-      const translationIds = new Map(existing.map((item) => [item.language.id, item.id]));
-
-      return manager.save(Country, {
-        ...country,
-        translations: country.translations.map((translation) => {
-          const id = translationIds.get(translation.language?.id ?? 0);
-
-          if (id === undefined) {
-            return translation;
-          }
-
-          return { ...translation, id };
-        }),
-      });
-    });
+    return this.countries.save(country);
   }
 
   hasStates(ids: number[]): Promise<boolean> {

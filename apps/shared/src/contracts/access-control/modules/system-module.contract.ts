@@ -1,10 +1,16 @@
 export interface SystemModuleTranslationInput {
+  id: number | null;
   locale: string;
   name: string;
   description: string | null;
 }
 
-export type SystemModuleTranslationResponse = SystemModuleTranslationInput;
+export interface SystemModuleTranslationResponse {
+  id: number;
+  locale: string;
+  name: string;
+  description: string | null;
+}
 
 export interface SaveSystemModuleRequest {
   id: number | null;

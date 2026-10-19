@@ -1,9 +1,20 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Expose } from 'class-transformer';
+import { Expose, Type } from 'class-transformer';
 
 import { DocumentType, type GetClientByIdResponse } from '@contenster/shared';
 
 import { ClientListItemResponseDto } from './client-list-item.response.dto.js';
+
+class ClientLanguageResponseDto {
+  @Expose()
+  @ApiProperty()
+  declare id: number;
+
+  @Expose()
+  @ApiProperty()
+  declare languageId: number;
+}
+
 export class GetClientByIdResponseDto
   extends ClientListItemResponseDto
   implements GetClientByIdResponse
@@ -53,6 +64,7 @@ export class GetClientByIdResponseDto
   declare imageId: number | null;
 
   @Expose()
-  @ApiProperty({ type: [Number] })
-  declare languageIds: number[];
+  @Type(() => ClientLanguageResponseDto)
+  @ApiProperty({ type: [ClientLanguageResponseDto] })
+  declare languageLinks: ClientLanguageResponseDto[];
 }

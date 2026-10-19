@@ -34,6 +34,18 @@ propriedade aninhada — como uma tradução — pertencem ao mesmo arquivo e m�
 consome; não crie DTOs compartilhados de tradução. Cada módulo pode evoluir seu próprio payload de
 tradução sem acoplamento com os demais.
 
+## Coleções aninhadas e persistência
+
+Quando um cadastro edita uma coleção filha persistida — por exemplo, traduções, idiomas habilitados
+ou permissões de perfil — cada item existente deve circular com seu próprio `id`. O request usa
+`id: number | null`: `null` cria um filho e um identificador existente o atualiza. A resposta de
+detalhe sempre devolve o `id` efetivo de cada item para viabilizar a edição seguinte.
+
+O service valida relações de domínio e ownership. O repository não deve consultar a coleção atual
+para reconstruir IDs por idioma, combinação de chaves ou mapas auxiliares; ele persiste exatamente
+a árvore já validada pelo serviço. Coleções ausentes no payload são removidas por
+`orphanedRowAction: 'delete'` quando a entidade adota essa semântica.
+
 Mantenha um decorator por linha, imediatamente acima da propriedade a que se aplica. Separe os
 blocos de propriedades por uma linha em branco. Esse espaçamento é obrigatório inclusive em DTOs
 pequenos e em DTOs auxiliares aninhados.

@@ -7,6 +7,10 @@ import { CountryListItemResponseDto } from './country-list-item-response.js';
 class CountryTranslationResponseDto {
   @Expose()
   @ApiProperty()
+  declare id: number;
+
+  @Expose()
+  @ApiProperty()
   declare locale: string;
 
   @Expose()

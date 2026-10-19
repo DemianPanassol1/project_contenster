@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Transform } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import {
   IsArray,
   IsBoolean,
@@ -10,17 +10,12 @@ import {
   IsOptional,
   IsString,
   MaxLength,
+  ValidateNested,
 } from 'class-validator';
 
 import { DocumentType, type SaveClientRequest } from '@contenster/shared';
 import { i18n } from '@/i18n/i18n.util';
-import {
-  toBoolean,
-  toLowercaseString,
-  toNumber,
-  toNumberArray,
-  toString,
-} from '@/shared/transformers/dto';
+import { toBoolean, toLowercaseString, toNumber, toString } from '@/shared/transformers/dto';
 
 const COMPANY_NAME_MAX_LENGTH = 150;
 const DOCUMENT_MAX_LENGTH = 30;
@@ -31,6 +26,20 @@ const ADDRESS_NUMBER_MAX_LENGTH = 20;
 const ZIP_CODE_MAX_LENGTH = 10;
 const NEIGHBORHOOD_MAX_LENGTH = 100;
 const SLUG_MAX_LENGTH = 75;
+
+class ClientLanguageRequestDto {
+  @Transform(toNumber)
+  @IsOptional()
+  @IsInt({ message: i18n('validation.integer') })
+  @ApiPropertyOptional({ nullable: true })
+  declare id: number | null;
+
+  @Transform(toNumber)
+  @IsInt({ message: i18n('validation.integer') })
+  @ApiProperty()
+  declare languageId: number;
+}
+
 export class SaveClientRequestDto implements SaveClientRequest {
   @Transform(toNumber)
   @IsOptional()
@@ -155,8 +164,9 @@ export class SaveClientRequestDto implements SaveClientRequest {
   @ApiProperty()
   declare isActive: boolean;
 
-  @Transform(toNumberArray)
   @IsArray({ message: i18n('validation.array') })
-  @ApiProperty({ type: [Number] })
-  declare languageIds: number[];
+  @ValidateNested({ each: true })
+  @Type(() => ClientLanguageRequestDto)
+  @ApiProperty({ type: [ClientLanguageRequestDto] })
+  declare languageLinks: ClientLanguageRequestDto[];
 }

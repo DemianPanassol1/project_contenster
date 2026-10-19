@@ -105,31 +105,7 @@ export class CitiesRepository {
   async save(
     city: DeepPartial<City> & { translations: DeepPartial<CityTranslation>[] },
   ): Promise<City> {
-    return this.cities.manager.transaction(async (manager) => {
-      let current: CityTranslation[] = [];
-
-      if (city.id) {
-        current = await manager.find(CityTranslation, {
-          where: { city: { id: city.id } },
-          relations: { language: true },
-        });
-      }
-
-      const ids = new Map(current.map((item) => [item.language.id, item.id]));
-
-      return manager.save(City, {
-        ...city,
-        translations: city.translations.map((translation) => {
-          const id = ids.get(translation.language?.id ?? 0);
-
-          if (id === undefined) {
-            return translation;
-          }
-
-          return { ...translation, id };
-        }),
-      });
-    });
+    return this.cities.save(city);
   }
 
   async delete(cities: City[]): Promise<number[]> {

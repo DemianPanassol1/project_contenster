@@ -23,6 +23,7 @@ export class ActionTranslation {
   @ManyToOne(() => Action, (action) => action.translations, {
     nullable: false,
     onDelete: 'CASCADE',
+    orphanedRowAction: 'delete',
   })
   @JoinColumn({ name: 'acao_id' })
   declare action: Action;

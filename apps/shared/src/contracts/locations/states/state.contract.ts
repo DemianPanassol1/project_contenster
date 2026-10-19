@@ -1,9 +1,14 @@
 export interface StateTranslationInput {
+  id: number | null;
   locale: string;
   name: string;
 }
 
-export type StateTranslationResponse = StateTranslationInput;
+export interface StateTranslationResponse {
+  id: number;
+  locale: string;
+  name: string;
+}
 
 export interface SaveStateRequest {
   id: number | null;

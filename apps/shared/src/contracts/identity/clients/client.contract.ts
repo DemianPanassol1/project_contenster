@@ -1,5 +1,15 @@
 import type { DocumentType } from '../../../domain/documents/document-type.enum.js';
 
+export interface ClientLanguageInput {
+  id: number | null;
+  languageId: number;
+}
+
+export interface ClientLanguageResponse {
+  id: number;
+  languageId: number;
+}
+
 export interface SaveClientRequest {
   id: number | null;
   corporateName: string;
@@ -17,7 +27,7 @@ export interface SaveClientRequest {
   cityId: number | null;
   imageId: number | null;
   isActive: boolean;
-  languageIds: number[];
+  languageLinks: ClientLanguageInput[];
 }
 
 export interface ClientListItem {
@@ -40,5 +50,5 @@ export interface GetClientByIdResponse extends ClientListItem {
   slug: string;
   cityId: number | null;
   imageId: number | null;
-  languageIds: number[];
+  languageLinks: ClientLanguageResponse[];
 }

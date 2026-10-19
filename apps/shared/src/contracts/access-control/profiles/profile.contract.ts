@@ -1,16 +1,34 @@
 export interface ProfileTranslationInput {
+  id: number | null;
   locale: string;
   name: string;
   description: string | null;
 }
 
-export type ProfileTranslationResponse = ProfileTranslationInput;
+export interface ProfileTranslationResponse {
+  id: number;
+  locale: string;
+  name: string;
+  description: string | null;
+}
+
+export interface ProfilePermissionAssignmentInput {
+  id: number | null;
+  functionalityId: number;
+  actionId: number;
+}
+
+export interface ProfilePermissionAssignmentResponse {
+  id: number;
+  functionalityId: number;
+  actionId: number;
+}
 
 export interface SaveProfileRequest {
   id: number | null;
   isActive: boolean;
   translations: ProfileTranslationInput[];
-  permissionIds: number[];
+  permissions: ProfilePermissionAssignmentInput[];
 }
 
 export interface ProfileListItem {
@@ -22,5 +40,5 @@ export interface ProfileListItem {
 
 export interface GetProfileByIdResponse extends ProfileListItem {
   translations: ProfileTranslationResponse[];
-  permissionIds: number[];
+  permissions: ProfilePermissionAssignmentResponse[];
 }

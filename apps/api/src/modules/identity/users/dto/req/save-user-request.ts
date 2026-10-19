@@ -100,6 +100,12 @@ export class SaveUserRequestDto implements SaveUserRequest {
   @ApiProperty()
   declare clientId: number;
 
+  @Transform(toNumber)
+  @IsOptional()
+  @IsInt({ message: i18n('validation.integer') })
+  @ApiPropertyOptional({ nullable: true })
+  declare userProfileId: number | null;
+
   @Transform(toInteger)
   @IsInt({ message: i18n('validation.integer') })
   @ApiProperty()

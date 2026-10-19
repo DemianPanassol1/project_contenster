@@ -1,8 +1,13 @@
 export interface CountryTranslationInput {
+  id: number | null;
   locale: string;
   name: string;
 }
-export type CountryTranslationResponse = CountryTranslationInput;
+export interface CountryTranslationResponse {
+  id: number;
+  locale: string;
+  name: string;
+}
 export interface SaveCountryRequest {
   id: number | null;
   iso2: string;

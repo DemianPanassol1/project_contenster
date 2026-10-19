@@ -15,6 +15,12 @@ import { i18n } from '@/i18n/i18n.util';
 import { toLowercaseString, toNumber, toString } from '@/shared/transformers/dto';
 
 class TranslationRequestDto {
+  @Transform(toNumber)
+  @IsOptional()
+  @IsInt({ message: i18n('validation.integer') })
+  @ApiPropertyOptional({ nullable: true })
+  declare id: number | null;
+
   @Transform(toLowercaseString)
   @IsNotEmpty({ message: i18n('validation.required') })
   @IsString({ message: i18n('validation.string') })

@@ -8,6 +8,7 @@ export interface SaveUserRequest {
   password: string | null;
   imageId: number | null;
   clientId: number;
+  userProfileId: number | null;
   profileId: number;
   isActive: boolean;
   isBlocked: boolean;
@@ -27,6 +28,7 @@ export interface GetUserByIdResponse extends UserListItem {
   secondaryPhone: string | null;
   imageId: number | null;
   clientId: number;
+  userProfileId: number;
   profileId: number;
   lastLoginAt: string | null;
 }

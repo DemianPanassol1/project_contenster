@@ -12,15 +12,15 @@ import {
 } from 'class-validator';
 
 import { i18n } from '@/i18n/i18n.util';
-import {
-  toBoolean,
-  toLowercaseString,
-  toNumber,
-  toNumberArray,
-  toString,
-} from '@/shared/transformers/dto';
+import { toBoolean, toLowercaseString, toNumber, toString } from '@/shared/transformers/dto';
 
 class TranslationRequestDto {
+  @Transform(toNumber)
+  @IsOptional()
+  @IsInt({ message: i18n('validation.integer') })
+  @ApiPropertyOptional({ nullable: true })
+  declare id: number | null;
+
   @Transform(toLowercaseString)
   @IsNotEmpty({ message: i18n('validation.required') })
   @IsString({ message: i18n('validation.string') })
@@ -38,6 +38,24 @@ class TranslationRequestDto {
   @IsString({ message: i18n('validation.string') })
   @ApiPropertyOptional({ nullable: true })
   declare description: string | null;
+}
+
+class ProfilePermissionAssignmentRequestDto {
+  @Transform(toNumber)
+  @IsOptional()
+  @IsInt({ message: i18n('validation.integer') })
+  @ApiPropertyOptional({ nullable: true })
+  declare id: number | null;
+
+  @Transform(toNumber)
+  @IsInt({ message: i18n('validation.integer') })
+  @ApiProperty()
+  declare functionalityId: number;
+
+  @Transform(toNumber)
+  @IsInt({ message: i18n('validation.integer') })
+  @ApiProperty()
+  declare actionId: number;
 }
 
 export class SaveProfileRequestDto implements SaveProfileRequest {
@@ -58,8 +76,9 @@ export class SaveProfileRequestDto implements SaveProfileRequest {
   @ApiProperty({ type: [TranslationRequestDto] })
   declare translations: TranslationRequestDto[];
 
-  @Transform(toNumberArray)
   @IsArray({ message: i18n('validation.array') })
-  @ApiProperty({ type: [Number] })
-  declare permissionIds: number[];
+  @ValidateNested({ each: true })
+  @Type(() => ProfilePermissionAssignmentRequestDto)
+  @ApiProperty({ type: [ProfilePermissionAssignmentRequestDto] })
+  declare permissions: ProfilePermissionAssignmentRequestDto[];
 }

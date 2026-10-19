@@ -11,10 +11,10 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-import { ProfilePermission } from '@/modules/authorization/profile-permissions/entities/profile-permission.entity';
 import { Client } from '@/modules/identity/clients/entities/client.entity';
 import { UserProfile } from '@/modules/identity/users/entities/user-profile.entity';
 
+import { ProfilePermission } from './profile-permission.entity';
 import { ProfileTranslation } from './profiles-translation.entity';
 
 @Index('idx_perfis_cliente', ['client'])
@@ -46,6 +46,6 @@ export class Profile {
   @OneToMany(() => UserProfile, (userProfile) => userProfile.profile)
   declare userProfiles: UserProfile[];
 
-  @OneToMany(() => ProfilePermission, (permission) => permission.profile)
+  @OneToMany(() => ProfilePermission, (permission) => permission.profile, { cascade: true })
   declare permissions: ProfilePermission[];
 }

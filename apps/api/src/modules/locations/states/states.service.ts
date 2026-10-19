@@ -46,6 +46,7 @@ export class StatesService {
     return toResponseDto(GetStateByIdResponseDto, {
       ...this.toListItem(state, locale),
       translations: state.translations.map((translation) => ({
+        id: translation.id,
         locale: translation.language.languageCode,
         name: translation.name,
       })),
@@ -70,6 +71,7 @@ export class StatesService {
       code: request.code,
       isActive: request.isActive,
       translations: request.translations.map((translation) => ({
+        ...(translation.id === null ? {} : { id: translation.id }),
         language: languageByCode.get(translation.locale) as Language,
         name: translation.name,
       })),

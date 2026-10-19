@@ -48,6 +48,7 @@ export class CitiesService {
     return toResponseDto(GetCityByIdResponseDto, {
       ...this.toListItem(city, locale),
       translations: city.translations.map((translation) => ({
+        id: translation.id,
         locale: translation.language.languageCode,
         name: translation.name,
       })),
@@ -73,6 +74,7 @@ export class CitiesService {
       ibgeCode: request.ibgeCode,
       isActive: request.isActive,
       translations: request.translations.map((translation) => ({
+        ...(translation.id === null ? {} : { id: translation.id }),
         language: languageByCode.get(translation.locale) as Language,
         name: translation.name,
       })),

@@ -100,6 +100,6 @@ export class Client {
   @OneToMany(() => StorageFileTypeRule, (rule) => rule.client)
   declare storageFileTypeRules: StorageFileTypeRule[];
 
-  @OneToMany(() => ClientLanguage, (link) => link.client)
+  @OneToMany(() => ClientLanguage, (link) => link.client, { cascade: true })
   declare availableLanguageLinks: ClientLanguage[];
 }

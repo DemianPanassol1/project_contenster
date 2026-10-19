@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Brackets, Repository } from 'typeorm';
 
-import { ProfilePermission } from './profile-permissions/entities/profile-permission.entity';
+import { ProfilePermission } from '@/modules/access-control/profiles/entities/profile-permission.entity';
 
 @Injectable()
 export class AuthorizationRepository {

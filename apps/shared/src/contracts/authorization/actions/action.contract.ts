@@ -1,12 +1,18 @@
 import type { ActionType } from '../../../domain/actions/action-type.enum.js';
 
 export interface ActionTranslationInput {
+  id: number | null;
   locale: string;
   name: string;
   description: string | null;
 }
 
-export type ActionTranslationResponse = ActionTranslationInput;
+export interface ActionTranslationResponse {
+  id: number;
+  locale: string;
+  name: string;
+  description: string | null;
+}
 
 export interface SaveActionRequest {
   id: number | null;
