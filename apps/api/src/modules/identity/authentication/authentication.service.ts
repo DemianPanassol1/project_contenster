@@ -1,24 +1,48 @@
 import type { AuthenticatedSession } from '@contenster/shared';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  ServiceUnavailableException,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { I18nService } from 'nestjs-i18n';
 
 import type { I18nTranslations } from '@/i18n/translations';
-import { validatePasswordHash } from '@/infrastructure/security/password.util';
+import { settings } from '@/infrastructure/config/app.config';
+import { RedisUnavailableError } from '@/infrastructure/redis/redis-unavailable.error';
+import {
+  generatePasswordHash,
+  validatePasswordHash,
+} from '@/infrastructure/security/password.util';
 import { AuthorizationResolverService } from '@/modules/authorization/authorization-resolver.service';
 import { toResponseDto } from '@/shared/responses';
+import { resolveTranslation } from '@/shared/translations';
 
+import { PASSWORD_RESET_TOKEN_PURPOSE } from './constants/password-reset-token.constants';
 import type { AuthorizeRequestDto } from './dto/req/authorize-request.dto';
+import type { ForgotPasswordRequestDto } from './dto/req/forgot-password-request.dto';
+import type { ResetPasswordRequestDto } from './dto/req/reset-password-request.dto';
 import type { SignInRequestDto } from './dto/req/sign-in-request.dto';
 import type { SwitchClientRequestDto } from './dto/req/switch-client-request.dto';
 import {
   AuthenticatedSessionResponseDto,
   AuthorizeResponseDto,
+  ForgotPasswordResponseDto,
+  ResetPasswordResponseDto,
   SessionResponseDto,
   SignOutResponseDto,
 } from './dto/res';
+import {
+  createPasswordResetTokenSignOptions,
+  createPasswordResetTokenVerifyOptions,
+} from './helpers/password-reset-token.helper';
+import { resolveSessionLanguages, resolveSessionLocale } from './helpers/session-locale.helper';
 import { readCookieValue } from './session/helpers/session-cookie.util';
 import { SessionAuthenticationService } from './session/session-authentication.service';
 import { AuthenticationRepository } from './authentication.repository';
+import { PasswordRecoveryEmailService } from './password-recovery-email.service';
+import { PasswordResetTokenStore } from './password-reset-token.store';
 
 @Injectable()
 export class AuthenticationService {
@@ -27,6 +51,9 @@ export class AuthenticationService {
     private readonly authorizationResolver: AuthorizationResolverService,
     private readonly sessionAuthenticationService: SessionAuthenticationService,
     private readonly i18n: I18nService<I18nTranslations>,
+    private readonly jwtService: JwtService,
+    private readonly passwordRecoveryEmailService: PasswordRecoveryEmailService,
+    private readonly passwordResetTokenStore: PasswordResetTokenStore,
   ) {}
 
   async authorize(request: AuthorizeRequestDto): Promise<AuthorizeResponseDto> {
@@ -104,6 +131,80 @@ export class AuthenticationService {
     return toResponseDto(SignOutResponseDto, { signedOut: true });
   }
 
+  async forgotPassword(request: ForgotPasswordRequestDto): Promise<ForgotPasswordResponseDto> {
+    const response = toResponseDto(ForgotPasswordResponseDto, { emailSent: true });
+
+    if (settings.PASSWORD_RESET_TOKEN_SECRET === null) {
+      throw new ServiceUnavailableException(
+        this.i18n.t('errors.authentication.password_recovery_unavailable'),
+      );
+    }
+
+    this.passwordRecoveryEmailService.ensureConfigured();
+
+    const user = await this.authenticationRepository.findUserByEmail(request.email);
+
+    if (!user) return response;
+
+    const tokenId = await this.executePasswordResetStore(() =>
+      this.passwordResetTokenStore.create(user.id, settings.PASSWORD_RESET_TOKEN_TTL_SECONDS),
+    );
+
+    const token = await this.jwtService.signAsync(
+      {
+        email: user.email,
+        jti: tokenId,
+        purpose: PASSWORD_RESET_TOKEN_PURPOSE,
+        sub: user.id,
+      },
+      createPasswordResetTokenSignOptions(),
+    );
+
+    try {
+      await this.passwordRecoveryEmailService.send({
+        recipient: user.email,
+        recipientName: user.name,
+        resetLink: this.buildResetPasswordLink(token),
+      });
+    } catch (error) {
+      await this.executePasswordResetStore(() => this.passwordResetTokenStore.delete(tokenId));
+      throw error;
+    }
+
+    return response;
+  }
+
+  async resetPassword(request: ResetPasswordRequestDto): Promise<ResetPasswordResponseDto> {
+    if (settings.PASSWORD_RESET_TOKEN_SECRET === null) {
+      throw new ServiceUnavailableException(
+        this.i18n.t('errors.authentication.password_recovery_unavailable'),
+      );
+    }
+
+    const tokenPayload = await this.verifyPasswordResetToken(request.token);
+    const user = await this.authenticationRepository.findUserByEmail(tokenPayload.email);
+
+    if (!user || user.id !== tokenPayload.sub) {
+      throw new BadRequestException(this.i18n.t('errors.authentication.invalid_reset_token'));
+    }
+
+    const consumed = await this.executePasswordResetStore(() =>
+      this.passwordResetTokenStore.consume(tokenPayload.jti, user.id),
+    );
+
+    if (!consumed) {
+      throw new BadRequestException(this.i18n.t('errors.authentication.invalid_reset_token'));
+    }
+
+    await this.authenticationRepository.updatePassword(
+      user.id,
+      await generatePasswordHash(request.password),
+    );
+    await this.sessionAuthenticationService.destroyAllByUser(user.id);
+
+    return toResponseDto(ResetPasswordResponseDto, { passwordReset: true });
+  }
+
   session(session: AuthenticatedSession): AuthenticatedSessionResponseDto {
     return toResponseDto(AuthenticatedSessionResponseDto, session);
   }
@@ -118,23 +219,22 @@ export class AuthenticationService {
       );
     }
 
-    const languages = userProfile.client.availableLanguageLinks
-      .map(({ language }) => language)
-      .filter((language): language is NonNullable<typeof language> => Boolean(language));
-    const languageCode =
-      languages.find((language) => language.languageCode === 'pt')?.languageCode ??
-      languages[0]?.languageCode ??
-      'pt';
-    const profileTranslation =
-      userProfile.profile.translations.find(
-        (translation) => translation.language.languageCode === languageCode,
-      ) ?? userProfile.profile.translations[0];
+    const languages = resolveSessionLanguages(userProfile.client.availableLanguageLinks);
+    const locale = resolveSessionLocale(languages);
 
-    if (!profileTranslation) {
+    if (userProfile.profile.translations.length === 0) {
       throw new UnauthorizedException(
         this.i18n.t('errors.authentication.session_not_authenticated'),
       );
     }
+
+    const profileName = resolveTranslation(userProfile.profile.translations, locale, 'name');
+    const profileDescription = resolveTranslation(
+      userProfile.profile.translations,
+      locale,
+      'description',
+      { nullable: true },
+    );
 
     return toResponseDto(AuthenticatedSessionResponseDto, {
       user: {
@@ -155,15 +255,11 @@ export class AuthenticationService {
         },
         profile: {
           id: userProfile.profile.id,
-          name: profileTranslation.name,
-          description: profileTranslation.description,
+          name: profileName,
+          description: profileDescription,
         },
       },
-      modules: await this.authorizationResolver.resolve(
-        userProfile.profile.id,
-        clientId,
-        languageCode,
-      ),
+      modules: await this.authorizationResolver.resolve(userProfile.profile.id, clientId, locale),
     });
   }
 
@@ -185,5 +281,51 @@ export class AuthenticationService {
     }
 
     return token;
+  }
+
+  private async verifyPasswordResetToken(
+    token: string,
+  ): Promise<{ email: string; jti: string; sub: number }> {
+    try {
+      const payload = await this.jwtService.verifyAsync<{
+        email?: unknown;
+        jti?: unknown;
+        purpose?: unknown;
+        sub?: unknown;
+      }>(token, createPasswordResetTokenVerifyOptions());
+
+      if (
+        payload.purpose !== PASSWORD_RESET_TOKEN_PURPOSE ||
+        typeof payload.email !== 'string' ||
+        typeof payload.jti !== 'string' ||
+        typeof payload.sub !== 'number'
+      ) {
+        throw new BadRequestException(this.i18n.t('errors.authentication.invalid_reset_token'));
+      }
+
+      return { email: payload.email, jti: payload.jti, sub: payload.sub };
+    } catch {
+      throw new BadRequestException(this.i18n.t('errors.authentication.invalid_reset_token'));
+    }
+  }
+
+  private buildResetPasswordLink(token: string): string {
+    const baseUrl = settings.APP_URL.replace(/\/+$/, '');
+
+    return `${baseUrl}/auth/reset-password?token=${encodeURIComponent(token)}`;
+  }
+
+  private async executePasswordResetStore<T>(operation: () => Promise<T>): Promise<T> {
+    try {
+      return await operation();
+    } catch (error) {
+      if (error instanceof RedisUnavailableError) {
+        throw new ServiceUnavailableException(
+          this.i18n.t('errors.authentication.password_recovery_unavailable'),
+        );
+      }
+
+      throw error;
+    }
   }
 }

@@ -58,6 +58,16 @@ export class SessionAuthenticationService {
     await this.sessionStore.delete(tokenHash);
   }
 
+  async destroyAllByUser(userId: number): Promise<void> {
+    for await (const tokenHash of this.iterateTokenHashes()) {
+      const storedSession = await this.getByHash(tokenHash);
+
+      if (storedSession?.session.user.id === userId) {
+        await this.destroyByHash(tokenHash);
+      }
+    }
+  }
+
   async getTtlByHash(tokenHash: string): Promise<number> {
     return this.sessionStore.ttl(tokenHash);
   }

@@ -27,6 +27,20 @@ export class AuthenticationRepository {
       .getOne();
   }
 
+  findUserByEmail(email: string): Promise<User | null> {
+    return this.userRepository
+      .createQueryBuilder('user')
+      .where('user.email = :email', { email })
+      .andWhere('user.eh_ativo = true')
+      .andWhere('user.eh_bloqueado = false')
+      .andWhere('user.deletado_em IS NULL')
+      .getOne();
+  }
+
+  async updatePassword(userId: number, passwordHash: string): Promise<void> {
+    await this.userRepository.update(userId, { passwordHash });
+  }
+
   findUserClients(userId: number): Promise<User> {
     return this.userRepository
       .createQueryBuilder('user')

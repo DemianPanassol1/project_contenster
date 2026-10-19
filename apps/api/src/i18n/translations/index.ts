@@ -1,13 +1,16 @@
 import type { Path } from 'nestjs-i18n';
 
+import type enEmails from './en/emails.json';
 import type enEnums from './en/enums.json';
 import type enErrors from './en/errors.json';
 import type enFields from './en/fields.json';
 import type enValidation from './en/validation.json';
+import type esEmails from './es/emails.json';
 import type esEnums from './es/enums.json';
 import type esErrors from './es/errors.json';
 import type esFields from './es/fields.json';
 import type esValidation from './es/validation.json';
+import type ptEmails from './pt/emails.json';
 import type ptEnums from './pt/enums.json';
 import type ptErrors from './pt/errors.json';
 import type ptFields from './pt/fields.json';
@@ -41,6 +44,7 @@ type TranslationValuesAreStrings<Value> =
   InvalidTranslationValue<Value> extends never ? true : never;
 
 export type I18nTranslations = {
+  emails: typeof ptEmails;
   errors: typeof ptErrors;
   enums: typeof ptEnums;
   fields: typeof ptFields;
@@ -50,6 +54,8 @@ export type I18nTranslations = {
 export type I18nPath = Extract<Path<I18nTranslations>, TranslationLeafPath<I18nTranslations>>;
 
 export type I18nTranslationKeyParity = [
+  SameTranslationKeys<typeof ptEmails, typeof enEmails>,
+  SameTranslationKeys<typeof ptEmails, typeof esEmails>,
   SameTranslationKeys<typeof ptErrors, typeof enErrors>,
   SameTranslationKeys<typeof ptErrors, typeof esErrors>,
   SameTranslationKeys<typeof ptEnums, typeof enEnums>,
@@ -61,6 +67,9 @@ export type I18nTranslationKeyParity = [
   TranslationValuesAreStrings<typeof ptErrors>,
   TranslationValuesAreStrings<typeof enErrors>,
   TranslationValuesAreStrings<typeof esErrors>,
+  TranslationValuesAreStrings<typeof ptEmails>,
+  TranslationValuesAreStrings<typeof enEmails>,
+  TranslationValuesAreStrings<typeof esEmails>,
   TranslationValuesAreStrings<typeof ptEnums>,
   TranslationValuesAreStrings<typeof enEnums>,
   TranslationValuesAreStrings<typeof esEnums>,
@@ -73,6 +82,11 @@ export type I18nTranslationKeyParity = [
 ];
 
 export const i18nTranslationKeyParity: I18nTranslationKeyParity = [
+  true,
+  true,
+  true,
+  true,
+  true,
   true,
   true,
   true,

@@ -20,6 +20,20 @@ O perfil pertence a um cliente. Um usuário pode ter vínculos com vários clien
 
 O estado persistido no Redis inclui contexto, autorização calculada e informações de revogação e expiração. Uma reinicialização do Redis invalida sessões e exige nova autenticação.
 
+## Senhas e recuperação de acesso
+
+- A alteração de senha pelo usuário autenticado exige a senha atual. Ao concluir, todas as sessões
+  opacas daquele usuário são revogadas, inclusive a que originou a requisição.
+- A recuperação de senha começa por uma rota pública que sempre devolve a mesma resposta para e-mail
+  encontrado ou inexistente. Isso impede enumeração de contas.
+- O link de recuperação contém um JWT exclusivo para essa finalidade e possui expiração curta. O seu
+  identificador aleatório é armazenado no Redis de forma hashada e consumido atomicamente; portanto,
+  o link só pode redefinir a senha uma vez.
+- A redefinição exige usuário ativo e não bloqueado, troca o hash da senha e revoga todas as sessões
+  opacas do usuário.
+- As configurações de e-mail e da chave de assinatura são obrigatórias para expor a recuperação.
+  Nenhuma credencial de SMTP é persistida no banco.
+
 ## Troca de contexto e isolamento
 
 A troca de contexto ocorre por rota autenticada. Ela valida novamente usuário, cliente, perfil e vínculo persistido, rotaciona a sessão conforme a política definida e emite novo token opaco.

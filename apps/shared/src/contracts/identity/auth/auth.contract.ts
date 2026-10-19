@@ -30,6 +30,23 @@ export interface SignOutResponse {
   signedOut: boolean;
 }
 
+export interface ForgotPasswordRequest {
+  email: string;
+}
+
+export interface ForgotPasswordResponse {
+  emailSent: boolean;
+}
+
+export interface ResetPasswordRequest {
+  password: string;
+  token: string;
+}
+
+export interface ResetPasswordResponse {
+  passwordReset: boolean;
+}
+
 export interface SynchronizeSessionResponse extends SessionResponse {
   sessionChanged: boolean;
 }

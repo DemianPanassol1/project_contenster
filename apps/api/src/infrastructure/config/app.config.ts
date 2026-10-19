@@ -17,6 +17,7 @@ export interface AppSettings {
   NODE_ENV: NodeEnv;
   PORT: number;
   APP_NAME: string;
+  APP_URL: string;
   API_PREFIX: string | null;
   API_VERSION: string | null;
   DATABASE_HOST: string;
@@ -44,6 +45,17 @@ export interface AppSettings {
   SESSION_NORMAL_TTL_SECONDS: number;
   SESSION_REMEMBERED_TTL_SECONDS: number;
   SESSION_ACTIVITY_UPDATE_INTERVAL_SECONDS: number;
+  PASSWORD_RESET_TOKEN_SECRET: string | null;
+  PASSWORD_RESET_TOKEN_TTL_SECONDS: number;
+  PASSWORD_RESET_TOKEN_ISSUER: string | null;
+  PASSWORD_RESET_TOKEN_AUDIENCE: string | null;
+  MAIL_HOST: string | null;
+  MAIL_PORT: number | null;
+  MAIL_SECURE: boolean;
+  MAIL_USER: string | null;
+  MAIL_PASSWORD: string | null;
+  MAIL_FROM_NAME: string | null;
+  MAIL_FROM_ADDRESS: string | null;
   CORS_ORIGIN: string[];
   CORS_METHODS: string[];
   CORS_CREDENTIALS: boolean;
@@ -105,6 +117,38 @@ const positiveIntegerValue = (name: string, fallback: number): number => {
   return value;
 };
 
+const optionalPositiveIntegerValue = (name: string): number | null => {
+  const value = optionalString(name);
+
+  return value === null ? null : positiveIntegerValue(name, 0);
+};
+
+const durationSecondsValue = (name: string, fallback: number): number => {
+  const value = optionalString(name);
+
+  if (value === null) return fallback;
+
+  const match = /^(\d+)([smhd])?$/.exec(value);
+  if (!match) throw new Error(`Invalid duration value for ${name}: ${value}`);
+
+  const amount = Number(match[1]);
+  const unit = match[2] ?? 's';
+  const multipliers: Record<string, number> = { d: 86_400, h: 3_600, m: 60, s: 1 };
+  const multiplier = multipliers[unit];
+
+  if (multiplier === undefined) {
+    throw new Error(`Invalid duration value for ${name}: ${value}`);
+  }
+
+  const seconds = amount * multiplier;
+
+  if (!Number.isSafeInteger(seconds) || seconds <= 0) {
+    throw new Error(`Invalid positive duration value for ${name}: ${value}`);
+  }
+
+  return seconds;
+};
+
 const booleanValue = (name: string, fallback: boolean): boolean => {
   const value = optionalString(name);
 
@@ -161,6 +205,23 @@ const sessionHmacSecretValue = (nodeEnv: NodeEnv): string | null => {
   return value;
 };
 
+const passwordResetTokenSecretValue = (nodeEnv: NodeEnv): string | null => {
+  const value = optionalString('PASSWORD_RESET_TOKEN_SECRET');
+
+  if (nodeEnv !== 'production' && !isValidSessionHmacSecret(value)) return null;
+  if (!isValidSessionHmacSecret(value)) {
+    throw new Error(
+      'PASSWORD_RESET_TOKEN_SECRET must contain at least 32 bytes and must not be a documented placeholder.',
+    );
+  }
+
+  if (value === optionalString('SESSION_HMAC_SECRET')) {
+    throw new Error('PASSWORD_RESET_TOKEN_SECRET must not reuse SESSION_HMAC_SECRET.');
+  }
+
+  return value;
+};
+
 const storageCredentialsEncryptionKeyValue = (nodeEnv: NodeEnv): string | null => {
   const value = optionalString('STORAGE_CREDENTIALS_ENCRYPTION_KEY');
 
@@ -183,6 +244,7 @@ export const settings: AppSettings = {
   NODE_ENV: nodeEnv,
   PORT: positiveIntegerValue('PORT', 8080),
   APP_NAME: stringValue('APP_NAME', 'Contenster Slim Core API'),
+  APP_URL: stringValue('APP_URL', 'http://localhost:5000'),
   API_PREFIX: optionalString('API_PREFIX'),
   API_VERSION: optionalString('API_VERSION'),
   DATABASE_HOST: stringValue('DATABASE_HOST', 'localhost'),
@@ -213,6 +275,17 @@ export const settings: AppSettings = {
     'SESSION_ACTIVITY_UPDATE_INTERVAL_SECONDS',
     300,
   ),
+  PASSWORD_RESET_TOKEN_SECRET: passwordResetTokenSecretValue(nodeEnv),
+  PASSWORD_RESET_TOKEN_TTL_SECONDS: durationSecondsValue('PASSWORD_RESET_TOKEN_EXPIRES_IN', 900),
+  PASSWORD_RESET_TOKEN_ISSUER: optionalString('PASSWORD_RESET_TOKEN_ISSUER'),
+  PASSWORD_RESET_TOKEN_AUDIENCE: optionalString('PASSWORD_RESET_TOKEN_AUDIENCE'),
+  MAIL_HOST: optionalString('MAIL_HOST'),
+  MAIL_PORT: optionalPositiveIntegerValue('MAIL_PORT'),
+  MAIL_SECURE: booleanValue('MAIL_SECURE', false),
+  MAIL_USER: optionalString('MAIL_USER'),
+  MAIL_PASSWORD: optionalString('MAIL_PASSWORD'),
+  MAIL_FROM_NAME: optionalString('MAIL_FROM_NAME'),
+  MAIL_FROM_ADDRESS: optionalString('MAIL_FROM_ADDRESS'),
   CORS_ORIGIN: stringList('CORS_ORIGIN', []),
   CORS_METHODS: stringList('CORS_METHODS', ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']),
   CORS_CREDENTIALS: booleanValue('CORS_CREDENTIALS', false),

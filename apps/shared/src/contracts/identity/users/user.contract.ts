@@ -32,3 +32,12 @@ export interface GetUserByIdResponse extends UserListItem {
   profileId: number;
   lastLoginAt: string | null;
 }
+
+export interface ChangeCurrentUserPasswordRequest {
+  currentPassword: string;
+  newPassword: string;
+}
+
+export interface ChangeCurrentUserPasswordResponse {
+  passwordChanged: boolean;
+}

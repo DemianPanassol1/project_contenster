@@ -5,6 +5,9 @@
   },
   "authentication": {
     "invalid_credentials": "Invalid username or password.",
+    "invalid_current_password": "The current password is invalid.",
+    "invalid_reset_token": "The password reset link is invalid or has expired.",
+    "password_recovery_unavailable": "Password recovery is temporarily unavailable.",
     "session_not_authenticated": "The session is not authenticated."
   },
   "translations": {

@@ -5,6 +5,9 @@
   },
   "authentication": {
     "invalid_credentials": "El usuario o la contraseña no son válidos.",
+    "invalid_current_password": "La contraseña actual no es válida.",
+    "invalid_reset_token": "El enlace de restablecimiento de contraseña no es válido o expiró.",
+    "password_recovery_unavailable": "La recuperación de contraseña no está disponible temporalmente.",
     "session_not_authenticated": "La sesión no está autenticada."
   },
   "translations": {

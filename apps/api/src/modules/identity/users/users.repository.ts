@@ -1,7 +1,7 @@
 import type { PaginateRequest } from '@contenster/shared';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { IsNull, Repository } from 'typeorm';
 
 import { Profile } from '@/modules/access-control/profiles/entities/profiles.entity';
 import { applyPaginatedQueryBuilder, type QueryFieldMap } from '@/shared/pagination';
@@ -60,6 +60,15 @@ export class UsersRepository {
       .getMany();
   }
 
+  findActiveById(id: number): Promise<User | null> {
+    return this.users.findOneBy({
+      deletedAt: IsNull(),
+      id,
+      isActive: true,
+      isBlocked: false,
+    });
+  }
+
   findProfile(clientId: number, id: number): Promise<Profile | null> {
     return this.profiles.findOneBy({ id, client: { id: clientId } });
   }
@@ -88,5 +97,9 @@ export class UsersRepository {
     const ids = users.map((user) => user.id);
     await this.users.softRemove(users);
     return ids;
+  }
+
+  updatePassword(id: number, passwordHash: string): Promise<void> {
+    return this.users.update(id, { passwordHash }).then(() => undefined);
   }
 }

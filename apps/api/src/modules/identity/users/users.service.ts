@@ -1,9 +1,18 @@
 import type { PaginatedBody } from '@contenster/shared';
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import type { I18nService } from 'nestjs-i18n';
 
 import type { I18nTranslations } from '@/i18n/translations';
-import { generatePasswordHash } from '@/infrastructure/security/password.util';
+import {
+  generatePasswordHash,
+  validatePasswordHash,
+} from '@/infrastructure/security/password.util';
+import { SessionAuthenticationService } from '@/modules/identity/authentication/session/session-authentication.service';
 import { SessionSynchronizationService } from '@/modules/identity/authentication/session/session-synchronization.service';
 import {
   type DeleteRecordsRequestDto,
@@ -14,7 +23,9 @@ import {
 import { buildPaginationMeta } from '@/shared/pagination';
 import { toResponseDto } from '@/shared/responses';
 
+import type { ChangeCurrentUserPasswordRequestDto } from './dto/req/change-current-user-password-request.dto';
 import type { SaveUserRequestDto } from './dto/req/save-user-request.js';
+import { ChangeCurrentUserPasswordResponseDto } from './dto/res/change-current-user-password-response.dto';
 import { GetUserByIdResponseDto } from './dto/res/get-user-by-id-response.js';
 import { UserListItemResponseDto } from './dto/res/user-list-item-response.js';
 import { User } from './entities/user.entity';
@@ -26,6 +37,7 @@ export class UsersService {
     private readonly repository: UsersRepository,
     private readonly i18n: I18nService<I18nTranslations>,
     private readonly sessionSynchronizationService: SessionSynchronizationService,
+    private readonly sessionAuthenticationService: SessionAuthenticationService,
   ) {}
 
   async list(
@@ -128,6 +140,35 @@ export class UsersService {
     await this.sessionSynchronizationService.synchronizeAll();
 
     return toResponseDto(DeleteRecordsResponseDto, { ids: result });
+  }
+
+  async changeCurrentUserPassword(
+    userId: number,
+    request: ChangeCurrentUserPasswordRequestDto,
+  ): Promise<ChangeCurrentUserPasswordResponseDto> {
+    const user = await this.repository.findActiveById(userId);
+
+    if (!user) {
+      throw new UnauthorizedException(
+        this.i18n.t('errors.authentication.session_not_authenticated'),
+      );
+    }
+
+    const isCurrentPasswordValid = await validatePasswordHash(
+      user.passwordHash,
+      request.currentPassword,
+    );
+
+    if (!isCurrentPasswordValid) {
+      throw new BadRequestException(this.i18n.t('errors.authentication.invalid_current_password'));
+    }
+
+    const passwordHash = await generatePasswordHash(request.newPassword);
+
+    await this.repository.updatePassword(user.id, passwordHash);
+    await this.sessionAuthenticationService.destroyAllByUser(user.id);
+
+    return toResponseDto(ChangeCurrentUserPasswordResponseDto, { passwordChanged: true });
   }
 
   private async getEntityByIdOrFail(clientId: number, id: number): Promise<User> {

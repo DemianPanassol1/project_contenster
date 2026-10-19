@@ -8,6 +8,10 @@
       {
         "include": "i18n/translations/**/*.json",
         "watchAssets": true
+      },
+      {
+        "include": "modules/identity/authentication/templates/**/*.html",
+        "watchAssets": true
       }
     ]
   }

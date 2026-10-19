@@ -5,11 +5,15 @@ import { CurrentSession } from '@/common/decorators/current-session.decorator';
 import type { ApiHttpRequest } from '@/common/types/http-context.type';
 
 import { AuthorizeRequestDto } from './dto/req/authorize-request.dto';
+import { ForgotPasswordRequestDto } from './dto/req/forgot-password-request.dto';
+import { ResetPasswordRequestDto } from './dto/req/reset-password-request.dto';
 import { SignInRequestDto } from './dto/req/sign-in-request.dto';
 import { SwitchClientRequestDto } from './dto/req/switch-client-request.dto';
 import {
   AuthenticatedSessionResponseDto,
   AuthorizeResponseDto,
+  ForgotPasswordResponseDto,
+  ResetPasswordResponseDto,
   SessionResponseDto,
   SignOutResponseDto,
   SynchronizeSessionResponseDto,
@@ -45,6 +49,16 @@ export class AuthenticationController {
     );
 
     return result.response;
+  }
+
+  @Post('forgot-password')
+  forgotPassword(@Body() request: ForgotPasswordRequestDto): Promise<ForgotPasswordResponseDto> {
+    return this.authenticationService.forgotPassword(request);
+  }
+
+  @Post('reset-password')
+  resetPassword(@Body() request: ResetPasswordRequestDto): Promise<ResetPasswordResponseDto> {
+    return this.authenticationService.resetPassword(request);
   }
 
   @Get('session')
