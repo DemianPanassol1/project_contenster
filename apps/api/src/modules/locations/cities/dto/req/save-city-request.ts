@@ -1,7 +1,15 @@
 import type { SaveCityRequest } from '@contenster/shared';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
-import { IsArray, IsBoolean, IsInt, IsOptional, IsString, ValidateNested } from 'class-validator';
+import {
+  IsArray,
+  IsBoolean,
+  IsInt,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
 
 import { i18n } from '@/i18n/i18n.util';
 import {
@@ -13,13 +21,17 @@ import {
 } from '@/shared/transformers/dto';
 
 class TranslationRequestDto {
-  @Transform(toLowercaseString) @ApiProperty() declare locale: string;
-  @Transform(toString) @ApiProperty() declare name: string;
-  @Transform(toString)
-  @IsOptional()
+  @Transform(toLowercaseString)
+  @IsNotEmpty({ message: i18n('validation.required') })
   @IsString({ message: i18n('validation.string') })
-  @ApiPropertyOptional({ nullable: true })
-  declare description: string | null;
+  @ApiProperty()
+  declare locale: string;
+
+  @Transform(toString)
+  @IsNotEmpty({ message: i18n('validation.required') })
+  @IsString({ message: i18n('validation.string') })
+  @ApiProperty()
+  declare name: string;
 }
 
 export class SaveCityRequestDto implements SaveCityRequest {

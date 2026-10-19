@@ -1,6 +1,7 @@
 import type {
   ActionType,
   AuthenticatedSession,
+  FunctionalitySlug,
   SessionAction,
   SessionFunctionality,
   SessionModule,
@@ -10,7 +11,7 @@ import { Injectable } from '@nestjs/common';
 import { AuthorizationRepository } from './authorization.repository';
 
 interface PermissionRequirement {
-  functionalitySlug: string;
+  functionalitySlug: FunctionalitySlug;
   action: ActionType;
 }
 

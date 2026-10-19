@@ -43,6 +43,37 @@ resposta de transporte quando necessário. Validação de contexto, seleção de
 estado, exceções de negócio e qualquer mensagem de erro pertencem ao serviço ou a uma capacidade
 especializada, nunca ao controller.
 
+## CRUD administrativo padrão
+
+Salvo quando um comportamento específico justificar outra superfície, um cadastro administrativo
+expõe quatro operações:
+
+- `POST /<recurso>/list`, com `PaginateRequestDto`, para listagem paginada;
+- `GET /<recurso>/:id`, para detalhe;
+- `POST /<recurso>`, para criar ou atualizar;
+- `POST /<recurso>/delete`, com `DeleteRecordsRequestDto`, para uma ou várias exclusões.
+
+`PaginateRequestDto` é a convenção para listagens. Seu campo `isOptional` permanece disponível
+para endpoints de opções: quando aplicável, a resposta pode incluir a opção vazia de seleção.
+Isso não altera automaticamente a resposta de uma listagem administrativa comum.
+
+O controller contém somente a adaptação HTTP e os decorators de autorização. O service busca e
+valida entidades relacionadas, resolve traduções, impede transições inválidas, decide erros de
+negócio e converte a resposta com `toResponseDto`. O repository contém exclusivamente consultas,
+paginação, transações e comandos de persistência. Antes de excluir, o service deve pedir ao
+repository a verificação dos vínculos que impedem a remoção e retornar um erro de negócio
+traduzido; não dependa apenas da falha de constraint do banco.
+
+Para cadastros traduzidos, obtenha o locale com `getCurrentLocale()` e use `resolveTranslation()`.
+O helper aplica locale solicitado, fallback padrão e tradução disponível sem repetir esse algoritmo
+nos serviços. A validação dos idiomas enviados para persistência usa
+`resolveTranslationLanguages()`.
+
+Organize controllers, services e repositories com uma linha em branco entre métodos. Separe
+também constantes de módulo e etapas lógicas do método — consulta, validação, persistência e
+retorno. Não comprima condicionais, fluxos de exclusão ou objetos de persistência em uma única
+linha apenas para reduzir o arquivo.
+
 ## DTOs de saída e serialização
 
 Todo payload público devolvido por um service deve passar por uma DTO de resposta que implementa o

@@ -48,7 +48,7 @@ export interface PaginatedBody<TItem> {
   meta: PaginationMeta;
 }
 
-export interface OptionRequest {
+export interface PaginateRequest {
   isOptional: boolean | null;
   pagination: PaginationRequest;
 }

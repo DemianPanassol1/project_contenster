@@ -1,7 +1,6 @@
 export interface CityTranslationInput {
   locale: string;
   name: string;
-  description: string | null;
 }
 
 export type CityTranslationResponse = CityTranslationInput;

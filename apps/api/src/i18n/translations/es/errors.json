@@ -10,6 +10,14 @@
     "language_not_found": "No se encontró uno de los idiomas informados.",
     "translation_language_duplicate": "Un idioma no puede informarse más de una vez."
   },
+  "locations": {
+    "country_not_found": "País no encontrado.",
+    "country_has_states": "No se puede eliminar el país porque tiene estados vinculados.",
+    "state_not_found": "Estado no encontrado.",
+    "state_has_cities": "No se puede eliminar el estado porque tiene ciudades vinculadas.",
+    "city_not_found": "Ciudad no encontrada.",
+    "city_has_clients": "No se puede eliminar la ciudad porque tiene clientes vinculados."
+  },
   "media": {
     "file_not_found": "Archivo no encontrado.",
     "file_required": "Se requiere un archivo.",

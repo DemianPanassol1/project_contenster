@@ -2,7 +2,7 @@ import type {
   FieldType,
   FilterItem,
   FilterOperator,
-  OptionRequest,
+  PaginateRequest,
   PaginationRequest,
   SortDirection,
   SortItem,
@@ -109,7 +109,7 @@ class PaginationRequestDto implements PaginationRequest {
   filters: FilterItemDto[] = [];
 }
 
-export class OptionRequestDto implements OptionRequest {
+export class PaginateRequestDto implements PaginateRequest {
   @ValidateNested()
   @Type(() => PaginationRequestDto)
   @ApiPropertyOptional({ type: () => PaginationRequestDto })

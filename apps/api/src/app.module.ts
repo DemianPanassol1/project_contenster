@@ -15,6 +15,7 @@ import { DatabaseModule } from '@/infrastructure/database/database.module';
 import { HealthController } from '@/infrastructure/health/health.controller';
 import { RedisModule } from '@/infrastructure/redis';
 import { IdentityModule } from '@/modules/identity/identity.module';
+import { LocationsModule } from '@/modules/locations/locations.module';
 import { MediaModule } from '@/modules/media/media.module';
 import { RequestLogModule } from '@/modules/observability/request-logs/request-log.module';
 import { SchedulingModule } from '@/modules/scheduling/scheduling.module';
@@ -58,6 +59,7 @@ const setUploadResponseHeaders = (response: ServerResponse, filePath: string): v
     RequestLogModule,
     MediaModule,
     IdentityModule,
+    LocationsModule,
     SchedulingModule,
   ],
   controllers: [HealthController],

@@ -1,7 +1,6 @@
 export interface CountryTranslationInput {
   locale: string;
   name: string;
-  description: string | null;
 }
 export type CountryTranslationResponse = CountryTranslationInput;
 export interface SaveCountryRequest {

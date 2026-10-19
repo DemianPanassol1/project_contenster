@@ -10,6 +10,14 @@
     "language_not_found": "One of the provided languages was not found.",
     "translation_language_duplicate": "A language cannot be provided more than once."
   },
+  "locations": {
+    "country_not_found": "Country not found.",
+    "country_has_states": "The country cannot be deleted because it has related states.",
+    "state_not_found": "State not found.",
+    "state_has_cities": "The state cannot be deleted because it has related cities.",
+    "city_not_found": "City not found.",
+    "city_has_clients": "The city cannot be deleted because it has related clients."
+  },
   "media": {
     "file_not_found": "File not found.",
     "file_required": "A file is required.",

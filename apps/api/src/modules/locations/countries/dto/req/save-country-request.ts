@@ -26,13 +26,17 @@ const ISO3_MAX_LENGTH = 3;
 const CODE_MAX_LENGTH = 10;
 
 class TranslationRequestDto {
-  @Transform(toLowercaseString) @ApiProperty() declare locale: string;
-  @Transform(toString) @ApiProperty() declare name: string;
-  @Transform(toString)
-  @IsOptional()
+  @Transform(toLowercaseString)
+  @IsNotEmpty({ message: i18n('validation.required') })
   @IsString({ message: i18n('validation.string') })
-  @ApiPropertyOptional({ nullable: true })
-  declare description: string | null;
+  @ApiProperty()
+  declare locale: string;
+
+  @Transform(toString)
+  @IsNotEmpty({ message: i18n('validation.required') })
+  @IsString({ message: i18n('validation.string') })
+  @ApiProperty()
+  declare name: string;
 }
 
 export class SaveCountryRequestDto implements SaveCountryRequest {

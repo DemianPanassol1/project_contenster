@@ -1,3 +1,4 @@
+import type { ActionType } from '@contenster/shared';
 import {
   type CanActivate,
   type ExecutionContext,
@@ -29,13 +30,38 @@ export class RequirePermissionGuard implements CanActivate {
     if (!permission) return true;
 
     const request = context.switchToHttp().getRequest<ApiHttpRequest>();
-    if (
-      !request.session ||
-      !this.authorizationResolver.hasPermission(request.session, permission)
-    ) {
+    if (!request.session) {
+      throw new ForbiddenException();
+    }
+
+    const hasPermission = this.authorizationResolver.hasPermission(request.session, {
+      action: this.resolveAction(request, permission),
+      functionalitySlug: permission.functionalitySlug,
+    });
+
+    if (!hasPermission) {
       throw new ForbiddenException();
     }
 
     return true;
+  }
+
+  private resolveAction(request: ApiHttpRequest, permission: RequiredPermission): ActionType {
+    const { bodyIdField, updateActionType } = permission.options;
+
+    if (!bodyIdField || !updateActionType || !this.hasPositiveRecordId(request.body, bodyIdField)) {
+      return permission.action;
+    }
+
+    return updateActionType;
+  }
+
+  private hasPositiveRecordId(body: unknown, field: string): boolean {
+    if (!body || typeof body !== 'object') return false;
+
+    const value = (body as Record<string, unknown>)[field];
+    const id = typeof value === 'number' ? value : Number(value);
+
+    return Number.isSafeInteger(id) && id > 0;
   }
 }

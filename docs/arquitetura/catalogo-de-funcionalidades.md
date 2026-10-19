@@ -17,6 +17,19 @@ Web                            -> apresentação e navegação
 
 Existir no catálogo não concede permissão nem cria automaticamente uma tela.
 
+## Guards de permissão da API
+
+Controllers usam `RequirePermission` com uma identidade exportada pelo catálogo e nunca com uma
+string solta. Desestruture a identidade do recurso uma vez no topo do controller — por exemplo,
+`const { cities } = CORE_FUNCTIONALITY_IDENTITIES` — e use `cities` em todos os decorators do
+mesmo controller. O decorator aceita somente `FunctionalitySlug`, portanto uma funcionalidade
+inexistente no catálogo não é aceita pela tipagem.
+
+Quando uma mesma rota persiste criação e edição, o decorator recebe a ação de criação e informa
+`bodyIdField: 'id'` com `updateActionType: ActionType.edit`. O guard decide a ação antes de
+delegar ao service: identificador positivo usa edição; `null`, ausente ou inválido usa criação.
+Essa decisão é de autorização HTTP e não deve ser reimplementada nos controllers.
+
 ## Bootstrap e evolução
 
 O seed inicial materializa módulos, funcionalidades, idiomas e ações. As funcionalidades iniciais cobrem clientes, usuários, perfis, funcionalidades, módulos, cidades, estados e países.

@@ -1,7 +1,6 @@
 export interface StateTranslationInput {
   locale: string;
   name: string;
-  description: string | null;
 }
 
 export type StateTranslationResponse = StateTranslationInput;

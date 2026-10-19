@@ -1,6 +1,6 @@
-import type { OptionRequest, PaginationMeta } from '@contenster/shared';
+import type { PaginateRequest, PaginationMeta } from '@contenster/shared';
 
-export const buildPaginationMeta = (request: OptionRequest, total: number): PaginationMeta => {
+export const buildPaginationMeta = (request: PaginateRequest, total: number): PaginationMeta => {
   const page = Math.max(1, request.pagination.page);
   const perPage = Math.max(1, request.pagination.perPage);
 
