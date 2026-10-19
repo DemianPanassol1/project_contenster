@@ -78,7 +78,7 @@ export class SystemModulesService {
 
     const module = await this.repository.save({
       ...(request.id === null ? {} : { id: request.id }),
-      clientId,
+      client: { id: clientId },
       order: request.order,
       isActive: request.isActive,
       translations: request.translations.map((translation) => ({

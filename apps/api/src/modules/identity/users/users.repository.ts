@@ -61,7 +61,7 @@ export class UsersRepository {
   }
 
   findProfile(clientId: number, id: number): Promise<Profile | null> {
-    return this.profiles.findOneBy({ id, clientId });
+    return this.profiles.findOneBy({ id, client: { id: clientId } });
   }
 
   async save(

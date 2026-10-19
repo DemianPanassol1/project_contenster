@@ -18,17 +18,14 @@ import { ProfilePermission } from './profile-permission.entity';
 import { ProfileTranslation } from './profiles-translation.entity';
 
 @Index('idx_perfis_cliente', ['client'])
-@Unique('uq_perfis_id_cliente', ['id', 'clientId'])
+@Unique('uq_perfis_id_cliente', ['id', 'client'])
 @Entity({ name: 'perfis' })
 export class Profile {
   @PrimaryGeneratedColumn({ name: 'id', type: 'integer' })
   declare id: number;
 
-  @Column({ name: 'cliente_id', type: 'integer' })
-  declare clientId: number;
-
   @ManyToOne(() => Client, (client) => client.profiles, { nullable: false, onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'cliente_id' })
+  @JoinColumn({ foreignKeyConstraintName: 'fk_perfis_cliente', name: 'cliente_id' })
   declare client: Client;
 
   @Column({ default: true, name: 'eh_ativo', type: 'boolean' })

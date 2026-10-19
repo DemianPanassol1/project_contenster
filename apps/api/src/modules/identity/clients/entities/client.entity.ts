@@ -70,7 +70,7 @@ export class Client {
 
   @Index('idx_clientes_cidade')
   @ManyToOne(() => City, (city) => city.clients, { nullable: true, onDelete: 'RESTRICT' })
-  @JoinColumn({ name: 'cidade_id' })
+  @JoinColumn({ foreignKeyConstraintName: 'fk_clientes_cidade', name: 'cidade_id' })
   declare city: City | null;
 
   @Column({ default: true, name: 'eh_ativo', type: 'boolean' })

@@ -28,21 +28,24 @@ export class ProfilePermission {
     onDelete: 'CASCADE',
     orphanedRowAction: 'delete',
   })
-  @JoinColumn({ name: 'perfil_id' })
+  @JoinColumn({ foreignKeyConstraintName: 'fk_perfis_permissoes_perfil', name: 'perfil_id' })
   declare profile: Profile;
 
   @ManyToOne(() => Functionality, (functionality) => functionality.profilePermissions, {
     nullable: false,
     onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: 'funcionalidade_id' })
+  @JoinColumn({
+    foreignKeyConstraintName: 'fk_perfis_permissoes_funcionalidade',
+    name: 'funcionalidade_id',
+  })
   declare functionality: Functionality;
 
   @ManyToOne(() => Action, (action) => action.profilePermissions, {
     nullable: false,
     onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: 'acao_id' })
+  @JoinColumn({ foreignKeyConstraintName: 'fk_perfis_permissoes_acao', name: 'acao_id' })
   declare action: Action;
 
   @CreateDateColumn({ name: 'criado_em', type: 'timestamp' })

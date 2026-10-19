@@ -30,21 +30,21 @@ export class Functionality {
     nullable: false,
     onDelete: 'RESTRICT',
   })
-  @JoinColumn({ name: 'cliente_id' })
+  @JoinColumn({ foreignKeyConstraintName: 'fk_funcionalidades_cliente', name: 'cliente_id' })
   declare client: Client;
 
   @ManyToOne(() => SystemModule, (module) => module.functionalities, {
     nullable: false,
     onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: 'modulo_id' })
+  @JoinColumn({ foreignKeyConstraintName: 'fk_funcionalidades_modulo', name: 'modulo_id' })
   declare module: SystemModule;
 
   @ManyToOne(() => Functionality, (functionality) => functionality.children, {
     nullable: true,
     onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: 'funcionalidade_pai_id' })
+  @JoinColumn({ foreignKeyConstraintName: 'fk_funcionalidades_pai', name: 'funcionalidade_pai_id' })
   declare parent: Functionality | null;
 
   @OneToMany(() => Functionality, (functionality) => functionality.parent)

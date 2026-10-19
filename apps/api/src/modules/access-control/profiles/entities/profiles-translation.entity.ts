@@ -25,11 +25,11 @@ export class ProfileTranslation {
     onDelete: 'CASCADE',
     orphanedRowAction: 'delete',
   })
-  @JoinColumn({ name: 'perfil_id' })
+  @JoinColumn({ foreignKeyConstraintName: 'fk_perfis_traducoes_perfil', name: 'perfil_id' })
   declare profile: Profile;
 
   @ManyToOne(() => Language, { nullable: false, onDelete: 'RESTRICT' })
-  @JoinColumn({ name: 'idioma_id' })
+  @JoinColumn({ foreignKeyConstraintName: 'fk_perfis_traducoes_idioma', name: 'idioma_id' })
   declare language: Language;
 
   @Column({ length: 75, name: 'nome', type: 'varchar' })

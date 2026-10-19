@@ -56,7 +56,7 @@ export class ProfilesRepository {
 
   findById(clientId: number, id: number): Promise<Profile | null> {
     return this.profiles.findOne({
-      where: { id, clientId },
+      where: { id, client: { id: clientId } },
       relations: {
         translations: { language: true },
         permissions: { functionality: true, action: true },
@@ -65,7 +65,7 @@ export class ProfilesRepository {
   }
 
   findByIds(clientId: number, ids: number[]): Promise<Profile[]> {
-    return this.profiles.find({ where: { clientId, id: In(ids) } });
+    return this.profiles.find({ where: { client: { id: clientId }, id: In(ids) } });
   }
 
   findLanguagesByCodes(codes: string[]): Promise<Language[]> {

@@ -24,7 +24,10 @@ export class FunctionalityClientLanguage {
   declare id: number;
 
   @ManyToOne(() => Client, { nullable: false, onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'cliente_id' })
+  @JoinColumn({
+    foreignKeyConstraintName: 'fk_funcionalidades_clientes_idiomas_cliente',
+    name: 'cliente_id',
+  })
   declare client: Client;
 
   @ManyToOne(() => Functionality, (functionality) => functionality.enabledLanguageLinks, {
@@ -32,11 +35,17 @@ export class FunctionalityClientLanguage {
     onDelete: 'CASCADE',
     orphanedRowAction: 'delete',
   })
-  @JoinColumn({ name: 'funcionalidade_id' })
+  @JoinColumn({
+    foreignKeyConstraintName: 'fk_funcionalidades_clientes_idiomas_funcionalidade',
+    name: 'funcionalidade_id',
+  })
   declare functionality: Functionality;
 
   @ManyToOne(() => Language, { nullable: false, onDelete: 'RESTRICT' })
-  @JoinColumn({ name: 'idioma_id' })
+  @JoinColumn({
+    foreignKeyConstraintName: 'fk_funcionalidades_clientes_idiomas_idioma',
+    name: 'idioma_id',
+  })
   declare language: Language;
 
   @CreateDateColumn({ name: 'criado_em', type: 'timestamp' })

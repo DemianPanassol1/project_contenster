@@ -121,6 +121,12 @@ serviço, mas não recebem `@Expose`, não entram no contrato Shared, Swagger ou
 
 Contratos públicos e tipos compartilhados ficam no Shared. Eles devem ser independentes de NestJS, TypeORM, React e Next.js. Mudanças de contrato exigem revisão dos consumidores API e Web.
 
+## Chaves estrangeiras e constraints
+
+Toda relação persistida deve declarar explicitamente `foreignKeyConstraintName` em `@JoinColumn` — ou `name` em `@ForeignKey` quando a relação integra uma constraint composta manual — e a migration correspondente deve criar e remover a constraint com o mesmo nome. Os nomes devem ser semânticos, estáveis e em minúsculas, por exemplo `fk_estados_pais`; nunca dependa dos identificadores automáticos e hashados gerados pelo TypeORM.
+
+Não duplique uma coluna de chave estrangeira com `@Column` apenas para expor seu identificador quando a relação já fornece o vínculo necessário. A exceção é uma coluna física exigida por uma constraint ou índice composto; nesse caso, a dependência deve permanecer explícita e ser documentada junto à entidade.
+
 ## Enumeradores e opções localizadas
 
 Todo enumerador público do projeto deve possuir um dicionário colocalizado ao enum no Shared. O

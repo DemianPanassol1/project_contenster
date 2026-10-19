@@ -25,11 +25,11 @@ export class ActionTranslation {
     onDelete: 'CASCADE',
     orphanedRowAction: 'delete',
   })
-  @JoinColumn({ name: 'acao_id' })
+  @JoinColumn({ foreignKeyConstraintName: 'fk_acoes_traducoes_acao', name: 'acao_id' })
   declare action: Action;
 
   @ManyToOne(() => Language, { nullable: false, onDelete: 'RESTRICT' })
-  @JoinColumn({ name: 'idioma_id' })
+  @JoinColumn({ foreignKeyConstraintName: 'fk_acoes_traducoes_idioma', name: 'idioma_id' })
   declare language: Language;
 
   @Column({ length: 75, name: 'nome', type: 'varchar' })

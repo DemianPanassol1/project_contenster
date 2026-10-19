@@ -76,7 +76,7 @@ export class FunctionalityRepository {
   }
 
   findModule(clientId: number, id: number): Promise<SystemModule | null> {
-    return this.modules.findOneBy({ id, clientId });
+    return this.modules.findOneBy({ id, client: { id: clientId } });
   }
 
   findParent(clientId: number, id: number): Promise<Functionality | null> {

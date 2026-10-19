@@ -26,11 +26,11 @@ export class ClientLanguage {
     onDelete: 'CASCADE',
     orphanedRowAction: 'delete',
   })
-  @JoinColumn({ name: 'cliente_id' })
+  @JoinColumn({ foreignKeyConstraintName: 'fk_clientes_idiomas_cliente', name: 'cliente_id' })
   declare client: Client;
 
   @ManyToOne(() => Language, { nullable: false, onDelete: 'RESTRICT' })
-  @JoinColumn({ name: 'idioma_id' })
+  @JoinColumn({ foreignKeyConstraintName: 'fk_clientes_idiomas_idioma', name: 'idioma_id' })
   declare language: Language;
 
   @CreateDateColumn({ name: 'criado_em', type: 'timestamp' })

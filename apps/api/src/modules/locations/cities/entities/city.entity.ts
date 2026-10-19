@@ -26,7 +26,7 @@ export class City {
   declare id: number;
 
   @ManyToOne(() => State, (state) => state.cities, { nullable: false, onDelete: 'RESTRICT' })
-  @JoinColumn({ name: 'estado_id' })
+  @JoinColumn({ foreignKeyConstraintName: 'fk_cidades_estado', name: 'estado_id' })
   declare state: State;
 
   @Column({ length: 20, name: 'codigo_ibge', nullable: true, type: 'varchar' })

@@ -107,7 +107,7 @@ export class ProfilesService {
 
     const profile = await this.repository.save({
       ...(request.id === null ? {} : { id: request.id }),
-      clientId,
+      client: { id: clientId },
       isActive: request.isActive,
       translations: request.translations.map((translation) => ({
         ...(translation.id === null ? {} : { id: translation.id }),

@@ -57,18 +57,19 @@ export class SystemModulesRepository {
 
   findById(clientId: number, id: number): Promise<SystemModule | null> {
     return this.modules.findOne({
-      where: { id, clientId },
+      where: { id, client: { id: clientId } },
       relations: { translations: { language: true } },
     });
   }
 
   findByIds(clientId: number, ids: number[]): Promise<SystemModule[]> {
-    return this.modules.find({ where: { clientId, id: In(ids) } });
+    return this.modules.find({ where: { client: { id: clientId }, id: In(ids) } });
   }
 
   findLanguagesByCodes(codes: string[]): Promise<Language[]> {
     return this.languages.find({ where: { languageCode: In(codes) } });
   }
+
   async save(
     module: DeepPartial<SystemModule> & { translations: DeepPartial<SystemModuleTranslation>[] },
   ): Promise<SystemModule> {
