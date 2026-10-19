@@ -78,6 +78,20 @@ serviço, mas não recebem `@Expose`, não entram no contrato Shared, Swagger ou
 
 Contratos públicos e tipos compartilhados ficam no Shared. Eles devem ser independentes de NestJS, TypeORM, React e Next.js. Mudanças de contrato exigem revisão dos consumidores API e Web.
 
+## Enumeradores e opções localizadas
+
+Todo enumerador público do projeto deve possuir um dicionário colocalizado ao enum no Shared. O
+dicionário é exaustivo e tipado com `Record<Enum, string>`; ele associa o valor técnico persistido
+a uma chave `enums.*`, nunca ao texto apresentado ao usuário. A chave é interna à implementação e
+deve existir nos arquivos `enums.json` dos três idiomas da API.
+
+Quando uma rota expuser opções de um enumerador, ela deve devolver `AppOption<TValue>`. `value` é
+o valor original reconhecido pelo banco e `label` é resolvido pela API no idioma da requisição.
+`createEnumOptions` inicializa `disabled` e `metadata` como `null`; a rota pode preenchê-los quando
+houver uma regra específica. Não exponha somente a chave de tradução e não substitua o valor
+técnico pelo texto localizado. Use `createEnumOptions` para construir essas opções a partir do
+dicionário e do tradutor da requisição.
+
 ## Segurança e legibilidade
 
 - Nunca confie em `clientId`, `profileId` ou permissões enviados pelo navegador.

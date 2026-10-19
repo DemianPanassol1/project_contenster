@@ -1,11 +1,14 @@
 import type { Path } from 'nestjs-i18n';
 
+import type enEnums from './en/enums.json';
 import type enErrors from './en/errors.json';
 import type enFields from './en/fields.json';
 import type enValidation from './en/validation.json';
+import type esEnums from './es/enums.json';
 import type esErrors from './es/errors.json';
 import type esFields from './es/fields.json';
 import type esValidation from './es/validation.json';
+import type ptEnums from './pt/enums.json';
 import type ptErrors from './pt/errors.json';
 import type ptFields from './pt/fields.json';
 import type ptValidation from './pt/validation.json';
@@ -39,6 +42,7 @@ type TranslationValuesAreStrings<Value> =
 
 export type I18nTranslations = {
   errors: typeof ptErrors;
+  enums: typeof ptEnums;
   fields: typeof ptFields;
   validation: typeof ptValidation;
 };
@@ -48,6 +52,8 @@ export type I18nPath = Extract<Path<I18nTranslations>, TranslationLeafPath<I18nT
 export type I18nTranslationKeyParity = [
   SameTranslationKeys<typeof ptErrors, typeof enErrors>,
   SameTranslationKeys<typeof ptErrors, typeof esErrors>,
+  SameTranslationKeys<typeof ptEnums, typeof enEnums>,
+  SameTranslationKeys<typeof ptEnums, typeof esEnums>,
   SameTranslationKeys<typeof ptFields, typeof enFields>,
   SameTranslationKeys<typeof ptFields, typeof esFields>,
   SameTranslationKeys<typeof ptValidation, typeof enValidation>,
@@ -55,6 +61,9 @@ export type I18nTranslationKeyParity = [
   TranslationValuesAreStrings<typeof ptErrors>,
   TranslationValuesAreStrings<typeof enErrors>,
   TranslationValuesAreStrings<typeof esErrors>,
+  TranslationValuesAreStrings<typeof ptEnums>,
+  TranslationValuesAreStrings<typeof enEnums>,
+  TranslationValuesAreStrings<typeof esEnums>,
   TranslationValuesAreStrings<typeof ptFields>,
   TranslationValuesAreStrings<typeof enFields>,
   TranslationValuesAreStrings<typeof esFields>,
@@ -64,6 +73,11 @@ export type I18nTranslationKeyParity = [
 ];
 
 export const i18nTranslationKeyParity: I18nTranslationKeyParity = [
+  true,
+  true,
+  true,
+  true,
+  true,
   true,
   true,
   true,

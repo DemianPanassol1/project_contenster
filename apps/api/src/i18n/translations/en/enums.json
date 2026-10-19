@@ -1,0 +1,37 @@
+{
+  "action_type": {
+    "create": "Create",
+    "edit": "Edit",
+    "delete": "Delete",
+    "view": "View",
+    "export": "Export",
+    "import": "Import",
+    "publish": "Publish",
+    "unpublish": "Unpublish",
+    "activate": "Activate",
+    "deactivate": "Deactivate",
+    "approve": "Approve",
+    "reject": "Reject",
+    "send": "Send",
+    "receive": "Receive",
+    "grant": "Grant",
+    "revoke": "Revoke",
+    "start": "Start",
+    "finish": "Finish",
+    "change_status": "Change status"
+  },
+  "document_type": { "cpf": "CPF", "cnpj": "CNPJ", "rg": "RG", "caepf": "CAEPF" },
+  "file_type": { "image": "Image", "video": "Video", "icon": "Icon", "file": "File" },
+  "storage_provider": {
+    "local": "Local storage",
+    "cloudflare_r2": "Cloudflare R2",
+    "google_cloud_storage": "Google Cloud Storage"
+  },
+  "request_log_level": {
+    "info": "Information",
+    "warning": "Warning",
+    "error": "Error",
+    "fatal": "Fatal"
+  },
+  "cron_execution_status": { "success": "Success", "partial": "Partial", "error": "Error" }
+}

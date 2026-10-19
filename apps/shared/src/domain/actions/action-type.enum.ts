@@ -19,3 +19,25 @@ export enum ActionType {
   finish = 'finalizar',
   changeStatus = 'alterar_status',
 }
+
+export const actionTypeDictionary = {
+  [ActionType.create]: 'enums.action_type.create',
+  [ActionType.edit]: 'enums.action_type.edit',
+  [ActionType.delete]: 'enums.action_type.delete',
+  [ActionType.view]: 'enums.action_type.view',
+  [ActionType.export]: 'enums.action_type.export',
+  [ActionType.import]: 'enums.action_type.import',
+  [ActionType.publish]: 'enums.action_type.publish',
+  [ActionType.unpublish]: 'enums.action_type.unpublish',
+  [ActionType.activate]: 'enums.action_type.activate',
+  [ActionType.deactivate]: 'enums.action_type.deactivate',
+  [ActionType.approve]: 'enums.action_type.approve',
+  [ActionType.reject]: 'enums.action_type.reject',
+  [ActionType.send]: 'enums.action_type.send',
+  [ActionType.receive]: 'enums.action_type.receive',
+  [ActionType.grant]: 'enums.action_type.grant',
+  [ActionType.revoke]: 'enums.action_type.revoke',
+  [ActionType.start]: 'enums.action_type.start',
+  [ActionType.finish]: 'enums.action_type.finish',
+  [ActionType.changeStatus]: 'enums.action_type.change_status',
+} as const satisfies Record<ActionType, string>;

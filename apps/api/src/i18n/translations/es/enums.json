@@ -1,0 +1,37 @@
+{
+  "action_type": {
+    "create": "Crear",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "view": "Visualizar",
+    "export": "Exportar",
+    "import": "Importar",
+    "publish": "Publicar",
+    "unpublish": "Anular publicación",
+    "activate": "Activar",
+    "deactivate": "Desactivar",
+    "approve": "Aprobar",
+    "reject": "Rechazar",
+    "send": "Enviar",
+    "receive": "Recibir",
+    "grant": "Conceder",
+    "revoke": "Revocar",
+    "start": "Iniciar",
+    "finish": "Finalizar",
+    "change_status": "Cambiar estado"
+  },
+  "document_type": { "cpf": "CPF", "cnpj": "CNPJ", "rg": "RG", "caepf": "CAEPF" },
+  "file_type": { "image": "Imagen", "video": "Video", "icon": "Icono", "file": "Archivo" },
+  "storage_provider": {
+    "local": "Almacenamiento local",
+    "cloudflare_r2": "Cloudflare R2",
+    "google_cloud_storage": "Google Cloud Storage"
+  },
+  "request_log_level": {
+    "info": "Información",
+    "warning": "Advertencia",
+    "error": "Error",
+    "fatal": "Fatal"
+  },
+  "cron_execution_status": { "success": "Éxito", "partial": "Parcial", "error": "Error" }
+}
