@@ -24,8 +24,8 @@ as regras de negócio distingam apenas valor e ausência explícita.
 
 ## Entidades TypeORM
 
-Entidades são materializadas pelo TypeORM, e não pelo construtor da classe. Por isso, suas
-propriedades decoradas usam `declare`:
+Entidades são materializadas pelo TypeORM, e não pelo construtor da classe. O mesmo princípio vale
+para DTOs, respostas e demais classes da API: propriedades declaradas em classes usam `declare`:
 
 ```ts
 @Column({ name: 'descricao', nullable: true, type: 'varchar' })
@@ -36,8 +36,9 @@ declare client: Client;
 ```
 
 `declare` preserva `strictPropertyInitialization`, não emite uma inicialização de campo em runtime e
-elimina a necessidade de `!`. O tipo continua descrevendo o estado após a entidade ser criada ou
-carregada pelo ORM.
+elimina a necessidade de `!`. Não use `!` nem `?` em declarações de propriedades de classes da
+aplicação para contornar inicialização ou representar ausência. O tipo continua descrevendo o estado
+após a entidade ser criada, transformada ou carregada pelo ORM.
 
 As regras de tipo devem acompanhar a persistência:
 
@@ -64,7 +65,9 @@ normalizam ausência ou conteúdo incompatível para `[]`. Assim, por exemplo, `
 
 `?` é reservado para estruturas técnicas em que a existência da própria propriedade é relevante,
 como extensões de `Request`, opções de função, metadados parciais e payloads externos ainda não
-normalizados. Não o use em entidades, DTOs normalizados, respostas da API ou modelos de domínio.
+normalizados. Não o use em propriedades de entidades, DTOs normalizados, respostas da API ou
+modelos de domínio. Nessas classes, use `declare property: Type | null` quando a ausência for
+válida.
 
 ## Configuração e revisão
 
@@ -73,7 +76,8 @@ legítimo, atribuir `undefined` exige que isso seja realmente parte do contrato.
 
 Em revisão, verifique que:
 
-- nenhuma entidade usa `!` para inicialização definida;
+- nenhuma propriedade de classe da aplicação usa `!` para inicialização definida ou `?` para
+  representar ausência de domínio;
 - nulidade no tipo coincide com `nullable` da coluna ou relação;
 - transformers de DTO convertem ausência aceitável em `null`, sem deixar `undefined` atravessar
   para validação, serviços, entidades ou respostas;

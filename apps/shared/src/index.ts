@@ -1,4 +1,5 @@
 export * from './catalog/index.js';
+export * from './contracts/index.js';
 export * from './domain/actions/action-type.enum.js';
 export * from './domain/documents/document-type.enum.js';
 export * from './domain/logging/cron-execution-status.enum.js';

@@ -22,18 +22,18 @@ export type FilterOperator =
   | 'starts_with';
 
 export interface FilterItem {
-  disjunctive?: boolean | null;
+  disjunctive: boolean | null;
   field: string;
   operator: FilterOperator;
-  type?: FieldType | null;
-  value?: unknown;
+  type: FieldType | null;
+  value: unknown;
 }
 
 export interface PaginationRequest {
-  filters?: FilterItem[];
+  filters: FilterItem[];
   page: number;
   perPage: number;
-  sort?: SortItem[];
+  sort: SortItem[];
 }
 
 export interface PaginationMeta {
@@ -49,6 +49,6 @@ export interface PaginatedBody<TItem> {
 }
 
 export interface OptionRequest {
-  isOptional?: boolean | null;
+  isOptional: boolean | null;
   pagination: PaginationRequest;
 }

@@ -27,13 +27,9 @@ export const setupSwagger = (app: INestApplication): void => {
     .setTitle(settings.APP_NAME)
     .setVersion(settings.API_VERSION ?? '1')
     .addServer('/', 'Current host')
-    .addBearerAuth(
-      {
-        bearerFormat: 'Opaque session token',
-        in: 'header',
-        scheme: 'bearer',
-        type: 'http',
-      },
+    .addCookieAuth(
+      'contenster_session',
+      { in: 'cookie', name: 'contenster_session', type: 'apiKey' },
       'session-token',
     )
     .build();

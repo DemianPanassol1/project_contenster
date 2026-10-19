@@ -1,0 +1,3 @@
+export const AUTH_USERNAME_MAX_LENGTH = 255;
+export const AUTH_PASSWORD_MIN_LENGTH = 5;
+export const AUTH_PASSWORD_MAX_LENGTH = 255;

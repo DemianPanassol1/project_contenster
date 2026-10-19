@@ -14,6 +14,7 @@ import { settings, WORKSPACE_ROOT_PATH } from '@/infrastructure/config/app.confi
 import { DatabaseModule } from '@/infrastructure/database/database.module';
 import { HealthController } from '@/infrastructure/health/health.controller';
 import { RedisModule } from '@/infrastructure/redis';
+import { IdentityModule } from '@/modules/identity/identity.module';
 import { MediaModule } from '@/modules/media/media.module';
 import { RequestLogModule } from '@/modules/observability/request-logs/request-log.module';
 import { SchedulingModule } from '@/modules/scheduling/scheduling.module';
@@ -56,6 +57,7 @@ const setUploadResponseHeaders = (response: ServerResponse, filePath: string): v
     RedisModule,
     RequestLogModule,
     MediaModule,
+    IdentityModule,
     SchedulingModule,
   ],
   controllers: [HealthController],

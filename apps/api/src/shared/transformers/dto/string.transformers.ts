@@ -12,6 +12,8 @@ export const toLowercaseString = ({ value }: TransformFnParams): string | null =
   return parsedValue?.toLowerCase() ?? null;
 };
 
+export const toLowercaseTrimmedString = toLowercaseString;
+
 export const toUppercaseString = ({ value }: TransformFnParams): string | null => {
   const parsedValue = parseString(value);
 

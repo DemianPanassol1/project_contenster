@@ -1,14 +1,5 @@
 import type { IncomingHttpHeaders, OutgoingHttpHeaders } from 'node:http';
-export interface ApiAuthenticatedSession {
-  context: {
-    client: {
-      id: number;
-    };
-  };
-  user: {
-    id: number;
-  };
-}
+import type { AuthenticatedSession } from '@contenster/shared';
 
 export interface ApiRequestLogAuditMetadata {
   clientId?: number | null;
@@ -25,7 +16,7 @@ export interface ApiHttpRequest {
   requestLogAudit?: ApiRequestLogAuditMetadata;
   requestId?: string;
   requestStartedAt?: number;
-  session?: ApiAuthenticatedSession;
+  session?: AuthenticatedSession;
   skipRequestLog?: boolean;
   url: string;
 }

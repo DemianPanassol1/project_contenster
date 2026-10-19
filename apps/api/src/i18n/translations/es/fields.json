@@ -1,10 +1,12 @@
 {
   "id": "ID",
   "name": "Nombre",
+  "username": "Nombre de usuario",
   "email": "Correo electrónico",
   "password": "Contraseña",
   "clientId": "Cliente",
   "profileId": "Perfil",
+  "staySignedIn": "Permanecer conectado",
   "file": "Archivo",
   "mimeType": "Tipo de archivo",
   "storageProvider": "Proveedor de almacenamiento"

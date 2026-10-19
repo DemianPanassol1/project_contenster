@@ -2,6 +2,10 @@
   "common": {
     "internal_server_error": "An internal server error occurred."
   },
+  "authentication": {
+    "invalid_credentials": "Invalid username or password.",
+    "session_not_authenticated": "The session is not authenticated."
+  },
   "translations": {
     "language_not_found": "One of the provided languages was not found.",
     "translation_language_duplicate": "A language cannot be provided more than once."
