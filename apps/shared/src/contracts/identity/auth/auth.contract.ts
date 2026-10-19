@@ -26,6 +26,10 @@ export interface SwitchClientRequest {
   clientId: number;
 }
 
+export interface SignOutResponse {
+  signedOut: boolean;
+}
+
 export interface SynchronizeSessionResponse extends SessionResponse {
   sessionChanged: boolean;
 }

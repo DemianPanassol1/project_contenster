@@ -1,10 +1,11 @@
-import type { SessionResponse } from '@contenster/shared';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
 
 import type { I18nTranslations } from '@/i18n/translations';
+import { toResponseDto } from '@/shared/responses';
 
 import { AuthenticationService } from '../authentication.service';
+import { SynchronizeSessionResponseDto } from '../dto/res';
 
 import { readCookieValue } from './helpers/session-cookie.util';
 import type { StoredSession } from './types/stored-session.type';
@@ -18,9 +19,7 @@ export class SessionSynchronizationService {
     private readonly i18n: I18nService<I18nTranslations>,
   ) {}
 
-  async synchronize(
-    cookieHeader: string | undefined,
-  ): Promise<{ sessionChanged: boolean; response: SessionResponse }> {
+  async synchronize(cookieHeader: string | undefined): Promise<SynchronizeSessionResponseDto> {
     const token = readCookieValue(cookieHeader, this.sessionAuthenticationService.cookieName);
     if (!token) {
       throw new UnauthorizedException(
@@ -31,9 +30,7 @@ export class SessionSynchronizationService {
     return this.synchronizeByToken(token);
   }
 
-  async synchronizeByToken(
-    token: string,
-  ): Promise<{ sessionChanged: boolean; response: SessionResponse }> {
+  async synchronizeByToken(token: string): Promise<SynchronizeSessionResponseDto> {
     const tokenHash = this.sessionAuthenticationService.tokenHash(token);
     const storedSession = await this.sessionAuthenticationService.getByToken(token);
     if (!storedSession) {
@@ -44,10 +41,11 @@ export class SessionSynchronizationService {
 
     const updated = await this.synchronizeStoredSession(tokenHash, storedSession);
 
-    return {
+    return toResponseDto(SynchronizeSessionResponseDto, {
       sessionChanged: JSON.stringify(updated.session) !== JSON.stringify(storedSession.session),
-      response: { expiresAt: updated.expiresAt, session: updated.session },
-    };
+      expiresAt: updated.expiresAt,
+      session: updated.session,
+    });
   }
 
   async synchronizeAll(): Promise<void> {

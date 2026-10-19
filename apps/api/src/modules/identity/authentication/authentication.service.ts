@@ -1,14 +1,21 @@
-import type { AuthenticatedSession, AuthorizeResponse, SessionResponse } from '@contenster/shared';
+import type { AuthenticatedSession } from '@contenster/shared';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
 
 import type { I18nTranslations } from '@/i18n/translations';
 import { validatePasswordHash } from '@/infrastructure/security/password.util';
 import { AuthorizationResolverService } from '@/modules/authorization/authorization-resolver.service';
+import { toResponseDto } from '@/shared/responses';
 
 import type { AuthorizeRequestDto } from './dto/req/authorize-request.dto';
 import type { SignInRequestDto } from './dto/req/sign-in-request.dto';
 import type { SwitchClientRequestDto } from './dto/req/switch-client-request.dto';
+import {
+  AuthenticatedSessionResponseDto,
+  AuthorizeResponseDto,
+  SessionResponseDto,
+  SignOutResponseDto,
+} from './dto/res';
 import { readCookieValue } from './session/helpers/session-cookie.util';
 import { SessionAuthenticationService } from './session/session-authentication.service';
 import { AuthenticationRepository } from './authentication.repository';
@@ -22,11 +29,11 @@ export class AuthenticationService {
     private readonly i18n: I18nService<I18nTranslations>,
   ) {}
 
-  async authorize(request: AuthorizeRequestDto): Promise<AuthorizeResponse> {
+  async authorize(request: AuthorizeRequestDto): Promise<AuthorizeResponseDto> {
     const user = await this.validateCredentials(request.username, request.password);
     const userWithClients = await this.authenticationRepository.findUserClients(user.id);
 
-    return {
+    return toResponseDto(AuthorizeResponseDto, {
       clients: userWithClients.userProfiles.map(({ client }) => ({
         label: client.tradeName,
         value: client.id,
@@ -36,12 +43,14 @@ export class AuthenticationService {
           document: client.document,
         },
       })),
-    };
+    });
   }
 
-  async signIn(
-    request: SignInRequestDto,
-  ): Promise<{ token: string; ttlSeconds: number; response: SessionResponse }> {
+  async signIn(request: SignInRequestDto): Promise<{
+    token: string;
+    ttlSeconds: number;
+    response: SessionResponseDto;
+  }> {
     const user = await this.validateCredentials(request.username, request.password);
     const session = await this.resolveSession(user.id, request.clientId);
     const result = await this.sessionAuthenticationService.create(session, request.staySignedIn);
@@ -51,10 +60,10 @@ export class AuthenticationService {
     return {
       token: result.token,
       ttlSeconds: result.ttlSeconds,
-      response: {
+      response: toResponseDto(SessionResponseDto, {
         expiresAt: result.storedSession.expiresAt,
         session: result.storedSession.session,
-      },
+      }),
     };
   }
 
@@ -62,7 +71,7 @@ export class AuthenticationService {
     request: SwitchClientRequestDto,
     userId: number,
     cookieHeader: string | undefined,
-  ): Promise<{ token: string; ttlSeconds: number; response: SessionResponse }> {
+  ): Promise<{ token: string; ttlSeconds: number; response: SessionResponseDto }> {
     const previousToken = this.getSessionTokenOrFail(cookieHeader);
     const previousSession = await this.sessionAuthenticationService.getByToken(previousToken);
     if (!previousSession) {
@@ -81,16 +90,22 @@ export class AuthenticationService {
     return {
       token: result.token,
       ttlSeconds: result.ttlSeconds,
-      response: {
+      response: toResponseDto(SessionResponseDto, {
         expiresAt: result.storedSession.expiresAt,
         session: result.storedSession.session,
-      },
+      }),
     };
   }
 
-  async signOut(cookieHeader: string | undefined): Promise<void> {
+  async signOut(cookieHeader: string | undefined): Promise<SignOutResponseDto> {
     const token = readCookieValue(cookieHeader, this.sessionAuthenticationService.cookieName);
     if (token) await this.sessionAuthenticationService.destroy(token);
+
+    return toResponseDto(SignOutResponseDto, { signedOut: true });
+  }
+
+  session(session: AuthenticatedSession): AuthenticatedSessionResponseDto {
+    return toResponseDto(AuthenticatedSessionResponseDto, session);
   }
 
   async resolveSession(userId: number, clientId: number): Promise<AuthenticatedSession> {
@@ -121,7 +136,7 @@ export class AuthenticationService {
       );
     }
 
-    return {
+    return toResponseDto(AuthenticatedSessionResponseDto, {
       user: {
         id: user.id,
         name: user.name,
@@ -149,7 +164,7 @@ export class AuthenticationService {
         clientId,
         languageCode,
       ),
-    };
+    });
   }
 
   private async validateCredentials(username: string, password: string) {

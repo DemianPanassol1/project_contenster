@@ -13,7 +13,7 @@ Módulos ficam em `apps/api/src/modules` e devem preservar responsabilidade clar
 
 Não extraia helpers ou camadas genéricas para uso único. Antes de criar uma estrutura nova, localize a capacidade equivalente e adapte apenas o necessário.
 
-## DTOs, transformação e validação
+## DTOs de entrada, transformação e validação
 
 Cada propriedade recebida por um DTO de request deve usar `@Transform` com o transformer apropriado
 de `apps/api/src/shared/transformers/dto`. A transformação normaliza a fronteira HTTP antes da
@@ -32,6 +32,22 @@ Controllers adaptam HTTP: recebem DTOs, aplicam decorators, delegam ao serviço 
 resposta de transporte quando necessário. Validação de contexto, seleção de sessão, transição de
 estado, exceções de negócio e qualquer mensagem de erro pertencem ao serviço ou a uma capacidade
 especializada, nunca ao controller.
+
+## DTOs de saída e serialização
+
+Todo payload público devolvido por um service deve passar por uma DTO de resposta que implementa o
+contrato correspondente do Shared. DTOs de saída ficam em `dto/res`, usam `@Expose` em cada campo
+permitido, `@Type` para propriedades aninhadas, `@ApiProperty` ou `@ApiPropertyOptional` para o
+Swagger e `declare` nas propriedades de classe.
+
+O service deve criar o payload de domínio e convertê-lo explicitamente com `toResponseDto`. Não
+retorne entidades TypeORM, objetos de repositório ou objetos literais diretamente ao controller.
+DTOs aninhadas também devem implementar seus contratos quando esses contratos existirem, inclusive
+para árvores recursivas.
+
+Dados necessários apenas para transporte técnico não pertencem à DTO pública. Por exemplo, o token
+opaco e o TTL que permitem escrever um cookie HTTP-only podem circular em um resultado interno do
+serviço, mas não recebem `@Expose`, não entram no contrato Shared, Swagger ou corpo HTTP.
 
 ## Contratos e Shared
 
