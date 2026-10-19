@@ -28,6 +28,16 @@ Para um campo opcional, use `@Transform(toOptionalType)`, `@IsOptional()` e
 `declare property: Type | null`. Campos obrigatórios usam o transformer do tipo e `declare
 property: Type`.
 
+DTOs de request ficam em `dto/req`. Cada DTO ocupa seu próprio arquivo, cujo nome deixa explícito
+o caso de uso, por exemplo `save-client.request.dto.ts`. DTOs auxiliares usados somente para uma
+propriedade aninhada — como uma tradução — pertencem ao mesmo arquivo e módulo do request que os
+consome; não crie DTOs compartilhados de tradução. Cada módulo pode evoluir seu próprio payload de
+tradução sem acoplamento com os demais.
+
+Mantenha um decorator por linha, imediatamente acima da propriedade a que se aplica. Separe os
+blocos de propriedades por uma linha em branco. Esse espaçamento é obrigatório inclusive em DTOs
+pequenos e em DTOs auxiliares aninhados.
+
 Controllers adaptam HTTP: recebem DTOs, aplicam decorators, delegam ao serviço e escrevem a
 resposta de transporte quando necessário. Validação de contexto, seleção de sessão, transição de
 estado, exceções de negócio e qualquer mensagem de erro pertencem ao serviço ou a uma capacidade
@@ -39,6 +49,21 @@ Todo payload público devolvido por um service deve passar por uma DTO de respos
 contrato correspondente do Shared. DTOs de saída ficam em `dto/res`, usam `@Expose` em cada campo
 permitido, `@Type` para propriedades aninhadas, `@ApiProperty` ou `@ApiPropertyOptional` para o
 Swagger e `declare` nas propriedades de classe.
+
+Cada DTO de saída ocupa seu próprio arquivo em `dto/res`; itens de listagem, detalhes e respostas
+de operações diferentes não são agrupados no mesmo arquivo. A formatação segue o mesmo padrão dos
+DTOs de entrada: um decorator por linha, decorators imediatamente acima da propriedade e uma linha
+em branco entre blocos de propriedades. Exemplo:
+
+```ts
+@Expose()
+@ApiProperty()
+declare id: number;
+
+@Expose()
+@ApiPropertyOptional({ nullable: true })
+declare description: string | null;
+```
 
 O service deve criar o payload de domínio e convertê-lo explicitamente com `toResponseDto`. Não
 retorne entidades TypeORM, objetos de repositório ou objetos literais diretamente ao controller.

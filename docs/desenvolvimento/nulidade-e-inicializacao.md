@@ -59,8 +59,7 @@ receber um valor padrão silenciosamente.
 Transformers compartilhados pertencem a `apps/api/src/shared/transformers/dto`. Eles não devem
 preservar uma entrada incompatível para que outro decorator descubra o erro: um transformer de
 valor opcional converte ausência ou conteúdo incompatível para `null`. Transformers de coleção
-normalizam ausência ou conteúdo incompatível para `[]`. Assim, por exemplo, `toNumber` e
-`toOptionalNumber` retornam somente `number | null`, enquanto `toStringArray` retorna somente
+normalizam ausência ou conteúdo incompatível para `[]`. Assim, por exemplo, `toNumber` retornam somente `number | null`, enquanto `toStringArray` retorna somente
 `string[]`. Campos obrigatórios continuam sendo rejeitados pelos decorators de validação.
 
 `?` é reservado para estruturas técnicas em que a existência da própria propriedade é relevante,

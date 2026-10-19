@@ -23,7 +23,7 @@ import {
 } from 'class-validator';
 
 import { i18n } from '@/i18n/i18n.util';
-import { toOptionalBoolean, toOptionalNumber } from '@/shared/transformers/dto';
+import { toBoolean, toNumber } from '@/shared/transformers/dto';
 
 const MAX_PER_PAGE = 1000;
 const SORT_DIRECTIONS: SortDirection[] = ['asc', 'desc'];
@@ -68,7 +68,7 @@ class FilterItemDto implements FilterItem {
   @ApiPropertyOptional({ nullable: true })
   value: unknown = null;
 
-  @Transform(toOptionalBoolean)
+  @Transform(toBoolean)
   @IsOptional()
   @IsBoolean({ message: i18n('validation.boolean') })
   @ApiPropertyOptional({ type: Boolean, nullable: true })
@@ -81,13 +81,13 @@ class FilterItemDto implements FilterItem {
 }
 
 class PaginationRequestDto implements PaginationRequest {
-  @Transform(toOptionalNumber)
+  @Transform(toNumber)
   @IsInt({ message: i18n('validation.integer') })
   @Min(1, { message: i18n('validation.min') })
   @ApiPropertyOptional({ type: Number })
   page = 1;
 
-  @Transform(toOptionalNumber)
+  @Transform(toNumber)
   @IsInt({ message: i18n('validation.integer') })
   @Min(1, { message: i18n('validation.min') })
   @Max(MAX_PER_PAGE, { message: i18n('validation.max') })
@@ -115,7 +115,7 @@ export class OptionRequestDto implements OptionRequest {
   @ApiPropertyOptional({ type: () => PaginationRequestDto })
   pagination = new PaginationRequestDto();
 
-  @Transform(toOptionalBoolean)
+  @Transform(toBoolean)
   @IsOptional()
   @IsBoolean({ message: i18n('validation.boolean') })
   @ApiPropertyOptional({ type: Boolean, nullable: true })
