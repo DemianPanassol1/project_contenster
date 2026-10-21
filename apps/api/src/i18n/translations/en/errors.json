@@ -31,6 +31,8 @@
     "file_upload_failed": "The file could not be uploaded."
   },
   "storage": {
+    "active_file_type_rule_already_exists": "An active rule already exists for this file type.",
+    "configuration_in_use": "The storage configuration cannot be deleted because it has related rules.",
     "rule_not_found": "No active storage rule was found for this file type.",
     "connection_test_failed": "Could not connect to the storage provider.",
     "credentials_required": "Storage provider credentials are required.",

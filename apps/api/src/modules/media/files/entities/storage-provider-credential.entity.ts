@@ -20,7 +20,10 @@ export class StorageProviderCredential {
     nullable: false,
     onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: 'configuracao_storage_id' })
+  @JoinColumn({
+    foreignKeyConstraintName: 'fk_credenciais_storage_provedor_configuracao',
+    name: 'configuracao_storage_id',
+  })
   declare storageConfiguration: StorageProviderConfiguration;
 
   @Column({ name: 'access_key_id_criptografado', nullable: true, type: 'text' })

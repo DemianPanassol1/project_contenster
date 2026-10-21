@@ -31,6 +31,8 @@
     "file_upload_failed": "Não foi possível enviar o arquivo."
   },
   "storage": {
+    "active_file_type_rule_already_exists": "Já existe uma regra ativa para este tipo de arquivo.",
+    "configuration_in_use": "A configuração de armazenamento não pode ser excluída porque possui regras vinculadas.",
     "rule_not_found": "Nenhuma regra de armazenamento ativa foi encontrada para este tipo de arquivo.",
     "connection_test_failed": "Não foi possível conectar ao provedor de armazenamento.",
     "credentials_required": "As credenciais do provedor de armazenamento são obrigatórias.",

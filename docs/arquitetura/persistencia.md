@@ -6,6 +6,9 @@ O sistema usa PostgreSQL em um único schema. O contexto de cliente limita autor
 
 Entidades pertencentes a cliente devem possuir ownership explícito. Serviços e repositórios aplicam o `clientId` do contexto autenticado em leituras, alterações e exclusões.
 
+As foreign keys recebem nomes semânticos explícitos tanto na migration quanto no `@JoinColumn` da
+entidade. Isso permite traduzir violações de integridade sem acoplamento a nomes gerados pelo ORM.
+
 ## TypeORM e migrations
 
 - `synchronize` permanece desativado.
@@ -21,3 +24,8 @@ Uma alteração que preserve invariantes entre vários registros deve usar uma t
 O bootstrap técnico materializa referências necessárias para operar: idiomas, ações, localização, módulos, funcionalidades e a identidade administrativa inicial com contexto de cliente e perfil.
 
 Somente `User` e `Client` usam exclusão lógica. Para as demais entidades, não introduza `deletedAt` ou comportamento equivalente sem requisito explícito.
+
+Configurações de armazenamento podem ser removidas somente quando o PostgreSQL permitir: regras de
+tipo de arquivo ainda vinculadas são protegidas por `RESTRICT`, e a violação da FK é convertida pela
+API em uma mensagem de domínio. Não replique essa integridade com consultas prévias apenas para
+antecipar o erro do banco.

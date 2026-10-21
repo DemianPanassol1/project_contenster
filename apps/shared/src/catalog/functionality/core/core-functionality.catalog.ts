@@ -3,6 +3,8 @@ import type { CoreFunctionalityDefinition } from '../functionality-catalog.type.
 export const CORE_FUNCTIONALITY_IDENTITIES = {
   actions: 'actions',
   cities: 'cities',
+  clientLogs: 'client-logs',
+  clientStorage: 'client-storage',
   clients: 'clients',
   countries: 'countries',
   functionalities: 'functionalities',
@@ -17,6 +19,8 @@ export const CORE_FUNCTIONALITY_CATALOG = [
   { slug: CORE_FUNCTIONALITY_IDENTITIES.actions },
   { slug: CORE_FUNCTIONALITY_IDENTITIES.languages },
   { slug: CORE_FUNCTIONALITY_IDENTITIES.clients },
+  { slug: CORE_FUNCTIONALITY_IDENTITIES.clientStorage },
+  { slug: CORE_FUNCTIONALITY_IDENTITIES.clientLogs },
   { slug: CORE_FUNCTIONALITY_IDENTITIES.users },
   { slug: CORE_FUNCTIONALITY_IDENTITIES.profiles },
   { slug: CORE_FUNCTIONALITY_IDENTITIES.modules },

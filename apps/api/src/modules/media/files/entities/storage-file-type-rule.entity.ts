@@ -28,7 +28,10 @@ export class StorageFileTypeRule {
     nullable: false,
     onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: 'cliente_id' })
+  @JoinColumn({
+    foreignKeyConstraintName: 'fk_regras_storage_tipo_arquivo_cliente',
+    name: 'cliente_id',
+  })
   declare client: Client;
 
   @Column({ enum: FileType, enumName: 'tipo_arquivo', name: 'tipo_arquivo', type: 'enum' })
@@ -38,7 +41,10 @@ export class StorageFileTypeRule {
     nullable: false,
     onDelete: 'RESTRICT',
   })
-  @JoinColumn({ name: 'configuracao_storage_id' })
+  @JoinColumn({
+    foreignKeyConstraintName: 'fk_regras_storage_tipo_arquivo_configuracao',
+    name: 'configuracao_storage_id',
+  })
   declare storageConfiguration: StorageProviderConfiguration;
 
   @Column({ default: true, name: 'eh_ativo', type: 'boolean' })

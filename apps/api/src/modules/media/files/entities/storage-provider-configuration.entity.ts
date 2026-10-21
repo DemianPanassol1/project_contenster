@@ -27,7 +27,10 @@ export class StorageProviderConfiguration {
     nullable: false,
     onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: 'cliente_id' })
+  @JoinColumn({
+    foreignKeyConstraintName: 'fk_configuracoes_storage_provedor_cliente',
+    name: 'cliente_id',
+  })
   declare client: Client;
 
   @Column({

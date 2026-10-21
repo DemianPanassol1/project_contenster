@@ -31,6 +31,8 @@
     "file_upload_failed": "No se pudo cargar el archivo."
   },
   "storage": {
+    "active_file_type_rule_already_exists": "Ya existe una regla activa para este tipo de archivo.",
+    "configuration_in_use": "La configuración de almacenamiento no se puede eliminar porque tiene reglas vinculadas.",
     "rule_not_found": "No se encontró ninguna regla de almacenamiento activa para este tipo de archivo.",
     "connection_test_failed": "No se pudo conectar al proveedor de almacenamiento.",
     "credentials_required": "Se requieren las credenciales del proveedor de almacenamiento.",

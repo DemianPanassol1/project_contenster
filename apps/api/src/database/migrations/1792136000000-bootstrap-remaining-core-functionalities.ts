@@ -7,6 +7,8 @@ const functionalities = [
   ['countries', 7, 'Países', 'Countries', 'Países'],
   ['states', 8, 'Estados', 'States', 'Estados'],
   ['cities', 9, 'Cidades', 'Cities', 'Ciudades'],
+  ['client-storage', 10, 'Armazenamento', 'Storage', 'Almacenamiento'],
+  ['client-logs', 11, 'Logs', 'Logs', 'Registros'],
 ] as const;
 
 export class BootstrapRemainingCoreFunctionalities1792136000000 implements MigrationInterface {

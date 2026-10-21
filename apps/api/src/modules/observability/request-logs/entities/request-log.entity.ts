@@ -28,11 +28,11 @@ export class RequestLog {
   declare requestId: string;
 
   @ManyToOne(() => User, { nullable: true, onDelete: 'SET NULL' })
-  @JoinColumn({ name: 'usuario_id' })
+  @JoinColumn({ foreignKeyConstraintName: 'fk_logs_requisicoes_usuario', name: 'usuario_id' })
   declare user: User | null;
 
   @ManyToOne(() => Client, { nullable: true, onDelete: 'SET NULL' })
-  @JoinColumn({ name: 'cliente_id' })
+  @JoinColumn({ foreignKeyConstraintName: 'fk_logs_requisicoes_cliente', name: 'cliente_id' })
   declare client: Client | null;
 
   @Column({ length: 100, name: 'tipo_evento', nullable: true, type: 'varchar' })

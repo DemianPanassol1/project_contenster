@@ -21,6 +21,7 @@ import { CommunicationModule } from '@/modules/communication/communication.modul
 import { IdentityModule } from '@/modules/identity/identity.module';
 import { LocationsModule } from '@/modules/locations/locations.module';
 import { MediaModule } from '@/modules/media/media.module';
+import { ClientLogsModule } from '@/modules/observability/client-logs/client-logs.module';
 import { RequestLogModule } from '@/modules/observability/request-logs/request-log.module';
 import { SchedulingModule } from '@/modules/scheduling/scheduling.module';
 
@@ -61,6 +62,7 @@ const setUploadResponseHeaders = (response: ServerResponse, filePath: string): v
     DatabaseModule,
     RedisModule,
     RequestLogModule,
+    ClientLogsModule,
     MediaModule,
     IdentityModule,
     AccessControlModule,

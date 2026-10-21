@@ -68,18 +68,21 @@ export class File {
   declare height: number | null;
 
   @ManyToOne(() => Client, (client) => client.files, { nullable: false, onDelete: 'RESTRICT' })
-  @JoinColumn({ name: 'cliente_id' })
+  @JoinColumn({ foreignKeyConstraintName: 'fk_arquivos_cliente', name: 'cliente_id' })
   declare client: Client;
 
   @ManyToOne(() => User, (user) => user.uploadedFiles, { nullable: true, onDelete: 'SET NULL' })
-  @JoinColumn({ name: 'usuario_upload_id' })
+  @JoinColumn({ foreignKeyConstraintName: 'fk_arquivos_usuario_upload', name: 'usuario_upload_id' })
   declare uploadedBy: User | null;
 
   @ManyToOne(() => StorageProviderConfiguration, (configuration) => configuration.files, {
     nullable: true,
     onDelete: 'SET NULL',
   })
-  @JoinColumn({ name: 'configuracao_storage_id' })
+  @JoinColumn({
+    foreignKeyConstraintName: 'fk_arquivos_configuracao_storage',
+    name: 'configuracao_storage_id',
+  })
   declare storageConfiguration: StorageProviderConfiguration | null;
 
   @OneToMany(() => Language, (language) => language.icon)

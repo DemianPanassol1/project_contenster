@@ -32,7 +32,12 @@ Essa decisão é de autorização HTTP e não deve ser reimplementada nos contro
 
 ## Bootstrap e evolução
 
-O seed inicial materializa módulos, funcionalidades, idiomas e ações. As funcionalidades iniciais cobrem clientes, usuários, perfis, funcionalidades, módulos, cidades, estados e países.
+O seed inicial materializa módulos, funcionalidades, idiomas e ações. As funcionalidades iniciais cobrem clientes, usuários, perfis, funcionalidades, módulos, cidades, estados, países, armazenamento do cliente e logs do cliente.
+
+`client-storage` reúne configurações de provedor, regras por tipo de arquivo e consulta dos arquivos
+do cliente. `client-logs` reúne a consulta dos logs de requisição acessíveis ao cliente ativo — logs
+do próprio cliente e técnicos sem cliente — e a consulta independente dos logs de rotinas. Ambas são
+funcionalidades administrativas únicas; a separação em listas ou abas é responsabilidade de apresentação.
 
 Ao adicionar uma funcionalidade, registre sua identidade no Shared, materialize-a por migration ou fluxo autorizado, associe ações por permissões de perfil e crie tela somente quando houver uma superfície real.
 
