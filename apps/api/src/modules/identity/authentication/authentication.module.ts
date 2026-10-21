@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
@@ -15,6 +15,7 @@ import { AuthenticationService } from './authentication.service';
 import { PasswordRecoveryEmailService } from './password-recovery-email.service';
 import { PasswordResetTokenStore } from './password-reset-token.store';
 
+@Global()
 @Module({
   imports: [TypeOrmModule.forFeature([User]), AuthorizationModule, JwtModule.register({})],
   controllers: [AuthenticationController],

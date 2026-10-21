@@ -32,6 +32,12 @@ pnpm --filter api dev
 pnpm --filter web dev
 ```
 
+## Swagger
+
+Com o ambiente local configurado em `apps/api/.env`, a documentação da API fica disponível em
+`http://localhost:7070/api/v1/docs`. A rota completa também está explícita em `SWAGGER_PATH` e é
+informada no log de inicialização da API quando o Swagger estiver habilitado.
+
 ## Validação
 
 ```bash

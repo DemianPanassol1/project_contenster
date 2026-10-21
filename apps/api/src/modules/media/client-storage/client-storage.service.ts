@@ -5,7 +5,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import type { I18nService } from 'nestjs-i18n';
+import { I18nService } from 'nestjs-i18n';
 import type { DeepPartial } from 'typeorm';
 
 import type { I18nTranslations } from '@/i18n/translations';

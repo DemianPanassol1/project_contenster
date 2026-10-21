@@ -1,7 +1,7 @@
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { Injectable, Logger, ServiceUnavailableException } from '@nestjs/common';
-import type { I18nService } from 'nestjs-i18n';
+import { I18nService } from 'nestjs-i18n';
 import { createTransport } from 'nodemailer';
 
 import type { I18nTranslations } from '@/i18n/translations';

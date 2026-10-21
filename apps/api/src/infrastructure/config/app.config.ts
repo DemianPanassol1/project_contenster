@@ -292,7 +292,7 @@ export const settings: AppSettings = {
   THROTTLE_TTL_MS: positiveIntegerValue('THROTTLE_TTL_MS', 60_000),
   THROTTLE_LIMIT: positiveIntegerValue('THROTTLE_LIMIT', 100),
   SWAGGER_ENABLED: booleanValue('SWAGGER_ENABLED', nodeEnv !== 'production'),
-  SWAGGER_PATH: stringValue('SWAGGER_PATH', 'docs'),
+  SWAGGER_PATH: stringValue('SWAGGER_PATH', 'api/v1/docs'),
   SWAGGER_PERSIST_AUTHORIZATION: booleanValue('SWAGGER_PERSIST_AUTHORIZATION', true),
   LOG_LEVEL: enumValue('LOG_LEVEL', LOG_LEVELS, 'info'),
   LOG_PRETTY: booleanValue('LOG_PRETTY', true),
