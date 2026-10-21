@@ -17,10 +17,10 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "vitest run",
+    "test": "pnpm run test:unit && pnpm run test:integration && pnpm run test:e2e",
     "test:unit": "vitest run src",
-    "test:integration": "vitest run test/integration",
-    "test:e2e": "vitest run test/e2e",
+    "test:integration": "vitest run --config vitest.integration.config.mts",
+    "test:e2e": "vitest run --config vitest.e2e.config.mts",
     "test:smoke": "vitest run test/e2e/app.e2e-spec.ts",
     "test:cov": "vitest run --coverage"
   },
