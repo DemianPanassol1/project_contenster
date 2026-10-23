@@ -4,7 +4,8 @@
 
 O registry associa uma funcionalidade conhecida do catálogo Shared a uma tela React e ao modo de
 operação administrativo correspondente. Ele resolve a apresentação de rotas como
-`/admin/<slug>`, `/admin/<slug>/new` e `/admin/<slug>/<id>`.
+`/admin/<functionality>`, `/admin/<functionality>/create` e
+`/admin/<functionality>/update/<id>`.
 
 Ele não concede autorização, não consulta o banco, não substitui guards da API e não é a fonte de
 verdade da sessão. A tela pode ser exibida apenas como conveniência de navegação; toda leitura e
@@ -40,11 +41,11 @@ registry/
 
 Os modos aceitos são:
 
-| Modo     | Rota administrativa esperada | Action associada     |
-| -------- | ---------------------------- | -------------------- |
-| `list`   | `/admin/<slug>`              | normalmente `view`   |
-| `create` | `/admin/<slug>/new`          | normalmente `create` |
-| `update` | `/admin/<slug>/<id>`         | normalmente `edit`   |
+| Modo     | Rota administrativa esperada         | Action associada     |
+| -------- | ------------------------------------ | -------------------- |
+| `list`   | `/admin/<functionality>`             | normalmente `view`   |
+| `create` | `/admin/<functionality>/create`      | normalmente `create` |
+| `update` | `/admin/<functionality>/update/<id>` | normalmente `edit`   |
 
 O campo `action` orienta a camada de apresentação sobre a permissão necessária para aquele modo.
 Ele não é uma garantia de acesso: se a API negar a requisição, a interface deve tratar a resposta

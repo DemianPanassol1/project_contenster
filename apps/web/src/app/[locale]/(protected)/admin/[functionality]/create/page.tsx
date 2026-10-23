@@ -4,21 +4,21 @@ import { isFunctionalitySlug } from '@contenster/shared';
 import { getAdminFeatureBinding } from '@/registry/admin';
 
 type AdminFeatureCreatePageProps = {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ functionality: string }>;
 };
 
 export default async function AdminFeatureCreatePage({ params }: AdminFeatureCreatePageProps) {
-  const { slug } = await params;
+  const { functionality } = await params;
 
-  if (!isFunctionalitySlug(slug)) {
+  if (!isFunctionalitySlug(functionality)) {
     notFound();
   }
 
-  const binding = getAdminFeatureBinding(slug, 'create');
+  const binding = getAdminFeatureBinding(functionality, 'create');
 
   if (!binding) {
     notFound();
   }
 
-  return <binding.View functionalitySlug={slug} entityId={null} />;
+  return <binding.View functionalitySlug={functionality} entityId={null} />;
 }

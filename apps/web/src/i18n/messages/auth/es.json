@@ -1,0 +1,14 @@
+{
+  "login": {
+    "title": "Iniciar sesión"
+  },
+  "password_recovery": {
+    "title": "Recuperar contraseña"
+  },
+  "password_reset": {
+    "title": "Restablecer contraseña"
+  },
+  "password_change": {
+    "title": "Cambiar contraseña"
+  }
+}

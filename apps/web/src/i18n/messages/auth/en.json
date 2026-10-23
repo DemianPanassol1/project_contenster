@@ -1,0 +1,14 @@
+{
+  "login": {
+    "title": "Sign in"
+  },
+  "password_recovery": {
+    "title": "Forgot password"
+  },
+  "password_reset": {
+    "title": "Reset password"
+  },
+  "password_change": {
+    "title": "Change password"
+  }
+}
