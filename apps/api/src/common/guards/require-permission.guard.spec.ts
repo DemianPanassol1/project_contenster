@@ -14,10 +14,12 @@ const createContext = (session: unknown, body: unknown) => ({
 });
 
 describe('RequirePermissionGuard', () => {
+  const i18n = { t: vi.fn((key: string) => key) };
+
   it('allows handlers without permission metadata', () => {
     const reflector = { getAllAndOverride: vi.fn().mockReturnValue(undefined) };
     const resolver = { hasPermission: vi.fn() };
-    const guard = new RequirePermissionGuard(reflector as never, resolver as never);
+    const guard = new RequirePermissionGuard(reflector as never, resolver as never, i18n as never);
 
     expect(guard.canActivate(createContext(undefined, undefined) as never)).toBe(true);
     expect(resolver.hasPermission).not.toHaveBeenCalled();
@@ -32,7 +34,7 @@ describe('RequirePermissionGuard', () => {
       }),
     };
     const resolver = { hasPermission: vi.fn().mockReturnValue(true) };
-    const guard = new RequirePermissionGuard(reflector as never, resolver as never);
+    const guard = new RequirePermissionGuard(reflector as never, resolver as never, i18n as never);
     const session = { user: { id: 1 } };
 
     expect(guard.canActivate(createContext(session, { id: '12' }) as never)).toBe(true);
@@ -51,7 +53,7 @@ describe('RequirePermissionGuard', () => {
       }),
     };
     const resolver = { hasPermission: vi.fn().mockReturnValue(false) };
-    const guard = new RequirePermissionGuard(reflector as never, resolver as never);
+    const guard = new RequirePermissionGuard(reflector as never, resolver as never, i18n as never);
 
     expect(() => guard.canActivate(createContext({ user: { id: 1 } }, {}) as never)).toThrow(
       ForbiddenException,

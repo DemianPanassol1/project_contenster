@@ -7,8 +7,6 @@ import type { PaginateRequestDto } from '@/shared/dtos';
 import { buildPaginationMeta } from '@/shared/pagination';
 import { toResponseDto } from '@/shared/responses';
 
-import { CronExecutionLogDetailResponseDto } from './dto/res/cron-execution-log-detail.response.dto';
-import { CronExecutionLogListItemResponseDto } from './dto/res/cron-execution-log-list-item.response.dto';
 import { RequestLogDetailResponseDto } from './dto/res/request-log-detail.response.dto';
 import { RequestLogListItemResponseDto } from './dto/res/request-log-list-item.response.dto';
 import { ClientLogsRepository } from './client-logs.repository';
@@ -46,30 +44,6 @@ export class ClientLogsService {
     };
   }
 
-  async listRoutineLogs(
-    request: PaginateRequestDto,
-  ): Promise<PaginatedBody<CronExecutionLogListItemResponseDto>> {
-    const [logs, total] = await this.repository.listRoutineLogs(request);
-
-    return {
-      items: toResponseDto(
-        CronExecutionLogListItemResponseDto,
-        logs.map((log) => ({
-          createdAt: log.createdAt.toISOString(),
-          durationMs: log.durationMs,
-          id: log.id,
-          message: log.message,
-          status: log.status,
-          taskName: log.taskName,
-          totalError: log.totalError,
-          totalProcessed: log.totalProcessed,
-          totalSuccess: log.totalSuccess,
-        })),
-      ),
-      meta: buildPaginationMeta(request, total),
-    };
-  }
-
   async getRequestLog(clientId: number, id: number): Promise<RequestLogDetailResponseDto> {
     const log = await this.repository.findRequestLog(clientId, id);
 
@@ -98,29 +72,6 @@ export class ClientLogsService {
       statusCode: log.statusCode,
       userAgent: log.userAgent,
       userName: log.user?.name ?? null,
-    });
-  }
-
-  async getRoutineLog(id: number): Promise<CronExecutionLogDetailResponseDto> {
-    const log = await this.repository.findRoutineLog(id);
-
-    if (!log) {
-      throw new NotFoundException(this.i18n.t('errors.common.record_not_found'));
-    }
-
-    return toResponseDto(CronExecutionLogDetailResponseDto, {
-      createdAt: log.createdAt.toISOString(),
-      durationMs: log.durationMs,
-      error: log.error,
-      finishedAt: log.finishedAt?.toISOString() ?? null,
-      id: log.id,
-      message: log.message,
-      startedAt: log.startedAt.toISOString(),
-      status: log.status,
-      taskName: log.taskName,
-      totalError: log.totalError,
-      totalProcessed: log.totalProcessed,
-      totalSuccess: log.totalSuccess,
     });
   }
 }

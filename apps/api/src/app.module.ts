@@ -23,6 +23,7 @@ import { LocationsModule } from '@/modules/locations/locations.module';
 import { MediaModule } from '@/modules/media/media.module';
 import { ObservabilityModule } from '@/modules/observability/observability.module';
 import { SchedulingModule } from '@/modules/scheduling/scheduling.module';
+import { SystemAdminModule } from '@/modules/system-admin/system-admin.module';
 
 const createUploadsServeRoot = (): string => {
   const baseUrl = settings.UPLOADS_PUBLIC_BASE_URL;
@@ -69,6 +70,7 @@ const setUploadResponseHeaders = (response: ServerResponse, filePath: string): v
     CommunicationModule,
     LocationsModule,
     SchedulingModule,
+    SystemAdminModule,
   ],
   controllers: [HealthController],
   providers: [

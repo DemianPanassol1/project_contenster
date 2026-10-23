@@ -17,6 +17,10 @@ export class SessionUserResponseDto implements SessionUser {
   declare id: number;
 
   @Expose()
+  @ApiProperty({ type: Boolean })
+  declare isSuperuser: boolean;
+
+  @Expose()
   @ApiProperty({ type: String })
   declare name: string;
 
@@ -153,20 +157,6 @@ export class SessionModuleResponseDto implements SessionModule {
   declare functionalities: SessionFunctionalityResponseDto[];
 }
 
-type SessionContext = AuthenticatedSession['context'];
-
-class SessionContextResponseDto implements SessionContext {
-  @Expose()
-  @Type(() => SessionClientResponseDto)
-  @ApiProperty({ type: SessionClientResponseDto })
-  declare client: SessionClientResponseDto;
-
-  @Expose()
-  @Type(() => SessionProfileResponseDto)
-  @ApiProperty({ type: SessionProfileResponseDto })
-  declare profile: SessionProfileResponseDto;
-}
-
 export class AuthenticatedSessionResponseDto implements AuthenticatedSession {
   @Expose()
   @Type(() => SessionUserResponseDto)
@@ -174,9 +164,8 @@ export class AuthenticatedSessionResponseDto implements AuthenticatedSession {
   declare user: SessionUserResponseDto;
 
   @Expose()
-  @Type(() => SessionContextResponseDto)
-  @ApiProperty({ type: SessionContextResponseDto })
-  declare context: SessionContextResponseDto;
+  @ApiProperty({ type: Object })
+  declare context: AuthenticatedSession['context'];
 
   @Expose()
   @Type(() => SessionModuleResponseDto)

@@ -25,4 +25,8 @@ export class AuthorizeResponseDto implements AuthorizeResponse {
   @Type(() => AuthorizeClientOptionResponseDto)
   @ApiProperty({ type: [AuthorizeClientOptionResponseDto] })
   declare clients: AuthorizeClientOptionResponseDto[];
+
+  @Expose()
+  @ApiProperty({ type: Boolean })
+  declare isEligibleToGlobalContext: boolean;
 }

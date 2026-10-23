@@ -10,6 +10,16 @@
     "password_recovery_unavailable": "La recuperación de contraseña no está disponible temporalmente.",
     "session_not_authenticated": "La sesión no está autenticada."
   },
+  "authorization": {
+    "client_context_required": "Esta operación requiere un contexto de cliente.",
+    "global_context_required": "Esta operación requiere el contexto global.",
+    "permission_denied": "No tiene permiso para realizar esta operación.",
+    "superuser_access_denied": "El acceso de superusuario no está disponible para esta sesión."
+  },
+  "infrastructure": {
+    "database_unavailable": "La base de datos no está disponible temporalmente.",
+    "session_authentication_unconfigured": "La autenticación de sesión no está configurada."
+  },
   "translations": {
     "language_not_found": "No se encontró uno de los idiomas informados.",
     "translation_language_duplicate": "Un idioma no puede informarse más de una vez."
@@ -40,5 +50,14 @@
     "invalid_path": "La ruta de almacenamiento no es válida.",
     "invalid_configuration": "La configuración de almacenamiento no es válida.",
     "provider_not_implemented": "El proveedor de almacenamiento no se ha implementado."
+  },
+  "system_admin": {
+    "client_not_found": "Cliente no encontrado.",
+    "language_not_found": "No se encontró uno de los idiomas del cliente.",
+    "functionality_not_in_catalog": "Una de las funcionalidades informadas no pertenece al catálogo técnico.",
+    "functionality_duplicate": "Una funcionalidad no puede ser informada más de una vez.",
+    "invalid_functionality_hierarchy": "La jerarquía de funcionalidades informada no es válida.",
+    "invalid_functionality_configuration": "La configuración de la funcionalidad informada no es válida.",
+    "invalid_user_profile_assignment": "El usuario, cliente o perfil informado no puede recibir esta asignación."
   }
 }

@@ -54,6 +54,7 @@ export class RequestLogService {
     const responseTimeMs = Date.now() - startedAt;
     const session = createSessionSnapshot(request);
     const log: DeepPartial<RequestLog> = {
+      accessType: session.accessType,
       client: session.clientId ? { id: session.clientId } : null,
       error: sanitizeLogPayload(error) ?? null,
       eventType: session.eventType,

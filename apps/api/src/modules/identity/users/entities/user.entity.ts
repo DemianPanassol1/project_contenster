@@ -50,6 +50,9 @@ export class User {
   @Column({ default: false, name: 'eh_bloqueado', type: 'boolean' })
   declare isBlocked: boolean;
 
+  @Column({ default: false, name: 'eh_super_usuario', type: 'boolean' })
+  declare isSuperuser: boolean;
+
   @Column({ name: 'ultimo_login_em', nullable: true, type: 'timestamp' })
   declare lastLoginAt: Date | null;
 

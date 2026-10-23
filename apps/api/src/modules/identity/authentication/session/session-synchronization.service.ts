@@ -1,6 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
 
+import { RequestLogAccessType, SessionContextType } from '@contenster/shared';
 import type { I18nTranslations } from '@/i18n/translations';
 import { toResponseDto } from '@/shared/responses';
 
@@ -70,10 +71,13 @@ export class SessionSynchronizationService {
     tokenHash: string,
     storedSession: StoredSession,
   ): Promise<StoredSession> {
-    const session = await this.authenticationService.resolveSession(
-      storedSession.session.user.id,
-      storedSession.session.context.client.id,
-    );
+    const { context, user } = storedSession.session;
+    const session =
+      context.type === SessionContextType.global
+        ? await this.authenticationService.resolveGlobalSession(user.id)
+        : context.accessType === RequestLogAccessType.superuser
+          ? await this.authenticationService.resolveAssumedSession(user.id, context.client.id)
+          : await this.authenticationService.resolveSession(user.id, context.client.id);
     const ttlSeconds = await this.getTtl(tokenHash);
     if (ttlSeconds <= 0) return storedSession;
 

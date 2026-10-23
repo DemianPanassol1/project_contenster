@@ -1,7 +1,9 @@
 import { Controller, Get, Header, ServiceUnavailableException } from '@nestjs/common';
+import { I18nService } from 'nestjs-i18n';
 import { DataSource } from 'typeorm';
 
 import { SkipRequestLog } from '@/common/decorators/skip-request-log.decorator';
+import type { I18nTranslations } from '@/i18n/translations';
 
 interface HealthCheckResponse {
   status: 'ok';
@@ -18,7 +20,10 @@ interface ReadinessCheckResponse extends HealthCheckResponse {
 @SkipRequestLog()
 @Controller('health')
 export class HealthController {
-  constructor(private readonly dataSource: DataSource) {}
+  constructor(
+    private readonly dataSource: DataSource,
+    private readonly i18n: I18nService<I18nTranslations>,
+  ) {}
 
   @Get()
   @Header('Cache-Control', 'no-store')
@@ -36,7 +41,9 @@ export class HealthController {
     try {
       await this.dataSource.query('SELECT 1');
     } catch {
-      throw new ServiceUnavailableException('Database is temporarily unavailable.');
+      throw new ServiceUnavailableException(
+        this.i18n.t('errors.infrastructure.database_unavailable'),
+      );
     }
 
     return {

@@ -8,7 +8,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-import { RequestLogLevel } from '@contenster/shared';
+import { RequestLogAccessType, RequestLogLevel } from '@contenster/shared';
 import { Client } from '@/modules/identity/clients/entities/client.entity';
 import { User } from '@/modules/identity/users/entities/user.entity';
 import type { SanitizedLogPayload } from '@/shared/utils/logger-redaction.util';
@@ -34,6 +34,14 @@ export class RequestLog {
   @ManyToOne(() => Client, { nullable: true, onDelete: 'SET NULL' })
   @JoinColumn({ foreignKeyConstraintName: 'fk_logs_requisicoes_cliente', name: 'cliente_id' })
   declare client: Client | null;
+
+  @Column({
+    enum: RequestLogAccessType,
+    enumName: 'tipo_acesso_log_requisicao',
+    name: 'tipo_acesso',
+    type: 'enum',
+  })
+  declare accessType: RequestLogAccessType;
 
   @Column({ length: 100, name: 'tipo_evento', nullable: true, type: 'varchar' })
   declare eventType: string | null;

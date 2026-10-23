@@ -10,6 +10,7 @@ export type AuthorizeClientOption = AppOption<number>;
 
 export interface AuthorizeResponse {
   clients: AuthorizeClientOption[];
+  isEligibleToGlobalContext: boolean;
 }
 
 export interface SignInRequest extends AuthorizeRequest {

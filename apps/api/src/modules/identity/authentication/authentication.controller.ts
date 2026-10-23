@@ -7,6 +7,7 @@ import type { ApiHttpRequest } from '@/common/types/http-context.type';
 import { AuthorizeRequestDto } from './dto/req/authorize-request.dto';
 import { ForgotPasswordRequestDto } from './dto/req/forgot-password-request.dto';
 import { ResetPasswordRequestDto } from './dto/req/reset-password-request.dto';
+import { SignInGlobalRequestDto } from './dto/req/sign-in-global-request.dto';
 import { SignInRequestDto } from './dto/req/sign-in-request.dto';
 import { SwitchClientRequestDto } from './dto/req/switch-client-request.dto';
 import {
@@ -34,6 +35,24 @@ export class AuthenticationController {
   @Post('authorize')
   authorize(@Body() request: AuthorizeRequestDto): Promise<AuthorizeResponseDto> {
     return this.authenticationService.authorize(request);
+  }
+
+  @Post('sign-in-global')
+  async signInGlobal(
+    @Body() request: SignInGlobalRequestDto,
+    @Res({ passthrough: true }) response: CookieResponse,
+  ): Promise<SessionResponseDto> {
+    const result = await this.authenticationService.signInGlobal(
+      request.staySignedIn,
+      request.username,
+      request.password,
+    );
+    response.cookie(
+      this.sessionAuthenticationService.cookieName,
+      result.token,
+      this.sessionAuthenticationService.cookieOptions(result.ttlSeconds),
+    );
+    return result.response;
   }
 
   @Post('sign-in')
@@ -89,6 +108,46 @@ export class AuthenticationController {
       this.sessionAuthenticationService.cookieOptions(result.ttlSeconds),
     );
 
+    return result.response;
+  }
+
+  @Post('switch-client-as-superuser')
+  @Authenticate()
+  async switchClientAsSuperuser(
+    @CurrentSession() session: AuthenticatedSessionResponseDto,
+    @Body() request: SwitchClientRequestDto,
+    @Req() httpRequest: ApiHttpRequest,
+    @Res({ passthrough: true }) response: CookieResponse,
+  ): Promise<SessionResponseDto> {
+    const result = await this.authenticationService.switchClientAsSuperuser(
+      request,
+      session.user.id,
+      httpRequest.headers.cookie,
+    );
+    response.cookie(
+      this.sessionAuthenticationService.cookieName,
+      result.token,
+      this.sessionAuthenticationService.cookieOptions(result.ttlSeconds),
+    );
+    return result.response;
+  }
+
+  @Post('switch-global')
+  @Authenticate()
+  async switchGlobal(
+    @CurrentSession() session: AuthenticatedSessionResponseDto,
+    @Req() httpRequest: ApiHttpRequest,
+    @Res({ passthrough: true }) response: CookieResponse,
+  ): Promise<SessionResponseDto> {
+    const result = await this.authenticationService.switchGlobal(
+      session.user.id,
+      httpRequest.headers.cookie,
+    );
+    response.cookie(
+      this.sessionAuthenticationService.cookieName,
+      result.token,
+      this.sessionAuthenticationService.cookieOptions(result.ttlSeconds),
+    );
     return result.response;
   }
 

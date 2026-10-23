@@ -31,6 +31,9 @@ export class Profile {
   @Column({ default: true, name: 'eh_ativo', type: 'boolean' })
   declare isActive: boolean;
 
+  @Column({ default: false, name: 'eh_admin', type: 'boolean' })
+  declare isAdmin: boolean;
+
   @CreateDateColumn({ name: 'criado_em', type: 'timestamp' })
   declare createdAt: Date;
 

@@ -10,6 +10,16 @@
     "password_recovery_unavailable": "Password recovery is temporarily unavailable.",
     "session_not_authenticated": "The session is not authenticated."
   },
+  "authorization": {
+    "client_context_required": "This operation requires a client context.",
+    "global_context_required": "This operation requires the global context.",
+    "permission_denied": "You do not have permission to perform this operation.",
+    "superuser_access_denied": "Superuser access is not available for this session."
+  },
+  "infrastructure": {
+    "database_unavailable": "The database is temporarily unavailable.",
+    "session_authentication_unconfigured": "Session authentication is not configured."
+  },
   "translations": {
     "language_not_found": "One of the provided languages was not found.",
     "translation_language_duplicate": "A language cannot be provided more than once."
@@ -40,5 +50,14 @@
     "invalid_path": "The storage path is invalid.",
     "invalid_configuration": "The storage configuration is invalid.",
     "provider_not_implemented": "The storage provider has not been implemented."
+  },
+  "system_admin": {
+    "client_not_found": "Client not found.",
+    "language_not_found": "One of the client languages was not found.",
+    "functionality_not_in_catalog": "One of the provided functionalities does not belong to the technical catalog.",
+    "functionality_duplicate": "A functionality cannot be provided more than once.",
+    "invalid_functionality_hierarchy": "The provided functionality hierarchy is invalid.",
+    "invalid_functionality_configuration": "The provided functionality configuration is invalid.",
+    "invalid_user_profile_assignment": "The provided user, client, or profile cannot receive this assignment."
   }
 }

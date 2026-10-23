@@ -69,8 +69,27 @@ export class ProfilesService {
   }
 
   async save(clientId: number, request: SaveProfileRequestDto): Promise<GetProfileByIdResponseDto> {
+    let existingProfile: Profile | null = null;
+
     if (request.id !== null) {
-      await this.getEntityByIdOrFail(clientId, request.id);
+      existingProfile = await this.getEntityByIdOrFail(clientId, request.id);
+
+      if (existingProfile.isAdmin) {
+        const currentPermissionKeys = existingProfile.permissions
+          .map((permission) => `${permission.functionality.id}:${permission.action.id}`)
+          .sort();
+        const requestedPermissionKeys = request.permissions
+          .map((permission) => `${permission.functionalityId}:${permission.actionId}`)
+          .sort();
+
+        if (
+          !request.isActive ||
+          currentPermissionKeys.length !== requestedPermissionKeys.length ||
+          currentPermissionKeys.some((key, index) => key !== requestedPermissionKeys[index])
+        ) {
+          throw new ConflictException(this.i18n.t('errors.common.record_not_found'));
+        }
+      }
     }
 
     const languageByCode = resolveTranslationLanguages(
@@ -82,6 +101,7 @@ export class ProfilesService {
     const functionalityIds = request.permissions.map((permission) => permission.functionalityId);
 
     const functionalities = await this.repository.findFunctionalities(clientId, functionalityIds);
+
     if (functionalities.length !== new Set(functionalityIds).size) {
       throw new BadRequestException(this.i18n.t('errors.common.record_not_found'));
     }
@@ -96,6 +116,7 @@ export class ProfilesService {
     }
 
     const actions = await this.repository.findActions(actionIds);
+
     if (actions.length !== new Set(actionIds).size) {
       throw new BadRequestException(this.i18n.t('errors.common.record_not_found'));
     }
@@ -138,7 +159,7 @@ export class ProfilesService {
       throw new NotFoundException(this.i18n.t('errors.common.record_not_found'));
     }
 
-    if (await this.repository.hasUsers(ids)) {
+    if (profiles.some((profile) => profile.isAdmin) || (await this.repository.hasUsers(ids))) {
       throw new ConflictException(this.i18n.t('errors.common.record_not_found'));
     }
 

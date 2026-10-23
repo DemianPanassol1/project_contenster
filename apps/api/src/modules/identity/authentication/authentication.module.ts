@@ -2,6 +2,7 @@ import { Global, Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
+import { Profile } from '@/modules/access-control/profiles/entities/profiles.entity';
 import { AuthorizationModule } from '@/modules/authorization/authorization.module';
 import { User } from '@/modules/identity/users/entities/user.entity';
 
@@ -17,7 +18,7 @@ import { PasswordResetTokenStore } from './password-reset-token.store';
 
 @Global()
 @Module({
-  imports: [TypeOrmModule.forFeature([User]), AuthorizationModule, JwtModule.register({})],
+  imports: [TypeOrmModule.forFeature([User, Profile]), AuthorizationModule, JwtModule.register({})],
   controllers: [AuthenticationController],
   providers: [
     AuthenticationRepository,

@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Brackets, Repository } from 'typeorm';
+import { Brackets, IsNull, Repository } from 'typeorm';
 
+import { Profile } from '@/modules/access-control/profiles/entities/profiles.entity';
 import { User } from '@/modules/identity/users/entities/user.entity';
 
 @Injectable()
@@ -9,6 +10,8 @@ export class AuthenticationRepository {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    @InjectRepository(Profile)
+    private readonly profileRepository: Repository<Profile>,
   ) {}
 
   findUserByUsernameOrEmail(identifier: string): Promise<User | null> {
@@ -37,6 +40,15 @@ export class AuthenticationRepository {
       .getOne();
   }
 
+  findUserById(id: number): Promise<User | null> {
+    return this.userRepository.findOneBy({
+      deletedAt: IsNull(),
+      id,
+      isActive: true,
+      isBlocked: false,
+    });
+  }
+
   async updatePassword(userId: number, passwordHash: string): Promise<void> {
     await this.userRepository.update(userId, { passwordHash });
   }
@@ -44,13 +56,25 @@ export class AuthenticationRepository {
   findUserClients(userId: number): Promise<User> {
     return this.userRepository
       .createQueryBuilder('user')
-      .innerJoinAndSelect('user.userProfiles', 'userProfile')
-      .innerJoinAndSelect('userProfile.client', 'client')
+      .leftJoinAndSelect('user.userProfiles', 'userProfile')
+      .leftJoinAndSelect('userProfile.client', 'client', 'client.deletado_em IS NULL')
       .where('user.id = :userId', { userId })
-      .andWhere('client.eh_ativo = true')
-      .andWhere('client.deletado_em IS NULL')
       .orderBy('client.nome_fantasia', 'ASC')
       .getOneOrFail();
+  }
+
+  findClientAdminProfile(clientId: number): Promise<Profile | null> {
+    return this.profileRepository.findOne({
+      relations: {
+        client: { availableLanguageLinks: { language: true } },
+        translations: { language: true },
+      },
+      where: {
+        client: { deletedAt: IsNull(), id: clientId, isActive: true },
+        isActive: true,
+        isAdmin: true,
+      },
+    });
   }
 
   findUserContext(userId: number, clientId: number): Promise<User | null> {

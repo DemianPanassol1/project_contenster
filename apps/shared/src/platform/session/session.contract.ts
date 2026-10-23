@@ -1,7 +1,11 @@
 import type { ActionType } from '../../domain/actions/action-type.enum.js';
+import type { RequestLogAccessType } from '../../domain/logging/request-log-access-type.enum.js';
+
+import type { SessionContextType } from './session-context-type.enum.js';
 
 export interface SessionUser {
   id: number;
+  isSuperuser: boolean;
   name: string;
   username: string;
   email: string;
@@ -52,11 +56,19 @@ export interface SessionModule {
   functionalities: SessionFunctionality[];
 }
 
+export interface GlobalSessionContext {
+  type: SessionContextType.global;
+}
+
+export interface ClientSessionContext {
+  accessType: RequestLogAccessType;
+  client: SessionClient;
+  profile: SessionProfile;
+  type: SessionContextType.client;
+}
+
 export interface AuthenticatedSession {
   user: SessionUser;
-  context: {
-    client: SessionClient;
-    profile: SessionProfile;
-  };
+  context: ClientSessionContext | GlobalSessionContext;
   modules: SessionModule[];
 }

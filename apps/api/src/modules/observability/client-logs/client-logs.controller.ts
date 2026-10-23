@@ -26,16 +26,4 @@ export class ClientLogsController {
   getRequestLog(@CurrentClientId() clientId: number, @Param('id', ParseIntPipe) id: number) {
     return this.service.getRequestLog(clientId, id);
   }
-
-  @Post('routines/list')
-  @RequirePermission(clientLogs, ActionType.view)
-  listRoutineLogs(@Body() request: PaginateRequestDto) {
-    return this.service.listRoutineLogs(request);
-  }
-
-  @Get('routines/:id')
-  @RequirePermission(clientLogs, ActionType.view)
-  getRoutineLog(@Param('id', ParseIntPipe) id: number) {
-    return this.service.getRoutineLog(id);
-  }
 }

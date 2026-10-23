@@ -6,12 +6,14 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { I18nService } from 'nestjs-i18n';
 
 import {
   REQUIRED_PERMISSION_METADATA_KEY,
   type RequiredPermission,
 } from '@/common/decorators/require-permission.decorator';
 import type { ApiHttpRequest } from '@/common/types/http-context.type';
+import type { I18nTranslations } from '@/i18n/translations';
 import { AuthorizationResolverService } from '@/modules/authorization/authorization-resolver.service';
 
 @Injectable()
@@ -19,6 +21,7 @@ export class RequirePermissionGuard implements CanActivate {
   constructor(
     private readonly reflector: Reflector,
     private readonly authorizationResolver: AuthorizationResolverService,
+    private readonly i18n: I18nService<I18nTranslations>,
   ) {}
 
   canActivate(context: ExecutionContext): boolean {
@@ -31,7 +34,7 @@ export class RequirePermissionGuard implements CanActivate {
 
     const request = context.switchToHttp().getRequest<ApiHttpRequest>();
     if (!request.session) {
-      throw new ForbiddenException();
+      throw new ForbiddenException(this.i18n.t('errors.authorization.client_context_required'));
     }
 
     const hasPermission = this.authorizationResolver.hasPermission(request.session, {
@@ -40,7 +43,7 @@ export class RequirePermissionGuard implements CanActivate {
     });
 
     if (!hasPermission) {
-      throw new ForbiddenException();
+      throw new ForbiddenException(this.i18n.t('errors.authorization.permission_denied'));
     }
 
     return true;

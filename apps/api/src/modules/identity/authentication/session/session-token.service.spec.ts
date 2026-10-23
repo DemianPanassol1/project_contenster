@@ -4,7 +4,7 @@ import { readCookieValue } from './helpers/session-cookie.util';
 import { SessionTokenService } from './session-token.service';
 
 describe('SessionTokenService', () => {
-  const service = new SessionTokenService();
+  const service = new SessionTokenService({ t: (key: string) => key } as never);
 
   it('creates opaque tokens and produces a stable hash for each token', () => {
     const token = service.create();

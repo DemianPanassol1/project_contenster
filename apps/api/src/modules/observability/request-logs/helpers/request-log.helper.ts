@@ -1,3 +1,4 @@
+import { RequestLogAccessType, SessionContextType } from '@contenster/shared';
 import { type ApiHttpRequest } from '@/common/types/http-context.type';
 import type { ApiResponse } from '@/shared/responses/api-response.types';
 
@@ -18,9 +19,17 @@ export const getUserAgent = (request: ApiHttpRequest): string | null => {
 export const createSessionSnapshot = (request: ApiHttpRequest): SessionSnapshot => {
   const session = request.session;
   const audit = request.requestLogAudit;
+  const clientId =
+    session?.context.type === SessionContextType.client ? session.context.client.id : null;
 
   return {
-    clientId: audit?.clientId ?? session?.context.client.id ?? null,
+    accessType:
+      session?.context.type === SessionContextType.client
+        ? session.context.accessType
+        : session?.user.isSuperuser
+          ? RequestLogAccessType.superuser
+          : RequestLogAccessType.client,
+    clientId: audit?.clientId ?? clientId,
     eventType: audit?.eventType ?? null,
     userId: session?.user.id ?? null,
   };

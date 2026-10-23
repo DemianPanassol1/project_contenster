@@ -1,6 +1,6 @@
-import type { AuthenticatedSession } from '@contenster/shared';
 import {
   BadRequestException,
+  ForbiddenException,
   Injectable,
   ServiceUnavailableException,
   UnauthorizedException,
@@ -8,6 +8,11 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { I18nService } from 'nestjs-i18n';
 
+import {
+  type AuthenticatedSession,
+  RequestLogAccessType,
+  SessionContextType,
+} from '@contenster/shared';
 import type { I18nTranslations } from '@/i18n/translations';
 import { settings } from '@/infrastructure/config/app.config';
 import { RedisUnavailableError } from '@/infrastructure/redis/redis-unavailable.error';
@@ -61,16 +66,42 @@ export class AuthenticationService {
     const userWithClients = await this.authenticationRepository.findUserClients(user.id);
 
     return toResponseDto(AuthorizeResponseDto, {
-      clients: userWithClients.userProfiles.map(({ client }) => ({
-        label: client.tradeName,
-        value: client.id,
-        disabled: false,
-        metadata: {
-          corporateName: client.corporateName,
-          document: client.document,
-        },
-      })),
+      clients: userWithClients.userProfiles
+        .filter(({ client }) => client !== null)
+        .map(({ client }) => ({
+          label: client.tradeName,
+          value: client.id,
+          disabled: !client.isActive,
+          metadata: {
+            corporateName: client.corporateName,
+            document: client.document,
+          },
+        })),
+      isEligibleToGlobalContext: user.isSuperuser,
     });
+  }
+
+  async signInGlobal(staySignedIn: boolean, username: string, password: string) {
+    const user = await this.validateCredentials(username, password);
+    if (!user.isSuperuser) {
+      throw new ForbiddenException(this.i18n.t('errors.authorization.superuser_access_denied'));
+    }
+
+    const result = await this.sessionAuthenticationService.create(
+      await this.resolveGlobalSession(user.id),
+      staySignedIn,
+    );
+
+    await this.authenticationRepository.updateLastLogin(user.id);
+
+    return {
+      token: result.token,
+      ttlSeconds: result.ttlSeconds,
+      response: toResponseDto(SessionResponseDto, {
+        expiresAt: result.storedSession.expiresAt,
+        session: result.storedSession.session,
+      }),
+    };
   }
 
   async signIn(request: SignInRequestDto): Promise<{
@@ -101,6 +132,7 @@ export class AuthenticationService {
   ): Promise<{ token: string; ttlSeconds: number; response: SessionResponseDto }> {
     const previousToken = this.getSessionTokenOrFail(cookieHeader);
     const previousSession = await this.sessionAuthenticationService.getByToken(previousToken);
+
     if (!previousSession) {
       throw new UnauthorizedException(
         this.i18n.t('errors.authentication.session_not_authenticated'),
@@ -112,6 +144,7 @@ export class AuthenticationService {
       session,
       previousSession.staySignedIn,
     );
+
     await this.sessionAuthenticationService.destroy(previousToken);
 
     return {
@@ -120,6 +153,69 @@ export class AuthenticationService {
       response: toResponseDto(SessionResponseDto, {
         expiresAt: result.storedSession.expiresAt,
         session: result.storedSession.session,
+      }),
+    };
+  }
+
+  async switchClientAsSuperuser(
+    request: SwitchClientRequestDto,
+    userId: number,
+    cookieHeader: string | undefined,
+  ): Promise<{ token: string; ttlSeconds: number; response: SessionResponseDto }> {
+    const previousToken = this.getSessionTokenOrFail(cookieHeader);
+    const previousSession = await this.sessionAuthenticationService.getByToken(previousToken);
+
+    if (
+      !previousSession?.session.user.isSuperuser ||
+      previousSession.session.context.type !== SessionContextType.global
+    ) {
+      throw new ForbiddenException(this.i18n.t('errors.authorization.global_context_required'));
+    }
+
+    const session = await this.resolveAssumedSession(userId, request.clientId);
+    const result = await this.sessionAuthenticationService.create(
+      session,
+      previousSession.staySignedIn,
+    );
+
+    await this.sessionAuthenticationService.destroy(previousToken);
+
+    return {
+      token: result.token,
+      ttlSeconds: result.ttlSeconds,
+      response: toResponseDto(SessionResponseDto, {
+        expiresAt: result.storedSession.expiresAt,
+        session,
+      }),
+    };
+  }
+
+  async switchGlobal(userId: number, cookieHeader: string | undefined) {
+    const previousToken = this.getSessionTokenOrFail(cookieHeader);
+    const previousSession = await this.sessionAuthenticationService.getByToken(previousToken);
+
+    if (
+      !previousSession?.session.user.isSuperuser ||
+      previousSession.session.context.type !== SessionContextType.client ||
+      previousSession.session.context.accessType !== RequestLogAccessType.superuser
+    ) {
+      throw new ForbiddenException(this.i18n.t('errors.authorization.superuser_access_denied'));
+    }
+
+    const session = await this.resolveGlobalSession(userId);
+    const result = await this.sessionAuthenticationService.create(
+      session,
+      previousSession.staySignedIn,
+    );
+
+    await this.sessionAuthenticationService.destroy(previousToken);
+
+    return {
+      token: result.token,
+      ttlSeconds: result.ttlSeconds,
+      response: toResponseDto(SessionResponseDto, {
+        expiresAt: result.storedSession.expiresAt,
+        session,
       }),
     };
   }
@@ -238,12 +334,10 @@ export class AuthenticationService {
 
     return toResponseDto(AuthenticatedSessionResponseDto, {
       user: {
-        id: user.id,
-        name: user.name,
-        username: user.username,
-        email: user.email,
+        ...this.toSessionUser(user),
       },
       context: {
+        accessType: RequestLogAccessType.client,
         client: {
           id: userProfile.client.id,
           name: userProfile.client.tradeName,
@@ -258,13 +352,82 @@ export class AuthenticationService {
           name: profileName,
           description: profileDescription,
         },
+        type: SessionContextType.client,
       },
       modules: await this.authorizationResolver.resolve(userProfile.profile.id, clientId, locale),
     });
   }
 
+  async resolveGlobalSession(userId: number): Promise<AuthenticatedSession> {
+    const user = await this.authenticationRepository.findUserById(userId);
+
+    if (!user?.isSuperuser) {
+      throw new ForbiddenException(this.i18n.t('errors.authorization.superuser_access_denied'));
+    }
+
+    return {
+      user: this.toSessionUser(user),
+      context: { type: SessionContextType.global },
+      modules: [],
+    };
+  }
+
+  async resolveAssumedSession(userId: number, clientId: number): Promise<AuthenticatedSession> {
+    const user = await this.authenticationRepository.findUserById(userId);
+    const profile = await this.authenticationRepository.findClientAdminProfile(clientId);
+
+    if (!user?.isSuperuser || !profile) {
+      throw new ForbiddenException(this.i18n.t('errors.authorization.superuser_access_denied'));
+    }
+
+    const languages = resolveSessionLanguages(profile.client.availableLanguageLinks);
+    const locale = resolveSessionLocale(languages);
+
+    return toResponseDto(AuthenticatedSessionResponseDto, {
+      user: this.toSessionUser(user),
+      context: {
+        accessType: RequestLogAccessType.superuser,
+        client: {
+          id: profile.client.id,
+          name: profile.client.tradeName,
+          languages: languages.map((language) => ({
+            id: language.id,
+            languageCode: language.languageCode,
+            name: language.name,
+          })),
+        },
+        profile: {
+          id: profile.id,
+          name: resolveTranslation(profile.translations, locale, 'name'),
+          description: resolveTranslation(profile.translations, locale, 'description', {
+            nullable: true,
+          }),
+        },
+        type: SessionContextType.client,
+      },
+      modules: await this.authorizationResolver.resolve(profile.id, clientId, locale),
+    });
+  }
+
+  private toSessionUser(user: {
+    id: number;
+    name: string;
+    username: string;
+    email: string;
+    isSuperuser: boolean;
+  }) {
+    return {
+      id: user.id,
+      name: user.name,
+      username: user.username,
+      email: user.email,
+      isSuperuser: user.isSuperuser,
+    };
+  }
+
   private async validateCredentials(username: string, password: string) {
     const user = await this.authenticationRepository.findUserByUsernameOrEmail(username);
+
     if (!user || !(await validatePasswordHash(user.passwordHash, password))) {
       throw new UnauthorizedException(this.i18n.t('errors.authentication.invalid_credentials'));
     }
@@ -274,6 +437,7 @@ export class AuthenticationService {
 
   private getSessionTokenOrFail(cookieHeader: string | undefined): string {
     const token = readCookieValue(cookieHeader, this.sessionAuthenticationService.cookieName);
+
     if (!token) {
       throw new UnauthorizedException(
         this.i18n.t('errors.authentication.session_not_authenticated'),
