@@ -20,7 +20,7 @@ export default defineConfig({
     },
     environment: 'node',
     globals: true,
-    include: ['src/**/*.spec.ts', 'test/**/*.e2e-spec.ts', 'test/**/*.integration-spec.ts'],
+    include: ['src/**/*.spec.ts'],
     setupFiles: ['./test/runner/setup-environment.ts'],
   },
 });

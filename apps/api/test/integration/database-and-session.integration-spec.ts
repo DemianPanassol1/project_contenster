@@ -1,7 +1,12 @@
-import type { AuthenticatedSession } from '@contenster/shared';
 import type { INestApplication } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 
+import {
+  type AuthenticatedSession,
+  RequestLogAccessType,
+  SessionContextType,
+} from '@contenster/shared';
+import { Profile } from '@/modules/access-control/profiles/entities/profiles.entity';
 import { SessionAuthenticationService } from '@/modules/identity/authentication/session/session-authentication.service';
 
 import { createTestApplication } from '../runner/app.factory';
@@ -55,20 +60,59 @@ describe('database and session integration', () => {
     ]);
   });
 
+  it('creates the administrative profile and request-log access type introduced by system administration', async () => {
+    const [profile] = await dataSource.query<{ isAdmin: boolean }[]>(
+      'SELECT eh_admin AS "isAdmin" FROM perfis WHERE id = 1 AND cliente_id = 1',
+    );
+    const [index] = await dataSource.query<{ indexdef: string }[]>(
+      `SELECT indexdef
+       FROM pg_indexes
+       WHERE indexname = 'uq_perfis_cliente_eh_admin'`,
+    );
+    const enumValues = await dataSource.query<{ enumlabel: string }[]>(
+      `SELECT enumlabel
+       FROM pg_enum
+       WHERE enumtypid = 'tipo_acesso_log_requisicao'::regtype
+       ORDER BY enumsortorder`,
+    );
+
+    expect(profile.isAdmin).toBe(true);
+    expect(index.indexdef).toContain('WHERE (eh_admin = true)');
+    expect(enumValues.map(({ enumlabel }) => enumlabel)).toEqual([
+      RequestLogAccessType.client,
+      RequestLogAccessType.superuser,
+    ]);
+  });
+
+  it('allows only one administrative profile for each client', async () => {
+    await expect(
+      dataSource.getRepository(Profile).save({
+        client: { id: 1 },
+        isActive: true,
+        isAdmin: true,
+        permissions: [],
+        translations: [],
+      }),
+    ).rejects.toThrow();
+  });
+
   it('persists opaque sessions in Redis and invalidates them by token', async () => {
     const session: AuthenticatedSession = {
       context: {
+        accessType: RequestLogAccessType.client,
         client: {
           id: 1,
           languages: [{ id: 1, languageCode: 'pt', name: 'Português' }],
           name: 'Cliente',
         },
         profile: { description: null, id: 1, name: 'Administrador' },
+        type: SessionContextType.client,
       },
       modules: [],
       user: {
         email: 'admin@cliente-inicial.local',
         id: 1,
+        isSuperuser: false,
         name: 'Administrador',
         username: 'admin',
       },

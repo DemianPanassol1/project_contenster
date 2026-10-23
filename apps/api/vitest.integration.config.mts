@@ -13,6 +13,11 @@ export default defineConfig({
     },
   },
   test: {
+    coverage: {
+      exclude: ['src/main.ts', 'src/database/**'],
+      include: ['src/**/*.ts'],
+      provider: 'v8',
+    },
     environment: 'node',
     fileParallelism: false,
     globals: true,

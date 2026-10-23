@@ -35,6 +35,18 @@ O ciclo é deliberadamente destrutivo apenas para esses recursos de teste:
 Não use `FLUSHALL`, banco de desenvolvimento, serviços externos de SMTP/GCP/R2 ou uma porta HTTP
 real para e2e. Os fluxos HTTP usam a aplicação Nest inicializada pelo Supertest.
 
+## Cobertura
+
+`pnpm --filter api test:cov` executa sequencialmente a cobertura unitária, de integração e e2e.
+Cada camada preserva sua própria configuração de teste; em particular, integração e e2e executam
+o setup que recria o banco de testes e aplica as migrations. Os relatórios ficam separados em
+`apps/api/coverage/unit`, `apps/api/coverage/integration` e `apps/api/coverage/e2e` para que uma
+camada não sobrescreva a outra.
+
+Os comandos `test:unit:cov`, `test:integration:cov` e `test:e2e:cov` permitem executar uma camada
+de cobertura isoladamente. Não trate os três relatórios como um percentual único: eles evidenciam
+limites de teste diferentes.
+
 ## Invariantes prioritários
 
 - credenciais válidas e inválidas;
@@ -43,6 +55,9 @@ real para e2e. Os fluxos HTTP usam a aplicação Nest inicializada pelo Supertes
 - usuário, cliente ou perfil inativo após a sessão;
 - permissão presente e ausente;
 - recurso de um cliente inacessível a contexto de outro cliente.
+- transição entre contexto global de superusuário e contexto de cliente assumido;
+- perfil administrativo único por cliente e materialização das permissões iniciais;
+- logs de jobs acessíveis exclusivamente pelo contexto global.
 
 ## Cobertura implementada
 
@@ -50,12 +65,12 @@ Os testes devem crescer por comportamento e risco, não pela existência de um a
 camada. Controllers são exercitados preferencialmente por e2e; repositories, relações TypeORM e
 constraints pertencem à integração; regras isoladas pertencem às specs unitárias.
 
-| Tipo       | Cobertura atual                                                                                                                                                                                                        |
-| ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Unitário   | Guard de permissões, tokens e sincronização de sessão, resolução de locale e traduções, criptografia de credenciais, sanitização SVG e rotinas de limpeza.                                                             |
-| Integração | Bootstrap das migrations, constraints nomeadas, sessão opaca no Redis, remoção de permissões órfãs e impedimento de vínculo `UserProfile` com perfil de outro cliente.                                                 |
-| E2E        | Autenticação, cookie opaco, troca e sincronização de sessão, RBAC, cadastros de idiomas, ações, módulos, funcionalidades, perfis, usuários, cliente, locations, storage e consultas de logs de requisição e de rotina. |
-| Smoke      | Inicialização da aplicação e healthcheck.                                                                                                                                                                              |
+| Tipo       | Cobertura atual                                                                                                                                                                                                                                            |
+| ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Unitário   | Guard de permissões, tokens e sincronização de sessão, resolução de locale e traduções, criptografia de credenciais, sanitização SVG e rotinas de limpeza.                                                                                                 |
+| Integração | Bootstrap das migrations, enum de tipo de acesso de log, perfil administrativo inicial, constraints nomeadas, sessão opaca no Redis, remoção de permissões órfãs e impedimento de vínculo `UserProfile` com perfil de outro cliente.                       |
+| E2E        | Autenticação normal e global, cookie opaco, troca e sincronização de sessão, RBAC, cadastros de idiomas, ações, módulos, funcionalidades, perfis, usuários, cliente, locations, storage, logs de requisição por cliente e logs de jobs no contexto global. |
+| Smoke      | Inicialização da aplicação e healthcheck.                                                                                                                                                                                                                  |
 
 Essa matriz não substitui casos futuros para regras novas. Toda alteração que mudar autorização,
 isolamento por cliente, persistência em cascata, sessão ou interface HTTP deve estender a camada de

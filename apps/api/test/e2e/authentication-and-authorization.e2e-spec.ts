@@ -3,7 +3,15 @@ import type { INestApplication } from '@nestjs/common';
 import request, { type Agent } from 'supertest';
 import { DataSource } from 'typeorm';
 
-import { CronExecutionStatus, FileType, StorageProvider } from '@contenster/shared';
+import {
+  CronExecutionStatus,
+  FileType,
+  RequestLogAccessType,
+  SessionContextType,
+  StorageProvider,
+} from '@contenster/shared';
+import { Profile } from '@/modules/access-control/profiles/entities/profiles.entity';
+import { User } from '@/modules/identity/users/entities/user.entity';
 import { CronExecutionLog } from '@/modules/scheduling/cron-execution-log/entities/cron-execution-log.entity';
 
 import { createTestApplication } from '../runner/app.factory';
@@ -69,6 +77,7 @@ describe('authentication and authorization', () => {
     expect(authorized.body.clients.map(({ value }) => value)).toEqual(
       expect.arrayContaining([1, secondaryClientId]),
     );
+    expect(authorized.body).toMatchObject({ isEligibleToGlobalContext: false });
 
     const signIn = await agent
       .post('/auth/sign-in')
@@ -444,7 +453,7 @@ describe('authentication and authorization', () => {
     await agent.post('/countries/delete').send({ id: countryId, ids: [] }).expect(201);
   });
 
-  it('lists routine logs separately from request logs', async () => {
+  it('lists job logs only from the global superuser context', async () => {
     const routine = await dataSource.getRepository(CronExecutionLog).save({
       durationMs: 10,
       error: null,
@@ -458,11 +467,124 @@ describe('authentication and authorization', () => {
       totalSuccess: 1,
     });
 
-    const response = await agent.post('/client-logs/routines/list').send({}).expect(201);
+    await agent.post('/system-admin/job-logs/list').send({}).expect(403);
+
+    await dataSource.getRepository(User).update({ id: 1 }, { isSuperuser: true });
+
+    const globalAgent = request.agent(httpServer);
+    const authorization = await globalAgent
+      .post('/auth/authorize')
+      .send({ password: '123456', username: 'admin' })
+      .expect(201);
+
+    expect(
+      (authorization.body as ApiResponse<{ isEligibleToGlobalContext: boolean }>).body,
+    ).toMatchObject({ isEligibleToGlobalContext: true });
+
+    const signIn = await globalAgent
+      .post('/auth/sign-in-global')
+      .send({ password: '123456', staySignedIn: false, username: 'admin' })
+      .expect(201);
+    const globalSession = signIn.body as ApiResponse<{
+      session: { context: { type: SessionContextType }; user: { isSuperuser: boolean } };
+    }>;
+
+    expect(globalSession.body.session).toMatchObject({
+      context: { type: SessionContextType.global },
+      user: { isSuperuser: true },
+    });
+
+    await dataSource
+      .getRepository(Profile)
+      .update({ client: { id: secondaryClientId } }, { isAdmin: true });
+
+    const assumed = await globalAgent
+      .post('/auth/switch-client-as-superuser')
+      .send({ clientId: secondaryClientId })
+      .expect(201);
+    const assumedSession = assumed.body as ApiResponse<{
+      session: { context: { accessType: RequestLogAccessType; type: SessionContextType } };
+    }>;
+
+    expect(assumedSession.body.session.context).toMatchObject({
+      accessType: RequestLogAccessType.superuser,
+      type: SessionContextType.client,
+    });
+
+    await globalAgent.post('/auth/switch-global').send({}).expect(201);
+
+    const response = await globalAgent.post('/system-admin/job-logs/list').send({}).expect(201);
     const logs = (response.body as ApiResponse<{ items: Array<{ id: number }> }>).body.items;
 
     expect(logs).toEqual(expect.arrayContaining([expect.objectContaining({ id: routine.id })]));
-    await agent.get(`/client-logs/routines/${routine.id}`).expect(200);
+  });
+
+  it('provisions a client, its administrative profile and all selected functionality permissions', async () => {
+    const globalAgent = request.agent(httpServer);
+
+    await globalAgent
+      .post('/auth/sign-in-global')
+      .send({ password: '123456', staySignedIn: false, username: 'admin' })
+      .expect(201);
+
+    const response = await globalAgent
+      .post('/system-admin/clients')
+      .send({
+        adminProfile: {
+          translations: [{ description: null, locale: 'pt', name: 'Administrador' }],
+        },
+        client: {
+          address: 'Rua de Provisionamento',
+          addressNumber: '1',
+          cityId: null,
+          corporateName: 'Cliente Provisionado LTDA',
+          document: '33333333333',
+          documentType: 'cpf',
+          email: 'provisionado@test.local',
+          id: null,
+          imageId: null,
+          isActive: true,
+          languageLinks: [{ id: null, languageId: 1 }],
+          neighborhood: 'Centro',
+          primaryPhone: '11999999999',
+          secondaryPhone: null,
+          slug: 'cliente-provisionado-e2e',
+          tradeName: 'Cliente Provisionado',
+          zipCode: '01000000',
+        },
+        functionalities: [
+          {
+            icon: null,
+            isNavigationGroup: false,
+            languageIds: [1],
+            moduleKey: 'administration',
+            order: 1,
+            parentSlug: null,
+            slug: 'users',
+            translations: [{ description: null, locale: 'pt', name: 'Usuários' }],
+          },
+        ],
+        modules: [
+          {
+            key: 'administration',
+            order: 1,
+            translations: [{ description: null, locale: 'pt', name: 'Administração' }],
+          },
+        ],
+      })
+      .expect(201);
+    const client = (response.body as ApiResponse<{ id: number }>).body;
+
+    const [profile] = await dataSource.query<{ id: number }[]>(
+      'SELECT id FROM perfis WHERE cliente_id = $1 AND eh_admin = true',
+      [client.id],
+    );
+    const [{ permissionCount }] = await dataSource.query<{ permissionCount: string }[]>(
+      'SELECT COUNT(*)::text AS "permissionCount" FROM perfis_permissoes WHERE perfil_id = $1',
+      [profile.id],
+    );
+
+    expect(Number(permissionCount)).toBeGreaterThan(0);
   });
 
   it('switches the authenticated client and enforces the new profile permissions', async () => {

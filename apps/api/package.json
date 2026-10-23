@@ -22,7 +22,10 @@
     "test:integration": "vitest run --config vitest.integration.config.mts",
     "test:e2e": "vitest run --config vitest.e2e.config.mts",
     "test:smoke": "vitest run test/e2e/app.e2e-spec.ts",
-    "test:cov": "vitest run --coverage"
+    "test:unit:cov": "vitest run src --coverage --coverage.reportsDirectory=coverage/unit",
+    "test:integration:cov": "vitest run --config vitest.integration.config.mts --coverage --coverage.reportsDirectory=coverage/integration",
+    "test:e2e:cov": "vitest run --config vitest.e2e.config.mts --coverage --coverage.reportsDirectory=coverage/e2e",
+    "test:cov": "pnpm run test:unit:cov && pnpm run test:integration:cov && pnpm run test:e2e:cov"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "3.1152.0",
