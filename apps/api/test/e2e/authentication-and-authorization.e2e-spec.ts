@@ -208,6 +208,86 @@ describe('authentication and authorization', () => {
       .expect(201);
   });
 
+  it('uploads files for the authenticated client and prevents access from another client', async () => {
+    const configuration = await agent
+      .post('/client-storage/configurations')
+      .send({
+        accountId: null,
+        accessKeyId: null,
+        bucketName: null,
+        clientEmail: null,
+        endpoint: null,
+        id: null,
+        identifier: 'e2e-upload',
+        isActive: true,
+        name: 'E2E Upload Storage',
+        privateKey: null,
+        projectId: null,
+        provider: StorageProvider.local,
+        publicBaseUrl: null,
+        secretAccessKey: null,
+        signedUrlExpiresInSeconds: null,
+        useSignedUrls: false,
+      })
+      .expect(201);
+    const configurationId = (configuration.body as ApiResponse<{ id: number }>).body.id;
+
+    await agent
+      .post('/client-storage/rules')
+      .send({
+        fileType: FileType.image,
+        id: null,
+        isActive: true,
+        storageConfigurationId: configurationId,
+      })
+      .expect(201);
+
+    const image = Buffer.from(
+      'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIHWP4z8DwHwAFgAI/ScLq7wAAAABJRU5ErkJggg==',
+      'base64',
+    );
+    const upload = await agent
+      .post('/media/files/upload')
+      .attach('file', image, { contentType: 'image/png', filename: 'pixel.png' })
+      .expect(201);
+    const uploaded = (
+      upload.body as ApiResponse<{
+        clientId: number;
+        id: number;
+        mimeType: string;
+        originalName: string;
+        type: FileType;
+        uploadedByUserId: number | null;
+        url: string | null;
+      }>
+    ).body;
+
+    expect(uploaded).toMatchObject({
+      clientId: 1,
+      mimeType: 'image/png',
+      originalName: 'pixel.png',
+      type: FileType.image,
+      uploadedByUserId: 1,
+    });
+    expect(uploaded.url).toEqual(expect.stringMatching(/^\/uploads\/e2e-upload\/images\//));
+
+    const found = await agent.get(`/media/files/${uploaded.id}`).expect(200);
+    expect((found.body as ApiResponse<{ id: number }>).body.id).toBe(uploaded.id);
+
+    const secondaryAgent = request.agent(httpServer);
+    await secondaryAgent
+      .post('/auth/sign-in')
+      .send({
+        clientId: secondaryClientId,
+        password: '123456',
+        staySignedIn: false,
+        username: 'admin',
+      })
+      .expect(201);
+
+    await secondaryAgent.get(`/media/files/${uploaded.id}`).expect(404);
+  });
+
   it('executes the administrative CRUDs for languages, modules, functionalities, profiles and users', async () => {
     const language = await agent
       .post('/languages')

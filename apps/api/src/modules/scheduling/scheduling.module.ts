@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { FilesModule } from '@/modules/media/files/files.module';
+import { FileModule } from '@/modules/media/files/file.module';
 import { StorageModule } from '@/modules/media/storage/storage.module';
 import { RequestLogModule } from '@/modules/observability/request-logs/request-log.module';
 
@@ -15,7 +15,7 @@ import { RequestLogCleanupService } from './request-log-cleanup/request-log-clea
 @Module({
   imports: [
     TypeOrmModule.forFeature([CronExecutionLog]),
-    FilesModule,
+    FileModule,
     RequestLogModule,
     StorageModule,
   ],

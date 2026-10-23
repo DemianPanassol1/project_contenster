@@ -2,14 +2,16 @@ import { BadRequestException, Injectable, Logger, NotFoundException } from '@nes
 import { I18nService } from 'nestjs-i18n';
 import sharp from 'sharp';
 
-import { FileType, type StorageProvider } from '@contenster/shared';
+import { type FileResponse, FileType } from '@contenster/shared';
 import type { I18nPath, I18nTranslations } from '@/i18n/translations';
 import { settings } from '@/infrastructure/config/app.config';
 import { Client } from '@/modules/identity/clients/entities/client.entity';
 import { User } from '@/modules/identity/users/entities/user.entity';
 import { StorageService } from '@/modules/media/storage/storage.service';
 import { generateStoredFileName } from '@/modules/media/storage/utils/storage-path.util';
+import { toResponseDto } from '@/shared/responses';
 
+import { FileResponseDto } from './dto/res/file.response.dto';
 import { File } from './entities/file.entity';
 import { StorageProviderConfiguration } from './entities/storage-provider-configuration.entity';
 import {
@@ -18,7 +20,7 @@ import {
   validateUploadedFile,
 } from './helpers/file-validation.helper';
 import type { UploadedMultipartFile } from './types/uploaded-multipart-file.type';
-import { FilesRepository } from './files.repository';
+import { FileRepository } from './file.repository';
 import { InvalidSvgContentError, SvgSanitizerService } from './svg-sanitizer.service';
 
 const fileValidationErrorKeys = {
@@ -27,47 +29,35 @@ const fileValidationErrorKeys = {
   invalid_file_type: 'errors.media.invalid_file_type',
 } as const satisfies Record<FileValidationErrorCode, I18nPath>;
 
-export interface StoredFileResponse {
-  extension: string | null;
-  fileName: string;
-  id: number;
-  mimeType: string;
-  originalName: string;
-  provider: StorageProvider;
-  size: number;
-  type: FileType;
-  url: string | null;
-}
-
 @Injectable()
-export class FilesService {
-  private readonly logger = new Logger(FilesService.name);
+export class FileService {
+  private readonly logger = new Logger(FileService.name);
 
   constructor(
-    private readonly filesRepository: FilesRepository,
+    private readonly fileRepository: FileRepository,
     private readonly i18n: I18nService<I18nTranslations>,
     private readonly storageService: StorageService,
     private readonly svgSanitizer: SvgSanitizerService,
   ) {}
 
-  async findById(id: number, clientId: number): Promise<File> {
-    const file = await this.filesRepository.findById(id, clientId);
+  async findById(id: number, clientId: number): Promise<FileResponseDto> {
+    const file = await this.fileRepository.findById(id, clientId);
     if (!file) throw new NotFoundException(this.i18n.t('errors.media.file_not_found'));
 
-    return file;
+    return this.toResponse(file);
   }
 
   async upload(
     file: UploadedMultipartFile | undefined,
     clientId: number,
     uploadedByUserId: number,
-  ): Promise<StoredFileResponse> {
+  ): Promise<FileResponseDto> {
     const validation = validateUploadedFile(file, settings.MAX_UPLOAD_FILE_SIZE_BYTES);
     if (!validation.ok) {
       throw new BadRequestException(this.i18n.t(fileValidationErrorKeys[validation.code]));
     }
 
-    const rule = await this.filesRepository.findActiveStorageFileTypeRule(
+    const rule = await this.fileRepository.findActiveStorageFileTypeRule(
       clientId,
       validation.file.fileType,
     );
@@ -81,17 +71,7 @@ export class FilesService {
     uploadedBy.id = uploadedByUserId;
     const stored = await this.store(validation.file, client, uploadedBy, rule.storageConfiguration);
 
-    return {
-      extension: stored.extension,
-      fileName: stored.storedName,
-      id: stored.id,
-      mimeType: stored.mimeType,
-      originalName: stored.originalName,
-      provider: stored.storageProvider,
-      size: stored.sizeInBytes,
-      type: stored.fileType,
-      url: stored.publicUrl ?? stored.filePath,
-    };
+    return this.toResponse(stored);
   }
 
   private async store(
@@ -114,7 +94,7 @@ export class FilesService {
     });
 
     try {
-      return await this.filesRepository.save({
+      return await this.fileRepository.save({
         client,
         extension: prepared.extension,
         filePath: storedFile.filePath,
@@ -177,5 +157,26 @@ export class FilesService {
     } catch {
       throw new BadRequestException(this.i18n.t('errors.media.invalid_file_type'));
     }
+  }
+
+  private toResponse(file: File): FileResponseDto {
+    const response: FileResponse = {
+      clientId: file.client.id,
+      createdAt: file.createdAt.toISOString(),
+      extension: file.extension,
+      fileName: file.storedName,
+      height: file.height,
+      id: file.id,
+      mimeType: file.mimeType,
+      originalName: file.originalName,
+      provider: file.storageProvider,
+      size: file.sizeInBytes,
+      type: file.fileType,
+      uploadedByUserId: file.uploadedBy?.id ?? null,
+      url: file.publicUrl ?? file.filePath,
+      width: file.width,
+    };
+
+    return toResponseDto(FileResponseDto, response);
   }
 }

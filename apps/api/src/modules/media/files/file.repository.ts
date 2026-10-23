@@ -8,7 +8,7 @@ import { File } from './entities/file.entity';
 import { StorageFileTypeRule } from './entities/storage-file-type-rule.entity';
 
 @Injectable()
-export class FilesRepository {
+export class FileRepository {
   constructor(
     @InjectRepository(File)
     private readonly files: Repository<File>,
