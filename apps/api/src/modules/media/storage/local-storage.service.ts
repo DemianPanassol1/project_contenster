@@ -40,6 +40,23 @@ export class LocalStorageService {
     };
   }
 
+  async saveDefault(
+    input: Omit<StorageUploadInput, 'storageConfiguration'>,
+  ): Promise<StorageUploadResult> {
+    const storageKey = buildStorageObjectKey(null, input.fileType, input.storedName);
+    const localPath = resolveLocalStoragePath(storageKey);
+
+    await mkdir(dirname(localPath), { recursive: true });
+    await writeFile(localPath, input.buffer);
+
+    return {
+      filePath: buildPublicUploadPath(storageKey),
+      publicUrl: buildPublicUploadPath(storageKey),
+      storageKey,
+      storageProvider: StorageProvider.local,
+    };
+  }
+
   async delete(input: StorageDeleteInput): Promise<void> {
     const storageKey = input.storageKey ?? input.filePath;
 

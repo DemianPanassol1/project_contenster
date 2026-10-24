@@ -33,5 +33,16 @@
     "error": "Error",
     "fatal": "Fatal"
   },
-  "cron_execution_status": { "success": "Success", "partial": "Partial", "error": "Error" }
+  "cron_execution_status": { "success": "Success", "partial": "Partial", "error": "Error" },
+  "portal_font_scale": { "small": "Small", "standard": "Standard", "large": "Large" },
+  "portal_login_header_mode": { "text": "Text", "brand_asset": "Brand asset" },
+  "portal_login_layout": { "centered": "Centered", "split": "Split" },
+  "portal_split_media_position": { "left": "Left", "right": "Right" },
+  "portal_login_media_slot": {
+    "centered_background_desktop": "Centered desktop background",
+    "centered_background_mobile": "Centered mobile background",
+    "split_panel_desktop": "Split desktop panel",
+    "split_panel_mobile": "Split mobile panel"
+  },
+  "portal_login_media_type": { "image": "Image", "video": "Video" }
 }

@@ -36,6 +36,12 @@ export class StorageService {
     }
   }
 
+  uploadDefaultLocal(
+    input: Omit<StorageUploadInput, 'storageConfiguration'>,
+  ): Promise<StorageUploadResult> {
+    return this.localStorageService.saveDefault(input);
+  }
+
   async delete(input: StorageDeleteInput): Promise<void> {
     switch (input.storageProvider) {
       case StorageProvider.local:

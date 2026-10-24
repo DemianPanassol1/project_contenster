@@ -10,12 +10,14 @@ import { File } from '@/modules/media/files/entities/file.entity';
 import { RequestLog } from '@/modules/observability/request-logs/entities/request-log.entity';
 import { CronExecutionLog } from '@/modules/scheduling/cron-execution-log/entities/cron-execution-log.entity';
 
+import { PortalsModule } from './portals';
 import { SystemAdminController } from './system-admin.controller';
 import { SystemAdminRepository } from './system-admin.repository';
 import { SystemAdminService } from './system-admin.service';
 
 @Module({
   imports: [
+    PortalsModule,
     TypeOrmModule.forFeature([
       Client,
       File,

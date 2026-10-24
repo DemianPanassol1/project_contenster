@@ -10,6 +10,7 @@ import { BootstrapSlimCore1792129518442 } from '@/database/migrations/1792129518
 import { ScopeModulesAndFunctionalitiesByClient1792135000000 } from '@/database/migrations/1792135000000-scope-modules-and-functionalities-by-client';
 import { BootstrapRemainingCoreFunctionalities1792136000000 } from '@/database/migrations/1792136000000-bootstrap-remaining-core-functionalities';
 import { AddSystemAdministration1792137000000 } from '@/database/migrations/1792137000000-add-system-administration';
+import { AddPortals1792138000000 } from '@/database/migrations/1792138000000-add-portals';
 
 const testRootPath = resolve(fileURLToPath(new URL('.', import.meta.url)), '..', '..');
 const expectedDatabaseName = 'contenster_slim_core_test';
@@ -50,6 +51,7 @@ const createDataSource = (): DataSource => {
       ScopeModulesAndFunctionalitiesByClient1792135000000,
       BootstrapRemainingCoreFunctionalities1792136000000,
       AddSystemAdministration1792137000000,
+      AddPortals1792138000000,
     ],
     migrationsRun: false,
     password: process.env.DATABASE_PASSWORD,

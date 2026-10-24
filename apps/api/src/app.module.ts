@@ -22,6 +22,7 @@ import { IdentityModule } from '@/modules/identity/identity.module';
 import { LocationsModule } from '@/modules/locations/locations.module';
 import { MediaModule } from '@/modules/media/media.module';
 import { ObservabilityModule } from '@/modules/observability/observability.module';
+import { PublicPortalModule } from '@/modules/public-portal';
 import { SchedulingModule } from '@/modules/scheduling/scheduling.module';
 import { SystemAdminModule } from '@/modules/system-admin/system-admin.module';
 
@@ -71,6 +72,7 @@ const setUploadResponseHeaders = (response: ServerResponse, filePath: string): v
     LocationsModule,
     SchedulingModule,
     SystemAdminModule,
+    PublicPortalModule,
   ],
   controllers: [HealthController],
   providers: [

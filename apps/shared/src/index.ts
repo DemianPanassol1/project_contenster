@@ -8,6 +8,7 @@ export * from './domain/logging/request-log-level.enum.js';
 export * from './domain/media/file-type.enum.js';
 export * from './domain/media/media-mime-types.const.js';
 export * from './domain/media/storage-provider.enum.js';
+export * from './domain/portal/index.js';
 export * from './platform/index.js';
 export * from './platform/session/session-context-type.enum.js';
 export * from './utils/index.js';

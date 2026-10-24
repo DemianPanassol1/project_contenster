@@ -9,8 +9,8 @@ vinculado a clientes diferentes, mas possui um único perfil ativo em cada clien
 ## Escopo
 
 O Core contempla clientes, usuários, perfis, permissões, funcionalidades, módulos, idiomas,
-localização, arquivos, observabilidade e rotinas técnicas. Não contempla produtos, portais,
-administração global, perfis virtuais, sessões virtuais ou troca administrativa de contexto.
+localização, arquivos, observabilidade, portais globais e rotinas técnicas. Não contempla produtos,
+perfis virtuais, sessões virtuais ou troca administrativa de contexto.
 
 ## Pré-requisitos
 

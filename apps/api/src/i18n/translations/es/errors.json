@@ -59,5 +59,17 @@
     "invalid_functionality_hierarchy": "La jerarquía de funcionalidades informada no es válida.",
     "invalid_functionality_configuration": "La configuración de la funcionalidad informada no es válida.",
     "invalid_user_profile_assignment": "El usuario, cliente o perfil informado no puede recibir esta asignación."
+  },
+  "portal": {
+    "not_found": "Portal no encontrado.",
+    "domain_conflict": "Uno de los dominios informados ya está vinculado a otro portal.",
+    "invalid_host": "Uno de los hosts informados no es válido.",
+    "duplicate_host": "Un host no puede informarse más de una vez.",
+    "invalid_translation": "Las traducciones del portal no son válidas.",
+    "invalid_file": "Uno de los archivos informados no es válido para el portal.",
+    "invalid_header": "La configuración del encabezado de inicio de sesión no es válida.",
+    "invalid_layout": "La configuración del diseño de inicio de sesión no es válida.",
+    "invalid_media": "La configuración de los medios de inicio de sesión no es válida.",
+    "invalid_support_url": "La URL de soporte no es válida."
   }
 }

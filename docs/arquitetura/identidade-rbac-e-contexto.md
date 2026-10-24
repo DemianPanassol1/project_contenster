@@ -38,7 +38,11 @@ O estado persistido no Redis inclui contexto, autorização calculada e informa�
 
 A troca de contexto ocorre por rota autenticada. Ela valida novamente usuário, cliente, perfil e vínculo persistido, rotaciona a sessão conforme a política definida e emite novo token opaco.
 
-Não existe contexto global, perfil virtual ou troca administrativa para cliente sem vínculo. Em requests protegidos, a API deve revalidar usuário, cliente, perfil e vínculo. Uma sessão em cache não pode manter autorizado um usuário bloqueado, um cliente inativo ou um perfil desativado.
+O contexto global é reservado a usuários com a flag persistida de superusuário. Ele permite operar
+capacidades administrativas globais, mas não equivale a um perfil de cliente nem pode ser usado para
+acessar dados de cliente sem um vínculo persistido. Em requests protegidos, a API deve revalidar
+usuário, cliente, perfil e vínculo. Uma sessão em cache não pode manter autorizado um usuário
+bloqueado, um cliente inativo ou um perfil desativado.
 
 Toda consulta ou escrita pertencente a cliente deve usar o `clientId` confiável do contexto autenticado. Um identificador recebido no corpo, query, rota ou header não comprova acesso.
 

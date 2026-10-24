@@ -17,6 +17,13 @@ interface HealthResponseBody {
   statusCode: number;
 }
 
+interface PublicPortalResponseBody {
+  body: {
+    identity: { applicationName: string };
+    login: { headerMode: string; layout: string };
+  };
+}
+
 describe('Application smoke', () => {
   let app: INestApplication;
 
@@ -46,5 +53,19 @@ describe('Application smoke', () => {
       statusCode: 200,
     });
     expect(body.requestId).toEqual(expect.any(String));
+  });
+
+  it('returns the public portal fallback when the Host has no configured portal', async () => {
+    const response = await request(app.getHttpServer() as Server)
+      .get('/public/portal')
+      .set('Host', 'unknown-portal.test')
+      .expect(200);
+
+    const body = response.body as PublicPortalResponseBody;
+
+    expect(body.body).toMatchObject({
+      identity: { applicationName: 'Contenster Slim Core' },
+      login: { headerMode: 'text', layout: 'centered' },
+    });
   });
 });

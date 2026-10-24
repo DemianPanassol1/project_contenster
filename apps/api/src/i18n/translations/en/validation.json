@@ -9,6 +9,7 @@
   "max_length": "$t(fields.{property}) must have at most {constraints.0} characters.",
   "matches": "$t(fields.{property}) has an invalid format.",
   "array": "$t(fields.{property}) must be a list.",
+  "min_items": "$t(fields.{property}) must contain at least {constraints.0} item(s).",
   "min": "$t(fields.{property}) must be greater than or equal to {constraints.0}.",
   "max": "$t(fields.{property}) must be less than or equal to {constraints.0}.",
   "invalid_delete_request": "Provide exactly one identifier or a list of identifiers."

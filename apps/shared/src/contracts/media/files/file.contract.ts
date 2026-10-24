@@ -2,7 +2,7 @@ import type { FileType } from '../../../domain/media/file-type.enum.js';
 import type { StorageProvider } from '../../../domain/media/storage-provider.enum.js';
 
 export interface FileResponse {
-  clientId: number;
+  clientId: number | null;
   createdAt: string;
   extension: string | null;
   fileName: string;

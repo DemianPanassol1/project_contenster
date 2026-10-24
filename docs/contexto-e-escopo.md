@@ -14,6 +14,8 @@ O cliente é a fronteira de isolamento. Um usuário pode participar de clientes 
 - Idiomas, países, estados e cidades.
 - Arquivos e provedores de armazenamento.
 - Logs de requisição e tarefas técnicas de limpeza e agendamento.
+- Administração global para superusuários.
+- Portais globais de identidade, seus hosts e mídias de login.
 
 Estar listado aqui ou possuir diretório no código não significa que o módulo já esteja implementado ou publicado. A implementação deve respeitar o estágio real do checkout.
 
@@ -21,8 +23,7 @@ Estar listado aqui ou possuir diretório no código não significa que o módulo
 
 - Produtos e extensões por produto.
 - Orquestração de sites, publicação e conteúdo.
-- Portais e consumidores públicos.
-- Administração global e superusuário.
+- Interface Web consumidora da resolução pública de portais.
 - Perfil virtual, sessão virtual e acesso administrativo em nome de outro cliente.
 - Multi-schema e seleção de schema por contexto, request ou navegador.
 - Controle manual de timezone.

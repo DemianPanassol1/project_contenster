@@ -59,5 +59,17 @@
     "invalid_functionality_hierarchy": "The provided functionality hierarchy is invalid.",
     "invalid_functionality_configuration": "The provided functionality configuration is invalid.",
     "invalid_user_profile_assignment": "The provided user, client, or profile cannot receive this assignment."
+  },
+  "portal": {
+    "not_found": "Portal not found.",
+    "domain_conflict": "One of the provided domains is already assigned to another portal.",
+    "invalid_host": "One of the provided hosts is invalid.",
+    "duplicate_host": "A host cannot be provided more than once.",
+    "invalid_translation": "The portal translations are invalid.",
+    "invalid_file": "One of the provided files is not valid for the portal.",
+    "invalid_header": "The login header configuration is invalid.",
+    "invalid_layout": "The login layout configuration is invalid.",
+    "invalid_media": "The login media configuration is invalid.",
+    "invalid_support_url": "The support URL is invalid."
   }
 }

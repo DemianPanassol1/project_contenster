@@ -59,5 +59,17 @@
     "invalid_functionality_hierarchy": "A hierarquia de funcionalidades informada é inválida.",
     "invalid_functionality_configuration": "A configuração da funcionalidade informada é inválida.",
     "invalid_user_profile_assignment": "O usuário, cliente ou perfil informado não pode receber este vínculo."
+  },
+  "portal": {
+    "not_found": "Portal não encontrado.",
+    "domain_conflict": "Um dos domínios informados já está vinculado a outro portal.",
+    "invalid_host": "Um dos hosts informados é inválido.",
+    "duplicate_host": "Um host não pode ser informado mais de uma vez.",
+    "invalid_translation": "As traduções do portal são inválidas.",
+    "invalid_file": "Um dos arquivos informados não é válido para o portal.",
+    "invalid_header": "A configuração do cabeçalho de login é inválida.",
+    "invalid_layout": "A configuração do layout de login é inválida.",
+    "invalid_media": "A configuração das mídias de login é inválida.",
+    "invalid_support_url": "A URL de suporte é inválida."
   }
 }

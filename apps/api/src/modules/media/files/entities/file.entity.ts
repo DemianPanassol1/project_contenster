@@ -67,9 +67,9 @@ export class File {
   @Column({ name: 'altura', nullable: true, type: 'integer' })
   declare height: number | null;
 
-  @ManyToOne(() => Client, (client) => client.files, { nullable: false, onDelete: 'RESTRICT' })
+  @ManyToOne(() => Client, (client) => client.files, { nullable: true, onDelete: 'RESTRICT' })
   @JoinColumn({ foreignKeyConstraintName: 'fk_arquivos_cliente', name: 'cliente_id' })
-  declare client: Client;
+  declare client: Client | null;
 
   @ManyToOne(() => User, (user) => user.uploadedFiles, { nullable: true, onDelete: 'SET NULL' })
   @JoinColumn({ foreignKeyConstraintName: 'fk_arquivos_usuario_upload', name: 'usuario_upload_id' })

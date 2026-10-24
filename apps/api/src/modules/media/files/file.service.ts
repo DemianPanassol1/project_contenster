@@ -2,7 +2,7 @@ import { BadRequestException, Injectable, Logger, NotFoundException } from '@nes
 import { I18nService } from 'nestjs-i18n';
 import sharp from 'sharp';
 
-import { type FileResponse, FileType } from '@contenster/shared';
+import { type FileResponse, FileType, PORTAL_UPLOAD_MIME_TYPES } from '@contenster/shared';
 import type { I18nPath, I18nTranslations } from '@/i18n/translations';
 import { settings } from '@/infrastructure/config/app.config';
 import { Client } from '@/modules/identity/clients/entities/client.entity';
@@ -74,6 +74,26 @@ export class FileService {
     return this.toResponse(stored);
   }
 
+  async uploadGlobal(
+    file: UploadedMultipartFile | undefined,
+    uploadedByUserId: number,
+  ): Promise<File> {
+    const validation = validateUploadedFile(file, settings.MAX_UPLOAD_FILE_SIZE_BYTES);
+
+    if (!validation.ok) {
+      throw new BadRequestException(this.i18n.t(fileValidationErrorKeys[validation.code]));
+    }
+
+    if (!PORTAL_UPLOAD_MIME_TYPES.includes(validation.file.mimeType)) {
+      throw new BadRequestException(this.i18n.t('errors.media.invalid_file_type'));
+    }
+
+    const uploadedBy = new User();
+    uploadedBy.id = uploadedByUserId;
+
+    return this.storeDefaultLocal(validation.file, uploadedBy);
+  }
+
   private async store(
     file: ValidatedFile,
     client: Client,
@@ -130,6 +150,48 @@ export class FileService {
     }
   }
 
+  private async storeDefaultLocal(file: ValidatedFile, uploadedBy: User): Promise<File> {
+    const prepared = this.prepareForStorage(file);
+    const metadata = await this.getImageMetadata(prepared.fileType, prepared.buffer);
+    const storedName = generateStoredFileName(prepared.originalName, prepared.mimeType);
+    const storedFile = await this.storageService.uploadDefaultLocal({
+      buffer: prepared.buffer,
+      fileType: prepared.fileType,
+      mimeType: prepared.mimeType,
+      originalName: prepared.originalName,
+      sizeInBytes: prepared.size,
+      storedName,
+    });
+
+    try {
+      return await this.fileRepository.save({
+        client: null,
+        extension: prepared.extension,
+        filePath: storedFile.filePath,
+        fileType: prepared.fileType,
+        height: metadata.height,
+        mimeType: prepared.mimeType,
+        originalName: prepared.originalName,
+        publicUrl: storedFile.publicUrl,
+        sizeInBytes: prepared.size,
+        storageConfiguration: null,
+        storageKey: storedFile.storageKey,
+        storageProvider: storedFile.storageProvider,
+        storedName,
+        uploadedBy,
+        width: metadata.width,
+      });
+    } catch (error) {
+      await this.storageService.delete({
+        filePath: storedFile.filePath,
+        storageProvider: storedFile.storageProvider,
+        storageKey: storedFile.storageKey,
+      });
+
+      throw error;
+    }
+  }
+
   private prepareForStorage(file: ValidatedFile): ValidatedFile {
     if (file.mimeType !== 'image/svg+xml') return file;
 
@@ -161,7 +223,7 @@ export class FileService {
 
   private toResponse(file: File): FileResponseDto {
     const response: FileResponse = {
-      clientId: file.client.id,
+      clientId: file.client?.id ?? null,
       createdAt: file.createdAt.toISOString(),
       extension: file.extension,
       fileName: file.storedName,

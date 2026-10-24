@@ -71,4 +71,25 @@ describe('core persistence integration', () => {
       }),
     ).rejects.toThrow();
   });
+
+  it('creates the portal schema and permits global media records without a client', async () => {
+    const [{ is_nullable: isNullable }] = await dataSource.query<{ is_nullable: string }[]>(
+      `SELECT is_nullable
+       FROM information_schema.columns
+       WHERE table_name = 'arquivos' AND column_name = 'cliente_id'`,
+    );
+    const [{ portalDomains, portals, portalTranslations }] = await dataSource.query<
+      { portalDomains: string | null; portals: string | null; portalTranslations: string | null }[]
+    >(
+      `SELECT
+        to_regclass('public.portais') AS portals,
+        to_regclass('public.portais_dominios') AS "portalDomains",
+        to_regclass('public.portais_traducoes') AS "portalTranslations"`,
+    );
+
+    expect(isNullable).toBe('YES');
+    expect(portals).toBe('portais');
+    expect(portalDomains).toBe('portais_dominios');
+    expect(portalTranslations).toBe('portais_traducoes');
+  });
 });

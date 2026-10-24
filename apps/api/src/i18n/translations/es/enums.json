@@ -33,5 +33,16 @@
     "error": "Error",
     "fatal": "Fatal"
   },
-  "cron_execution_status": { "success": "Éxito", "partial": "Parcial", "error": "Error" }
+  "cron_execution_status": { "success": "Éxito", "partial": "Parcial", "error": "Error" },
+  "portal_font_scale": { "small": "Pequeña", "standard": "Estándar", "large": "Grande" },
+  "portal_login_header_mode": { "text": "Texto", "brand_asset": "Marca" },
+  "portal_login_layout": { "centered": "Centrado", "split": "Dividido" },
+  "portal_split_media_position": { "left": "Izquierda", "right": "Derecha" },
+  "portal_login_media_slot": {
+    "centered_background_desktop": "Fondo centrado para escritorio",
+    "centered_background_mobile": "Fondo centrado para celular",
+    "split_panel_desktop": "Panel dividido para escritorio",
+    "split_panel_mobile": "Panel dividido para celular"
+  },
+  "portal_login_media_type": { "image": "Imagen", "video": "Vídeo" }
 }

@@ -5,8 +5,8 @@ import { type FileResponse, FileType, StorageProvider } from '@contenster/shared
 
 export class FileResponseDto implements FileResponse {
   @Expose()
-  @ApiProperty()
-  declare clientId: number;
+  @ApiPropertyOptional({ nullable: true })
+  declare clientId: number | null;
 
   @Expose()
   @ApiProperty({ format: 'date-time', type: String })
