@@ -1,9 +1,14 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { I18nService } from 'nestjs-i18n';
 import { DataSource, type DeepPartial, In, Repository } from 'typeorm';
 
-import { CORE_FUNCTIONALITY_CATALOG, type PaginateRequest } from '@contenster/shared';
+import {
+  CORE_FUNCTIONALITY_CATALOG,
+  type CreateSystemAdminClientRequest,
+  type PaginateRequest,
+  type SystemAdminAccessLinkRequest,
+} from '@contenster/shared';
 import type { I18nTranslations } from '@/i18n/translations';
 import { Functionality } from '@/modules/access-control/functionalities/entities/functionality.entity';
 import { SystemModule } from '@/modules/access-control/modules/entities/system-module.entity';
@@ -11,25 +16,22 @@ import { ProfilePermission } from '@/modules/access-control/profiles/entities/pr
 import { Profile } from '@/modules/access-control/profiles/entities/profiles.entity';
 import { Action } from '@/modules/authorization/actions/entities/action.entity';
 import { Language } from '@/modules/communication/languages/entities/language.entity';
+import { SessionAuthenticationService } from '@/modules/identity/authentication/session/session-authentication.service';
 import type { SaveClientRequestDto } from '@/modules/identity/clients/dto/req/save-client.request.dto';
 import { Client } from '@/modules/identity/clients/entities/client.entity';
-import { User } from '@/modules/identity/users/entities/user.entity';
-import { UserProfile } from '@/modules/identity/users/entities/user-profile.entity';
 import { buildPaginationMeta } from '@/shared/pagination';
 
-import type { CreateSystemAdminClientRequest } from './types/system-admin.types';
+import { ReplaceUserAccessLinksRequestDto } from './dto/req/replace-user-access-links.request.dto';
 import { SystemAdminRepository } from './system-admin.repository';
 
 @Injectable()
 export class SystemAdminService {
   constructor(
-    @InjectRepository(User) private readonly users: Repository<User>,
-    @InjectRepository(UserProfile) private readonly userProfiles: Repository<UserProfile>,
-    @InjectRepository(Profile) private readonly profiles: Repository<Profile>,
     @InjectRepository(Language) private readonly languages: Repository<Language>,
     private readonly dataSource: DataSource,
     private readonly repository: SystemAdminRepository,
     private readonly i18n: I18nService<I18nTranslations>,
+    private readonly sessionAuthentication: SessionAuthenticationService,
   ) {}
 
   listClients() {
@@ -252,24 +254,95 @@ export class SystemAdminService {
     return { items, meta: buildPaginationMeta(request, total) };
   }
 
-  async assignUserProfile(userId: number, clientId: number, profileId: number) {
-    const [user, client, profile] = await Promise.all([
-      this.users.findOneBy({ id: userId }),
-      this.repository.findActiveClient(clientId),
-      this.profiles.findOneBy({ id: profileId, client: { id: clientId }, isActive: true }),
-    ]);
+  async replaceUserAccessLinks(userId: number, request: ReplaceUserAccessLinksRequestDto) {
+    const ids = await this.dataSource.transaction(async (manager) => {
+      const user = await this.repository.findAccessLinkUser(userId, manager);
 
-    if (!user || !client || !profile) {
-      throw new NotFoundException(
-        this.i18n.t('errors.system_admin.invalid_user_profile_assignment'),
+      if (!user) {
+        throw new NotFoundException(this.i18n.t('errors.system_admin.user_not_found'));
+      }
+
+      this.validateAccessLinks(request.links);
+
+      const clientIds = [...new Set(request.links.map((link) => link.clientId))];
+      const profileIds = [...new Set(request.links.map((link) => link.profileId))];
+
+      const [clients, profiles, existingLinks] = await Promise.all([
+        this.repository.findAccessLinkClients(clientIds, manager),
+        this.repository.findAccessLinkProfiles(profileIds, manager),
+        this.repository.findAccessLinksByUser(userId, manager),
+      ]);
+
+      const clientsById = new Map(clients.map((client) => [client.id, client]));
+      const profilesById = new Map(profiles.map((profile) => [profile.id, profile]));
+      const existingLinkKeys = new Set(
+        existingLinks.map((link) => this.toAccessLinkKey(link.client.id, link.profile.id)),
       );
-    }
 
-    return this.userProfiles.save({
-      user: { id: userId },
-      client: { id: clientId },
-      profile: { id: profileId },
+      for (const link of request.links) {
+        const client = clientsById.get(link.clientId);
+
+        if (!client) {
+          throw new NotFoundException(this.i18n.t('errors.system_admin.client_not_found'));
+        }
+
+        const profile = profilesById.get(link.profileId);
+
+        if (!profile) {
+          throw new NotFoundException(this.i18n.t('errors.system_admin.profile_not_found'));
+        }
+
+        if (profile.client.id !== client.id) {
+          throw new BadRequestException(this.i18n.t('errors.system_admin.profile_client_mismatch'));
+        }
+
+        const isExistingLink = existingLinkKeys.has(this.toAccessLinkKey(client.id, profile.id));
+
+        if (!client.isActive && !isExistingLink) {
+          throw new BadRequestException(
+            this.i18n.t('errors.system_admin.access_link_inactive_client'),
+          );
+        }
+
+        if (!profile.isActive && !isExistingLink) {
+          throw new BadRequestException(
+            this.i18n.t('errors.system_admin.access_link_inactive_profile'),
+          );
+        }
+      }
+
+      return this.repository.replaceAccessLinks(userId, request.links, manager);
     });
+
+    await this.sessionAuthentication.destroyAllByUser(userId);
+
+    return { ids: ids.map((link) => link.id) };
+  }
+
+  private validateAccessLinks(links: SystemAdminAccessLinkRequest[]): void {
+    const clientIds = new Set<number>();
+    const profileIds = new Set<number>();
+
+    for (const link of links) {
+      if (clientIds.has(link.clientId)) {
+        throw new BadRequestException(
+          this.i18n.t('errors.system_admin.access_link_duplicate_client'),
+        );
+      }
+
+      if (profileIds.has(link.profileId)) {
+        throw new BadRequestException(
+          this.i18n.t('errors.system_admin.access_link_duplicate_profile'),
+        );
+      }
+
+      clientIds.add(link.clientId);
+      profileIds.add(link.profileId);
+    }
+  }
+
+  private toAccessLinkKey(clientId: number, profileId: number): string {
+    return `${clientId}:${profileId}`;
   }
 
   private clientNotFound(): NotFoundException {

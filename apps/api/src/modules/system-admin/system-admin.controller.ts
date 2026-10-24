@@ -14,6 +14,10 @@ import { ApiTags } from '@nestjs/swagger';
 import { RequireSuperuser } from '@/common/decorators/require-superuser.decorator';
 import { PaginateRequestDto } from '@/shared/dtos';
 
+import { SaveClientRequestDto } from '../identity/clients/dto/req/save-client.request.dto';
+
+import { CreateSystemAdminClientRequestDto } from './dto/req/create-system-admin-client.request.dto';
+import { ReplaceUserAccessLinksRequestDto } from './dto/req/replace-user-access-links.request.dto';
 import { SystemAdminService } from './system-admin.service';
 
 @ApiTags('System administration')
@@ -27,13 +31,13 @@ export class SystemAdminController {
   }
 
   @Post('clients')
-  createClient(@Body() request: Parameters<SystemAdminService['createClient']>[0]) {
+  createClient(@Body() request: CreateSystemAdminClientRequestDto) {
     return this.service.createClient(request);
   }
 
   @Patch('clients/:id') updateClient(
     @Param('id', ParseIntPipe) id: number,
-    @Body() body: Parameters<SystemAdminService['updateClient']>[1],
+    @Body() body: SaveClientRequestDto,
   ) {
     return this.service.updateClient(id, body);
   }
@@ -73,11 +77,11 @@ export class SystemAdminController {
     return this.service.listFilesPaginated(request);
   }
 
-  @Post('users/:userId/clients/:clientId/profiles/:profileId') assignUserProfile(
+  @Post('users/:userId/access-links')
+  replaceUserAccessLinks(
     @Param('userId', ParseIntPipe) userId: number,
-    @Param('clientId', ParseIntPipe) clientId: number,
-    @Param('profileId', ParseIntPipe) profileId: number,
+    @Body() request: ReplaceUserAccessLinksRequestDto,
   ) {
-    return this.service.assignUserProfile(userId, clientId, profileId);
+    return this.service.replaceUserAccessLinks(userId, request);
   }
 }

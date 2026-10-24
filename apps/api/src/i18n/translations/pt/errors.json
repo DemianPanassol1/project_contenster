@@ -58,7 +58,13 @@
     "functionality_duplicate": "Uma funcionalidade não pode ser informada mais de uma vez.",
     "invalid_functionality_hierarchy": "A hierarquia de funcionalidades informada é inválida.",
     "invalid_functionality_configuration": "A configuração da funcionalidade informada é inválida.",
-    "invalid_user_profile_assignment": "O usuário, cliente ou perfil informado não pode receber este vínculo."
+    "user_not_found": "Usuário não encontrado.",
+    "profile_not_found": "Perfil não encontrado.",
+    "profile_client_mismatch": "O perfil informado não pertence ao cliente informado.",
+    "access_link_duplicate_client": "Um cliente não pode ser informado mais de uma vez nos vínculos de acesso.",
+    "access_link_duplicate_profile": "Um perfil não pode ser informado mais de uma vez nos vínculos de acesso.",
+    "access_link_inactive_client": "Não é possível criar um novo vínculo para um cliente inativo.",
+    "access_link_inactive_profile": "Não é possível criar um novo vínculo para um perfil inativo."
   },
   "portal": {
     "not_found": "Portal não encontrado.",

@@ -1,9 +1,12 @@
 import type { PaginateRequest } from '@contenster/shared';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { EntityManager, In, Repository } from 'typeorm';
 
+import { Profile } from '@/modules/access-control/profiles/entities/profiles.entity';
 import { Client } from '@/modules/identity/clients/entities/client.entity';
+import { User } from '@/modules/identity/users/entities/user.entity';
+import { UserProfile } from '@/modules/identity/users/entities/user-profile.entity';
 import { File } from '@/modules/media/files/entities/file.entity';
 import { RequestLog } from '@/modules/observability/request-logs/entities/request-log.entity';
 import { CronExecutionLog } from '@/modules/scheduling/cron-execution-log/entities/cron-execution-log.entity';
@@ -24,10 +27,6 @@ export class SystemAdminRepository {
 
   findClient(id: number) {
     return this.clients.findOneBy({ id });
-  }
-
-  findActiveClient(id: number) {
-    return this.clients.findOneBy({ id, isActive: true });
   }
 
   findClientWithLanguages(id: number) {
@@ -127,5 +126,51 @@ export class SystemAdminRepository {
       },
       tieBreaker: 'file.id',
     });
+  }
+
+  findAccessLinkUser(id: number, manager: EntityManager): Promise<User | null> {
+    return manager.getRepository(User).findOneBy({ id });
+  }
+
+  findAccessLinkClients(ids: number[], manager: EntityManager): Promise<Client[]> {
+    if (ids.length === 0) return Promise.resolve([]);
+
+    return manager.getRepository(Client).find({ where: { id: In(ids) } });
+  }
+
+  findAccessLinkProfiles(ids: number[], manager: EntityManager): Promise<Profile[]> {
+    if (ids.length === 0) return Promise.resolve([]);
+
+    return manager.getRepository(Profile).find({
+      relations: { client: true },
+      where: { id: In(ids) },
+    });
+  }
+
+  findAccessLinksByUser(userId: number, manager: EntityManager): Promise<UserProfile[]> {
+    return manager.getRepository(UserProfile).find({
+      relations: { client: true, profile: true },
+      where: { user: { id: userId } },
+    });
+  }
+
+  async replaceAccessLinks(
+    userId: number,
+    links: Array<{ clientId: number; profileId: number }>,
+    manager: EntityManager,
+  ): Promise<UserProfile[]> {
+    const userProfiles = manager.getRepository(UserProfile);
+
+    await userProfiles.delete({ user: { id: userId } });
+
+    if (links.length === 0) return [];
+
+    return userProfiles.save(
+      links.map(({ clientId, profileId }) => ({
+        client: { id: clientId },
+        profile: { id: profileId },
+        user: { id: userId },
+      })),
+    );
   }
 }

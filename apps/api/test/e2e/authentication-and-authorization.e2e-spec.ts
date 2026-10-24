@@ -12,6 +12,7 @@ import {
 } from '@contenster/shared';
 import { Profile } from '@/modules/access-control/profiles/entities/profiles.entity';
 import { User } from '@/modules/identity/users/entities/user.entity';
+import { UserProfile } from '@/modules/identity/users/entities/user-profile.entity';
 import { CronExecutionLog } from '@/modules/scheduling/cron-execution-log/entities/cron-execution-log.entity';
 
 import { createTestApplication } from '../runner/app.factory';
@@ -517,6 +518,73 @@ describe('authentication and authorization', () => {
     const logs = (response.body as ApiResponse<{ items: Array<{ id: number }> }>).body.items;
 
     expect(logs).toEqual(expect.arrayContaining([expect.objectContaining({ id: routine.id })]));
+  });
+
+  it('replaces all user access links and invalidates the affected user sessions', async () => {
+    const primaryProfile = await dataSource.getRepository(Profile).findOneByOrFail({
+      client: { id: 1 },
+    });
+    const secondaryProfile = await dataSource.getRepository(Profile).findOneByOrFail({
+      client: { id: secondaryClientId },
+    });
+    const globalAgent = request.agent(httpServer);
+
+    await globalAgent
+      .post('/auth/sign-in-global')
+      .send({ password: '123456', staySignedIn: false, username: 'admin' })
+      .expect(201);
+
+    const replacement = await globalAgent
+      .post('/system-admin/users/1/access-links')
+      .send({ links: [{ clientId: secondaryClientId, profileId: secondaryProfile.id }] })
+      .expect(201);
+
+    expect((replacement.body as ApiResponse<{ ids: number[] }>).body.ids).toHaveLength(1);
+    await globalAgent.get('/auth/session').expect(401);
+
+    const accessLinks = await dataSource.getRepository(UserProfile).find({
+      relations: { client: true, profile: true },
+      where: { user: { id: 1 } },
+    });
+
+    expect(
+      accessLinks.map((link) => ({ clientId: link.client.id, profileId: link.profile.id })),
+    ).toEqual([{ clientId: secondaryClientId, profileId: secondaryProfile.id }]);
+
+    const emptyLinksAgent = request.agent(httpServer);
+
+    await emptyLinksAgent
+      .post('/auth/sign-in-global')
+      .send({ password: '123456', staySignedIn: false, username: 'admin' })
+      .expect(201);
+    await emptyLinksAgent
+      .post('/system-admin/users/1/access-links')
+      .send({ links: [] })
+      .expect(201);
+
+    await expect(
+      dataSource.getRepository(UserProfile).count({ where: { user: { id: 1 } } }),
+    ).resolves.toBe(0);
+
+    const restoreLinksAgent = request.agent(httpServer);
+
+    await restoreLinksAgent
+      .post('/auth/sign-in-global')
+      .send({ password: '123456', staySignedIn: false, username: 'admin' })
+      .expect(201);
+    await restoreLinksAgent
+      .post('/system-admin/users/1/access-links')
+      .send({
+        links: [
+          { clientId: 1, profileId: primaryProfile.id },
+          { clientId: secondaryClientId, profileId: secondaryProfile.id },
+        ],
+      })
+      .expect(201);
+    await agent
+      .post('/auth/sign-in')
+      .send({ clientId: 1, password: '123456', staySignedIn: false, username: 'admin' })
+      .expect(201);
   });
 
   it('provisions a client, its administrative profile and all selected functionality permissions', async () => {

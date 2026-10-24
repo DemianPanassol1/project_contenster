@@ -58,7 +58,13 @@
     "functionality_duplicate": "A functionality cannot be provided more than once.",
     "invalid_functionality_hierarchy": "The provided functionality hierarchy is invalid.",
     "invalid_functionality_configuration": "The provided functionality configuration is invalid.",
-    "invalid_user_profile_assignment": "The provided user, client, or profile cannot receive this assignment."
+    "user_not_found": "User not found.",
+    "profile_not_found": "Profile not found.",
+    "profile_client_mismatch": "The provided profile does not belong to the provided client.",
+    "access_link_duplicate_client": "A client cannot be provided more than once in access links.",
+    "access_link_duplicate_profile": "A profile cannot be provided more than once in access links.",
+    "access_link_inactive_client": "A new link cannot be created for an inactive client.",
+    "access_link_inactive_profile": "A new link cannot be created for an inactive profile."
   },
   "portal": {
     "not_found": "Portal not found.",
