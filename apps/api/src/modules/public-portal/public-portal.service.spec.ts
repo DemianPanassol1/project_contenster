@@ -103,4 +103,14 @@ describe('PublicPortalService', () => {
       },
     });
   });
+
+  it('preserves a localhost port when resolving a portal', async () => {
+    const findByHost = vi.fn().mockResolvedValue(null);
+    const repository = { findByHost } as unknown as PublicPortalRepository;
+    const service = new PublicPortalService(repository);
+
+    await service.resolve('localhost:4001');
+
+    expect(findByHost).toHaveBeenCalledWith('localhost:4001');
+  });
 });

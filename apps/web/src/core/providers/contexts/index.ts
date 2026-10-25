@@ -10,4 +10,5 @@ export {
 } from './global.context';
 export { ModalProvider, useModalContext } from './modal.context';
 export type { ModalAction, ModalContextValue, ModalItem, OpenModalOptions } from './modal.types';
+export { PortalProvider, usePortal } from './portal.context';
 export { AppSnackbarProvider } from './snackbar.context';

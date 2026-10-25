@@ -8,6 +8,7 @@ import { I18nService } from 'nestjs-i18n';
 
 import {
   isPortalAssetCompatible,
+  normalizePortalHost,
   type PaginatedBody,
   type PortalDetail,
   type PortalListItem,
@@ -137,22 +138,19 @@ export class PortalsService {
   }
 
   private normalizeHosts(hosts: string[]): string[] {
-    const normalized = hosts.map((host) => host.trim().toLowerCase().replace(/\.$/, ''));
+    const normalized = hosts.map(normalizePortalHost);
 
-    if (
-      normalized.some(
-        (host) =>
-          !/^[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?(\.[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)*$/.test(host),
-      )
-    ) {
+    if (normalized.some((host) => host === null)) {
       throw new BadRequestException(this.i18n.t('errors.portal.invalid_host'));
     }
 
-    if (new Set(normalized).size !== normalized.length) {
+    const hostsToPersist = normalized as string[];
+
+    if (new Set(hostsToPersist).size !== hostsToPersist.length) {
       throw new BadRequestException(this.i18n.t('errors.portal.duplicate_host'));
     }
 
-    return normalized;
+    return hostsToPersist;
   }
 
   private async buildTranslations(request: SavePortalRequestDto): Promise<PortalTranslation[]> {

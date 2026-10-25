@@ -30,7 +30,7 @@ export interface WebResponse<TBody = unknown> {
 
 export interface FetchOptions {
   authentication?: 'none' | 'session';
-  body?: FormData | Record<string, unknown>;
+  body?: FormData | object;
   cache?: RequestCache;
   headers?: HeadersInit;
   locale?: Locale;

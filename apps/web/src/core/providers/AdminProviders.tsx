@@ -1,5 +1,6 @@
 'use client';
 
+import type { ResolvedPublicPortal } from '@contenster/shared';
 import type { ReactNode } from 'react';
 
 import {
@@ -16,11 +17,17 @@ interface AdminProvidersProps {
   children: ReactNode;
   closeSnackbarLabel: string;
   locale: Locale;
+  portal: ResolvedPublicPortal;
 }
 
-export function AdminProviders({ children, closeSnackbarLabel, locale }: AdminProvidersProps) {
+export function AdminProviders({
+  children,
+  closeSnackbarLabel,
+  locale,
+  portal,
+}: AdminProvidersProps) {
   return (
-    <MuiThemeProvider>
+    <MuiThemeProvider portal={portal}>
       <AppSnackbarProvider closeSnackbarLabel={closeSnackbarLabel}>
         <GlobalProvider>
           <DatePickersProvider locale={locale}>

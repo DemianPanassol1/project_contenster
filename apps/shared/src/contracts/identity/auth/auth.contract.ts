@@ -18,6 +18,10 @@ export interface SignInRequest extends AuthorizeRequest {
   staySignedIn: boolean;
 }
 
+export interface SignInGlobalRequest extends AuthorizeRequest {
+  staySignedIn: boolean;
+}
+
 export interface SessionResponse {
   expiresAt: string;
   session: AuthenticatedSession;

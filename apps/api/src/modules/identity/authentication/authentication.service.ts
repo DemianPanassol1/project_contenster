@@ -21,6 +21,7 @@ import {
   validatePasswordHash,
 } from '@/infrastructure/security/password.util';
 import { AuthorizationResolverService } from '@/modules/authorization/authorization-resolver.service';
+import { getCurrentLocale } from '@/shared/i18n';
 import { toResponseDto } from '@/shared/responses';
 import { resolveTranslation } from '@/shared/translations';
 
@@ -38,6 +39,7 @@ import {
   SessionResponseDto,
   SignOutResponseDto,
 } from './dto/res';
+import { buildPasswordRecoveryPath } from './helpers/password-recovery-url.helper';
 import {
   createPasswordResetTokenSignOptions,
   createPasswordResetTokenVerifyOptions,
@@ -476,7 +478,7 @@ export class AuthenticationService {
   private buildResetPasswordLink(token: string): string {
     const baseUrl = settings.APP_URL.replace(/\/+$/, '');
 
-    return `${baseUrl}/auth/reset-password?token=${encodeURIComponent(token)}`;
+    return `${baseUrl}${buildPasswordRecoveryPath(getCurrentLocale(), token)}`;
   }
 
   private async executePasswordResetStore<T>(operation: () => Promise<T>): Promise<T> {

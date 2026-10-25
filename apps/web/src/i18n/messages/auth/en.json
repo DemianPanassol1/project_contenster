@@ -3,15 +3,37 @@
     "close_snackbar": "Dismiss message"
   },
   "login": {
-    "title": "Sign in"
+    "client": "Client",
+    "forgot_password": "Forgot password",
+    "global_context": "Enter global administration",
+    "or": "or",
+    "password": "Password",
+    "submit": "Sign in",
+    "stay_signed_in": "Stay signed in",
+    "title": "Sign in",
+    "username": "Username"
   },
   "password_recovery": {
+    "back_to_login": "Back to login",
+    "email": "Email",
+    "submit": "Send instructions",
+    "success": "If the email is registered, you will receive instructions shortly.",
+    "success_title": "Check your email",
     "title": "Forgot password"
   },
   "password_reset": {
+    "back_to_login": "Back to login",
+    "confirm_password": "Confirm new password",
+    "confirm_password_required": "Confirm your new password.",
+    "go_to_login": "Go to login",
+    "invalid_title": "Invalid link",
+    "invalid_token": "The reset link is invalid or expired.",
+    "password": "New password",
+    "passwords_must_match": "Passwords must match.",
+    "request_new_link": "Request a new link",
+    "submit": "Reset password",
+    "success": "Password reset successfully.",
+    "success_title": "Password reset",
     "title": "Reset password"
-  },
-  "password_change": {
-    "title": "Change password"
   }
 }

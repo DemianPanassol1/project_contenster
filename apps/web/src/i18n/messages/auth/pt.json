@@ -3,15 +3,37 @@
     "close_snackbar": "Fechar mensagem"
   },
   "login": {
-    "title": "Login"
+    "client": "Cliente",
+    "forgot_password": "Esqueci minha senha",
+    "global_context": "Entrar no painel global",
+    "or": "ou",
+    "password": "Senha",
+    "submit": "Entrar",
+    "stay_signed_in": "Manter conectado",
+    "title": "Login",
+    "username": "Usuário"
   },
   "password_recovery": {
+    "back_to_login": "Voltar para o login",
+    "email": "E-mail",
+    "submit": "Enviar instruções",
+    "success": "Se o e-mail estiver cadastrado, você receberá as instruções em instantes.",
+    "success_title": "Verifique seu e-mail",
     "title": "Recuperar senha"
   },
   "password_reset": {
+    "back_to_login": "Voltar para o login",
+    "confirm_password": "Confirmar nova senha",
+    "confirm_password_required": "Confirme a nova senha.",
+    "go_to_login": "Ir para o login",
+    "invalid_title": "Link inválido",
+    "invalid_token": "O link de redefinição é inválido ou expirou.",
+    "password": "Nova senha",
+    "passwords_must_match": "As senhas devem ser iguais.",
+    "request_new_link": "Solicitar novo link",
+    "submit": "Redefinir senha",
+    "success": "Senha redefinida com sucesso.",
+    "success_title": "Senha redefinida",
     "title": "Redefinir senha"
-  },
-  "password_change": {
-    "title": "Alterar senha"
   }
 }

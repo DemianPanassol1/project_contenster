@@ -13,7 +13,10 @@ export class PublicPortalController {
 
   @Get()
   @Header('Cache-Control', 'no-store')
-  resolve(@Headers('host') host: string | undefined) {
-    return this.service.resolve(host);
+  resolve(
+    @Headers('x-forwarded-host') forwardedHost: string | undefined,
+    @Headers('host') host: string | undefined,
+  ) {
+    return this.service.resolve(forwardedHost?.split(',')[0] ?? host);
   }
 }

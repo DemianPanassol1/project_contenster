@@ -3,15 +3,37 @@
     "close_snackbar": "Cerrar mensaje"
   },
   "login": {
-    "title": "Iniciar sesión"
+    "client": "Cliente",
+    "forgot_password": "Olvidé mi contraseña",
+    "global_context": "Entrar al panel global",
+    "or": "o",
+    "password": "Contraseña",
+    "submit": "Entrar",
+    "stay_signed_in": "Mantener sesión iniciada",
+    "title": "Iniciar sesión",
+    "username": "Usuario"
   },
   "password_recovery": {
+    "back_to_login": "Volver al inicio de sesión",
+    "email": "Correo electrónico",
+    "submit": "Enviar instrucciones",
+    "success": "Si el correo está registrado, recibirás las instrucciones en breve.",
+    "success_title": "Revisa tu correo electrónico",
     "title": "Recuperar contraseña"
   },
   "password_reset": {
+    "back_to_login": "Volver al inicio de sesión",
+    "confirm_password": "Confirmar nueva contraseña",
+    "confirm_password_required": "Confirma tu nueva contraseña.",
+    "go_to_login": "Ir al inicio de sesión",
+    "invalid_title": "Enlace inválido",
+    "invalid_token": "El enlace de restablecimiento no es válido o expiró.",
+    "password": "Nueva contraseña",
+    "passwords_must_match": "Las contraseñas deben coincidir.",
+    "request_new_link": "Solicitar un nuevo enlace",
+    "submit": "Restablecer contraseña",
+    "success": "Contraseña restablecida correctamente.",
+    "success_title": "Contraseña restablecida",
     "title": "Restablecer contraseña"
-  },
-  "password_change": {
-    "title": "Cambiar contraseña"
   }
 }

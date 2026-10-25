@@ -1,0 +1,27 @@
+'use client';
+
+import { Box, Typography } from '@mui/material';
+import { useTranslations } from 'next-intl';
+
+import { Icon } from '@/shared/ui/Icon';
+
+export const DataTableEmptyState = () => {
+  const t = useTranslations();
+
+  return (
+    <Box
+      sx={{
+        py: 6,
+        gap: 1,
+        display: 'flex',
+        alignItems: 'center',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        color: 'text.secondary',
+      }}
+    >
+      <Icon name="scan-search" size={24} />
+      <Typography sx={{ fontSize: 13 }}>{t('dataTable.empty')}</Typography>
+    </Box>
+  );
+};

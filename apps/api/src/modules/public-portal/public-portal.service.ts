@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import {
   isPortalAssetCompatible,
+  normalizePortalHost,
   PortalFontScale,
   PortalLoginHeaderMode,
   PortalLoginLayout,
@@ -41,23 +42,13 @@ export class PublicPortalService {
 
   async resolve(rawHost: string | undefined): Promise<ResolvedPublicPortal> {
     const fallback = this.fallback();
-    const host = this.normalizeHost(rawHost);
+    const host = normalizePortalHost(rawHost ?? '');
 
     if (!host) return fallback;
 
     const portal = await this.repository.findByHost(host);
 
     return portal ? this.toResolvedPortal(portal, getCurrentLocale(), fallback) : fallback;
-  }
-
-  private normalizeHost(rawHost: string | undefined): string | null {
-    if (!rawHost) return null;
-
-    const host = rawHost.trim().toLowerCase().replace(/\.$/, '').replace(/:\d+$/, '');
-
-    return /^[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?(\.[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)*$/.test(host)
-      ? host
-      : null;
   }
 
   private toResolvedPortal(

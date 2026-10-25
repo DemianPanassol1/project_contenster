@@ -8,10 +8,8 @@ import type { I18nTranslations } from '@/i18n/translations';
 import { settings } from '@/infrastructure/config/app.config';
 import { getCurrentLocale } from '@/shared/i18n';
 
-import {
-  escapePasswordRecoveryEmailHtml,
-  resolvePasswordRecoveryEmailLocale,
-} from './helpers/password-recovery-email.helper';
+import { escapePasswordRecoveryEmailHtml } from './helpers/password-recovery-email.helper';
+import { resolvePasswordRecoveryLocale } from './helpers/password-recovery-url.helper';
 import type {
   PasswordRecoveryEmailLocale,
   PasswordRecoveryMailConfiguration,
@@ -31,7 +29,7 @@ export class PasswordRecoveryEmailService {
   async send(input: SendPasswordRecoveryEmailInput): Promise<void> {
     const configuration = this.getConfiguration();
 
-    const locale = resolvePasswordRecoveryEmailLocale(getCurrentLocale());
+    const locale = resolvePasswordRecoveryLocale(getCurrentLocale());
     const template = await this.readTemplate(locale);
     const html = template
       .replaceAll('[USER_NAME]', escapePasswordRecoveryEmailHtml(input.recipientName))

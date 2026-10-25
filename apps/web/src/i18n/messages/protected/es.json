@@ -5,6 +5,10 @@
   "not_found": {
     "message": "Página administrativa no encontrada."
   },
+  "access_denied": {
+    "message": "No tienes permiso para acceder a esta funcionalidad.",
+    "title": "Acceso denegado"
+  },
   "feedback": {
     "close_snackbar": "Cerrar mensaje",
     "operation_failed": "No fue posible completar la operación.",
