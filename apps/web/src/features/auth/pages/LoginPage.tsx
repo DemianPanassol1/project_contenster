@@ -2,7 +2,7 @@
 
 import type { AuthorizeResponse } from '@contenster/shared';
 import { Stack, Typography } from '@mui/material';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useState } from 'react';
 
 import { useToast, useWebResponseErrorToast } from '@/hooks';
@@ -20,6 +20,7 @@ import {
 
 export function LoginView() {
   const router = useRouter();
+  const locale = useLocale();
   const t = useTranslations('auth.login');
   const { errorMessage } = useToast();
   const showErrors = useWebResponseErrorToast();
@@ -27,7 +28,7 @@ export function LoginView() {
   const [isPending, setIsPending] = useState(false);
 
   const signInClient = async (values: LoginFormValues, clientId: number): Promise<boolean> => {
-    const response = await signIn(toSignInRequest(values, clientId));
+    const response = await signIn(toSignInRequest(values, clientId), locale);
 
     if (!response.success) {
       showErrors(response);
@@ -52,7 +53,7 @@ export function LoginView() {
       return false;
     }
 
-    const response = await authorize(toAuthorizeRequest(values));
+    const response = await authorize(toAuthorizeRequest(values), locale);
 
     if (!response.success || !response.body) {
       showErrors(response);
@@ -89,7 +90,7 @@ export function LoginView() {
     setIsPending(true);
 
     try {
-      const response = await signInGlobal(toSignInGlobalRequest(values));
+      const response = await signInGlobal(toSignInGlobalRequest(values), locale);
 
       if (!response.success) {
         showErrors(response);

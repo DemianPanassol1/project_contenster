@@ -27,7 +27,6 @@
   "password_reset": {
     "back_to_login": "Back to login",
     "confirm_password": "Confirm new password",
-    "confirm_password_required": "Confirm your new password.",
     "go_to_login": "Go to login",
     "invalid_title": "Invalid link",
     "invalid_token": "The reset link is invalid or expired.",

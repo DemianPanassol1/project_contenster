@@ -27,7 +27,6 @@
   "password_reset": {
     "back_to_login": "Voltar para o login",
     "confirm_password": "Confirmar nova senha",
-    "confirm_password_required": "Confirme a nova senha.",
     "go_to_login": "Ir para o login",
     "invalid_title": "Link inválido",
     "invalid_token": "O link de redefinição é inválido ou expirou.",

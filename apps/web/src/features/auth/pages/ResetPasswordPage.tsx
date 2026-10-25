@@ -2,7 +2,7 @@
 
 import type { ResetPasswordRequest } from '@contenster/shared';
 import { Alert, Stack, Typography } from '@mui/material';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useState } from 'react';
 
 import { useToast, useWebResponseErrorToast } from '@/hooks';
@@ -20,6 +20,7 @@ interface ResetPasswordViewProps {
 
 export function ResetPasswordView({ token }: ResetPasswordViewProps) {
   const router = useRouter();
+  const locale = useLocale();
   const t = useTranslations('auth.password_reset');
   const { errorMessage } = useToast();
   const showErrors = useWebResponseErrorToast();
@@ -40,7 +41,7 @@ export function ResetPasswordView({ token }: ResetPasswordViewProps) {
       password: values.password,
       token,
     };
-    const response = await resetPassword(request);
+    const response = await resetPassword(request, locale);
 
     if (response.success) {
       setIsReset(true);

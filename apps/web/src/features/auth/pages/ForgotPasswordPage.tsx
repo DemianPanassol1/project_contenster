@@ -2,7 +2,7 @@
 
 import type { ForgotPasswordRequest } from '@contenster/shared';
 import { Alert, Stack, Typography } from '@mui/material';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useState } from 'react';
 
 import { useToast, useWebResponseErrorToast } from '@/hooks';
@@ -14,6 +14,7 @@ import { ForgotPasswordForm } from '../components/ForgotPasswordForm';
 
 export function ForgotPasswordView() {
   const router = useRouter();
+  const locale = useLocale();
   const t = useTranslations('auth.password_recovery');
   const { errorMessage } = useToast();
   const showErrors = useWebResponseErrorToast();
@@ -21,7 +22,7 @@ export function ForgotPasswordView() {
   const [isPending, setIsPending] = useState(false);
 
   const submit = async (values: ForgotPasswordRequest): Promise<boolean> => {
-    const response = await forgotPassword(values);
+    const response = await forgotPassword(values, locale);
 
     if (response.success) {
       setSent(true);

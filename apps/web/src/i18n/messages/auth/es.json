@@ -27,7 +27,6 @@
   "password_reset": {
     "back_to_login": "Volver al inicio de sesión",
     "confirm_password": "Confirmar nueva contraseña",
-    "confirm_password_required": "Confirma tu nueva contraseña.",
     "go_to_login": "Ir al inicio de sesión",
     "invalid_title": "Enlace inválido",
     "invalid_token": "El enlace de restablecimiento no es válido o expiró.",

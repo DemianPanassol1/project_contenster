@@ -5,6 +5,7 @@ import { Alert, Box, Divider, Link as MuiLink, Stack } from '@mui/material';
 import { useTranslations } from 'next-intl';
 import type { ElementType } from 'react';
 
+import { useValidationRules } from '@/hooks';
 import { Link } from '@/i18n/navigation';
 import {
   Button,
@@ -32,6 +33,7 @@ export function LoginForm({
   onSubmit,
 }: LoginFormProps) {
   const t = useTranslations('auth.login');
+  const { createValidationRules } = useValidationRules<LoginFormValues>();
 
   return (
     <FormWrapper<LoginFormValues>
@@ -49,7 +51,7 @@ export function LoginForm({
                 disabled={isPending}
                 label={t('username')}
                 name="username"
-                rules={{ required: true }}
+                rules={createValidationRules('required')}
               />
               <Box>
                 <Stack direction="row" sx={{ justifyContent: 'flex-end', mb: 0.75 }}>
@@ -67,7 +69,7 @@ export function LoginForm({
                   disabled={isPending}
                   label={t('password')}
                   name="password"
-                  rules={{ required: true }}
+                  rules={createValidationRules('required')}
                 />
               </Box>
               <FormCheckbox<LoginFormValues>
@@ -98,7 +100,7 @@ export function LoginForm({
                   label={t('client')}
                   name="clientId"
                   options={authorization.clients}
-                  rules={{ required: true }}
+                  rules={createValidationRules('required')}
                 />
               )}
               {!authorization.isEligibleToGlobalContext && authorization.clients.length === 0 && (

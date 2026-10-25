@@ -39,7 +39,7 @@ export function ResetPasswordForm({ isPending, onSubmit }: ResetPasswordFormProp
           label={t('confirm_password')}
           name="confirmPassword"
           rules={{
-            required: t('confirm_password_required'),
+            ...createValidationRules('required'),
             validate: (value, values) => value === values.password || t('passwords_must_match'),
           }}
         />

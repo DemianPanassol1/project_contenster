@@ -14,6 +14,7 @@ import type {
   SignInRequest,
 } from '@contenster/shared';
 
+import type { Locale } from '@/i18n/routing';
 import {
   apiInstance,
   clearSessionCookie,
@@ -46,30 +47,41 @@ const toSessionActionResponse = async (
 
 export const authorize = async (
   request: AuthorizeRequest,
+  locale: Locale,
 ): Promise<WebResponse<AuthorizeResponse>> =>
-  apiInstance.post('auth/authorize', { authentication: 'none', body: request });
+  apiInstance.post('auth/authorize', { authentication: 'none', body: request, locale });
 
-export const signIn = async (request: SignInRequest): Promise<WebResponse<SessionResponse>> =>
+export const signIn = async (
+  request: SignInRequest,
+  locale: Locale,
+): Promise<WebResponse<SessionResponse>> =>
   toSessionActionResponse(
-    await apiInstance.post('auth/sign-in', { authentication: 'none', body: request }),
+    await apiInstance.post('auth/sign-in', { authentication: 'none', body: request, locale }),
   );
 
 export const signInGlobal = async (
   request: SignInGlobalRequest,
+  locale: Locale,
 ): Promise<WebResponse<SessionResponse>> =>
   toSessionActionResponse(
-    await apiInstance.post('auth/sign-in-global', { authentication: 'none', body: request }),
+    await apiInstance.post('auth/sign-in-global', {
+      authentication: 'none',
+      body: request,
+      locale,
+    }),
   );
 
 export const forgotPassword = async (
   request: ForgotPasswordRequest,
+  locale: Locale,
 ): Promise<WebResponse<ForgotPasswordResponse>> =>
-  apiInstance.post('auth/forgot-password', { authentication: 'none', body: request });
+  apiInstance.post('auth/forgot-password', { authentication: 'none', body: request, locale });
 
 export const resetPassword = async (
   request: ResetPasswordRequest,
+  locale: Locale,
 ): Promise<WebResponse<ResetPasswordResponse>> =>
-  apiInstance.post('auth/reset-password', { authentication: 'none', body: request });
+  apiInstance.post('auth/reset-password', { authentication: 'none', body: request, locale });
 
 export const changeCurrentUserPassword = async (
   request: ChangeCurrentUserPasswordRequest,
