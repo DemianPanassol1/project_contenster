@@ -4,5 +4,18 @@
   },
   "not_found": {
     "message": "Página administrativa no encontrada."
+  },
+  "feedback": {
+    "close_snackbar": "Cerrar mensaje",
+    "operation_failed": "No fue posible completar la operación.",
+    "operation_succeeded": "Operación completada correctamente.",
+    "request_in_progress": "Espere a que finalice la operación actual."
+  },
+  "modal": {
+    "close": "Cerrar"
+  },
+  "system_admin": {
+    "home_title": "Panel de administración global",
+    "not_found": "Página global no encontrada."
   }
 }

@@ -4,5 +4,18 @@
   },
   "not_found": {
     "message": "Administrative page not found."
+  },
+  "feedback": {
+    "close_snackbar": "Dismiss message",
+    "operation_failed": "The operation could not be completed.",
+    "operation_succeeded": "Operation completed successfully.",
+    "request_in_progress": "Wait for the current operation to finish."
+  },
+  "modal": {
+    "close": "Close"
+  },
+  "system_admin": {
+    "home_title": "Global administration panel",
+    "not_found": "Global page not found."
   }
 }

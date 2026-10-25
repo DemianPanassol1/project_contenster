@@ -1,4 +1,7 @@
 {
+  "feedback": {
+    "close_snackbar": "Fechar mensagem"
+  },
   "login": {
     "title": "Login"
   },

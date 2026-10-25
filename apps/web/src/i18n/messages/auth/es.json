@@ -1,4 +1,7 @@
 {
+  "feedback": {
+    "close_snackbar": "Cerrar mensaje"
+  },
   "login": {
     "title": "Iniciar sesión"
   },
