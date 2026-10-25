@@ -21,3 +21,4 @@ export {
   regexSimpleEmail,
   regexUUID,
 } from './validation-regex.util';
+export { splitValidationRules } from './validation-rules.util';

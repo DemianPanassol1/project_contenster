@@ -3,9 +3,9 @@
 import type { ForgotPasswordRequest } from '@contenster/shared';
 import { Alert, Stack, Typography } from '@mui/material';
 import { useTranslations } from 'next-intl';
-import { useState, useTransition } from 'react';
+import { useState } from 'react';
 
-import { useToast } from '@/hooks';
+import { useToast, useWebResponseErrorToast } from '@/hooks';
 import { useRouter } from '@/i18n/navigation';
 import { forgotPassword } from '@/services/actions';
 import { Button } from '@/shared';
@@ -16,8 +16,9 @@ export function ForgotPasswordView() {
   const router = useRouter();
   const t = useTranslations('auth.password_recovery');
   const { errorMessage } = useToast();
+  const showErrors = useWebResponseErrorToast();
   const [sent, setSent] = useState(false);
-  const [isPending, startTransition] = useTransition();
+  const [isPending, setIsPending] = useState(false);
 
   const submit = async (values: ForgotPasswordRequest): Promise<boolean> => {
     const response = await forgotPassword(values);
@@ -28,17 +29,24 @@ export function ForgotPasswordView() {
       return true;
     }
 
-    response.errors.forEach((error) => errorMessage(error.message));
+    showErrors(response);
 
     return false;
   };
 
-  const handleSubmit = (values: ForgotPasswordRequest): Promise<boolean> =>
-    new Promise((resolve) => {
-      startTransition(() => {
-        void submit(values).then(resolve);
-      });
-    });
+  const handleSubmit = async (values: ForgotPasswordRequest): Promise<boolean> => {
+    setIsPending(true);
+
+    try {
+      return await submit(values);
+    } catch {
+      errorMessage(t('unexpected_error'));
+
+      return false;
+    } finally {
+      setIsPending(false);
+    }
+  };
 
   if (sent) {
     return (

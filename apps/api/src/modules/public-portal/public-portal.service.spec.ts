@@ -113,4 +113,24 @@ describe('PublicPortalService', () => {
 
     expect(findByHost).toHaveBeenCalledWith('localhost:4001');
   });
+
+  it('preserves an IPv6 loopback port when resolving a portal', async () => {
+    const findByHost = vi.fn().mockResolvedValue(null);
+    const repository = { findByHost } as unknown as PublicPortalRepository;
+    const service = new PublicPortalService(repository);
+
+    await service.resolve('[::1]:4001');
+
+    expect(findByHost).toHaveBeenCalledWith('[::1]:4001');
+  });
+
+  it('uses the fallback without querying persistence for an invalid host', async () => {
+    const findByHost = vi.fn();
+    const repository = { findByHost } as unknown as PublicPortalRepository;
+    const service = new PublicPortalService(repository);
+
+    await service.resolve('portal.example.test:70000');
+
+    expect(findByHost).not.toHaveBeenCalled();
+  });
 });

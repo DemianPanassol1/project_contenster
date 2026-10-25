@@ -7,6 +7,7 @@ export {
   GlobalProvider,
   type GlobalState,
   useGlobalContext,
+  useOptionalGlobalContext,
 } from './global.context';
 export { ModalProvider, useModalContext } from './modal.context';
 export type { ModalAction, ModalContextValue, ModalItem, OpenModalOptions } from './modal.types';

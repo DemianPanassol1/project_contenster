@@ -14,6 +14,7 @@ import {
   regexNumeric,
   regexSimpleEmail,
   regexUUID,
+  splitValidationRules,
   toDisplayText,
 } from '@/utils';
 
@@ -82,19 +83,19 @@ export const useValidationRules = <T extends FieldValues = FieldValues>() => {
 
           case 'min_length':
             addLengthRule(validationRules, 'minLength', rule.parameter, (value) =>
-              t('minLength', { value: String(value) }),
+              t('min_length', { value: String(value) }),
             );
             break;
 
           case 'max_length':
             addLengthRule(validationRules, 'maxLength', rule.parameter, (value) =>
-              t('maxLength', { value: String(value) }),
+              t('max_length', { value: String(value) }),
             );
             break;
 
           case 'exact_length':
             addExactLengthRule(validationRules, rule.parameter, (value) =>
-              t('exactLength', { value: String(value) }),
+              t('exact_length', { value: String(value) }),
             );
             break;
 
@@ -177,7 +178,7 @@ export const useValidationRules = <T extends FieldValues = FieldValues>() => {
             break;
 
           case 'alpha_numeric':
-            addPatternRule(validationRules, 'alphaNumeric', regexAlphaNumeric, t('alphaNumeric'));
+            addPatternRule(validationRules, 'alphaNumeric', regexAlphaNumeric, t('alpha_numeric'));
             break;
 
           case 'alpha_numeric_spaces':
@@ -185,17 +186,17 @@ export const useValidationRules = <T extends FieldValues = FieldValues>() => {
               validationRules,
               'alphaNumericSpaces',
               regexAlphaNumericSpaces,
-              t('alphaNumericSpaces'),
+              t('alpha_numeric_spaces'),
             );
             break;
 
           case 'alpha_dash':
-            addPatternRule(validationRules, 'alphaDash', regexAlphaDash, t('alphaDash'));
+            addPatternRule(validationRules, 'alphaDash', regexAlphaDash, t('alpha_dash'));
             break;
 
           case 'greater_than':
             addNumberComparisonRule(validationRules, rule.parameter, 'greaterThan', (value) =>
-              t('greaterThan', { value: String(value) }),
+              t('greater_than', { value: String(value) }),
             );
             break;
 
@@ -204,19 +205,19 @@ export const useValidationRules = <T extends FieldValues = FieldValues>() => {
               validationRules,
               rule.parameter,
               'greaterThanEqualTo',
-              (value) => t('greaterThanEqualTo', { value: String(value) }),
+              (value) => t('greater_than_equal_to', { value: String(value) }),
             );
             break;
 
           case 'less_than':
             addNumberComparisonRule(validationRules, rule.parameter, 'lessThan', (value) =>
-              t('lessThan', { value: String(value) }),
+              t('less_than', { value: String(value) }),
             );
             break;
 
           case 'less_than_equal_to':
             addNumberComparisonRule(validationRules, rule.parameter, 'lessThanEqualTo', (value) =>
-              t('lessThanEqualTo', { value: String(value) }),
+              t('less_than_equal_to', { value: String(value) }),
             );
             break;
 
@@ -229,7 +230,7 @@ export const useValidationRules = <T extends FieldValues = FieldValues>() => {
             break;
 
           case 'not_in':
-            addInRule(validationRules, rule.parameter, 'notIn', t('notIn'));
+            addInRule(validationRules, rule.parameter, 'notIn', t('not_in'));
             break;
 
           case 'accepted':
@@ -253,36 +254,13 @@ export const useValidationRules = <T extends FieldValues = FieldValues>() => {
 };
 
 const normalizeRules = (rules: string | string[]): ParsedValidationRule[] => {
-  const ruleList = Array.isArray(rules) ? rules : splitRules(rules);
+  const ruleList = Array.isArray(rules) ? rules : splitValidationRules(rules);
 
-  return ruleList.flatMap(splitRules).map(parseRule).filter(isParsedValidationRule);
+  return ruleList.flatMap(splitValidationRules).map(parseRule).filter(isParsedValidationRule);
 };
 
 const isParsedValidationRule = (rule: ParsedValidationRule | null): rule is ParsedValidationRule =>
   Boolean(rule);
-
-const splitRules = (rules: string): string[] => {
-  const result: string[] = [];
-  let current = '';
-  let bracketDepth = 0;
-
-  for (const character of rules) {
-    if (character === '[') bracketDepth += 1;
-    if (character === ']') bracketDepth = Math.max(0, bracketDepth - 1);
-
-    if (character === '|' && bracketDepth === 0) {
-      if (current.trim()) result.push(current.trim());
-      current = '';
-      continue;
-    }
-
-    current += character;
-  }
-
-  if (current.trim()) result.push(current.trim());
-
-  return result;
-};
 
 const parseRule = (rule: string): ParsedValidationRule | null => {
   const match = rule.match(/^([a-z_]+)(?:\[(.*)\])?$/);
@@ -523,9 +501,12 @@ const isValidDate = (value: unknown): boolean => {
 
   if (!/^\d{4}-\d{2}-\d{2}$/.test(text)) return false;
 
-  const date = new Date(`${text}T00:00:00`);
+  const [year, month, day] = text.split('-').map(Number);
+  const date = new Date(Date.UTC(year, month - 1, day));
 
-  return !Number.isNaN(date.getTime());
+  return (
+    date.getUTCFullYear() === year && date.getUTCMonth() === month - 1 && date.getUTCDate() === day
+  );
 };
 
 const isValidDateTime = (value: unknown): boolean => {

@@ -60,9 +60,9 @@ export const CrudTable = <TForm extends FieldValues, TRow extends FieldValues>({
     getRowId,
     onReorder: reorderRows,
   });
-  const currentCreateLabel = createLabel ?? t('form.createRegister');
+  const currentCreateLabel = createLabel ?? t('form.create_register');
   const currentEditLabel = editLabel ?? t('form.edit');
-  const currentDeleteLabel = deleteLabel ?? t('dataTable.delete');
+  const currentDeleteLabel = deleteLabel ?? t('data_table.delete');
   const isRowActionVisible = (
     visibility: boolean | ((row: TRow) => boolean),
     row: TRow,

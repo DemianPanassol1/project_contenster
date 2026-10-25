@@ -3,9 +3,9 @@
 import type { AuthorizeResponse } from '@contenster/shared';
 import { Stack, Typography } from '@mui/material';
 import { useTranslations } from 'next-intl';
-import { useState, useTransition } from 'react';
+import { useState } from 'react';
 
-import { useToast } from '@/hooks';
+import { useToast, useWebResponseErrorToast } from '@/hooks';
 import { useRouter } from '@/i18n/navigation';
 import { authorize, signIn, signInGlobal } from '@/services/actions';
 
@@ -22,18 +22,15 @@ export function LoginView() {
   const router = useRouter();
   const t = useTranslations('auth.login');
   const { errorMessage } = useToast();
+  const showErrors = useWebResponseErrorToast();
   const [authorization, setAuthorization] = useState<AuthorizeResponse | null>(null);
-  const [isPending, startTransition] = useTransition();
-
-  const showErrors = (messages: string[]) => {
-    messages.forEach(errorMessage);
-  };
+  const [isPending, setIsPending] = useState(false);
 
   const signInClient = async (values: LoginFormValues, clientId: number): Promise<boolean> => {
     const response = await signIn(toSignInRequest(values, clientId));
 
     if (!response.success) {
-      showErrors(response.errors.map((error) => error.message));
+      showErrors(response);
 
       return false;
     }
@@ -46,13 +43,19 @@ export function LoginView() {
 
   const submit = async (values: LoginFormValues): Promise<boolean> => {
     if (authorization) {
-      return values.clientId === null ? false : signInClient(values, values.clientId);
+      if (values.clientId !== null) {
+        return signInClient(values, values.clientId);
+      }
+
+      errorMessage(t('no_available_access'));
+
+      return false;
     }
 
     const response = await authorize(toAuthorizeRequest(values));
 
     if (!response.success || !response.body) {
-      showErrors(response.errors.map((error) => error.message));
+      showErrors(response);
 
       return false;
     }
@@ -68,34 +71,40 @@ export function LoginView() {
     return true;
   };
 
-  const handleSubmit = (values: LoginFormValues): Promise<boolean> =>
-    new Promise((resolve) => {
-      startTransition(() => {
-        void submit(values).then(resolve);
-      });
-    });
+  const handleSubmit = async (values: LoginFormValues): Promise<boolean> => {
+    setIsPending(true);
 
-  const handleGlobalContextSignIn = (values: LoginFormValues): Promise<void> =>
-    new Promise((resolve) => {
-      startTransition(() => {
-        void (async () => {
-          try {
-            const response = await signInGlobal(toSignInGlobalRequest(values));
+    try {
+      return await submit(values);
+    } catch {
+      errorMessage(t('unexpected_error'));
 
-            if (!response.success) {
-              showErrors(response.errors.map((error) => error.message));
+      return false;
+    } finally {
+      setIsPending(false);
+    }
+  };
 
-              return;
-            }
+  const handleGlobalContextSignIn = async (values: LoginFormValues): Promise<void> => {
+    setIsPending(true);
 
-            router.push('/system-admin');
-            router.refresh();
-          } finally {
-            resolve();
-          }
-        })();
-      });
-    });
+    try {
+      const response = await signInGlobal(toSignInGlobalRequest(values));
+
+      if (!response.success) {
+        showErrors(response);
+
+        return;
+      }
+
+      router.push('/system-admin');
+      router.refresh();
+    } catch {
+      errorMessage(t('unexpected_error'));
+    } finally {
+      setIsPending(false);
+    }
+  };
 
   return (
     <Stack spacing={2}>

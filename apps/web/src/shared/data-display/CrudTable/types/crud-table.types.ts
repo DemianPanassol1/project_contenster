@@ -1,12 +1,12 @@
 import type { ReactNode } from 'react';
 import type { DefaultValues, FieldPathByValue, FieldValues } from 'react-hook-form';
 
+import type { OpenModalOptions } from '@/core/providers/contexts';
 import type {
   DataTableAction,
   DataTableColumn,
   DataTableProps,
 } from '@/shared/data-display/DataTable';
-import type { OpenModalOptions } from '@/types/contexts';
 
 export type CrudTableMode = 'create' | 'edit';
 

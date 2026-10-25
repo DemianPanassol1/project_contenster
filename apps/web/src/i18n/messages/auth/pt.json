@@ -6,6 +6,8 @@
     "client": "Cliente",
     "forgot_password": "Esqueci minha senha",
     "global_context": "Entrar no painel global",
+    "no_available_access": "Este usuário não possui um acesso disponível.",
+    "unexpected_error": "Não foi possível concluir a solicitação. Tente novamente.",
     "or": "ou",
     "password": "Senha",
     "submit": "Entrar",
@@ -19,7 +21,8 @@
     "submit": "Enviar instruções",
     "success": "Se o e-mail estiver cadastrado, você receberá as instruções em instantes.",
     "success_title": "Verifique seu e-mail",
-    "title": "Recuperar senha"
+    "title": "Recuperar senha",
+    "unexpected_error": "Não foi possível concluir a solicitação. Tente novamente."
   },
   "password_reset": {
     "back_to_login": "Voltar para o login",
@@ -34,6 +37,7 @@
     "submit": "Redefinir senha",
     "success": "Senha redefinida com sucesso.",
     "success_title": "Senha redefinida",
-    "title": "Redefinir senha"
+    "title": "Redefinir senha",
+    "unexpected_error": "Não foi possível concluir a solicitação. Tente novamente."
   }
 }

@@ -69,7 +69,7 @@ export const DataTableColumnsPanel = <T extends object>({
           textTransform: 'none',
         }}
       >
-        {t('dataTable.columns')}
+        {t('data_table.columns')}
       </Button>
 
       <Popover
@@ -101,10 +101,10 @@ export const DataTableColumnsPanel = <T extends object>({
           }}
         >
           <Typography sx={{ flex: 1, fontSize: 13, fontWeight: 600 }}>
-            {t('dataTable.columns')}
+            {t('data_table.columns')}
           </Typography>
           <Typography sx={{ fontSize: 12, color: 'text.secondary' }}>
-            {t('dataTable.visibleColumns', {
+            {t('data_table.visible_columns', {
               visible: String(visibleCount),
               total: String(totalCount),
             })}
@@ -112,7 +112,7 @@ export const DataTableColumnsPanel = <T extends object>({
         </Box>
 
         <Box sx={{ px: 2, py: 1, display: 'grid', gap: 0.5 }}>
-          {selectable && <ColumnSwitchRow label={t('dataTable.selection')} checked locked />}
+          {selectable && <ColumnSwitchRow label={t('data_table.selection')} checked locked />}
 
           {columns.map((column) => {
             const columnKey = getColumnKey(column);
@@ -129,7 +129,7 @@ export const DataTableColumnsPanel = <T extends object>({
             );
           })}
 
-          {hasActions && <ColumnSwitchRow label={t('dataTable.actions')} checked locked />}
+          {hasActions && <ColumnSwitchRow label={t('data_table.actions')} checked locked />}
         </Box>
 
         <Box
@@ -148,7 +148,7 @@ export const DataTableColumnsPanel = <T extends object>({
             onClick={() => onHiddenColumnKeysChange([])}
             sx={{ textTransform: 'none', fontSize: 12 }}
           >
-            {t('dataTable.showAll')}
+            {t('data_table.show_all')}
           </Button>
           <Button
             size="small"
@@ -157,7 +157,7 @@ export const DataTableColumnsPanel = <T extends object>({
             onClick={() => onHiddenColumnKeysChange(initialHiddenColumnKeys)}
             sx={{ textTransform: 'none', fontSize: 12 }}
           >
-            {t('dataTable.reset')}
+            {t('data_table.reset')}
           </Button>
         </Box>
       </Popover>

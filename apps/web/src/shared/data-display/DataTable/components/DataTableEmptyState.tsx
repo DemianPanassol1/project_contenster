@@ -21,7 +21,7 @@ export const DataTableEmptyState = () => {
       }}
     >
       <Icon name="scan-search" size={24} />
-      <Typography sx={{ fontSize: 13 }}>{t('dataTable.empty')}</Typography>
+      <Typography sx={{ fontSize: 13 }}>{t('data_table.empty')}</Typography>
     </Box>
   );
 };

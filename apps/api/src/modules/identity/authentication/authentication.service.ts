@@ -283,7 +283,7 @@ export class AuthenticationService {
     const user = await this.authenticationRepository.findUserByEmail(tokenPayload.email);
 
     if (!user || user.id !== tokenPayload.sub) {
-      throw new BadRequestException(this.i18n.t('errors.authentication.invalid_reset_token'));
+      throw this.createInvalidResetTokenException();
     }
 
     const consumed = await this.executePasswordResetStore(() =>
@@ -291,7 +291,7 @@ export class AuthenticationService {
     );
 
     if (!consumed) {
-      throw new BadRequestException(this.i18n.t('errors.authentication.invalid_reset_token'));
+      throw this.createInvalidResetTokenException();
     }
 
     await this.authenticationRepository.updatePassword(
@@ -466,12 +466,12 @@ export class AuthenticationService {
         typeof payload.jti !== 'string' ||
         typeof payload.sub !== 'number'
       ) {
-        throw new BadRequestException(this.i18n.t('errors.authentication.invalid_reset_token'));
+        throw this.createInvalidResetTokenException();
       }
 
       return { email: payload.email, jti: payload.jti, sub: payload.sub };
     } catch {
-      throw new BadRequestException(this.i18n.t('errors.authentication.invalid_reset_token'));
+      throw this.createInvalidResetTokenException();
     }
   }
 
@@ -479,6 +479,13 @@ export class AuthenticationService {
     const baseUrl = settings.APP_URL.replace(/\/+$/, '');
 
     return `${baseUrl}${buildPasswordRecoveryPath(getCurrentLocale(), token)}`;
+  }
+
+  private createInvalidResetTokenException(): BadRequestException {
+    return new BadRequestException({
+      error: 'invalid_reset_token',
+      message: this.i18n.t('errors.authentication.invalid_reset_token'),
+    });
   }
 
   private async executePasswordResetStore<T>(operation: () => Promise<T>): Promise<T> {

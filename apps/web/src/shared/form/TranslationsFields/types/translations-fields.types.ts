@@ -2,11 +2,15 @@ import type { TextFieldProps } from '@mui/material';
 import type { ReactNode } from 'react';
 import type { FieldPath, FieldValues, RegisterOptions } from 'react-hook-form';
 
-import type { WebLanguageOption } from '@/types';
-
 export type TranslationFieldType = 'input' | 'textarea';
 
 export type TranslationTextProperty = string;
+
+export interface TranslationLocaleOption {
+  id: number;
+  locale: string;
+  name: string;
+}
 
 export type ValidationConfig<TForm extends FieldValues> =
   string | string[] | RegisterOptions<TForm>;
@@ -22,7 +26,7 @@ type TranslationsFieldsBaseProps<TForm extends FieldValues> = {
   label: ReactNode;
   languageSelectorLabel?: string;
   name: FieldPath<TForm>;
-  languages: WebLanguageOption[];
+  languages: TranslationLocaleOption[];
   textProperty?: TranslationTextProperty;
   rules?: RegisterOptions<TForm>;
   validations?: ValidationConfig<TForm>;
@@ -60,7 +64,7 @@ export interface TranslationFieldProps<TForm extends FieldValues> {
 export interface TranslationLanguageSelectorProps {
   label: ReactNode;
   ariaLabel?: string;
-  languages: WebLanguageOption[];
+  languages: TranslationLocaleOption[];
   activeLanguageIndex: number;
   filledLanguageIndexes: Set<number>;
   visibleStart: number;

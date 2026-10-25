@@ -24,12 +24,12 @@ export const AppliedFilterChips = <T extends object>({
 }: AppliedFilterChipsProps<T>) => {
   const t = useTranslations();
   const labels: FilterDisplayLabels = {
-    yes: t('dataTable.yes'),
-    no: t('dataTable.no'),
-    from: t('dataTable.from'),
-    to: t('dataTable.to'),
-    fromValue: t('dataTable.fromValue'),
-    upTo: t('dataTable.upTo'),
+    yes: t('data_table.yes'),
+    no: t('data_table.no'),
+    from: t('data_table.from'),
+    to: t('data_table.to'),
+    fromValue: t('data_table.from_value'),
+    upTo: t('data_table.up_to'),
   };
 
   if (!filters.length) {
@@ -77,7 +77,7 @@ export const AppliedFilterChips = <T extends object>({
           onClick={onClearAll}
           sx={{ height: 28, textTransform: 'none', fontSize: 12 }}
         >
-          {t('dataTable.clearAll')}
+          {t('data_table.clear_all')}
         </Button>
       )}
     </Box>

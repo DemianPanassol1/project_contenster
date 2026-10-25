@@ -5,6 +5,7 @@ export type {
   TranslationFieldProps,
   TranslationFieldType,
   TranslationLanguageSelectorProps,
+  TranslationLocaleOption,
   TranslationsFieldsProps,
   TranslationTextFieldProps,
   TranslationTextProperty,

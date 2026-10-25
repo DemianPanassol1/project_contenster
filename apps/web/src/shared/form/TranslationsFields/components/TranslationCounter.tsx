@@ -12,7 +12,7 @@ export const TranslationCounter = ({ filledCount, totalCount }: TranslationCount
 
   return (
     <Paper
-      aria-label={t('filledLanguagesAria', { filled, total })}
+      aria-label={t('filled_languages_aria', { filled, total })}
       sx={{
         gap: 0.75,
         px: 1,
@@ -29,7 +29,7 @@ export const TranslationCounter = ({ filledCount, totalCount }: TranslationCount
       }}
     >
       <Icon name="globe" size={14} strokeWidth={1.8} />
-      {t('filledLanguagesShort', { filled, total })}
+      {t('filled_languages_short', { filled, total })}
     </Paper>
   );
 };

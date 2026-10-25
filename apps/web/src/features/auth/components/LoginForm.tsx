@@ -1,7 +1,7 @@
 'use client';
 
 import type { AuthorizeResponse } from '@contenster/shared';
-import { Box, Divider, Link as MuiLink, Stack } from '@mui/material';
+import { Alert, Box, Divider, Link as MuiLink, Stack } from '@mui/material';
 import { useTranslations } from 'next-intl';
 import type { ElementType } from 'react';
 
@@ -101,9 +101,22 @@ export function LoginForm({
                   rules={{ required: true }}
                 />
               )}
+              {!authorization.isEligibleToGlobalContext && authorization.clients.length === 0 && (
+                <Alert severity="warning">{t('no_available_access')}</Alert>
+              )}
             </>
           )}
-          <Button disabled={isPending} form={LOGIN_FORM_ID} label={t('submit')} type="submit" />
+          <Button
+            disabled={
+              isPending ||
+              (authorization !== null &&
+                !authorization.isEligibleToGlobalContext &&
+                authorization.clients.length === 0)
+            }
+            form={LOGIN_FORM_ID}
+            label={t('submit')}
+            type="submit"
+          />
         </Stack>
       )}
     </FormWrapper>

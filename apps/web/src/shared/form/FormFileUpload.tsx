@@ -1,5 +1,6 @@
 'use client';
 
+import type { FileResponse } from '@contenster/shared';
 import { Box, Button, FormControl, FormHelperText, Typography } from '@mui/material';
 import { useLocale, useTranslations } from 'next-intl';
 import { type ChangeEvent, useEffect, useId, useReducer, useState } from 'react';
@@ -7,18 +8,23 @@ import { Controller, type FieldValues, useFormContext, useWatch } from 'react-ho
 
 import { useGlobalContext } from '@/core/providers';
 import { useGET } from '@/services/hooks';
-import { getMediaFileEndpoint, uploadMediaFile } from '@/services/media';
+import {
+  getMediaFileEndpoint,
+  type MediaFileEndpointResolver,
+  uploadMediaFile,
+} from '@/services/media';
 import { Icon, IconButton } from '@/shared/ui';
-import { type BaseFormFieldProps, type UploadFieldFile } from '@/types';
+import type { BaseFormFieldProps } from '@/types';
 import { FormatUtils, toDisplayText } from '@/utils';
 
 interface FormFileUploadProps<T extends FieldValues> extends BaseFormFieldProps<T> {
   accept?: string;
   disabled?: boolean;
   onDelete?: () => void;
-  initialFile?: UploadFieldFile | null;
+  initialFile?: FileResponse | null;
+  fileEndpoint?: MediaFileEndpointResolver;
   uploadEndpoint?: string;
-  onUploadSuccess?: (file: UploadFieldFile) => void;
+  onUploadSuccess?: (file: FileResponse) => void;
 }
 
 export const FormFileUpload = <T extends FieldValues>({
@@ -28,6 +34,7 @@ export const FormFileUpload = <T extends FieldValues>({
   onDelete,
   helperText,
   onUploadSuccess,
+  fileEndpoint,
   uploadEndpoint,
   accept = '*',
   disabled = false,
@@ -49,8 +56,9 @@ export const FormFileUpload = <T extends FieldValues>({
 
   const fileId = getValidFileId(fieldValue);
   const shouldLoadFile = Boolean(fileId && fileData?.id !== fileId && !isUploading);
-  const savedFileEndpoint = shouldLoadFile && fileId ? getMediaFileEndpoint(fileId) : null;
-  const savedFile = useGET<UploadFieldFile>(savedFileEndpoint);
+  const savedFileEndpoint =
+    shouldLoadFile && fileId ? (fileEndpoint ?? getMediaFileEndpoint)(fileId) : null;
+  const savedFile = useGET<FileResponse>(savedFileEndpoint);
   const isLoadingSavedFile = Boolean(shouldLoadFile && savedFile.isLoading);
   const hasLoadError = Boolean(savedFile.data && !savedFile.data.success);
 
@@ -320,14 +328,14 @@ const getValidFileId = (value: unknown): number | null => {
 };
 
 type FormFileUploadState = {
-  fileData: UploadFieldFile | null;
+  fileData: FileResponse | null;
   selectedFileName: string | null;
 };
 
 type FormFileUploadAction =
   | { type: 'reset' }
   | { type: 'setSelectedFileName'; selectedFileName: string | null }
-  | { type: 'setFileData'; fileData: UploadFieldFile | null; clearSelectedFileName?: boolean };
+  | { type: 'setFileData'; fileData: FileResponse | null; clearSelectedFileName?: boolean };
 
 const formFileUploadReducer = (
   state: FormFileUploadState,

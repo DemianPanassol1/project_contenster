@@ -88,7 +88,7 @@ export const FormPasswordInput = <T extends FieldValues>({
                     <IconButton
                       size="small"
                       edge="end"
-                      aria-label={t(visible ? 'global.hidePassword' : 'global.showPassword')}
+                      aria-label={t(visible ? 'global.hide_password' : 'global.show_password')}
                       aria-pressed={visible}
                       onClick={() => setVisible((state) => !state)}
                       sx={{ color: 'text.secondary' }}

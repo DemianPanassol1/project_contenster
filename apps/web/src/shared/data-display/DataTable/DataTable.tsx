@@ -295,15 +295,15 @@ export const DataTable = <T extends object>({
     }
 
     openModal({
-      title: deleteConfirmation?.title ?? t('dataTable.confirmDeleteTitle'),
+      title: deleteConfirmation?.title ?? t('data_table.confirm_delete_title'),
       maxWidth: 'xs',
       content: (
         <Typography sx={{ fontSize: 13, color: 'text.secondary' }}>
           {ids.length === 1
-            ? (deleteConfirmation?.message ?? t('dataTable.confirmDeleteSingle'))
+            ? (deleteConfirmation?.message ?? t('data_table.confirm_delete_single'))
             : (deleteConfirmation?.manyMessage ??
               deleteConfirmation?.message ??
-              t('dataTable.confirmDeleteMany', { count: String(ids.length) }))}
+              t('data_table.confirm_delete_many', { count: String(ids.length) }))}
         </Typography>
       ),
       actions: [
@@ -315,10 +315,10 @@ export const DataTable = <T extends object>({
         {
           label:
             ids.length === 1
-              ? (deleteConfirmation?.confirmLabel ?? t('dataTable.delete'))
+              ? (deleteConfirmation?.confirmLabel ?? t('data_table.delete'))
               : (deleteConfirmation?.manyConfirmLabel ??
                 deleteConfirmation?.confirmLabel ??
-                t('dataTable.delete')),
+                t('data_table.delete')),
           color: 'error',
           variant: 'contained',
           closeOnClick: false,
@@ -363,7 +363,7 @@ export const DataTable = <T extends object>({
     ...(showRowDeleteAction && canDeleteRows
       ? [
           {
-            label: deleteConfirmation?.confirmLabel ?? t('dataTable.delete'),
+            label: deleteConfirmation?.confirmLabel ?? t('data_table.delete'),
             icon: 'trash' as const,
             color: 'error' as const,
             onClick: (_row: T, rowId: string | number) => executeDelete([rowId]),

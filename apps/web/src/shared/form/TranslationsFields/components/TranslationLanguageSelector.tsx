@@ -4,7 +4,7 @@ import { useTranslations } from 'next-intl';
 import { toDisplayText } from '@/utils';
 
 import type { TranslationLanguageSelectorProps } from '../types/translations-fields.types';
-import { getLanguageRegionCode, MAX_VISIBLE_LANGUAGES } from '../utils/translations-fields.util';
+import { getLocaleCode, MAX_VISIBLE_LANGUAGES } from '../utils/translations-fields.util';
 
 export const TranslationLanguageSelector = ({
   label,
@@ -21,7 +21,7 @@ export const TranslationLanguageSelector = ({
   return (
     <Box
       role="tablist"
-      aria-label={t('selectorAria', { label: ariaLabel ?? toDisplayText(label) })}
+      aria-label={t('selector_aria', { label: ariaLabel ?? toDisplayText(label) })}
       sx={{
         p: 0.25,
         gap: 0.25,
@@ -83,7 +83,7 @@ export const TranslationLanguageSelector = ({
                 },
               }}
             >
-              <Box component="span">{getLanguageRegionCode(language)}</Box>
+              <Box component="span">{getLocaleCode(language)}</Box>
               <Box
                 aria-hidden="true"
                 component="span"

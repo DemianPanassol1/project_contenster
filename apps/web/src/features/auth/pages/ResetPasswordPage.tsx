@@ -3,8 +3,9 @@
 import type { ResetPasswordRequest } from '@contenster/shared';
 import { Alert, Stack, Typography } from '@mui/material';
 import { useTranslations } from 'next-intl';
-import { useState, useTransition } from 'react';
+import { useState } from 'react';
 
+import { useToast, useWebResponseErrorToast } from '@/hooks';
 import { useRouter } from '@/i18n/navigation';
 import { resetPassword } from '@/services/actions';
 import { Button } from '@/shared';
@@ -20,7 +21,9 @@ interface ResetPasswordViewProps {
 export function ResetPasswordView({ token }: ResetPasswordViewProps) {
   const router = useRouter();
   const t = useTranslations('auth.password_reset');
-  const [isPending, startTransition] = useTransition();
+  const { errorMessage } = useToast();
+  const showErrors = useWebResponseErrorToast();
+  const [isPending, setIsPending] = useState(false);
   const [isInvalidToken, setIsInvalidToken] = useState(
     !token || !isDecodablePasswordResetToken(token),
   );
@@ -45,17 +48,30 @@ export function ResetPasswordView({ token }: ResetPasswordViewProps) {
       return true;
     }
 
-    setIsInvalidToken(true);
+    if (response.errors.some((error) => error.code === 'invalid_reset_token')) {
+      setIsInvalidToken(true);
+
+      return false;
+    }
+
+    showErrors(response);
 
     return false;
   };
 
-  const handleSubmit = (values: ResetPasswordFormValues): Promise<boolean> =>
-    new Promise((resolve) => {
-      startTransition(() => {
-        void submit(values).then(resolve);
-      });
-    });
+  const handleSubmit = async (values: ResetPasswordFormValues): Promise<boolean> => {
+    setIsPending(true);
+
+    try {
+      return await submit(values);
+    } catch {
+      errorMessage(t('unexpected_error'));
+
+      return false;
+    } finally {
+      setIsPending(false);
+    }
+  };
 
   if (isInvalidToken) {
     return (

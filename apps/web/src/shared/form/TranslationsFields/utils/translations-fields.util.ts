@@ -1,10 +1,11 @@
 import type { FieldError, FieldErrors, FieldValues, RegisterOptions } from 'react-hook-form';
 
-import type { WebLanguageOption } from '@/types';
 import { toDisplayText } from '@/utils';
+import { splitValidationRules } from '@/utils/validation-rules.util';
 
 import type {
   PartialTranslationField,
+  TranslationLocaleOption,
   TranslationTextProperty,
   ValidationConfig,
 } from '../types/translations-fields.types';
@@ -13,9 +14,9 @@ export const MAX_VISIBLE_LANGUAGES = 3;
 const normalizeLocale = (locale: string): string => locale.trim().toLowerCase();
 
 export const orderTranslationLanguages = (
-  languages: WebLanguageOption[],
+  languages: TranslationLocaleOption[],
   activeLocale: string,
-): WebLanguageOption[] => {
+): TranslationLocaleOption[] => {
   const normalizedActiveLocale = normalizeLocale(activeLocale);
 
   return languages
@@ -37,7 +38,7 @@ export const orderTranslationLanguages = (
 
 export const alignTranslationsWithLanguages = (
   value: unknown,
-  languages: WebLanguageOption[],
+  languages: TranslationLocaleOption[],
 ): PartialTranslationField[] => {
   const translations = Array.isArray(value) ? (value as PartialTranslationField[]) : [];
   return languages.map(
@@ -98,7 +99,7 @@ export const hasRequiredValidation = <TForm extends FieldValues>(
   return hasRule(rules, 'required');
 };
 
-export const getLanguageRegionCode = (language: WebLanguageOption): string => language.locale;
+export const getLocaleCode = (language: TranslationLocaleOption): string => language.locale;
 
 export const getNextVisibleStart = (
   clickedIndex: number,
@@ -227,29 +228,6 @@ const mergeRegisterRules = <TForm extends FieldValues>(
 
 const hasRule = (rules: string[], ruleName: string): boolean =>
   rules.flatMap(splitValidationRules).some((rule) => rule.split('[')[0] === ruleName);
-
-const splitValidationRules = (rules: string): string[] => {
-  const result: string[] = [];
-  let current = '';
-  let bracketDepth = 0;
-
-  for (const character of rules) {
-    if (character === '[') bracketDepth += 1;
-    if (character === ']') bracketDepth = Math.max(0, bracketDepth - 1);
-
-    if (character === '|' && bracketDepth === 0) {
-      if (current.trim()) result.push(current.trim());
-      current = '';
-      continue;
-    }
-
-    current += character;
-  }
-
-  if (current.trim()) result.push(current.trim());
-
-  return result;
-};
 
 const isRegisterOptions = <TForm extends FieldValues>(
   validations: ValidationConfig<TForm> | undefined,

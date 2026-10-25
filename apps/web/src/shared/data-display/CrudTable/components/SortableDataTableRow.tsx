@@ -32,7 +32,7 @@ export const SortableDataTableRow = <TRow extends object>(props: DataTableRowPro
         },
       }}
       leadingCell={
-        <Tooltip title={t('dataTable.drag')}>
+        <Tooltip title={t('data_table.drag')}>
           <Box
             component="span"
             sx={{
@@ -43,7 +43,7 @@ export const SortableDataTableRow = <TRow extends object>(props: DataTableRowPro
           >
             <IconButton
               size="small"
-              aria-label={t('dataTable.drag')}
+              aria-label={t('data_table.drag')}
               {...attributes}
               {...listeners}
               sx={{

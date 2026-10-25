@@ -1,7 +1,1 @@
-export type {
-  BaseFormFieldProps,
-  MaskType,
-  PhoneCountry,
-  UploadedFile,
-  UploadFieldFile,
-} from './form.type';
+export type { BaseFormFieldProps, MaskType, PhoneCountry } from './form.type';

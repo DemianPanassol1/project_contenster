@@ -48,8 +48,8 @@ export const DataTableRowActions = <T extends object>({
       openModal({
         title:
           typeof action.confirm === 'object'
-            ? (action.confirm.title ?? t('dataTable.confirmActionTitle'))
-            : t('dataTable.confirmActionTitle'),
+            ? (action.confirm.title ?? t('data_table.confirm_action_title'))
+            : t('data_table.confirm_action_title'),
         maxWidth: 'xs',
         content: (
           <Typography sx={{ fontSize: 13, color: 'text.secondary' }}>{confirmMessage}</Typography>
@@ -66,8 +66,8 @@ export const DataTableRowActions = <T extends object>({
           {
             label:
               typeof action.confirm === 'object'
-                ? (action.confirm.confirmLabel ?? t('dataTable.confirm'))
-                : t('dataTable.confirm'),
+                ? (action.confirm.confirmLabel ?? t('data_table.confirm'))
+                : t('data_table.confirm'),
             variant: 'contained',
             color: action.color === 'secondary' ? 'primary' : (action.color ?? 'primary'),
             closeOnClick: false,

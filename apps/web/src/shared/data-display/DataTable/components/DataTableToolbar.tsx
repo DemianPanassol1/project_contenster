@@ -56,7 +56,7 @@ export const DataTableToolbar = ({
           <TextField
             size="small"
             value={search}
-            placeholder={t('dataTable.search')}
+            placeholder={t('data_table.search')}
             onChange={(event) => onSearchChange(event.target.value)}
             sx={{
               width: { xs: '100%', sm: 320 },
@@ -107,7 +107,7 @@ export const DataTableToolbar = ({
                 textTransform: 'none',
               }}
             >
-              {t('dataTable.reset')}
+              {t('data_table.reset')}
             </Button>
           )}
 
@@ -128,7 +128,7 @@ export const DataTableToolbar = ({
                 textTransform: 'none',
               }}
             >
-              {t('dataTable.export')}
+              {t('data_table.export')}
             </Button>
           )}
 

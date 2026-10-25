@@ -190,7 +190,7 @@ const RichTextEditorField = ({
   onBlur,
   onChange,
 }: RichTextEditorFieldProps) => {
-  const t = useTranslations('forms.richText');
+  const t = useTranslations('forms.rich_text');
   const value = typeof rawValue === 'string' ? rawValue : '';
   const isSyncingExternalValueRef = useRef(false);
   const lastSyncedExternalValueRef = useRef({ name, value });
@@ -419,49 +419,49 @@ const RichTextEditorField = ({
             onClick={() => editor?.chain().focus().toggleUnderline().run()}
           />
           <ToolbarIconButton
-            label={t('bulletList')}
+            label={t('bullet_list')}
             icon={List}
             active={toolbarState.bulletList}
             disabled={toolbarDisabled}
             onClick={() => editor?.chain().focus().toggleBulletList().run()}
           />
           <ToolbarIconButton
-            label={t('orderedList')}
+            label={t('ordered_list')}
             icon={ListOrdered}
             active={toolbarState.orderedList}
             disabled={toolbarDisabled}
             onClick={() => editor?.chain().focus().toggleOrderedList().run()}
           />
           <ToolbarIconButton
-            label={t('alignLeft')}
+            label={t('align_left')}
             icon={AlignLeft}
             active={toolbarState.textAlign === 'left'}
             disabled={toolbarDisabled}
             onClick={() => applyTextAlign('left')}
           />
           <ToolbarIconButton
-            label={t('alignCenter')}
+            label={t('align_center')}
             icon={AlignCenter}
             active={toolbarState.textAlign === 'center'}
             disabled={toolbarDisabled}
             onClick={() => applyTextAlign('center')}
           />
           <ToolbarIconButton
-            label={t('alignRight')}
+            label={t('align_right')}
             icon={AlignRight}
             active={toolbarState.textAlign === 'right'}
             disabled={toolbarDisabled}
             onClick={() => applyTextAlign('right')}
           />
           <ToolbarIconButton
-            label={t('alignJustify')}
+            label={t('align_justify')}
             icon={AlignJustify}
             active={toolbarState.textAlign === 'justify'}
             disabled={toolbarDisabled}
             onClick={() => applyTextAlign('justify')}
           />
           <ToolbarIconButton
-            label={t('clearFormatting')}
+            label={t('clear_formatting')}
             icon={RemoveFormatting}
             disabled={toolbarDisabled}
             onClick={() => editor?.chain().focus().unsetAllMarks().clearNodes().run()}

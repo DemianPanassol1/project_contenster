@@ -102,7 +102,7 @@ export const DataTableHeader = <T extends object>({
 
         {!!rowActionsCount && (
           <TableCell align="center" sx={{ width: 64 }}>
-            {t('dataTable.actions')}
+            {t('data_table.actions')}
           </TableCell>
         )}
       </TableRow>

@@ -29,7 +29,7 @@ export const DataTableCell = <T extends object>({ row, column, value }: DataTabl
       return (
         <Chip
           size="small"
-          label={value ? t('dataTable.yes') : t('dataTable.no')}
+          label={value ? t('data_table.yes') : t('data_table.no')}
           color={value ? 'success' : 'default'}
           sx={{ height: 24, borderRadius: 1, fontSize: 11.5 }}
         />

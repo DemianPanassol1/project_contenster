@@ -29,7 +29,7 @@ export const DataTablePagination = ({
       page={Math.max(0, page - 1)}
       rowsPerPage={perPage}
       rowsPerPageOptions={perPageOptions}
-      labelRowsPerPage={t('dataTable.rowsPerPage')}
+      labelRowsPerPage={t('data_table.rows_per_page')}
       onPageChange={(_, nextPage) => onPageChange(nextPage + 1)}
       onRowsPerPageChange={(event) => onPerPageChange(Number(event.target.value))}
       sx={{

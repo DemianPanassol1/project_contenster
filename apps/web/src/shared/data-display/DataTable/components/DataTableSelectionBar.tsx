@@ -52,7 +52,7 @@ export const DataTableSelectionBar = ({
         sx={{ height: 24, borderRadius: '50%', minWidth: 24 }}
       />
       <Typography sx={{ fontSize: 13, fontWeight: 600 }}>
-        {t('dataTable.selectedCount', { count: String(selectedCount) })}
+        {t('data_table.selected_count', { count: String(selectedCount) })}
       </Typography>
       <Button
         size="small"
@@ -60,7 +60,7 @@ export const DataTableSelectionBar = ({
         onClick={onClearSelection}
         sx={{ textTransform: 'none', fontSize: 12.5 }}
       >
-        {t('dataTable.clearSelection')}
+        {t('data_table.clear_selection')}
       </Button>
       <Box sx={{ flex: 1 }} />
       {canExport && (
@@ -72,7 +72,7 @@ export const DataTableSelectionBar = ({
           onClick={onExportSelected}
           sx={{ borderRadius: 1.5, textTransform: 'none', fontSize: 12.5 }}
         >
-          {t('dataTable.exportSelected')}
+          {t('data_table.export_selected')}
         </Button>
       )}
       {canDelete && (
@@ -84,7 +84,7 @@ export const DataTableSelectionBar = ({
           onClick={onDeleteSelected}
           sx={{ borderRadius: 1.5, textTransform: 'none', fontSize: 12.5 }}
         >
-          {deleteLabel ?? t('dataTable.deleteSelected')}
+          {deleteLabel ?? t('data_table.delete_selected')}
         </Button>
       )}
     </Box>

@@ -4,7 +4,7 @@ import { useColorScheme } from '@mui/material/styles';
 import { useTranslations } from 'next-intl';
 import { createContext, type ReactNode, useCallback, useContext, useMemo, useState } from 'react';
 
-import { useToast } from '@/hooks';
+import { useToast, useWebResponseErrorToast } from '@/hooks';
 import { useRouter } from '@/i18n/navigation';
 import {
   type ApiRequestActionResponse,
@@ -60,6 +60,7 @@ export function GlobalProvider({ children }: GlobalProviderProps) {
   const router = useRouter();
   const t = useTranslations('protected.feedback');
   const { errorMessage, successMessage } = useToast();
+  const showResponseErrors = useWebResponseErrorToast();
   const { mode, setMode, systemMode } = useColorScheme();
 
   const [state, setState] = useState<Omit<GlobalState, 'theme'>>(initialState);
@@ -117,14 +118,10 @@ export function GlobalProvider({ children }: GlobalProviderProps) {
           await options.onSuccess?.(response);
         } else {
           if (options.showErrorMessage !== false) {
-            const messages = response.errors.map((error) => error.message).filter(Boolean);
-
             if (options.errorMessage) {
               errorMessage(options.errorMessage);
-            } else if (messages.length > 0) {
-              messages.forEach((message) => errorMessage(message));
             } else {
-              errorMessage(t('operation_failed'));
+              showResponseErrors(response);
             }
           }
 
@@ -136,7 +133,11 @@ export function GlobalProvider({ children }: GlobalProviderProps) {
         const response = createUnexpectedErrorResponse<TBody>(error);
 
         if (options.showErrorMessage !== false) {
-          errorMessage(options.errorMessage ?? t('operation_failed'));
+          if (options.errorMessage) {
+            errorMessage(options.errorMessage);
+          } else {
+            showResponseErrors(response);
+          }
         }
 
         await options.onError?.(response);
@@ -150,7 +151,7 @@ export function GlobalProvider({ children }: GlobalProviderProps) {
         }
       }
     },
-    [errorMessage, router, successMessage, t, state.isLoading],
+    [errorMessage, router, showResponseErrors, successMessage, t, state.isLoading],
   );
 
   const stateWithTheme = useMemo<GlobalState>(
@@ -167,11 +168,15 @@ export function GlobalProvider({ children }: GlobalProviderProps) {
 }
 
 export function useGlobalContext(): GlobalContextValue {
-  const context = useContext(GlobalContext);
+  const context = useOptionalGlobalContext();
 
   if (!context) {
     throw new Error('useGlobalContext must be used within a GlobalProvider.');
   }
 
   return context;
+}
+
+export function useOptionalGlobalContext(): GlobalContextValue | null {
+  return useContext(GlobalContext);
 }

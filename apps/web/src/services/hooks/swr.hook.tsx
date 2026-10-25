@@ -6,7 +6,7 @@ import { useEffect, useMemo, useRef } from 'react';
 import useSWR, { useSWRConfig } from 'swr';
 
 import { useToast } from '@/hooks';
-import { type ApiRequestActionResponse, requestContent } from '@/services/actions';
+import { type ApiRequestActionResponse, requestApi } from '@/services/actions';
 import { getWebResponseErrorToastMessages } from '@/services/utils/web-error.util';
 
 import type { UseGetResponse, UsePostResponse } from './swr.type';
@@ -39,7 +39,7 @@ export function useGET<T>(
   const fetcher = async ([, url]: readonly [string, string]): Promise<
     ApiRequestActionResponse<T>
   > => {
-    const response = await requestContent<T>({
+    const response = await requestApi<T>({
       method: 'GET',
       endpoint: url,
     });
@@ -120,7 +120,7 @@ export function usePOST<T>(
   const fetcher = async ([, url, payload]: readonly [string, string, object]): Promise<
     ApiRequestActionResponse<T>
   > => {
-    const response = await requestContent<T>({
+    const response = await requestApi<T>({
       method: 'POST',
       endpoint: url,
       body: payload,

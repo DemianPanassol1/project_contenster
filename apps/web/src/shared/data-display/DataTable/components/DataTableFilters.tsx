@@ -109,7 +109,7 @@ export const DataTableFilters = <T extends object>({
           textTransform: 'none',
         }}
       >
-        {t('dataTable.filters')}
+        {t('data_table.filters')}
       </Button>
 
       <Popover
@@ -132,7 +132,7 @@ export const DataTableFilters = <T extends object>({
         }}
       >
         <Typography sx={{ mb: 1.5, fontSize: 13, fontWeight: 600 }}>
-          {t('dataTable.filters')}
+          {t('data_table.filters')}
         </Typography>
 
         <Box sx={{ display: 'grid', gap: 1.25 }}>
@@ -142,8 +142,8 @@ export const DataTableFilters = <T extends object>({
               column.filter?.options ??
               (column.type === 'boolean'
                 ? [
-                    { label: t('dataTable.yes'), value: true },
-                    { label: t('dataTable.no'), value: false },
+                    { label: t('data_table.yes'), value: true },
+                    { label: t('data_table.no'), value: false },
                   ]
                 : undefined);
             const isLoadingOptions = Boolean(column.filter?.isLoadingOptions);
@@ -193,7 +193,7 @@ export const DataTableFilters = <T extends object>({
                   <TextField
                     size="small"
                     type={inputType}
-                    label={`${column.name} ${t('dataTable.from')}`}
+                    label={`${column.name} ${t('data_table.from')}`}
                     value={value.from ?? ''}
                     onChange={(event) =>
                       setDraft((current) => ({
@@ -206,7 +206,7 @@ export const DataTableFilters = <T extends object>({
                   <TextField
                     size="small"
                     type={inputType}
-                    label={`${column.name} ${t('dataTable.to')}`}
+                    label={`${column.name} ${t('data_table.to')}`}
                     value={value.to ?? ''}
                     onChange={(event) =>
                       setDraft((current) => ({
@@ -239,10 +239,10 @@ export const DataTableFilters = <T extends object>({
 
         <Box sx={{ mt: 1.5, display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
           <Button size="small" variant="text" onClick={handleReset}>
-            {t('dataTable.reset')}
+            {t('data_table.reset')}
           </Button>
           <Button size="small" variant="contained" onClick={handleApply}>
-            {t('dataTable.applyFilters')}
+            {t('data_table.apply_filters')}
           </Button>
         </Box>
       </Popover>

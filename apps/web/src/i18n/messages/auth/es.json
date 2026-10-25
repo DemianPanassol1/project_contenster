@@ -6,6 +6,8 @@
     "client": "Cliente",
     "forgot_password": "Olvidé mi contraseña",
     "global_context": "Entrar al panel global",
+    "no_available_access": "Este usuario no tiene un acceso disponible.",
+    "unexpected_error": "No fue posible completar la solicitud. Inténtalo de nuevo.",
     "or": "o",
     "password": "Contraseña",
     "submit": "Entrar",
@@ -19,7 +21,8 @@
     "submit": "Enviar instrucciones",
     "success": "Si el correo está registrado, recibirás las instrucciones en breve.",
     "success_title": "Revisa tu correo electrónico",
-    "title": "Recuperar contraseña"
+    "title": "Recuperar contraseña",
+    "unexpected_error": "No fue posible completar la solicitud. Inténtalo de nuevo."
   },
   "password_reset": {
     "back_to_login": "Volver al inicio de sesión",
@@ -34,6 +37,7 @@
     "submit": "Restablecer contraseña",
     "success": "Contraseña restablecida correctamente.",
     "success_title": "Contraseña restablecida",
-    "title": "Restablecer contraseña"
+    "title": "Restablecer contraseña",
+    "unexpected_error": "No fue posible completar la solicitud. Inténtalo de nuevo."
   }
 }

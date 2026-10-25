@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import { useEffect, useMemo, useState } from 'react';
 
 import { useToast } from '@/hooks';
-import { requestContent } from '@/services/actions/content.action';
+import { requestApi } from '@/services/actions';
 import { getWebResponseErrorToastMessages } from '@/services/utils/web-error.util';
 
 import { useGET, usePOST } from './swr.hook';
@@ -243,7 +243,7 @@ export const useOptionsCollection = (sources: OptionsSource[]) => {
         const entries = await Promise.all(
           endpointSources.map(async (source) => {
             const method = source.optionsMethod ?? 'GET';
-            const response = await requestContent<OptionsResponseBody>({
+            const response = await requestApi<OptionsResponseBody>({
               method,
               endpoint: source.optionsEndpoint as string,
               body: method === 'POST' ? (source.optionsBody ?? {}) : undefined,

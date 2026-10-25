@@ -4,7 +4,7 @@ import { Button as BtnMui, type SxProps, type Theme } from '@mui/material';
 import { alpha } from '@mui/material/styles';
 import { memo } from 'react';
 
-import { useGlobalContext } from '@/core/providers';
+import { useOptionalGlobalContext } from '@/core/providers';
 
 import { Icon, type icons } from './Icon';
 
@@ -34,9 +34,7 @@ export const Button = memo(
     form = 'app-form',
     iconPosition = 'end',
   }: ButtonProps) => {
-    const {
-      state: { isLoading },
-    } = useGlobalContext();
+    const isLoading = useOptionalGlobalContext()?.state.isLoading ?? false;
 
     return (
       <BtnMui
