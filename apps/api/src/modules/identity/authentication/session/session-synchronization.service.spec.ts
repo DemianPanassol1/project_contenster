@@ -8,7 +8,13 @@ import { SessionSynchronizationService } from './session-synchronization.service
 const session = (clientId: number) => ({
   context: {
     accessType: RequestLogAccessType.client,
-    client: { id: clientId, languages: [], name: `Client ${clientId}` },
+    client: {
+      document: '12345678901',
+      documentType: 'cpf',
+      id: clientId,
+      languages: [],
+      name: `Client ${clientId}`,
+    },
     profile: { description: null, id: clientId, name: `Profile ${clientId}` },
     type: SessionContextType.client,
   },

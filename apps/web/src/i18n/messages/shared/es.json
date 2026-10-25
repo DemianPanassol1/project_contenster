@@ -25,6 +25,8 @@
     "returning_to_global_panel": "Volviendo al panel global...",
     "my_profile": "Mi perfil",
     "change_password": "Cambiar contraseña",
+    "current_password": "Contraseña actual",
+    "new_password": "Nueva contraseña",
     "show_password": "Mostrar contraseña",
     "hide_password": "Ocultar contraseña",
     "open_user_menu": "Abrir menú de usuario",

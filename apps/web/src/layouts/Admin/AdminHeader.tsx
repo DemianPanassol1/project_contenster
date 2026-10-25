@@ -1,32 +1,66 @@
 'use client';
 
-import { CircularProgress, IconButton, Stack, Typography } from '@mui/material';
-import { Menu } from 'lucide-react';
+import type {
+  RequestLogAccessType,
+  SessionClient,
+  SessionProfile,
+  SessionUser,
+} from '@contenster/shared';
+import { Box, Divider } from '@mui/material';
+import { useTranslations } from 'next-intl';
 
 import { useGlobalContext } from '@/core/providers';
+import { IconButton } from '@/shared';
+import { HEADER_HEIGHT } from '@/utils';
 
-export function AdminHeader() {
+import { AdminHeaderActions } from './AdminHeaderActions';
+import { AdminHeaderUserMenu } from './AdminHeaderUserMenu';
+
+interface AdminHeaderProps {
+  accessType: RequestLogAccessType;
+  client: SessionClient;
+  profile: SessionProfile;
+  user: SessionUser;
+}
+
+export function AdminHeader({ accessType, client, profile, user }: AdminHeaderProps) {
   const {
-    state: { isLoading },
+    state: { drawerState },
     toggleDrawer,
   } = useGlobalContext();
+  const t = useTranslations('global');
 
   return (
-    <Stack
+    <Box
       component="header"
-      direction="row"
-      spacing={1}
-      sx={{ alignItems: 'center', borderBottom: 1, borderColor: 'divider', minHeight: 64, px: 2 }}
+      sx={{
+        alignItems: 'center',
+        borderBottom: 1,
+        borderColor: 'divider',
+        boxSizing: 'border-box',
+        display: 'flex',
+        flexShrink: 0,
+        height: HEADER_HEIGHT,
+        maxWidth: '100%',
+        minWidth: 0,
+        pl: 1,
+        pr: 1.5,
+        width: '100%',
+      }}
     >
-      <IconButton aria-label="Toggle navigation" onClick={() => toggleDrawer()}>
-        <Menu size={20} />
-      </IconButton>
+      <IconButton
+        icon={drawerState === 'open' ? 'panel-left-close' : 'panel-left-open'}
+        onClick={() => toggleDrawer()}
+        toolTip={t(drawerState === 'open' ? 'toggle_drawer_close' : 'toggle_drawer_open')}
+      />
 
-      <Typography component="span" sx={{ fontWeight: 600 }}>
-        Administration
-      </Typography>
+      <Box sx={{ flex: 1 }} />
 
-      {isLoading && <CircularProgress size={18} sx={{ ml: 'auto' }} />}
-    </Stack>
+      <AdminHeaderActions />
+
+      <Divider orientation="vertical" sx={{ height: '45%', mx: 1 }} />
+
+      <AdminHeaderUserMenu accessType={accessType} client={client} profile={profile} user={user} />
+    </Box>
   );
 }

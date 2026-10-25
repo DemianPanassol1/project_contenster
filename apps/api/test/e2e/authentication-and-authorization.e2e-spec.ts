@@ -93,12 +93,26 @@ describe('authentication and authorization', () => {
 
     const session = await agent.get('/auth/session').expect(200);
     const current = session.body as ApiResponse<{
-      context: { client: { id: number } };
+      context: { client: { document: string; documentType: string; id: number } };
       user: { id: number };
     }>;
 
     expect(current.body.user.id).toBe(1);
     expect(current.body.context.client.id).toBe(1);
+    expect(current.body.context.client.document).toEqual(expect.any(String));
+    expect(current.body.context.client.documentType).toEqual(expect.any(String));
+
+    const availableClients = await agent.get('/auth/available-clients').expect(200);
+    const available = availableClients.body as ApiResponse<{
+      clients: Array<{ disabled: boolean; value: number }>;
+    }>;
+
+    expect(available.body.clients).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ disabled: false, value: 1 }),
+        expect.objectContaining({ disabled: false, value: secondaryClientId }),
+      ]),
+    );
 
     await waitFor(async () => {
       const [{ logCount }] = await dataSource.query<{ logCount: string }[]>(
@@ -677,5 +691,27 @@ describe('authentication and authorization', () => {
 
     await agent.post('/auth/sign-out').send({}).expect(201);
     await agent.get('/auth/session').expect(401);
+  });
+
+  it('preserves the current session and revokes the other sessions after a password change', async () => {
+    const currentAgent = request.agent(httpServer);
+    const otherAgent = request.agent(httpServer);
+
+    await currentAgent
+      .post('/auth/sign-in')
+      .send({ clientId: 1, password: '123456', staySignedIn: false, username: 'admin' })
+      .expect(201);
+    await otherAgent
+      .post('/auth/sign-in')
+      .send({ clientId: 1, password: '123456', staySignedIn: false, username: 'admin' })
+      .expect(201);
+
+    await currentAgent
+      .post('/users/me/password')
+      .send({ currentPassword: '123456', newPassword: '654321' })
+      .expect(201);
+
+    await currentAgent.get('/auth/session').expect(200);
+    await otherAgent.get('/auth/session').expect(401);
   });
 });

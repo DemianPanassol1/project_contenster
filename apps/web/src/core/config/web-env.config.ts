@@ -14,6 +14,8 @@ const numberEnvironmentValue = (key: string, fallback: number): number => {
 const apiUrl = nonEmptyEnvironmentValue('WEB_API_URL') ?? 'http://localhost:8080/api/v1';
 
 export const webEnv = {
+  appEnvironment: nonEmptyEnvironmentValue('WEB_APP_ENVIRONMENT') ?? 'local',
+  appVersion: nonEmptyEnvironmentValue('WEB_APP_VERSION') ?? '0.0.0',
   apiTimeoutMs: numberEnvironmentValue('WEB_API_TIMEOUT_MS', 30_000),
   apiUrl: apiUrl.replace(/\/+$/, ''),
 };

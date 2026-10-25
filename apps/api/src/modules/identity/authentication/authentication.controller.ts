@@ -13,6 +13,7 @@ import { SwitchClientRequestDto } from './dto/req/switch-client-request.dto';
 import {
   AuthenticatedSessionResponseDto,
   AuthorizeResponseDto,
+  AvailableClientsResponseDto,
   ForgotPasswordResponseDto,
   ResetPasswordResponseDto,
   SessionResponseDto,
@@ -35,6 +36,14 @@ export class AuthenticationController {
   @Post('authorize')
   authorize(@Body() request: AuthorizeRequestDto): Promise<AuthorizeResponseDto> {
     return this.authenticationService.authorize(request);
+  }
+
+  @Get('available-clients')
+  @Authenticate()
+  availableClients(
+    @CurrentSession() session: AuthenticatedSessionResponseDto,
+  ): Promise<AvailableClientsResponseDto> {
+    return this.authenticationService.availableClients(session.user.id);
   }
 
   @Post('sign-in-global')

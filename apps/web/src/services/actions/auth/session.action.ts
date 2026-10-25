@@ -2,12 +2,14 @@
 
 import type {
   AuthenticatedSession,
+  AvailableClientsResponse,
   SessionResponse,
   SignOutResponse,
   SwitchClientRequest,
   SynchronizeSessionResponse,
 } from '@contenster/shared';
 
+import type { Locale } from '@/i18n/routing';
 import {
   apiInstance,
   clearSessionCookie,
@@ -35,24 +37,33 @@ export const getSession = async (): Promise<AuthenticatedSession | null> => {
 
 export const switchClient = async (
   request: SwitchClientRequest,
+  locale: Locale,
 ): Promise<WebResponse<SessionResponse>> =>
-  persistSession(await apiInstance.post('auth/switch-client', { body: request }));
+  persistSession(await apiInstance.post('auth/switch-client', { body: request, locale }));
 
 export const switchClientAsSuperuser = async (
   request: SwitchClientRequest,
+  locale: Locale,
 ): Promise<WebResponse<SessionResponse>> =>
-  persistSession(await apiInstance.post('auth/switch-client-as-superuser', { body: request }));
+  persistSession(
+    await apiInstance.post('auth/switch-client-as-superuser', { body: request, locale }),
+  );
 
-export const switchGlobal = async (): Promise<WebResponse<SessionResponse>> =>
-  persistSession(await apiInstance.post('auth/switch-global'));
+export const switchGlobal = async (locale: Locale): Promise<WebResponse<SessionResponse>> =>
+  persistSession(await apiInstance.post('auth/switch-global', { locale }));
 
 export const synchronizeSession = async (): Promise<WebResponse<SynchronizeSessionResponse>> =>
   apiInstance.post('auth/session/sync');
 
-export const signOut = async (): Promise<WebResponse<SignOutResponse>> => {
-  const response = await apiInstance.post<SignOutResponse>('auth/sign-out');
+export const signOut = async (locale: Locale): Promise<WebResponse<SignOutResponse>> => {
+  const response = await apiInstance.post<SignOutResponse>('auth/sign-out', { locale });
 
   await clearSessionCookie();
 
   return response;
 };
+
+export const getAvailableClients = async (
+  locale: Locale,
+): Promise<WebResponse<AvailableClientsResponse>> =>
+  apiInstance.get<AvailableClientsResponse>('auth/available-clients', { locale });

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, Res } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Req } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
 import {
@@ -10,8 +10,9 @@ import { Authenticate } from '@/common/decorators/authenticate.decorator';
 import { CurrentClientId } from '@/common/decorators/current-client-id.decorator';
 import { CurrentSession } from '@/common/decorators/current-session.decorator';
 import { RequirePermission } from '@/common/decorators/require-permission.decorator';
+import type { ApiHttpRequest } from '@/common/types/http-context.type';
+import { readCookieValue } from '@/modules/identity/authentication/session/helpers/session-cookie.util';
 import { SessionAuthenticationService } from '@/modules/identity/authentication/session/session-authentication.service';
-import { type CookieResponse } from '@/modules/identity/authentication/types/cookie-response.type';
 import { DeleteRecordsRequestDto, PaginateRequestDto } from '@/shared/dtos';
 
 import { ChangeCurrentUserPasswordRequestDto } from './dto/req/change-current-user-password-request.dto';
@@ -40,16 +41,18 @@ export class UsersController {
   async changeCurrentUserPassword(
     @CurrentSession() session: AuthenticatedSession,
     @Body() request: ChangeCurrentUserPasswordRequestDto,
-    @Res({ passthrough: true }) response: CookieResponse,
+    @Req() httpRequest: ApiHttpRequest,
   ): Promise<ChangeCurrentUserPasswordResponseDto> {
-    const result = await this.service.changeCurrentUserPassword(session.user.id, request);
-
-    response.clearCookie(
+    const token = readCookieValue(
+      httpRequest.headers.cookie,
       this.sessionAuthenticationService.cookieName,
-      this.sessionAuthenticationService.clearCookieOptions(),
     );
 
-    return result;
+    return this.service.changeCurrentUserPassword(
+      session.user.id,
+      request,
+      this.sessionAuthenticationService.tokenHash(token!),
+    );
   }
 
   @Get(':id')

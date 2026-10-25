@@ -59,7 +59,19 @@ export class SessionAuthenticationService {
   }
 
   async destroyAllByUser(userId: number): Promise<void> {
+    await this.destroyUserSessions(userId);
+  }
+
+  async destroyAllByUserExcept(userId: number, preservedTokenHash: string): Promise<void> {
+    await this.destroyUserSessions(userId, preservedTokenHash);
+  }
+
+  private async destroyUserSessions(userId: number, preservedTokenHash?: string): Promise<void> {
     for await (const tokenHash of this.iterateTokenHashes()) {
+      if (tokenHash === preservedTokenHash) {
+        continue;
+      }
+
       const storedSession = await this.getByHash(tokenHash);
 
       if (storedSession?.session.user.id === userId) {

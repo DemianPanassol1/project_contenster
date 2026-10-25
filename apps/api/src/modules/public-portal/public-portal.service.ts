@@ -18,14 +18,24 @@ import { getCurrentLocale } from '@/shared/i18n';
 
 import { PublicPortalRepository } from './public-portal.repository';
 
-const defaultPalette: PortalPalette = {
-  background: '#F7F8FA',
-  error: '#F43F5E',
+const defaultLightPalette: PortalPalette = {
+  background: '#F8FAFC',
+  error: '#E11D48',
   paper: '#FFFFFF',
-  primary: '#7266FF',
-  secondary: '#6B7280',
-  success: '#10B981',
-  warning: '#F59E0B',
+  primary: '#5B5BD6',
+  secondary: '#64748B',
+  success: '#16A34A',
+  warning: '#D97706',
+};
+
+const defaultDarkPalette: PortalPalette = {
+  background: '#111827',
+  error: '#FDA4AF',
+  paper: '#1F2937',
+  primary: '#A5B4FC',
+  secondary: '#94A3B8',
+  success: '#4ADE80',
+  warning: '#FBBF24',
 };
 
 type PortalTranslationTextField =
@@ -145,10 +155,10 @@ export class PublicPortalService {
       identity: {
         applicationDescription: null,
         applicationName: 'Contenster Slim Core',
-        darkPalette: defaultPalette,
+        darkPalette: defaultDarkPalette,
         favicon: null,
         fontScale: PortalFontScale.standard,
-        lightPalette: defaultPalette,
+        lightPalette: defaultLightPalette,
         supportText: null,
         supportUrl: null,
       },

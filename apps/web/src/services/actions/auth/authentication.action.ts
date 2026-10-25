@@ -15,11 +15,7 @@ import type {
 } from '@contenster/shared';
 
 import type { Locale } from '@/i18n/routing';
-import {
-  apiInstance,
-  clearSessionCookie,
-  persistSessionCookie,
-} from '@/services/api-instance.service';
+import { apiInstance, persistSessionCookie } from '@/services/api-instance.service';
 import type { WebResponse } from '@/services/types';
 
 const toSessionActionResponse = async (
@@ -85,14 +81,5 @@ export const resetPassword = async (
 
 export const changeCurrentUserPassword = async (
   request: ChangeCurrentUserPasswordRequest,
-): Promise<WebResponse<ChangeCurrentUserPasswordResponse>> => {
-  const response = await apiInstance.post<ChangeCurrentUserPasswordResponse>('users/me/password', {
-    body: request,
-  });
-
-  if (response.success) {
-    await clearSessionCookie();
-  }
-
-  return response;
-};
+): Promise<WebResponse<ChangeCurrentUserPasswordResponse>> =>
+  apiInstance.post<ChangeCurrentUserPasswordResponse>('users/me/password', { body: request });

@@ -30,6 +30,8 @@ export default async function AdminRouteLayout({ children, params }: AdminRouteL
 
   if (!isClientSession(session)) {
     redirect({ href: '/auth/login', locale });
+
+    return null;
   }
 
   const portal = await getPublicPortal();
@@ -39,7 +41,7 @@ export default async function AdminRouteLayout({ children, params }: AdminRouteL
       <PortalColorSchemeScript />
       <PortalProvider portal={portal}>
         <AdminProviders closeSnackbarLabel={t('close_snackbar')} locale={locale} portal={portal}>
-          <AdminLayout>{children}</AdminLayout>
+          <AdminLayout session={session}>{children}</AdminLayout>
         </AdminProviders>
       </PortalProvider>
     </>

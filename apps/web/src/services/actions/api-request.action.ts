@@ -1,11 +1,13 @@
 'use server';
 
+import type { Locale } from '@/i18n/routing';
 import { apiInstance } from '@/services/api-instance.service';
 import type { FetchOptions, HttpMethod, WebResponse } from '@/services/types';
 
 export interface ApiRequestActionInput {
   body?: FetchOptions['body'];
   endpoint: string;
+  locale?: Locale;
   method: HttpMethod;
 }
 
@@ -22,6 +24,7 @@ export async function requestApi<TBody = Record<string, unknown>>(
 ): Promise<ApiRequestActionResponse<TBody>> {
   const options: FetchOptions = {
     ...(input.body !== undefined && { body: input.body }),
+    ...(input.locale !== undefined && { locale: input.locale }),
   };
   let response: WebResponse<TBody>;
 

@@ -8,6 +8,10 @@ export interface AuthorizeRequest {
 
 export type AuthorizeClientOption = AppOption<number>;
 
+export interface AvailableClientsResponse {
+  clients: AuthorizeClientOption[];
+}
+
 export interface AuthorizeResponse {
   clients: AuthorizeClientOption[];
   isEligibleToGlobalContext: boolean;

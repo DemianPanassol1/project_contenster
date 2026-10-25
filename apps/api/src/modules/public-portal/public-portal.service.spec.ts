@@ -20,7 +20,11 @@ describe('PublicPortalService', () => {
     const service = new PublicPortalService(repository);
 
     await expect(service.resolve(undefined)).resolves.toMatchObject({
-      identity: { applicationName: 'Contenster Slim Core' },
+      identity: {
+        applicationName: 'Contenster Slim Core',
+        darkPalette: { background: '#111827', paper: '#1F2937' },
+        lightPalette: { background: '#F8FAFC', paper: '#FFFFFF' },
+      },
       login: { headerMode: PortalLoginHeaderMode.text, layout: PortalLoginLayout.centered },
     });
     expect(findByHost).not.toHaveBeenCalled();

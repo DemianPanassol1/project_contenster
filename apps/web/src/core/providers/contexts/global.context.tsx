@@ -1,7 +1,7 @@
 'use client';
 
 import { useColorScheme } from '@mui/material/styles';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { createContext, type ReactNode, useCallback, useContext, useMemo, useState } from 'react';
 
 import { useToast, useWebResponseErrorToast } from '@/hooks';
@@ -41,6 +41,7 @@ export interface GlobalContextValue {
     options: ApiRequestOptions<TBody>,
   ) => Promise<ApiRequestActionResponse<TBody>>;
   state: GlobalState;
+  toggleLoading: (isLoading: boolean) => void;
   toggleDrawer: (state?: DrawerState) => void;
   toggleTheme: (theme?: AdminTheme) => void;
 }
@@ -58,6 +59,7 @@ interface GlobalProviderProps {
 
 export function GlobalProvider({ children }: GlobalProviderProps) {
   const router = useRouter();
+  const locale = useLocale();
   const t = useTranslations('protected.feedback');
   const { errorMessage, successMessage } = useToast();
   const showResponseErrors = useWebResponseErrorToast();
@@ -70,6 +72,10 @@ export function GlobalProvider({ children }: GlobalProviderProps) {
       ...current,
       drawerState: drawerState ?? (current.drawerState === 'open' ? 'closed' : 'open'),
     }));
+  }, []);
+
+  const toggleLoading = useCallback((isLoading: boolean) => {
+    setState((current) => ({ ...current, isLoading }));
   }, []);
 
   const toggleTheme = useCallback(
@@ -107,6 +113,7 @@ export function GlobalProvider({ children }: GlobalProviderProps) {
         const response = await requestApi<TBody>({
           ...(options.body !== undefined && { body: options.body }),
           endpoint: options.endpoint,
+          locale,
           method: options.method,
         });
 
@@ -151,7 +158,7 @@ export function GlobalProvider({ children }: GlobalProviderProps) {
         }
       }
     },
-    [errorMessage, router, showResponseErrors, successMessage, t, state.isLoading],
+    [errorMessage, locale, router, showResponseErrors, successMessage, t, state.isLoading],
   );
 
   const stateWithTheme = useMemo<GlobalState>(
@@ -160,8 +167,8 @@ export function GlobalProvider({ children }: GlobalProviderProps) {
   );
 
   const value = useMemo(
-    () => ({ apiRequest, state: stateWithTheme, toggleDrawer, toggleTheme }),
-    [apiRequest, stateWithTheme, toggleDrawer, toggleTheme],
+    () => ({ apiRequest, state: stateWithTheme, toggleDrawer, toggleLoading, toggleTheme }),
+    [apiRequest, stateWithTheme, toggleDrawer, toggleLoading, toggleTheme],
   );
 
   return <GlobalContext.Provider value={value}>{children}</GlobalContext.Provider>;

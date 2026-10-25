@@ -7,6 +7,7 @@ export {
   signInGlobal,
 } from './authentication.action';
 export {
+  getAvailableClients,
   getSession,
   signOut,
   switchClient,

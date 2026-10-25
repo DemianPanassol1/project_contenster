@@ -10,6 +10,7 @@ import { I18nService } from 'nestjs-i18n';
 
 import {
   type AuthenticatedSession,
+  type AvailableClientsResponse,
   RequestLogAccessType,
   SessionContextType,
 } from '@contenster/shared';
@@ -34,6 +35,7 @@ import type { SwitchClientRequestDto } from './dto/req/switch-client-request.dto
 import {
   AuthenticatedSessionResponseDto,
   AuthorizeResponseDto,
+  AvailableClientsResponseDto,
   ForgotPasswordResponseDto,
   ResetPasswordResponseDto,
   SessionResponseDto,
@@ -65,21 +67,16 @@ export class AuthenticationService {
 
   async authorize(request: AuthorizeRequestDto): Promise<AuthorizeResponseDto> {
     const user = await this.validateCredentials(request.username, request.password);
-    const userWithClients = await this.authenticationRepository.findUserClients(user.id);
 
     return toResponseDto(AuthorizeResponseDto, {
-      clients: userWithClients.userProfiles
-        .filter(({ client }) => client !== null)
-        .map(({ client }) => ({
-          label: client.tradeName,
-          value: client.id,
-          disabled: !client.isActive,
-          metadata: {
-            corporateName: client.corporateName,
-            document: client.document,
-          },
-        })),
+      clients: await this.resolveAvailableClients(user.id),
       isEligibleToGlobalContext: user.isSuperuser,
+    });
+  }
+
+  async availableClients(userId: number): Promise<AvailableClientsResponseDto> {
+    return toResponseDto(AvailableClientsResponseDto, {
+      clients: await this.resolveAvailableClients(userId),
     });
   }
 
@@ -341,6 +338,8 @@ export class AuthenticationService {
       context: {
         accessType: RequestLogAccessType.client,
         client: {
+          document: userProfile.client.document,
+          documentType: userProfile.client.documentType,
           id: userProfile.client.id,
           name: userProfile.client.tradeName,
           languages: languages.map((language) => ({
@@ -390,6 +389,8 @@ export class AuthenticationService {
       context: {
         accessType: RequestLogAccessType.superuser,
         client: {
+          document: profile.client.document,
+          documentType: profile.client.documentType,
           id: profile.client.id,
           name: profile.client.tradeName,
           languages: languages.map((language) => ({
@@ -425,6 +426,25 @@ export class AuthenticationService {
       email: user.email,
       isSuperuser: user.isSuperuser,
     };
+  }
+
+  private async resolveAvailableClients(
+    userId: number,
+  ): Promise<AvailableClientsResponse['clients']> {
+    const user = await this.authenticationRepository.findUserClients(userId);
+
+    return user.userProfiles
+      .filter(({ client }) => client !== null)
+      .map(({ client }) => ({
+        label: client.tradeName,
+        value: client.id,
+        disabled: !client.isActive,
+        metadata: {
+          corporateName: client.corporateName,
+          document: client.document,
+          documentType: client.documentType,
+        },
+      }));
   }
 
   private async validateCredentials(username: string, password: string) {

@@ -1,4 +1,5 @@
 import type { ActionType } from '../../domain/actions/action-type.enum.js';
+import type { DocumentType } from '../../domain/documents/document-type.enum.js';
 import type { RequestLogAccessType } from '../../domain/logging/request-log-access-type.enum.js';
 
 import type { SessionContextType } from './session-context-type.enum.js';
@@ -18,6 +19,8 @@ export interface SessionLanguage {
 }
 
 export interface SessionClient {
+  document: string;
+  documentType: DocumentType;
   id: number;
   name: string;
   languages: SessionLanguage[];

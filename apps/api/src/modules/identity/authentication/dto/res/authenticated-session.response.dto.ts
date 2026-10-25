@@ -1,15 +1,17 @@
-import type {
-  AuthenticatedSession,
-  SessionAction,
-  SessionClient,
-  SessionFunctionality,
-  SessionLanguage,
-  SessionModule,
-  SessionProfile,
-  SessionUser,
-} from '@contenster/shared';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
+
+import {
+  type AuthenticatedSession,
+  DocumentType,
+  type SessionAction,
+  type SessionClient,
+  type SessionFunctionality,
+  type SessionLanguage,
+  type SessionModule,
+  type SessionProfile,
+  type SessionUser,
+} from '@contenster/shared';
 
 export class SessionUserResponseDto implements SessionUser {
   @Expose()
@@ -48,6 +50,14 @@ export class SessionLanguageResponseDto implements SessionLanguage {
 }
 
 export class SessionClientResponseDto implements SessionClient {
+  @Expose()
+  @ApiProperty({ type: String })
+  declare document: string;
+
+  @Expose()
+  @ApiProperty({ enum: DocumentType, enumName: 'DocumentType' })
+  declare documentType: DocumentType;
+
   @Expose()
   @ApiProperty({ type: Number })
   declare id: number;

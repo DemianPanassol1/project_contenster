@@ -145,6 +145,7 @@ export class UsersService {
   async changeCurrentUserPassword(
     userId: number,
     request: ChangeCurrentUserPasswordRequestDto,
+    currentSessionTokenHash: string,
   ): Promise<ChangeCurrentUserPasswordResponseDto> {
     const user = await this.repository.findActiveById(userId);
 
@@ -166,7 +167,10 @@ export class UsersService {
     const passwordHash = await generatePasswordHash(request.newPassword);
 
     await this.repository.updatePassword(user.id, passwordHash);
-    await this.sessionAuthenticationService.destroyAllByUser(user.id);
+    await this.sessionAuthenticationService.destroyAllByUserExcept(
+      user.id,
+      currentSessionTokenHash,
+    );
 
     return toResponseDto(ChangeCurrentUserPasswordResponseDto, { passwordChanged: true });
   }

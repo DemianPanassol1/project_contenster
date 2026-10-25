@@ -22,8 +22,9 @@ O estado persistido no Redis inclui contexto, autorização calculada e informa�
 
 ## Senhas e recuperação de acesso
 
-- A alteração de senha pelo usuário autenticado exige a senha atual. Ao concluir, todas as sessões
-  opacas daquele usuário são revogadas, inclusive a que originou a requisição.
+- A alteração de senha pelo usuário autenticado exige a senha atual. Ao concluir, as demais sessões
+  opacas daquele usuário são revogadas; a sessão que originou a requisição permanece válida no
+  contexto atual.
 - A recuperação de senha começa por uma rota pública que sempre devolve a mesma resposta para e-mail
   encontrado ou inexistente. Isso impede enumeração de contas.
 - O link de recuperação contém um JWT exclusivo para essa finalidade e possui expiração curta. O seu
