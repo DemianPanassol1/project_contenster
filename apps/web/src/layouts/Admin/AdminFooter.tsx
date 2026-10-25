@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Chip, Divider, Stack, Typography } from '@mui/material';
+import { Box, Chip, Divider, Stack, Typography, useTheme } from '@mui/material';
 import { alpha } from '@mui/material/styles';
 import { Circle } from 'lucide-react';
 
@@ -19,6 +19,7 @@ const resolveEnvironmentName = (value: string): EnvironmentName =>
   value in ENVIRONMENT_COLORS ? (value as EnvironmentName) : 'local';
 
 export function AdminFooter({ appVersion, currentYear, environmentName }: AdminFooterProps) {
+  const theme = useTheme();
   const { identity } = usePortal();
   const resolvedEnvironmentName = resolveEnvironmentName(environmentName);
   const environmentColor = ENVIRONMENT_COLORS[resolvedEnvironmentName];
@@ -29,8 +30,7 @@ export function AdminFooter({ appVersion, currentYear, environmentName }: AdminF
       sx={{
         alignItems: 'center',
         backgroundColor: 'background.paper',
-        borderColor: 'divider',
-        borderTop: 1,
+        borderTop: `1px solid ${theme.palette.divider}`,
         boxSizing: 'border-box',
         display: 'flex',
         flexShrink: 0,
