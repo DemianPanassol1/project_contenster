@@ -22,6 +22,18 @@ export class FunctionalityController {
     return this.service.list(clientId, request);
   }
 
+  @Post('modules/options')
+  @RequirePermission(functionalities, ActionType.view)
+  listModuleOptions(@CurrentClientId() clientId: number, @Body() request: PaginateRequestDto) {
+    return this.service.listModuleOptions(clientId, request);
+  }
+
+  @Post('parents/options')
+  @RequirePermission(functionalities, ActionType.view)
+  listParentOptions(@CurrentClientId() clientId: number, @Body() request: PaginateRequestDto) {
+    return this.service.listParentOptions(clientId, request);
+  }
+
   @Get(':id')
   @RequirePermission(functionalities, ActionType.view)
   getById(@CurrentClientId() clientId: number, @Param('id', ParseIntPipe) id: number) {

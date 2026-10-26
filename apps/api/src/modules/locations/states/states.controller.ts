@@ -21,6 +21,12 @@ export class StatesController {
     return this.service.list(request);
   }
 
+  @Post('countries/options')
+  @RequirePermission(states, ActionType.view)
+  listCountryOptions(@Body() request: PaginateRequestDto) {
+    return this.service.listCountryOptions(request);
+  }
+
   @Get(':id')
   @RequirePermission(states, ActionType.view)
   getById(@Param('id', ParseIntPipe) id: number) {

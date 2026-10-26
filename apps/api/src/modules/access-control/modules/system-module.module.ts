@@ -18,5 +18,6 @@ import { SystemModulesService } from './system-module.service';
   ],
   controllers: [SystemModulesController],
   providers: [SystemModulesRepository, SystemModulesService],
+  exports: [SystemModulesRepository],
 })
 export class SystemModulesModule {}

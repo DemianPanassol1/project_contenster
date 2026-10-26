@@ -36,6 +36,12 @@ export class UsersController {
     return this.service.list(clientId, request);
   }
 
+  @Post('profiles/options')
+  @RequirePermission(users, ActionType.view)
+  listProfileOptions(@CurrentClientId() clientId: number, @Body() request: PaginateRequestDto) {
+    return this.service.listProfileOptions(clientId, request);
+  }
+
   @Post('me/password')
   @Authenticate()
   async changeCurrentUserPassword(

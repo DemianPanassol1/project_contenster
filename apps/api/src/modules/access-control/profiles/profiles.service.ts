@@ -1,4 +1,4 @@
-import type { PaginatedBody } from '@contenster/shared';
+import type { AppOption, PaginatedBody } from '@contenster/shared';
 import {
   BadRequestException,
   ConflictException,
@@ -8,6 +8,8 @@ import {
 import { I18nService } from 'nestjs-i18n';
 
 import type { I18nTranslations } from '@/i18n/translations';
+import { FunctionalityRepository } from '@/modules/access-control/functionalities/functionality.repository';
+import { ActionsRepository } from '@/modules/authorization/actions/actions.repository';
 import { SessionSynchronizationService } from '@/modules/identity/authentication/session/session-synchronization.service';
 import {
   type DeleteRecordsRequestDto,
@@ -30,6 +32,8 @@ import { ProfilesRepository } from './profiles.repository';
 export class ProfilesService {
   constructor(
     private readonly repository: ProfilesRepository,
+    private readonly functionalityRepository: FunctionalityRepository,
+    private readonly actionsRepository: ActionsRepository,
     private readonly i18n: I18nService<I18nTranslations>,
     private readonly sessionSynchronizationService: SessionSynchronizationService,
   ) {}
@@ -46,6 +50,33 @@ export class ProfilesService {
       ),
       meta: buildPaginationMeta(request, total),
     };
+  }
+
+  async listFunctionalityOptions(
+    clientId: number,
+    request: PaginateRequestDto,
+  ): Promise<AppOption[]> {
+    const locale = getCurrentLocale();
+    const [functionalities] = await this.functionalityRepository.list(clientId, request, locale);
+
+    return functionalities.map((functionality) => ({
+      disabled: !functionality.isActive,
+      label: resolveTranslation(functionality.translations, locale, 'name'),
+      metadata: null,
+      value: functionality.id,
+    }));
+  }
+
+  async listActionOptions(request: PaginateRequestDto): Promise<AppOption[]> {
+    const locale = getCurrentLocale();
+    const [actions] = await this.actionsRepository.list(request, locale);
+
+    return actions.map((action) => ({
+      disabled: null,
+      label: resolveTranslation(action.translations, locale, 'name'),
+      metadata: null,
+      value: action.id,
+    }));
   }
 
   async getById(clientId: number, id: number): Promise<GetProfileByIdResponseDto> {

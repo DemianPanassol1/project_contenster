@@ -53,6 +53,8 @@ export class StatesRepository {
     const query = this.states
       .createQueryBuilder('state')
       .leftJoinAndSelect('state.country', 'country')
+      .leftJoinAndSelect('country.translations', 'countryTranslations')
+      .leftJoinAndSelect('countryTranslations.language', 'countryTranslationLanguage')
       .leftJoinAndSelect('state.translations', 'translations')
       .leftJoinAndSelect('translations.language', 'translationLanguage')
       .setParameters(buildTranslationQueryParameters(locale));

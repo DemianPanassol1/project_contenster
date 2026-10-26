@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { Functionality } from '@/modules/access-control/functionalities/entities/functionality.entity';
+import { FunctionalityModule } from '@/modules/access-control/functionalities/functionality.module';
+import { ActionsModule } from '@/modules/authorization/actions/actions.module';
 import { Action } from '@/modules/authorization/actions/entities/action.entity';
 import { Language } from '@/modules/communication/languages/entities/language.entity';
 import { AuthenticationModule } from '@/modules/identity/authentication/authentication.module';
@@ -25,8 +27,11 @@ import { ProfilesService } from './profiles.service';
       UserProfile,
     ]),
     AuthenticationModule,
+    FunctionalityModule,
+    ActionsModule,
   ],
   controllers: [ProfilesController],
   providers: [ProfilesRepository, ProfilesService],
+  exports: [ProfilesRepository],
 })
 export class ProfilesModule {}

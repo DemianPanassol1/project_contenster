@@ -21,6 +21,12 @@ export class CitiesController {
     return this.service.list(request);
   }
 
+  @Post('states/options')
+  @RequirePermission(cities, ActionType.view)
+  listStateOptions(@Body() request: PaginateRequestDto) {
+    return this.service.listStateOptions(request);
+  }
+
   @Get(':id')
   @RequirePermission(cities, ActionType.view)
   getById(@Param('id', ParseIntPipe) id: number) {

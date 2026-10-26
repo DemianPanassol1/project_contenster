@@ -1,9 +1,10 @@
-import type { PaginatedBody } from '@contenster/shared';
+import type { AppOption, PaginatedBody } from '@contenster/shared';
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
 
 import type { I18nTranslations } from '@/i18n/translations';
 import type { Language } from '@/modules/communication/languages/entities/language.entity';
+import { StatesRepository } from '@/modules/locations/states/states.repository';
 import {
   type DeleteRecordsRequestDto,
   DeleteRecordsResponseDto,
@@ -25,6 +26,7 @@ import { CitiesRepository } from './cities.repository';
 export class CitiesService {
   constructor(
     private readonly repository: CitiesRepository,
+    private readonly statesRepository: StatesRepository,
     private readonly i18n: I18nService<I18nTranslations>,
   ) {}
 
@@ -39,6 +41,18 @@ export class CitiesService {
       ),
       meta: buildPaginationMeta(request, total),
     };
+  }
+
+  async listStateOptions(request: PaginateRequestDto): Promise<AppOption[]> {
+    const locale = getCurrentLocale();
+    const [states] = await this.statesRepository.list(request, locale);
+
+    return states.map((state) => ({
+      disabled: !state.isActive,
+      label: resolveTranslation(state.translations, locale, 'name'),
+      metadata: null,
+      value: state.id,
+    }));
   }
 
   async getById(id: number): Promise<GetCityByIdResponseDto> {

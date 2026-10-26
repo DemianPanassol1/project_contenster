@@ -1,4 +1,4 @@
-import type { PaginatedBody } from '@contenster/shared';
+import type { AppOption, PaginatedBody } from '@contenster/shared';
 import {
   BadRequestException,
   ConflictException,
@@ -8,6 +8,7 @@ import {
 import { I18nService } from 'nestjs-i18n';
 
 import type { I18nTranslations } from '@/i18n/translations';
+import { SystemModulesRepository } from '@/modules/access-control/modules/system-module.repository';
 import { SessionSynchronizationService } from '@/modules/identity/authentication/session/session-synchronization.service';
 import {
   type DeleteRecordsRequestDto,
@@ -30,6 +31,7 @@ import { FunctionalityRepository } from './functionality.repository';
 export class FunctionalityService {
   constructor(
     private readonly repository: FunctionalityRepository,
+    private readonly modulesRepository: SystemModulesRepository,
     private readonly i18n: I18nService<I18nTranslations>,
     private readonly sessionSynchronizationService: SessionSynchronizationService,
   ) {}
@@ -48,6 +50,30 @@ export class FunctionalityService {
       ),
       meta: buildPaginationMeta(request, total),
     };
+  }
+
+  async listModuleOptions(clientId: number, request: PaginateRequestDto): Promise<AppOption[]> {
+    const locale = getCurrentLocale();
+    const [modules] = await this.modulesRepository.list(clientId, request, locale);
+
+    return modules.map((module) => ({
+      disabled: !module.isActive,
+      label: resolveTranslation(module.translations, locale, 'name'),
+      metadata: null,
+      value: module.id,
+    }));
+  }
+
+  async listParentOptions(clientId: number, request: PaginateRequestDto): Promise<AppOption[]> {
+    const locale = getCurrentLocale();
+    const [functionalities] = await this.repository.list(clientId, request, locale);
+
+    return functionalities.map((functionality) => ({
+      disabled: !functionality.isActive,
+      label: resolveTranslation(functionality.translations, locale, 'name'),
+      metadata: null,
+      value: functionality.id,
+    }));
   }
 
   async getById(clientId: number, id: number): Promise<GetFunctionalityByIdResponseDto> {

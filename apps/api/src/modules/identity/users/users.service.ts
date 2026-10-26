@@ -1,4 +1,4 @@
-import type { PaginatedBody } from '@contenster/shared';
+import type { AppOption, PaginatedBody } from '@contenster/shared';
 import {
   BadRequestException,
   Injectable,
@@ -12,6 +12,7 @@ import {
   generatePasswordHash,
   validatePasswordHash,
 } from '@/infrastructure/security/password.util';
+import { ProfilesRepository } from '@/modules/access-control/profiles/profiles.repository';
 import { SessionAuthenticationService } from '@/modules/identity/authentication/session/session-authentication.service';
 import { SessionSynchronizationService } from '@/modules/identity/authentication/session/session-synchronization.service';
 import {
@@ -20,8 +21,10 @@ import {
   normalizeDeleteRecordIds,
   type PaginateRequestDto,
 } from '@/shared/dtos';
+import { getCurrentLocale } from '@/shared/i18n';
 import { buildPaginationMeta } from '@/shared/pagination';
 import { toResponseDto } from '@/shared/responses';
+import { resolveTranslation } from '@/shared/translations';
 
 import type { ChangeCurrentUserPasswordRequestDto } from './dto/req/change-current-user-password-request.dto';
 import type { SaveUserRequestDto } from './dto/req/save-user-request.js';
@@ -35,6 +38,7 @@ import { UsersRepository } from './users.repository';
 export class UsersService {
   constructor(
     private readonly repository: UsersRepository,
+    private readonly profilesRepository: ProfilesRepository,
     private readonly i18n: I18nService<I18nTranslations>,
     private readonly sessionSynchronizationService: SessionSynchronizationService,
     private readonly sessionAuthenticationService: SessionAuthenticationService,
@@ -52,6 +56,18 @@ export class UsersService {
       ),
       meta: buildPaginationMeta(request, total),
     };
+  }
+
+  async listProfileOptions(clientId: number, request: PaginateRequestDto): Promise<AppOption[]> {
+    const locale = getCurrentLocale();
+    const [profiles] = await this.profilesRepository.list(clientId, request, locale);
+
+    return profiles.map((profile) => ({
+      disabled: !profile.isActive,
+      label: resolveTranslation(profile.translations, locale, 'name'),
+      metadata: null,
+      value: profile.id,
+    }));
   }
 
   async getById(clientId: number, id: number): Promise<GetUserByIdResponseDto> {

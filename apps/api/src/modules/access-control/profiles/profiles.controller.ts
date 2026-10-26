@@ -22,6 +22,21 @@ export class ProfilesController {
     return this.service.list(clientId, request);
   }
 
+  @Post('functionalities/options')
+  @RequirePermission(profiles, ActionType.view)
+  listFunctionalityOptions(
+    @CurrentClientId() clientId: number,
+    @Body() request: PaginateRequestDto,
+  ) {
+    return this.service.listFunctionalityOptions(clientId, request);
+  }
+
+  @Post('actions/options')
+  @RequirePermission(profiles, ActionType.view)
+  listActionOptions(@Body() request: PaginateRequestDto) {
+    return this.service.listActionOptions(request);
+  }
+
   @Get(':id')
   @RequirePermission(profiles, ActionType.view)
   getById(@CurrentClientId() clientId: number, @Param('id', ParseIntPipe) id: number) {
