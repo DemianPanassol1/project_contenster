@@ -65,6 +65,10 @@ export class CitiesRepository {
       .createQueryBuilder('city')
       .leftJoinAndSelect('city.state', 'state')
       .leftJoinAndSelect('state.country', 'country')
+      .leftJoinAndSelect('state.translations', 'stateTranslations')
+      .leftJoinAndSelect('stateTranslations.language', 'stateTranslationLanguage')
+      .leftJoinAndSelect('country.translations', 'countryTranslations')
+      .leftJoinAndSelect('countryTranslations.language', 'countryTranslationLanguage')
       .leftJoinAndSelect('city.translations', 'translations')
       .leftJoinAndSelect('translations.language', 'translationLanguage')
       .setParameters(buildTranslationQueryParameters(locale));

@@ -108,6 +108,24 @@
     "phone_code": "Código telefónico",
     "save": "Guardar"
   },
+  "cities": {
+    "cancel": "Cancelar",
+    "country": "País",
+    "create_register": "Crear registro",
+    "create_title": "{functionality} - Crear",
+    "delete": "Eliminar",
+    "delete_many_message": "¿Desea eliminar las {count} ciudades seleccionadas? Esta acción no se puede deshacer.",
+    "delete_message": "¿Desea eliminar esta ciudad? Esta acción no se puede deshacer.",
+    "delete_selected": "Eliminar ciudades seleccionadas",
+    "delete_title": "Eliminar ciudad",
+    "edit_title": "{functionality} - Editar",
+    "go_back": "Volver",
+    "ibge_code": "Código IBGE",
+    "is_active": "Activo",
+    "name": "Nombre",
+    "save": "Guardar",
+    "state": "Estado"
+  },
   "states": {
     "cancel": "Cancelar",
     "code": "Código",
