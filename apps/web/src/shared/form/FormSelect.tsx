@@ -202,11 +202,13 @@ export const FormSelect = <T extends FieldValues>({
                 '& .MuiAutocomplete-inputRoot': {
                   gap: 0.5,
                   alignItems: 'center',
+                  fontSize: 14,
                   flexWrap: multiple ? 'wrap' : 'nowrap',
                   maxHeight: multiple ? 92 : undefined,
                   overflowY: multiple ? 'auto' : undefined,
                 },
                 '& .MuiAutocomplete-input': {
+                  fontSize: 14,
                   minWidth: multiple ? '56px !important' : 0,
                 },
                 '& .MuiAutocomplete-tag': {
