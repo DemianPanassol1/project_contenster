@@ -1,15 +1,16 @@
 'use server';
 
-import type {
-  AuthenticatedSession,
-  AvailableClientsResponse,
-  SessionResponse,
-  SignOutResponse,
-  SwitchClientRequest,
-  SynchronizeSessionResponse,
+import {
+  type AuthenticatedSession,
+  type AvailableClientsResponse,
+  SessionContextType,
+  type SessionResponse,
+  type SignOutResponse,
+  type SwitchClientRequest,
+  type SynchronizeSessionResponse,
 } from '@contenster/shared';
-
 import type { Locale } from '@/i18n/routing';
+import { API_ROUTES } from '@/routes';
 import {
   apiInstance,
   clearSessionCookie,
@@ -25,8 +26,30 @@ const persistSession = async (
   return { ...response, body: null, statusCode: 500, success: false };
 };
 
+const hasOutdatedSessionLanguages = (session: AuthenticatedSession): boolean => {
+  if (session.context.type !== SessionContextType.client) {
+    return false;
+  }
+
+  return session.context.client.languages.some(
+    (language) => typeof (language as { locale?: unknown }).locale !== 'string',
+  );
+};
+
 export const getSession = async (): Promise<AuthenticatedSession | null> => {
-  const response = await apiInstance.get<AuthenticatedSession>('auth/session');
+  let response = await apiInstance.get<AuthenticatedSession>(API_ROUTES.AUTH.GET_SESSION);
+
+  if (response.success && response.body && hasOutdatedSessionLanguages(response.body)) {
+    const synchronization = await apiInstance.post<SynchronizeSessionResponse>(
+      API_ROUTES.AUTH.POST_SESSION_SYNC,
+    );
+
+    if (!synchronization.success) {
+      throw new Error(`Session synchronization failed with status ${synchronization.statusCode}.`);
+    }
+
+    response = await apiInstance.get<AuthenticatedSession>(API_ROUTES.AUTH.GET_SESSION);
+  }
 
   if (response.success) return response.body;
 
@@ -39,24 +62,33 @@ export const switchClient = async (
   request: SwitchClientRequest,
   locale: Locale,
 ): Promise<WebResponse<SessionResponse>> =>
-  persistSession(await apiInstance.post('auth/switch-client', { body: request, locale }));
+  persistSession(
+    await apiInstance.post(API_ROUTES.AUTH.POST_SWITCH_CLIENT, { body: request, locale }),
+  );
 
 export const switchClientAsSuperuser = async (
   request: SwitchClientRequest,
   locale: Locale,
 ): Promise<WebResponse<SessionResponse>> =>
   persistSession(
-    await apiInstance.post('auth/switch-client-as-superuser', { body: request, locale }),
+    await apiInstance.post(API_ROUTES.AUTH.POST_SWITCH_CLIENT_AS_SUPERUSER, {
+      body: request,
+      locale,
+    }),
   );
 
 export const switchGlobal = async (locale: Locale): Promise<WebResponse<SessionResponse>> =>
-  persistSession(await apiInstance.post('auth/switch-global', { locale }));
+  persistSession(await apiInstance.post(API_ROUTES.AUTH.POST_SWITCH_GLOBAL, { locale }));
 
-export const synchronizeSession = async (): Promise<WebResponse<SynchronizeSessionResponse>> =>
-  apiInstance.post('auth/session/sync');
+export const synchronizeSession = async (
+  locale: Locale,
+): Promise<WebResponse<SynchronizeSessionResponse>> =>
+  apiInstance.post(API_ROUTES.AUTH.POST_SESSION_SYNC, { locale });
 
 export const signOut = async (locale: Locale): Promise<WebResponse<SignOutResponse>> => {
-  const response = await apiInstance.post<SignOutResponse>('auth/sign-out', { locale });
+  const response = await apiInstance.post<SignOutResponse>(API_ROUTES.AUTH.POST_SIGN_OUT, {
+    locale,
+  });
 
   await clearSessionCookie();
 
@@ -66,4 +98,4 @@ export const signOut = async (locale: Locale): Promise<WebResponse<SignOutRespon
 export const getAvailableClients = async (
   locale: Locale,
 ): Promise<WebResponse<AvailableClientsResponse>> =>
-  apiInstance.get<AvailableClientsResponse>('auth/available-clients', { locale });
+  apiInstance.get<AvailableClientsResponse>(API_ROUTES.AUTH.GET_AVAILABLE_CLIENTS, { locale });

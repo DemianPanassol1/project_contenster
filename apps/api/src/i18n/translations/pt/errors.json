@@ -16,6 +16,9 @@
     "permission_denied": "Você não possui permissão para realizar esta operação.",
     "superuser_access_denied": "O acesso de superusuário não está disponível para esta sessão."
   },
+  "access_control": {
+    "module_has_functionalities": "O módulo não pode ser excluído porque possui funcionalidades vinculadas."
+  },
   "infrastructure": {
     "database_unavailable": "O banco de dados está temporariamente indisponível.",
     "session_authentication_unconfigured": "A autenticação de sessão não está configurada."

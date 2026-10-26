@@ -18,6 +18,23 @@
   "modal": {
     "close": "Close"
   },
+  "modules": {
+    "cancel": "Cancel",
+    "create_register": "Create record",
+    "create_title": "{functionality} - Create",
+    "delete": "Delete",
+    "delete_many_message": "Do you want to delete the {count} selected modules? This action cannot be undone.",
+    "delete_message": "Do you want to delete this module? This action cannot be undone.",
+    "delete_selected": "Delete selected modules",
+    "delete_title": "Delete module",
+    "description": "Description",
+    "edit_title": "{functionality} - Edit",
+    "go_back": "Back",
+    "is_active": "Active",
+    "name": "Name",
+    "order": "Order",
+    "save": "Save"
+  },
   "system_admin": {
     "home_title": "Global administration panel",
     "not_found": "Global page not found."

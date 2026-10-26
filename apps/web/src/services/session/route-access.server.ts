@@ -1,4 +1,18 @@
-import { type ActionType, type AuthenticatedSession, SessionContextType } from '@contenster/shared';
+import {
+  type ActionType,
+  type AuthenticatedSession,
+  SessionContextType,
+  type SessionLanguage,
+  type SessionModule,
+} from '@contenster/shared';
+
+export interface SessionFeaturePresentation {
+  actions: ActionType[];
+  description: string | null;
+  functionalityName: string;
+  languages: SessionLanguage[];
+  moduleName: string;
+}
 
 export const isClientSession = (
   session: AuthenticatedSession | null,
@@ -8,20 +22,45 @@ export const isClientSession = (
 export const isGlobalSuperuserSession = (session: AuthenticatedSession | null): boolean =>
   session?.context.type === SessionContextType.global && session.user.isSuperuser;
 
-export const hasFunctionalityAction = (
-  session: AuthenticatedSession,
+export const getSessionFeaturePresentation = (
+  session: AuthenticatedSession & { context: { type: SessionContextType.client } },
   slug: string,
-  action: ActionType,
-): boolean => {
+): SessionFeaturePresentation | null => {
+  for (const systemModule of session.modules) {
+    const functionality = findSessionFunctionality(systemModule, slug);
+
+    if (functionality) {
+      return {
+        actions: functionality.actions.map((action) => action.type),
+        description: functionality.description,
+        functionalityName: functionality.name,
+        languages: session.context.client.languages,
+        moduleName: systemModule.name,
+      };
+    }
+  }
+
+  return null;
+};
+
+const findSessionFunctionality = (module: SessionModule, slug: string) => {
   const visit = (
     functionalities: AuthenticatedSession['modules'][number]['functionalities'],
-  ): boolean =>
-    functionalities.some(
-      (functionality) =>
-        (functionality.slug === slug &&
-          functionality.actions.some((item) => item.type === action)) ||
-        visit(functionality.children),
-    );
+  ): AuthenticatedSession['modules'][number]['functionalities'][number] | null => {
+    for (const functionality of functionalities) {
+      if (functionality.slug === slug) {
+        return functionality;
+      }
 
-  return session.modules.some((module) => visit(module.functionalities));
+      const nestedFunctionality = visit(functionality.children);
+
+      if (nestedFunctionality) {
+        return nestedFunctionality;
+      }
+    }
+
+    return null;
+  };
+
+  return visit(module.functionalities);
 };

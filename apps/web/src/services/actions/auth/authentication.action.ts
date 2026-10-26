@@ -15,6 +15,7 @@ import type {
 } from '@contenster/shared';
 
 import type { Locale } from '@/i18n/routing';
+import { API_ROUTES } from '@/routes';
 import { apiInstance, persistSessionCookie } from '@/services/api-instance.service';
 import type { WebResponse } from '@/services/types';
 
@@ -45,14 +46,22 @@ export const authorize = async (
   request: AuthorizeRequest,
   locale: Locale,
 ): Promise<WebResponse<AuthorizeResponse>> =>
-  apiInstance.post('auth/authorize', { authentication: 'none', body: request, locale });
+  apiInstance.post(API_ROUTES.AUTH.POST_AUTHORIZE, {
+    authentication: 'none',
+    body: request,
+    locale,
+  });
 
 export const signIn = async (
   request: SignInRequest,
   locale: Locale,
 ): Promise<WebResponse<SessionResponse>> =>
   toSessionActionResponse(
-    await apiInstance.post('auth/sign-in', { authentication: 'none', body: request, locale }),
+    await apiInstance.post(API_ROUTES.AUTH.POST_SIGN_IN, {
+      authentication: 'none',
+      body: request,
+      locale,
+    }),
   );
 
 export const signInGlobal = async (
@@ -60,7 +69,7 @@ export const signInGlobal = async (
   locale: Locale,
 ): Promise<WebResponse<SessionResponse>> =>
   toSessionActionResponse(
-    await apiInstance.post('auth/sign-in-global', {
+    await apiInstance.post(API_ROUTES.AUTH.POST_SIGN_IN_GLOBAL, {
       authentication: 'none',
       body: request,
       locale,
@@ -71,15 +80,27 @@ export const forgotPassword = async (
   request: ForgotPasswordRequest,
   locale: Locale,
 ): Promise<WebResponse<ForgotPasswordResponse>> =>
-  apiInstance.post('auth/forgot-password', { authentication: 'none', body: request, locale });
+  apiInstance.post(API_ROUTES.AUTH.POST_FORGOT_PASSWORD, {
+    authentication: 'none',
+    body: request,
+    locale,
+  });
 
 export const resetPassword = async (
   request: ResetPasswordRequest,
   locale: Locale,
 ): Promise<WebResponse<ResetPasswordResponse>> =>
-  apiInstance.post('auth/reset-password', { authentication: 'none', body: request, locale });
+  apiInstance.post(API_ROUTES.AUTH.POST_RESET_PASSWORD, {
+    authentication: 'none',
+    body: request,
+    locale,
+  });
 
 export const changeCurrentUserPassword = async (
   request: ChangeCurrentUserPasswordRequest,
+  locale: Locale,
 ): Promise<WebResponse<ChangeCurrentUserPasswordResponse>> =>
-  apiInstance.post<ChangeCurrentUserPasswordResponse>('users/me/password', { body: request });
+  apiInstance.post<ChangeCurrentUserPasswordResponse>(API_ROUTES.ADMIN.POST_CURRENT_USER_PASSWORD, {
+    body: request,
+    locale,
+  });

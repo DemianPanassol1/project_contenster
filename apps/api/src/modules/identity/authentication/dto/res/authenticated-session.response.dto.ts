@@ -42,7 +42,7 @@ export class SessionLanguageResponseDto implements SessionLanguage {
 
   @Expose()
   @ApiProperty({ type: String })
-  declare languageCode: string;
+  declare locale: string;
 
   @Expose()
   @ApiProperty({ type: String })

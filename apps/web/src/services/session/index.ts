@@ -1,5 +1,6 @@
+export type { SessionFeaturePresentation } from './route-access.server';
 export {
-  hasFunctionalityAction,
+  getSessionFeaturePresentation,
   isClientSession,
   isGlobalSuperuserSession,
 } from './route-access.server';

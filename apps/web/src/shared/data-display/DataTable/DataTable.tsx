@@ -16,6 +16,7 @@ import { type FilterOption, Order, type SortOption } from './types/data-table-qu
 import type {
   DataTableAction,
   DataTableColumn,
+  DataTableDeleteConfirmationConfig,
   DataTableProps,
   DataTableState,
 } from './types/DataTable.types';
@@ -37,6 +38,11 @@ import {
   DataTableSelectionBar,
   DataTableToolbar,
 } from './components';
+
+const getDeleteManyMessage = (
+  message: DataTableDeleteConfirmationConfig['manyMessage'],
+  count: number,
+): string | undefined => (typeof message === 'function' ? message(count) : message);
 
 const getDefaultEditPath = (pathname: string, rowId: string | number) => {
   const currentPath = pathname.split('?')[0].replace(/\/+$/, '') || '/';
@@ -301,7 +307,7 @@ export const DataTable = <T extends object>({
         <Typography sx={{ fontSize: 13, color: 'text.secondary' }}>
           {ids.length === 1
             ? (deleteConfirmation?.message ?? t('data_table.confirm_delete_single'))
-            : (deleteConfirmation?.manyMessage ??
+            : (getDeleteManyMessage(deleteConfirmation?.manyMessage, ids.length) ??
               deleteConfirmation?.message ??
               t('data_table.confirm_delete_many', { count: String(ids.length) }))}
         </Typography>

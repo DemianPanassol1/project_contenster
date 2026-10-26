@@ -106,7 +106,7 @@ export class SystemModulesService {
     }
 
     if (await this.repository.hasFunctionalities(ids)) {
-      throw new ConflictException(this.i18n.t('errors.common.record_not_found'));
+      throw new ConflictException(this.i18n.t('errors.access_control.module_has_functionalities'));
     }
 
     const result = await this.repository.delete(modules);

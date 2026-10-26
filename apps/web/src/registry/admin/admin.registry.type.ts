@@ -1,11 +1,14 @@
 import type { ActionType, CoreFunctionalitySlug } from '@contenster/shared';
 import type { ComponentType } from 'react';
 
+import type { SessionFeaturePresentation } from '@/services/session';
+
 export type AdminFeatureMode = 'create' | 'list' | 'update';
 
 export type AdminFeatureViewProps = {
-  entityId: string | null;
+  entityId: number | null;
   functionalitySlug: CoreFunctionalitySlug;
+  presentation: SessionFeaturePresentation;
 };
 
 export type AdminFeatureModeBinding = {

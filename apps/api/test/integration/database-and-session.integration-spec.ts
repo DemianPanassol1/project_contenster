@@ -102,7 +102,7 @@ describe('database and session integration', () => {
         accessType: RequestLogAccessType.client,
         client: {
           id: 1,
-          languages: [{ id: 1, languageCode: 'pt', name: 'Português' }],
+          languages: [{ id: 1, locale: 'pt', name: 'Português' }],
           name: 'Cliente',
         },
         profile: { description: null, id: 1, name: 'Administrador' },

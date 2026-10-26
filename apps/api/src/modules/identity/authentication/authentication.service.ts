@@ -344,7 +344,7 @@ export class AuthenticationService {
           name: userProfile.client.tradeName,
           languages: languages.map((language) => ({
             id: language.id,
-            languageCode: language.languageCode,
+            locale: language.languageCode,
             name: language.name,
           })),
         },
@@ -395,7 +395,7 @@ export class AuthenticationService {
           name: profile.client.tradeName,
           languages: languages.map((language) => ({
             id: language.id,
-            languageCode: language.languageCode,
+            locale: language.languageCode,
             name: language.name,
           })),
         },

@@ -14,7 +14,7 @@ export interface SessionUser {
 
 export interface SessionLanguage {
   id: number;
-  languageCode: string;
+  locale: string;
   name: string;
 }
 

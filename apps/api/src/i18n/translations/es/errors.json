@@ -16,6 +16,9 @@
     "permission_denied": "No tiene permiso para realizar esta operación.",
     "superuser_access_denied": "El acceso de superusuario no está disponible para esta sesión."
   },
+  "access_control": {
+    "module_has_functionalities": "El módulo no se puede eliminar porque tiene funcionalidades vinculadas."
+  },
   "infrastructure": {
     "database_unavailable": "La base de datos no está disponible temporalmente.",
     "session_authentication_unconfigured": "La autenticación de sesión no está configurada."

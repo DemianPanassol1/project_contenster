@@ -1,10 +1,11 @@
 import { notFound } from 'next/navigation';
 
-import { ActionType, isFunctionalitySlug } from '@contenster/shared';
+import { isFunctionalitySlug } from '@contenster/shared';
 import { AccessDeniedView } from '@/features/admin/access/AccessDeniedView';
+import { hasPermissionAction } from '@/features/shared/navigation';
 import { getAdminFeatureBinding } from '@/registry/admin';
 import { getSession } from '@/services/actions';
-import { hasFunctionalityAction, isClientSession } from '@/services/session';
+import { getSessionFeaturePresentation, isClientSession } from '@/services/session';
 
 type AdminFeatureCreatePageProps = {
   params: Promise<{ functionality: string }>;
@@ -25,12 +26,17 @@ export default async function AdminFeatureCreatePage({ params }: AdminFeatureCre
 
   const session = await getSession();
 
-  if (
-    !isClientSession(session) ||
-    !hasFunctionalityAction(session, functionality, ActionType.create)
-  ) {
+  if (!isClientSession(session)) {
     return <AccessDeniedView />;
   }
 
-  return <binding.View functionalitySlug={functionality} entityId={null} />;
+  const presentation = getSessionFeaturePresentation(session, functionality);
+
+  if (!presentation || !hasPermissionAction(presentation.actions, binding.action)) {
+    return <AccessDeniedView />;
+  }
+
+  return (
+    <binding.View functionalitySlug={functionality} entityId={null} presentation={presentation} />
+  );
 }

@@ -18,6 +18,23 @@
   "modal": {
     "close": "Fechar"
   },
+  "modules": {
+    "cancel": "Cancelar",
+    "create_register": "Criar registro",
+    "create_title": "{functionality} - Criar",
+    "delete": "Excluir",
+    "delete_many_message": "Deseja excluir os {count} módulos selecionados? Esta ação não pode ser desfeita.",
+    "delete_message": "Deseja excluir este módulo? Esta ação não pode ser desfeita.",
+    "delete_selected": "Excluir módulos selecionados",
+    "delete_title": "Excluir módulo",
+    "description": "Descrição",
+    "edit_title": "{functionality} - Editar",
+    "go_back": "Voltar",
+    "is_active": "Ativo",
+    "name": "Nome",
+    "order": "Ordem",
+    "save": "Salvar"
+  },
   "system_admin": {
     "home_title": "Painel administrativo global",
     "not_found": "Página global não encontrada."

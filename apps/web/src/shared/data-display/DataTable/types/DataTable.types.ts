@@ -87,7 +87,7 @@ export interface DataTableDeleteConfirmationConfig {
   selectionBarLabel?: string;
   title?: string;
   message?: string;
-  manyMessage?: string;
+  manyMessage?: string | ((count: number) => string);
 }
 
 export interface DataTableState<T extends object> {

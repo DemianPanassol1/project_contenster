@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useMemo, useRef } from 'react';
 import useSWR, { useSWRConfig } from 'swr';
 
@@ -22,6 +22,7 @@ export function useGET<T>(
   options: UseGetOptions = {},
 ): UseGetResponse<T> {
   const router = useRouter();
+  const locale = useLocale();
   const t = useTranslations();
   const { mutate } = useSWRConfig();
   const { errorMessage } = useToast();
@@ -42,6 +43,7 @@ export function useGET<T>(
     const response = await requestApi<T>({
       method: 'GET',
       endpoint: url,
+      locale,
     });
 
     if (response.statusCode === 403) {
@@ -103,6 +105,7 @@ export function usePOST<T>(
   revalidate = false,
 ): UsePostResponse<T> {
   const router = useRouter();
+  const locale = useLocale();
   const t = useTranslations();
   const { mutate } = useSWRConfig();
   const { errorMessage } = useToast();
@@ -124,6 +127,7 @@ export function usePOST<T>(
       method: 'POST',
       endpoint: url,
       body: payload,
+      locale,
     });
 
     if (response.statusCode === 403) {

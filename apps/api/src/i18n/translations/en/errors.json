@@ -16,6 +16,9 @@
     "permission_denied": "You do not have permission to perform this operation.",
     "superuser_access_denied": "Superuser access is not available for this session."
   },
+  "access_control": {
+    "module_has_functionalities": "The module cannot be deleted because it has related functionalities."
+  },
   "infrastructure": {
     "database_unavailable": "The database is temporarily unavailable.",
     "session_authentication_unconfigured": "Session authentication is not configured."

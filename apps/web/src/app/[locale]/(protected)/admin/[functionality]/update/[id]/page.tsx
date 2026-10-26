@@ -1,10 +1,11 @@
 import { notFound } from 'next/navigation';
 
-import { ActionType, isFunctionalitySlug } from '@contenster/shared';
+import { isFunctionalitySlug } from '@contenster/shared';
 import { AccessDeniedView } from '@/features/admin/access/AccessDeniedView';
+import { hasPermissionAction, parseIdParam } from '@/features/shared/navigation';
 import { getAdminFeatureBinding } from '@/registry/admin';
 import { getSession } from '@/services/actions';
-import { hasFunctionalityAction, isClientSession } from '@/services/session';
+import { getSessionFeaturePresentation, isClientSession } from '@/services/session';
 
 type AdminFeatureUpdatePageProps = {
   params: Promise<{ functionality: string; id: string }>;
@@ -13,7 +14,9 @@ type AdminFeatureUpdatePageProps = {
 export default async function AdminFeatureUpdatePage({ params }: AdminFeatureUpdatePageProps) {
   const { functionality, id } = await params;
 
-  if (!isFunctionalitySlug(functionality)) {
+  const entityId = parseIdParam(id);
+
+  if (!isFunctionalitySlug(functionality) || entityId === null) {
     notFound();
   }
 
@@ -25,12 +28,21 @@ export default async function AdminFeatureUpdatePage({ params }: AdminFeatureUpd
 
   const session = await getSession();
 
-  if (
-    !isClientSession(session) ||
-    !hasFunctionalityAction(session, functionality, ActionType.edit)
-  ) {
+  if (!isClientSession(session)) {
     return <AccessDeniedView />;
   }
 
-  return <binding.View functionalitySlug={functionality} entityId={id} />;
+  const presentation = getSessionFeaturePresentation(session, functionality);
+
+  if (!presentation || !hasPermissionAction(presentation.actions, binding.action)) {
+    return <AccessDeniedView />;
+  }
+
+  return (
+    <binding.View
+      functionalitySlug={functionality}
+      entityId={entityId}
+      presentation={presentation}
+    />
+  );
 }

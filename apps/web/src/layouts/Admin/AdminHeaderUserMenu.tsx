@@ -16,6 +16,7 @@ import {
 import { useGlobalContext, useModalContext } from '@/core/providers';
 import { useValidationRules, useWebResponseErrorToast } from '@/hooks';
 import { useRouter } from '@/i18n/navigation';
+import { API_ROUTES } from '@/routes';
 import { getAvailableClients, signOut, switchClient, switchGlobal } from '@/services/actions';
 import type { FetchOptionsResponse, SelectOption } from '@/services/hooks';
 import { FormPasswordInput, FormSelect, FormWrapper } from '@/shared/form';
@@ -112,7 +113,7 @@ export function AdminHeaderUserMenu({
           onSubmit={async (values) => {
             const response = await apiRequest({
               body: values,
-              endpoint: 'users/me/password',
+              endpoint: API_ROUTES.ADMIN.POST_CURRENT_USER_PASSWORD,
               method: 'POST',
               onSuccess: () => closeModal(changePasswordModalId.current),
               successMessage: t('password_changed_successfully'),
