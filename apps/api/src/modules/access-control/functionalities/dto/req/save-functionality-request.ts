@@ -1,9 +1,9 @@
-import type { SaveFunctionalityRequest } from '@contenster/shared';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
 import {
   IsArray,
   IsBoolean,
+  IsIn,
   IsInt,
   IsNotEmpty,
   IsOptional,
@@ -11,6 +11,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 
+import { FUNCTIONALITY_CATALOG, type SaveFunctionalityRequest } from '@contenster/shared';
 import { i18n } from '@/i18n/i18n.util';
 import {
   toBoolean,
@@ -30,6 +31,9 @@ class TranslationRequestDto {
   @Transform(toLowercaseString)
   @IsNotEmpty({ message: i18n('validation.required') })
   @IsString({ message: i18n('validation.string') })
+  @IsIn(FUNCTIONALITY_CATALOG.map((functionality) => functionality.slug), {
+    message: i18n('validation.enum'),
+  })
   @ApiProperty()
   declare locale: string;
 

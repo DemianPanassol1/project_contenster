@@ -36,9 +36,9 @@ export function ModalRenderer() {
         },
       }}
     >
-      <DialogTitle>
+      <DialogTitle sx={{ px: 2, py: 1.25 }}>
         <Stack direction="row" sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
-          <Typography component="span" sx={{ fontWeight: 600 }}>
+          <Typography component="span" sx={{ fontSize: 18, fontWeight: 600, lineHeight: 1.3 }}>
             {modal.title}
           </Typography>
 
@@ -50,10 +50,20 @@ export function ModalRenderer() {
         </Stack>
       </DialogTitle>
 
-      <DialogContent dividers>{modal.content}</DialogContent>
+      <DialogContent
+        dividers
+        sx={{
+          px: 2,
+          py: 1.5,
+          '& .MuiInputBase-input': { fontSize: 14 },
+          '& .MuiInputLabel-root': { fontSize: 13 },
+        }}
+      >
+        {modal.content}
+      </DialogContent>
 
       {modal.actions && modal.actions.length > 0 && (
-        <DialogActions>
+        <DialogActions sx={{ gap: 0.5, px: 1.25, py: 1.25 }}>
           {modal.actions.map((action) => (
             <Button
               color={action.color ?? 'primary'}
@@ -69,6 +79,7 @@ export function ModalRenderer() {
               }}
               type={action.type ?? 'button'}
               variant={action.variant ?? 'text'}
+              sx={{ fontSize: 13, minHeight: 34, px: 1.5 }}
             >
               {action.label}
             </Button>

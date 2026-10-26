@@ -68,6 +68,15 @@ const renderIconOptionLabel = (option: SelectOption) => (
   </Box>
 );
 
+const renderSelectedIconLabel = (option: SelectOption) => (
+  <Box component="span" sx={{ display: 'inline-flex', alignItems: 'center', gap: 1, fontSize: 14 }}>
+    {isIconName(option.value) && (
+      <Icon name={option.value} size={16} strokeWidth={1.9} aria-hidden="true" />
+    )}
+    {option.label}
+  </Box>
+);
+
 interface FormIconSelectProps<T extends FieldValues> extends BaseFormFieldProps<T> {
   disabled?: boolean;
 }
@@ -89,6 +98,7 @@ export const FormIconSelect = <T extends FieldValues>({
       disabled={disabled}
       options={options}
       renderOptionLabel={renderIconOptionLabel}
+      renderValue={(value) => (!Array.isArray(value) ? renderSelectedIconLabel(value) : null)}
     />
   );
 };

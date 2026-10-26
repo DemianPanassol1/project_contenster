@@ -1,9 +1,13 @@
 'use client';
 
-import type { SaveFunctionalityRequest, SessionLanguage } from '@contenster/shared';
 import { Box } from '@mui/material';
 import { useTranslations } from 'next-intl';
 
+import {
+  FUNCTIONALITY_CATALOG,
+  type SaveFunctionalityRequest,
+  type SessionLanguage,
+} from '@contenster/shared';
 import { useValidationRules } from '@/hooks';
 import { API_ROUTES } from '@/routes';
 import { FormIconSelect, FormInput, FormSelect, FormSwitch, TranslationsFields } from '@/shared';
@@ -53,10 +57,14 @@ export function FunctionalityForm({ languages }: FunctionalityFormProps) {
         textProperty="description"
         type="textarea"
       />
-      <FormInput<SaveFunctionalityRequest>
+      <FormSelect<SaveFunctionalityRequest>
         label={t('slug')}
         name="slug"
-        rules={createValidationRules('required|max_length[150]')}
+        options={FUNCTIONALITY_CATALOG.map((functionality) => ({
+          label: functionality.slug,
+          value: functionality.slug,
+        }))}
+        rules={createValidationRules('required')}
       />
       <FormIconSelect<SaveFunctionalityRequest> label={t('icon')} name="icon" />
       <FormSelect<SaveFunctionalityRequest>
