@@ -59,13 +59,15 @@ Cada `View` recebe:
 
 ```ts
 type AdminFeatureViewProps = {
-  entityId: string | null;
-  functionalitySlug: FunctionalitySlug;
+  entityId: number | null;
+  functionalitySlug: CoreFunctionalitySlug;
+  presentation: SessionFeaturePresentation;
 };
 ```
 
-`entityId` é `null` em listagem/criação e contém o parâmetro da rota em edição. A view deve validar
-e converter esse valor conforme o contrato da API; o registry não transforma nem valida payloads.
+`entityId` é `null` em listagem/criação e contém um inteiro positivo validado pela rota em edição.
+`presentation` contém os textos da funcionalidade, as actions disponíveis e os idiomas do cliente
+da sessão. O registry não transforma payloads nem substitui a autorização da API.
 
 ## Como adicionar um binding do Core
 
