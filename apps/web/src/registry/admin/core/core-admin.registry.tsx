@@ -2,6 +2,7 @@ import { ActionType, CORE_FUNCTIONALITY_IDENTITIES } from '@contenster/shared';
 import { ActionSaveView, ActionsListView } from '@/features/admin/actions';
 import { CitiesListView, CitySaveView } from '@/features/admin/cities';
 import { CountriesListView, CountrySaveView } from '@/features/admin/countries';
+import { FunctionalitiesListView, FunctionalitySaveView } from '@/features/admin/functionalities';
 import { LanguageSaveView, LanguagesListView } from '@/features/admin/languages';
 import { SystemModuleSaveView, SystemModulesListView } from '@/features/admin/modules';
 import { StateSaveView, StatesListView } from '@/features/admin/states';
@@ -9,6 +10,14 @@ import { StateSaveView, StatesListView } from '@/features/admin/states';
 import type { AdminFeatureBinding } from '../admin.registry.type';
 
 export const CORE_ADMIN_FEATURE_BINDINGS: readonly AdminFeatureBinding[] = [
+  {
+    modes: {
+      create: { action: ActionType.create, View: FunctionalitySaveView },
+      list: { action: ActionType.view, View: FunctionalitiesListView },
+      update: { action: ActionType.edit, View: FunctionalitySaveView },
+    },
+    slug: CORE_FUNCTIONALITY_IDENTITIES.functionalities,
+  },
   {
     modes: {
       create: { action: ActionType.create, View: CitySaveView },

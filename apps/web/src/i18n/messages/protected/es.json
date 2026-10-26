@@ -126,6 +126,28 @@
     "save": "Guardar",
     "state": "Estado"
   },
+  "functionalities": {
+    "cancel": "Cancelar",
+    "create_register": "Crear registro",
+    "create_title": "{functionality} - Crear",
+    "delete": "Eliminar",
+    "delete_many_message": "¿Desea eliminar las {count} funcionalidades seleccionadas? Esta acción no se puede deshacer.",
+    "delete_message": "¿Desea eliminar esta funcionalidad? Esta acción no se puede deshacer.",
+    "delete_selected": "Eliminar funcionalidades seleccionadas",
+    "delete_title": "Eliminar funcionalidad",
+    "description": "Descripción",
+    "edit_title": "{functionality} - Editar",
+    "go_back": "Volver",
+    "icon": "Icono",
+    "is_active": "Activo",
+    "is_navigation_group": "Grupo de navegación",
+    "module": "Módulo",
+    "name": "Nombre",
+    "order": "Orden",
+    "parent": "Funcionalidad padre",
+    "save": "Guardar",
+    "slug": "Slug"
+  },
   "states": {
     "cancel": "Cancelar",
     "code": "Código",

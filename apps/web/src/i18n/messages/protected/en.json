@@ -126,6 +126,28 @@
     "save": "Save",
     "state": "State"
   },
+  "functionalities": {
+    "cancel": "Cancel",
+    "create_register": "Create record",
+    "create_title": "{functionality} - Create",
+    "delete": "Delete",
+    "delete_many_message": "Do you want to delete the {count} selected functionalities? This action cannot be undone.",
+    "delete_message": "Do you want to delete this functionality? This action cannot be undone.",
+    "delete_selected": "Delete selected functionalities",
+    "delete_title": "Delete functionality",
+    "description": "Description",
+    "edit_title": "{functionality} - Edit",
+    "go_back": "Back",
+    "icon": "Icon",
+    "is_active": "Active",
+    "is_navigation_group": "Navigation group",
+    "module": "Module",
+    "name": "Name",
+    "order": "Order",
+    "parent": "Parent functionality",
+    "save": "Save",
+    "slug": "Slug"
+  },
   "states": {
     "cancel": "Cancel",
     "code": "Code",
