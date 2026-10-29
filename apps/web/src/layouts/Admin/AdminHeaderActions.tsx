@@ -171,7 +171,18 @@ export function AdminHeaderActions() {
           </Box>
           <Typography
             color="primary.main"
-            sx={{ cursor: 'default', fontSize: '11px', fontWeight: 500 }}
+            sx={{
+              color: 'primary.main',
+              cursor: 'pointer',
+              fontSize: '12px',
+              fontWeight: 500,
+              textAlign: 'center',
+              textDecoration: 'none',
+              transition: 'text-decoration-color .15s ease',
+              '&:hover': {
+                textDecoration: 'underline',
+              },
+            }}
           >
             {t('global.mark_all_as_read')}
           </Typography>
