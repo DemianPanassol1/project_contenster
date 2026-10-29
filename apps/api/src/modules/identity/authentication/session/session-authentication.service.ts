@@ -9,7 +9,7 @@ import { SessionTokenService } from './session-token.service';
 
 @Injectable()
 export class SessionAuthenticationService {
-  readonly cookieName = 'contenster_session';
+  readonly cookieName = settings.SESSION_COOKIE_NAME;
 
   constructor(
     private readonly sessionStore: RedisSessionStore,

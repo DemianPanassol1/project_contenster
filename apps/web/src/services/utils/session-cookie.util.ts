@@ -1,6 +1,7 @@
+import { webEnv } from '@/core/config';
 import type { ResponseCookie } from '@/services/types';
 
-export const SESSION_COOKIE_NAME = 'contenster_session';
+export const SESSION_COOKIE_NAME = webEnv.sessionCookieName;
 
 export const OPAQUE_SESSION_TOKEN_PATTERN = /^[A-Za-z0-9_-]{64}$/;
 

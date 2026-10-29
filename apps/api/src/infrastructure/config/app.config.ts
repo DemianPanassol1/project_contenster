@@ -41,6 +41,7 @@ export interface AppSettings {
   REDIS_RECONNECT_MAX_DELAY_MS: number;
   REDIS_RECONNECT_COOLDOWN_MS: number;
   SESSION_HMAC_SECRET: string | null;
+  SESSION_COOKIE_NAME: string;
   SESSION_KEY_PREFIX: string;
   SESSION_NORMAL_TTL_SECONDS: number;
   SESSION_REMEMBERED_TTL_SECONDS: number;
@@ -268,6 +269,7 @@ export const settings: AppSettings = {
   REDIS_RECONNECT_MAX_DELAY_MS: positiveIntegerValue('REDIS_RECONNECT_MAX_DELAY_MS', 1000),
   REDIS_RECONNECT_COOLDOWN_MS: positiveIntegerValue('REDIS_RECONNECT_COOLDOWN_MS', 5000),
   SESSION_HMAC_SECRET: sessionHmacSecretValue(nodeEnv),
+  SESSION_COOKIE_NAME: stringValue('SESSION_COOKIE_NAME', 'contenster_session'),
   SESSION_KEY_PREFIX: stringValue('SESSION_KEY_PREFIX', 'contenster:auth'),
   SESSION_NORMAL_TTL_SECONDS: positiveIntegerValue('SESSION_NORMAL_TTL_SECONDS', 3600),
   SESSION_REMEMBERED_TTL_SECONDS: positiveIntegerValue('SESSION_REMEMBERED_TTL_SECONDS', 2_592_000),

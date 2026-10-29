@@ -18,4 +18,5 @@ export const webEnv = {
   appVersion: nonEmptyEnvironmentValue('WEB_APP_VERSION') ?? '0.0.0',
   apiTimeoutMs: numberEnvironmentValue('WEB_API_TIMEOUT_MS', 30_000),
   apiUrl: apiUrl.replace(/\/+$/, ''),
+  sessionCookieName: nonEmptyEnvironmentValue('WEB_SESSION_COOKIE_NAME') ?? 'contenster_session',
 };
