@@ -244,6 +244,60 @@
     "title": "Mi perfil",
     "username": "Usuario"
   },
+  "client_logs": {
+    "close": "Cerrar",
+    "details": "Ver detalles",
+    "details_title": "Detalles del registro de solicitud",
+    "not_available": "No informado",
+    "columns": {
+      "date_time": "Fecha/hora",
+      "ip": "IP",
+      "method": "Método",
+      "route": "Ruta",
+      "status": "Estado",
+      "time": "Tiempo",
+      "user": "Usuario"
+    },
+    "empty": {
+      "no_errors": "No hay errores registrados.",
+      "no_headers": "No hay encabezados registrados.",
+      "no_params": "No hay parámetros registrados.",
+      "no_request_body": "No hay cuerpo de solicitud registrado.",
+      "no_response_body": "No hay cuerpo de respuesta registrado."
+    },
+    "fields": {
+      "client_ip": "IP del cliente",
+      "created_at": "Fecha/hora",
+      "error": "Error",
+      "event_type": "Tipo de evento",
+      "http_method": "Método HTTP",
+      "http_status": "Estado HTTP",
+      "internal_id": "Identificador interno",
+      "level": "Nivel",
+      "query_params": "Parámetros de consulta",
+      "request_body": "Cuerpo de la solicitud",
+      "request_headers": "Encabezados de la solicitud",
+      "request_id": "Identificador de la solicitud",
+      "response_body": "Cuerpo de la respuesta",
+      "response_headers": "Encabezados de la respuesta",
+      "response_time": "Tiempo de respuesta",
+      "response_time_ms": "Tiempo de respuesta (ms)",
+      "route": "Ruta",
+      "user": "Usuario",
+      "user_agent": "User-Agent"
+    },
+    "levels": {
+      "error": "Error",
+      "fatal": "Fatal",
+      "info": "Información",
+      "warning": "Aviso"
+    },
+    "sections": {
+      "identification": "Identificación",
+      "request": "Solicitud",
+      "response": "Respuesta"
+    }
+  },
   "system_admin": {
     "home_title": "Panel de administración global",
     "not_found": "Página global no encontrada."

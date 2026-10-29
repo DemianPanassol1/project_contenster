@@ -244,6 +244,60 @@
     "title": "Meu perfil",
     "username": "Usuário"
   },
+  "client_logs": {
+    "close": "Fechar",
+    "details": "Visualizar detalhes",
+    "details_title": "Detalhes do log de requisição",
+    "not_available": "Não informado",
+    "columns": {
+      "date_time": "Data/hora",
+      "ip": "IP",
+      "method": "Método",
+      "route": "Rota",
+      "status": "Status",
+      "time": "Tempo",
+      "user": "Usuário"
+    },
+    "empty": {
+      "no_errors": "Nenhum erro registrado.",
+      "no_headers": "Nenhum cabeçalho registrado.",
+      "no_params": "Nenhum parâmetro registrado.",
+      "no_request_body": "Nenhum corpo de requisição registrado.",
+      "no_response_body": "Nenhum corpo de resposta registrado."
+    },
+    "fields": {
+      "client_ip": "IP do cliente",
+      "created_at": "Data/hora",
+      "error": "Erro",
+      "event_type": "Tipo de evento",
+      "http_method": "Método HTTP",
+      "http_status": "Status HTTP",
+      "internal_id": "Identificador interno",
+      "level": "Nível",
+      "query_params": "Parâmetros de consulta",
+      "request_body": "Corpo da requisição",
+      "request_headers": "Cabeçalhos da requisição",
+      "request_id": "Identificador da requisição",
+      "response_body": "Corpo da resposta",
+      "response_headers": "Cabeçalhos da resposta",
+      "response_time": "Tempo de resposta",
+      "response_time_ms": "Tempo de resposta (ms)",
+      "route": "Rota",
+      "user": "Usuário",
+      "user_agent": "User-Agent"
+    },
+    "levels": {
+      "error": "Erro",
+      "fatal": "Fatal",
+      "info": "Informação",
+      "warning": "Aviso"
+    },
+    "sections": {
+      "identification": "Identificação",
+      "request": "Requisição",
+      "response": "Resposta"
+    }
+  },
   "system_admin": {
     "home_title": "Painel administrativo global",
     "not_found": "Página global não encontrada."

@@ -6,7 +6,7 @@ export type SanitizedLogPayload =
   boolean | null | number | string | SanitizedLogPayload[] | { [key: string]: SanitizedLogPayload };
 
 const sanitizeValue = (value: unknown, depth = 0): SanitizedLogPayload => {
-  if (depth > 5) return '[MAX_DEPTH]';
+  if (depth > 10) return '[MAX_DEPTH]';
   if (value === undefined) return null;
   if (typeof value === 'string')
     return value.length > 4000 ? `${value.slice(0, 4000)}...[TRUNCATED]` : value;

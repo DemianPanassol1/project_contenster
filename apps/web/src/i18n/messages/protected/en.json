@@ -244,6 +244,60 @@
     "title": "My profile",
     "username": "Username"
   },
+  "client_logs": {
+    "close": "Close",
+    "details": "View details",
+    "details_title": "Request log details",
+    "not_available": "Not available",
+    "columns": {
+      "date_time": "Date/time",
+      "ip": "IP",
+      "method": "Method",
+      "route": "Route",
+      "status": "Status",
+      "time": "Time",
+      "user": "User"
+    },
+    "empty": {
+      "no_errors": "No errors recorded.",
+      "no_headers": "No headers recorded.",
+      "no_params": "No parameters recorded.",
+      "no_request_body": "No request body recorded.",
+      "no_response_body": "No response body recorded."
+    },
+    "fields": {
+      "client_ip": "Client IP",
+      "created_at": "Date/time",
+      "error": "Error",
+      "event_type": "Event type",
+      "http_method": "HTTP method",
+      "http_status": "HTTP status",
+      "internal_id": "Internal identifier",
+      "level": "Level",
+      "query_params": "Query parameters",
+      "request_body": "Request body",
+      "request_headers": "Request headers",
+      "request_id": "Request identifier",
+      "response_body": "Response body",
+      "response_headers": "Response headers",
+      "response_time": "Response time",
+      "response_time_ms": "Response time (ms)",
+      "route": "Route",
+      "user": "User",
+      "user_agent": "User-Agent"
+    },
+    "levels": {
+      "error": "Error",
+      "fatal": "Fatal",
+      "info": "Information",
+      "warning": "Warning"
+    },
+    "sections": {
+      "identification": "Identification",
+      "request": "Request",
+      "response": "Response"
+    }
+  },
   "system_admin": {
     "home_title": "Global administration panel",
     "not_found": "Global page not found."
