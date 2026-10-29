@@ -189,6 +189,40 @@
     "name": "Name",
     "save": "Save"
   },
+  "users": {
+    "cancel": "Cancel",
+    "create_register": "Create record",
+    "create_title": "{functionality} - Create",
+    "delete": "Delete",
+    "delete_many_message": "Do you want to delete the {count} selected users? This action cannot be undone.",
+    "delete_message": "Do you want to delete this user? This action cannot be undone.",
+    "delete_selected": "Delete selected users",
+    "delete_title": "Delete user",
+    "edit_title": "{functionality} - Edit",
+    "email": "Email",
+    "go_back": "Back",
+    "image": "Image",
+    "is_active": "Active",
+    "is_blocked": "Blocked",
+    "name": "Name",
+    "password": "Password",
+    "primary_phone": "Primary phone",
+    "profile": "Access profile",
+    "save": "Save",
+    "secondary_phone": "Secondary phone",
+    "username": "Username"
+  },
+  "profile": {
+    "email": "Email",
+    "image": "Image",
+    "module": "Administration",
+    "name": "Name",
+    "primary_phone": "Primary phone",
+    "save": "Save",
+    "secondary_phone": "Secondary phone",
+    "title": "My profile",
+    "username": "Username"
+  },
   "system_admin": {
     "home_title": "Global administration panel",
     "not_found": "Global page not found."

@@ -10,6 +10,13 @@
     "password_recovery_unavailable": "A recuperação de senha está temporariamente indisponível.",
     "session_not_authenticated": "A sessão não está autenticada."
   },
+  "users": {
+    "password_change_not_allowed": "A senha de outro usuário não pode ser alterada por este cadastro.",
+    "profile_not_found": "O perfil informado não foi encontrado para este cliente.",
+    "self_delete_not_allowed": "Não é possível excluir o próprio usuário autenticado.",
+    "user_not_found": "Usuário não encontrado.",
+    "user_profile_not_found": "O vínculo de acesso do usuário não foi encontrado para este cliente."
+  },
   "authorization": {
     "client_context_required": "Esta operação exige um contexto de cliente.",
     "global_context_required": "Esta operação exige o contexto global.",

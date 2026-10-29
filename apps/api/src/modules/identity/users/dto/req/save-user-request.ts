@@ -95,11 +95,6 @@ export class SaveUserRequestDto implements SaveUserRequest {
   @ApiPropertyOptional({ nullable: true })
   declare imageId: number | null;
 
-  @Transform(toInteger)
-  @IsInt({ message: i18n('validation.integer') })
-  @ApiProperty()
-  declare clientId: number;
-
   @Transform(toNumber)
   @IsOptional()
   @IsInt({ message: i18n('validation.integer') })

@@ -7,10 +7,19 @@ import { LanguageSaveView, LanguagesListView } from '@/features/admin/languages'
 import { SystemModuleSaveView, SystemModulesListView } from '@/features/admin/modules';
 import { ProfileSaveView, ProfilesListView } from '@/features/admin/profiles';
 import { StateSaveView, StatesListView } from '@/features/admin/states';
+import { UserSaveView, UsersListView } from '@/features/admin/users';
 
 import type { AdminFeatureBinding } from '../admin.registry.type';
 
 export const CORE_ADMIN_FEATURE_BINDINGS: readonly AdminFeatureBinding[] = [
+  {
+    modes: {
+      create: { action: ActionType.create, View: UserSaveView },
+      list: { action: ActionType.view, View: UsersListView },
+      update: { action: ActionType.edit, View: UserSaveView },
+    },
+    slug: CORE_FUNCTIONALITY_IDENTITIES.users,
+  },
   {
     modes: {
       create: { action: ActionType.create, View: ProfileSaveView },

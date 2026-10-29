@@ -9,6 +9,7 @@ import {
 import { Authenticate } from '@/common/decorators/authenticate.decorator';
 import { CurrentClientId } from '@/common/decorators/current-client-id.decorator';
 import { CurrentSession } from '@/common/decorators/current-session.decorator';
+import { CurrentUserId } from '@/common/decorators/current-user-id.decorator';
 import { RequirePermission } from '@/common/decorators/require-permission.decorator';
 import type { ApiHttpRequest } from '@/common/types/http-context.type';
 import { readCookieValue } from '@/modules/identity/authentication/session/helpers/session-cookie.util';
@@ -16,8 +17,10 @@ import { SessionAuthenticationService } from '@/modules/identity/authentication/
 import { DeleteRecordsRequestDto, PaginateRequestDto } from '@/shared/dtos';
 
 import { ChangeCurrentUserPasswordRequestDto } from './dto/req/change-current-user-password-request.dto';
+import { SaveCurrentUserProfileRequestDto } from './dto/req/save-current-user-profile-request.dto';
 import { SaveUserRequestDto } from './dto/req/save-user-request.js';
 import { ChangeCurrentUserPasswordResponseDto } from './dto/res/change-current-user-password-response.dto';
+import { CurrentUserProfileResponseDto } from './dto/res/current-user-profile-response.dto';
 import { UsersService } from './users.service';
 
 const { users } = CORE_FUNCTIONALITY_IDENTITIES;
@@ -61,6 +64,21 @@ export class UsersController {
     );
   }
 
+  @Get('me')
+  @Authenticate()
+  getCurrentUserProfile(@CurrentUserId() userId: number): Promise<CurrentUserProfileResponseDto> {
+    return this.service.getCurrentUserProfile(userId);
+  }
+
+  @Post('me')
+  @Authenticate()
+  updateCurrentUserProfile(
+    @CurrentUserId() userId: number,
+    @Body() request: SaveCurrentUserProfileRequestDto,
+  ): Promise<CurrentUserProfileResponseDto> {
+    return this.service.updateCurrentUserProfile(userId, request);
+  }
+
   @Get(':id')
   @RequirePermission(users, ActionType.view)
   getById(@CurrentClientId() clientId: number, @Param('id', ParseIntPipe) id: number) {
@@ -78,7 +96,11 @@ export class UsersController {
 
   @Post('delete')
   @RequirePermission(users, ActionType.delete)
-  delete(@CurrentClientId() clientId: number, @Body() request: DeleteRecordsRequestDto) {
-    return this.service.delete(clientId, request);
+  delete(
+    @CurrentClientId() clientId: number,
+    @CurrentUserId() currentUserId: number,
+    @Body() request: DeleteRecordsRequestDto,
+  ) {
+    return this.service.delete(clientId, currentUserId, request);
   }
 }

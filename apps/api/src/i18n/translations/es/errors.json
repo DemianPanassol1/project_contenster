@@ -10,6 +10,13 @@
     "password_recovery_unavailable": "La recuperación de contraseña no está disponible temporalmente.",
     "session_not_authenticated": "La sesión no está autenticada."
   },
+  "users": {
+    "password_change_not_allowed": "La contraseña de otro usuario no se puede cambiar desde este formulario.",
+    "profile_not_found": "El perfil informado no fue encontrado para este cliente.",
+    "self_delete_not_allowed": "No es posible eliminar el propio usuario autenticado.",
+    "user_not_found": "Usuario no encontrado.",
+    "user_profile_not_found": "El vínculo de acceso del usuario no fue encontrado para este cliente."
+  },
   "authorization": {
     "client_context_required": "Esta operación requiere un contexto de cliente.",
     "global_context_required": "Esta operación requiere el contexto global.",

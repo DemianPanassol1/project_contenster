@@ -189,6 +189,40 @@
     "name": "Nome",
     "save": "Salvar"
   },
+  "users": {
+    "cancel": "Cancelar",
+    "create_register": "Criar registro",
+    "create_title": "{functionality} - Criar",
+    "delete": "Excluir",
+    "delete_many_message": "Deseja excluir os {count} usuários selecionados? Esta ação não pode ser desfeita.",
+    "delete_message": "Deseja excluir este usuário? Esta ação não pode ser desfeita.",
+    "delete_selected": "Excluir usuários selecionados",
+    "delete_title": "Excluir usuário",
+    "edit_title": "{functionality} - Editar",
+    "email": "E-mail",
+    "go_back": "Voltar",
+    "image": "Imagem",
+    "is_active": "Ativo",
+    "is_blocked": "Bloqueado",
+    "name": "Nome",
+    "password": "Senha",
+    "primary_phone": "Telefone principal",
+    "profile": "Perfil de acesso",
+    "save": "Salvar",
+    "secondary_phone": "Telefone secundário",
+    "username": "Usuário"
+  },
+  "profile": {
+    "email": "E-mail",
+    "image": "Imagem",
+    "module": "Administração",
+    "name": "Nome",
+    "primary_phone": "Telefone principal",
+    "save": "Salvar",
+    "secondary_phone": "Telefone secundário",
+    "title": "Meu perfil",
+    "username": "Usuário"
+  },
   "system_admin": {
     "home_title": "Painel administrativo global",
     "not_found": "Página global não encontrada."

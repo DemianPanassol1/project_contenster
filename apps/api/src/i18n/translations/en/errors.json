@@ -10,6 +10,13 @@
     "password_recovery_unavailable": "Password recovery is temporarily unavailable.",
     "session_not_authenticated": "The session is not authenticated."
   },
+  "users": {
+    "password_change_not_allowed": "Another user's password cannot be changed through this form.",
+    "profile_not_found": "The selected profile was not found for this client.",
+    "self_delete_not_allowed": "You cannot delete your own authenticated user.",
+    "user_not_found": "User not found.",
+    "user_profile_not_found": "The user's access link was not found for this client."
+  },
   "authorization": {
     "client_context_required": "This operation requires a client context.",
     "global_context_required": "This operation requires the global context.",

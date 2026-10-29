@@ -7,7 +7,6 @@ export interface SaveUserRequest {
   secondaryPhone: string | null;
   password: string | null;
   imageId: number | null;
-  clientId: number;
   userProfileId: number | null;
   profileId: number;
   isActive: boolean;
@@ -31,6 +30,19 @@ export interface GetUserByIdResponse extends UserListItem {
   userProfileId: number;
   profileId: number;
   lastLoginAt: string | null;
+}
+
+export interface SaveCurrentUserProfileRequest {
+  name: string;
+  email: string;
+  username: string;
+  primaryPhone: string;
+  secondaryPhone: string | null;
+  imageId: number | null;
+}
+
+export interface GetCurrentUserProfileResponse extends SaveCurrentUserProfileRequest {
+  id: number;
 }
 
 export interface ChangeCurrentUserPasswordRequest {

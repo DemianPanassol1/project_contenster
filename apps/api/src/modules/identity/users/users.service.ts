@@ -1,6 +1,7 @@
 import type { AppOption, PaginatedBody } from '@contenster/shared';
 import {
   BadRequestException,
+  ConflictException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -27,8 +28,10 @@ import { toResponseDto } from '@/shared/responses';
 import { resolveTranslation } from '@/shared/translations';
 
 import type { ChangeCurrentUserPasswordRequestDto } from './dto/req/change-current-user-password-request.dto';
+import type { SaveCurrentUserProfileRequestDto } from './dto/req/save-current-user-profile-request.dto';
 import type { SaveUserRequestDto } from './dto/req/save-user-request.js';
 import { ChangeCurrentUserPasswordResponseDto } from './dto/res/change-current-user-password-response.dto';
+import { CurrentUserProfileResponseDto } from './dto/res/current-user-profile-response.dto';
 import { GetUserByIdResponseDto } from './dto/res/get-user-by-id-response.js';
 import { UserListItemResponseDto } from './dto/res/user-list-item-response.js';
 import { User } from './entities/user.entity';
@@ -75,7 +78,7 @@ export class UsersService {
     const userProfile = user.userProfiles.find((item) => item.client.id === clientId);
 
     if (!userProfile) {
-      throw new NotFoundException(this.i18n.t('errors.common.record_not_found'));
+      throw new NotFoundException(this.i18n.t('errors.users.user_profile_not_found'));
     }
 
     return toResponseDto(GetUserByIdResponseDto, {
@@ -91,15 +94,15 @@ export class UsersService {
   }
 
   async save(clientId: number, request: SaveUserRequestDto): Promise<GetUserByIdResponseDto> {
-    if (request.clientId !== clientId) {
-      throw new BadRequestException(this.i18n.t('errors.common.record_not_found'));
-    }
-
     const existing =
       request.id === null ? null : await this.getEntityByIdOrFail(clientId, request.id);
 
     if (!existing && request.password === null) {
       throw new BadRequestException(this.i18n.t('validation.required'));
+    }
+
+    if (existing && request.password !== null) {
+      throw new BadRequestException(this.i18n.t('errors.users.password_change_not_allowed'));
     }
 
     if (existing && request.userProfileId !== null) {
@@ -108,14 +111,14 @@ export class UsersService {
       );
 
       if (currentUserProfile?.id !== request.userProfileId) {
-        throw new BadRequestException(this.i18n.t('errors.common.record_not_found'));
+        throw new BadRequestException(this.i18n.t('errors.users.user_profile_not_found'));
       }
     }
 
     const profile = await this.repository.findProfile(clientId, request.profileId);
 
     if (!profile) {
-      throw new BadRequestException(this.i18n.t('errors.common.record_not_found'));
+      throw new BadRequestException(this.i18n.t('errors.users.profile_not_found'));
     }
 
     const user = Object.assign(existing ?? new User(), {
@@ -142,13 +145,19 @@ export class UsersService {
 
   async delete(
     clientId: number,
+    currentUserId: number,
     request: DeleteRecordsRequestDto,
   ): Promise<DeleteRecordsResponseDto> {
     const ids = normalizeDeleteRecordIds(request, this.i18n.t('validation.invalid_delete_request'));
+
+    if (ids.includes(currentUserId)) {
+      throw new ConflictException(this.i18n.t('errors.users.self_delete_not_allowed'));
+    }
+
     const users = await this.repository.findByIds(clientId, ids);
 
     if (users.length !== ids.length) {
-      throw new NotFoundException(this.i18n.t('errors.common.record_not_found'));
+      throw new NotFoundException(this.i18n.t('errors.users.user_not_found'));
     }
 
     const result = await this.repository.delete(users);
@@ -191,11 +200,39 @@ export class UsersService {
     return toResponseDto(ChangeCurrentUserPasswordResponseDto, { passwordChanged: true });
   }
 
+  async getCurrentUserProfile(userId: number): Promise<CurrentUserProfileResponseDto> {
+    const user = await this.getActiveUserByIdOrFail(userId);
+
+    return toResponseDto(CurrentUserProfileResponseDto, this.toCurrentUserProfile(user));
+  }
+
+  async updateCurrentUserProfile(
+    userId: number,
+    request: SaveCurrentUserProfileRequestDto,
+  ): Promise<CurrentUserProfileResponseDto> {
+    const user = await this.getActiveUserByIdOrFail(userId);
+
+    Object.assign(user, {
+      email: request.email,
+      image: request.imageId === null ? null : { id: request.imageId },
+      name: request.name,
+      primaryPhone: request.primaryPhone,
+      secondaryPhone: request.secondaryPhone,
+      username: request.username,
+    });
+
+    const saved = await this.repository.saveCurrentUserProfile(user);
+
+    await this.sessionSynchronizationService.synchronizeAll();
+
+    return toResponseDto(CurrentUserProfileResponseDto, this.toCurrentUserProfile(saved));
+  }
+
   private async getEntityByIdOrFail(clientId: number, id: number): Promise<User> {
     const user = await this.repository.findById(clientId, id);
 
     if (!user) {
-      throw new NotFoundException(this.i18n.t('errors.common.record_not_found'));
+      throw new NotFoundException(this.i18n.t('errors.users.user_not_found'));
     }
 
     return user;
@@ -209,6 +246,30 @@ export class UsersService {
       username: user.username,
       isActive: user.isActive,
       isBlocked: user.isBlocked,
+    };
+  }
+
+  private async getActiveUserByIdOrFail(userId: number): Promise<User> {
+    const user = await this.repository.findActiveById(userId);
+
+    if (!user) {
+      throw new UnauthorizedException(
+        this.i18n.t('errors.authentication.session_not_authenticated'),
+      );
+    }
+
+    return user;
+  }
+
+  private toCurrentUserProfile(user: User) {
+    return {
+      email: user.email,
+      id: user.id,
+      imageId: user.image?.id ?? null,
+      name: user.name,
+      primaryPhone: user.primaryPhone,
+      secondaryPhone: user.secondaryPhone,
+      username: user.username,
     };
   }
 }

@@ -144,7 +144,8 @@ registry: `null` significa criação; um número válido significa edição.
 - `FormWrapper` controla `react-hook-form`, carregamento de detalhe, erro e hidratação;
 - a página orquestra requisição, navegação e ações de salvar/voltar;
 - o componente de formulário contém somente campos e disposição visual;
-- `utils/` mantém funções puras de valores iniciais, hidratação e normalização do payload;
+- `utils/` mantém funções puras de valores iniciais, hidratação e, somente quando necessária,
+  adaptação estrutural do payload;
 - use `useValidationRules` e `createValidationRules`; não crie validações ad hoc nos campos;
 - use componentes compartilhados de `src/shared`, como `FormInput`, `FormSwitch`,
   `TranslationsFields`, `Button` e `FormWrapper`.
@@ -152,6 +153,18 @@ registry: `null` significa criação; um número válido significa edição.
 A disposição dos campos deve ser controlada por `Box` com `display: 'grid'`, usando breakpoints
 em `sx`. Campos que precisam ocupar toda a linha devem declarar `gridColumn`; não use margens
 isoladas para simular o layout.
+
+### Normalização e sanitização
+
+Não implemente `trim`, conversão de caixa, conversão de valores opcionais ou outras sanitizações
+triviais em `onSubmit`, `map<Resource>Payload` ou componentes de feature. Essas transformações
+duplicam a responsabilidade do formulário e do contrato HTTP, tornam os payloads inconsistentes
+entre telas e dificultam a auditoria do comportamento.
+
+O Web deve enviar o estado controlado pelo `react-hook-form`. Validação e transformação de dados
+pertencem às regras compartilhadas de formulário, quando já existirem, ou à DTO da API. Uma
+adaptação no Web só é permitida quando for estrutural e específica da tela — por exemplo, agrupar
+um estado visual para o contrato persistido — e deve ter uma justificativa clara.
 
 ## Traduções de conteúdo
 

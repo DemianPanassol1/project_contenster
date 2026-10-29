@@ -61,11 +61,14 @@ export class UsersRepository {
   }
 
   findActiveById(id: number): Promise<User | null> {
-    return this.users.findOneBy({
-      deletedAt: IsNull(),
-      id,
-      isActive: true,
-      isBlocked: false,
+    return this.users.findOne({
+      relations: { image: true },
+      where: {
+        deletedAt: IsNull(),
+        id,
+        isActive: true,
+        isBlocked: false,
+      },
     });
   }
 
@@ -101,5 +104,9 @@ export class UsersRepository {
 
   updatePassword(id: number, passwordHash: string): Promise<void> {
     return this.users.update(id, { passwordHash }).then(() => undefined);
+  }
+
+  saveCurrentUserProfile(user: User): Promise<User> {
+    return this.users.save(user);
   }
 }
