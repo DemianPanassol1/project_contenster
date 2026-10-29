@@ -11,7 +11,7 @@ export const lightPaletteOptions = {
     main: '#635bff',
   },
   text: {
-    primary: '#1e2330',
-    secondary: '#6c7280',
+    primary: '#111827',
+    secondary: '#6B7280',
   },
 } satisfies PaletteOptions;

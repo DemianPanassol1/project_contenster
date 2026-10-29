@@ -31,9 +31,6 @@ class TranslationRequestDto {
   @Transform(toLowercaseString)
   @IsNotEmpty({ message: i18n('validation.required') })
   @IsString({ message: i18n('validation.string') })
-  @IsIn(FUNCTIONALITY_CATALOG.map((functionality) => functionality.slug), {
-    message: i18n('validation.enum'),
-  })
   @ApiProperty()
   declare locale: string;
 
@@ -84,6 +81,9 @@ export class SaveFunctionalityRequestDto implements SaveFunctionalityRequest {
   @Transform(toLowercaseString)
   @IsNotEmpty({ message: i18n('validation.required') })
   @IsString({ message: i18n('validation.string') })
+  @IsIn(FUNCTIONALITY_CATALOG.map((functionality) => functionality.slug), {
+    message: i18n('validation.enum'),
+  })
   @ApiProperty()
   declare slug: string;
 

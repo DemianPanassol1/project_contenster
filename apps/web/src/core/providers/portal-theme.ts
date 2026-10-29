@@ -12,6 +12,10 @@ const toPalette = (mode: 'dark' | 'light', palette: PortalPalette): PaletteOptio
   primary: { main: palette.primary },
   secondary: { main: palette.secondary },
   success: { main: palette.success },
+  text:
+    mode === 'light'
+      ? { primary: '#111827', secondary: '#6B7280' }
+      : { primary: '#F9FAFB', secondary: '#9CA3AF' },
   warning: { main: palette.warning },
 });
 
