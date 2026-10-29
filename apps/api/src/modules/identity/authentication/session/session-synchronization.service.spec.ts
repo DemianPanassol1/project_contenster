@@ -21,6 +21,7 @@ const session = (clientId: number) => ({
   modules: [],
   user: {
     email: 'admin@test.local',
+    imageUrl: null,
     id: clientId,
     isSuperuser: false,
     name: 'Admin',
@@ -41,6 +42,7 @@ const globalStoredSession = () => ({
     modules: [],
     user: {
       email: 'superuser@test.local',
+      imageUrl: null,
       id: 1,
       isSuperuser: true,
       name: 'Superuser',

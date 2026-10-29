@@ -3,7 +3,6 @@
 import {
   type AuthenticatedSession,
   type AvailableClientsResponse,
-  SessionContextType,
   type SessionResponse,
   type SignOutResponse,
   type SwitchClientRequest,
@@ -26,30 +25,8 @@ const persistSession = async (
   return { ...response, body: null, statusCode: 500, success: false };
 };
 
-const hasOutdatedSessionLanguages = (session: AuthenticatedSession): boolean => {
-  if (session.context.type !== SessionContextType.client) {
-    return false;
-  }
-
-  return session.context.client.languages.some(
-    (language) => typeof (language as { locale?: unknown }).locale !== 'string',
-  );
-};
-
 export const getSession = async (): Promise<AuthenticatedSession | null> => {
-  let response = await apiInstance.get<AuthenticatedSession>(API_ROUTES.AUTH.GET_SESSION);
-
-  if (response.success && response.body && hasOutdatedSessionLanguages(response.body)) {
-    const synchronization = await apiInstance.post<SynchronizeSessionResponse>(
-      API_ROUTES.AUTH.POST_SESSION_SYNC,
-    );
-
-    if (!synchronization.success) {
-      throw new Error(`Session synchronization failed with status ${synchronization.statusCode}.`);
-    }
-
-    response = await apiInstance.get<AuthenticatedSession>(API_ROUTES.AUTH.GET_SESSION);
-  }
+  const response = await apiInstance.get<AuthenticatedSession>(API_ROUTES.AUTH.GET_SESSION);
 
   if (response.success) return response.body;
 

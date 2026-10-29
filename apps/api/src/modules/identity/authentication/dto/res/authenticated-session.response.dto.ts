@@ -15,6 +15,10 @@ import {
 
 export class SessionUserResponseDto implements SessionUser {
   @Expose()
+  @ApiPropertyOptional({ nullable: true })
+  declare imageUrl: string | null;
+
+  @Expose()
   @ApiProperty({ type: Number })
   declare id: number;
 

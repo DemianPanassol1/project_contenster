@@ -5,6 +5,7 @@ import type { RequestLogAccessType } from '../../domain/logging/request-log-acce
 import type { SessionContextType } from './session-context-type.enum.js';
 
 export interface SessionUser {
+  imageUrl: string | null;
   id: number;
   isSuperuser: boolean;
   name: string;

@@ -22,6 +22,7 @@ import type { I18nTranslations } from '@/i18n/translations';
 import { Language } from '@/modules/communication/languages/entities/language.entity';
 import { File } from '@/modules/media/files/entities/file.entity';
 import { FileService } from '@/modules/media/files/file.service';
+import { resolveFilePublicUrl } from '@/modules/media/files/helpers/file-public-url.helper';
 import type { UploadedMultipartFile } from '@/modules/media/files/types/uploaded-multipart-file.type';
 import {
   type DeleteRecordsRequestDto,
@@ -349,13 +350,15 @@ export class PortalsService {
   }
 
   private toMediaFile(file: File | null): PortalMediaFile | null {
-    if (!file || !file.publicUrl) return null;
+    const url = resolveFilePublicUrl(file);
+
+    if (!file || !url) return null;
 
     return {
       fileType: file.fileType,
       id: file.id,
       mimeType: file.mimeType,
-      url: file.publicUrl,
+      url,
     };
   }
 

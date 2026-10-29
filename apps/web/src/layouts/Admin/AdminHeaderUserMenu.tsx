@@ -262,6 +262,7 @@ export function AdminHeaderUserMenu({
         }}
       >
         <Avatar
+          src={user.imageUrl ?? undefined}
           sx={{
             backgroundColor: avatarColor,
             boxShadow: `0px 2px 8px -2px ${avatarColor}`,
@@ -346,6 +347,7 @@ export function AdminHeaderUserMenu({
           }}
         >
           <Avatar
+            src={user.imageUrl ?? undefined}
             sx={{
               backgroundColor: avatarColor,
               fontSize: '13px',

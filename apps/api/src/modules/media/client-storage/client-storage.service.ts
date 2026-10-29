@@ -26,6 +26,7 @@ import { buildPaginationMeta } from '@/shared/pagination';
 import { toResponseDto } from '@/shared/responses';
 
 import { StorageProviderConfiguration } from '../files/entities/storage-provider-configuration.entity';
+import { resolveFilePublicUrl } from '../files/helpers/file-public-url.helper';
 
 import { SaveStorageConfigurationRequestDto } from './dto/req/save-storage-configuration.request.dto';
 import { SaveStorageFileTypeRuleRequestDto } from './dto/req/save-storage-file-type-rule.request.dto';
@@ -120,7 +121,7 @@ export class ClientStorageService {
           provider: item.storageProvider,
           sizeInBytes: item.sizeInBytes,
           uploadedByName: item.uploadedBy?.name ?? null,
-          url: item.publicUrl,
+          url: resolveFilePublicUrl(item),
         })),
       ),
       meta: buildPaginationMeta(request, total),

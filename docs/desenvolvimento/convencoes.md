@@ -121,6 +121,13 @@ serviço, mas não recebem `@Expose`, não entram no contrato Shared, Swagger ou
 
 Contratos públicos e tipos compartilhados ficam no Shared. Eles devem ser independentes de NestJS, TypeORM, React e Next.js. Mudanças de contrato exigem revisão dos consumidores API e Web.
 
+O Core não mantém compatibilidade automática com formatos antigos de contratos de sessão ou de
+respostas HTTP. O Web não deve detectar propriedades ausentes para disparar sincronização,
+repetir requisições, reescrever payloads ou aceitar formatos legados. Uma mudança de contrato
+atualiza API, Shared e Web de forma coordenada. Se uma migração de sessões persistidas for
+realmente necessária, ela deve ser uma decisão explícita e uma estratégia centralizada na API;
+nunca uma heurística por campo no consumidor Web.
+
 ## Chaves estrangeiras e constraints
 
 Toda relação persistida deve declarar explicitamente `foreignKeyConstraintName` em `@JoinColumn` — ou `name` em `@ForeignKey` quando a relação integra uma constraint composta manual — e a migration correspondente deve criar e remover a constraint com o mesmo nome. Os nomes devem ser semânticos, estáveis e em minúsculas, por exemplo `fk_estados_pais`; nunca dependa dos identificadores automáticos e hashados gerados pelo TypeORM.

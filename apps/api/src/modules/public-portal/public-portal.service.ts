@@ -12,6 +12,7 @@ import {
   type ResolvedPublicPortal,
 } from '@contenster/shared';
 import { File } from '@/modules/media/files/entities/file.entity';
+import { resolveFilePublicUrl } from '@/modules/media/files/helpers/file-public-url.helper';
 import { Portal } from '@/modules/system-admin/portals/entities/portal.entity';
 import { PortalTranslation } from '@/modules/system-admin/portals/entities/portal-translation.entity';
 import { getCurrentLocale } from '@/shared/i18n';
@@ -126,16 +127,18 @@ export class PublicPortalService {
     file: File | null,
     role: 'favicon' | 'icon' | 'brand' | 'image' | 'video',
   ): PortalMediaFile | null {
+    const url = resolveFilePublicUrl(file);
+
     if (
       !file ||
       file.client !== null ||
-      !file.publicUrl ||
+      !url ||
       !isPortalAssetCompatible(role, file.mimeType, file.fileType)
     ) {
       return null;
     }
 
-    return { fileType: file.fileType, id: file.id, mimeType: file.mimeType, url: file.publicUrl };
+    return { fileType: file.fileType, id: file.id, mimeType: file.mimeType, url };
   }
 
   private toPalette(portal: Portal, mode: 'light' | 'dark'): PortalPalette {

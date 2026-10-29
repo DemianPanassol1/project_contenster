@@ -41,11 +41,14 @@ export class AuthenticationRepository {
   }
 
   findUserById(id: number): Promise<User | null> {
-    return this.userRepository.findOneBy({
-      deletedAt: IsNull(),
-      id,
-      isActive: true,
-      isBlocked: false,
+    return this.userRepository.findOne({
+      relations: { image: true },
+      where: {
+        deletedAt: IsNull(),
+        id,
+        isActive: true,
+        isBlocked: false,
+      },
     });
   }
 
@@ -92,6 +95,7 @@ export class AuthenticationRepository {
       .innerJoinAndSelect('userProfile.profile', 'profile')
       .leftJoinAndSelect('profile.translations', 'profileTranslation')
       .leftJoinAndSelect('profileTranslation.language', 'profileLanguage')
+      .leftJoinAndSelect('user.image', 'image')
       .where('user.id = :userId', { userId })
       .andWhere('user.eh_ativo = true')
       .andWhere('user.eh_bloqueado = false')

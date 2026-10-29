@@ -14,6 +14,7 @@ import { toResponseDto } from '@/shared/responses';
 import { FileResponseDto } from './dto/res/file.response.dto';
 import { File } from './entities/file.entity';
 import { StorageProviderConfiguration } from './entities/storage-provider-configuration.entity';
+import { resolveFilePublicUrl } from './helpers/file-public-url.helper';
 import {
   type FileValidationErrorCode,
   type ValidatedFile,
@@ -235,7 +236,7 @@ export class FileService {
       size: file.sizeInBytes,
       type: file.fileType,
       uploadedByUserId: file.uploadedBy?.id ?? null,
-      url: file.publicUrl ?? file.filePath,
+      url: resolveFilePublicUrl(file) ?? file.filePath,
       width: file.width,
     };
 

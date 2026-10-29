@@ -8,6 +8,7 @@ import {
   PortalLoginMediaSlot,
   PortalLoginMediaType,
   PortalSplitMediaPosition,
+  StorageProvider,
 } from '@contenster/shared';
 
 import { type PublicPortalRepository } from './public-portal.repository';
@@ -57,9 +58,11 @@ describe('PublicPortalService', () => {
           file: {
             client: null,
             fileType: FileType.image,
+            filePath: '/uploads/core/image/login.png',
             id: 9,
             mimeType: 'image/png',
             publicUrl: '/uploads/core/image/login.png',
+            storageProvider: StorageProvider.local,
           },
           mediaType: PortalLoginMediaType.image,
           posterFile: null,
@@ -98,7 +101,7 @@ describe('PublicPortalService', () => {
         layout: PortalLoginLayout.split,
         media: {
           split_panel_desktop: {
-            asset: { id: 9, url: '/uploads/core/image/login.png' },
+            asset: { id: 9, url: 'http://localhost:5000/uploads/core/image/login.png' },
             mediaType: PortalLoginMediaType.image,
           },
         },

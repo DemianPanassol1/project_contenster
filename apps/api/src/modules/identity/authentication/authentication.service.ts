@@ -22,6 +22,8 @@ import {
   validatePasswordHash,
 } from '@/infrastructure/security/password.util';
 import { AuthorizationResolverService } from '@/modules/authorization/authorization-resolver.service';
+import type { User } from '@/modules/identity/users/entities/user.entity';
+import { resolveFilePublicUrl } from '@/modules/media/files/helpers/file-public-url.helper';
 import { getCurrentLocale } from '@/shared/i18n';
 import { toResponseDto } from '@/shared/responses';
 import { resolveTranslation } from '@/shared/translations';
@@ -413,6 +415,7 @@ export class AuthenticationService {
   }
 
   private toSessionUser(user: {
+    image: User['image'];
     id: number;
     name: string;
     username: string;
@@ -420,6 +423,7 @@ export class AuthenticationService {
     isSuperuser: boolean;
   }) {
     return {
+      imageUrl: resolveFilePublicUrl(user.image),
       id: user.id,
       name: user.name,
       username: user.username,

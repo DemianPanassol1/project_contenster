@@ -245,7 +245,7 @@ export const settings: AppSettings = {
   NODE_ENV: nodeEnv,
   PORT: positiveIntegerValue('PORT', 8080),
   APP_NAME: stringValue('APP_NAME', 'Contenster Slim Core API'),
-  APP_URL: stringValue('APP_URL', 'http://localhost:5000'),
+  APP_URL: stringValue('APP_URL', 'http://localhost:8080'),
   API_PREFIX: optionalString('API_PREFIX'),
   API_VERSION: optionalString('API_VERSION'),
   DATABASE_HOST: stringValue('DATABASE_HOST', 'localhost'),
