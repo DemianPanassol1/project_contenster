@@ -47,6 +47,7 @@ export const ADMIN_ROUTES = {
   POST_FUNCTIONALITY_LIST: 'functionalities/list',
   POST_FUNCTIONALITY_MODULE_OPTIONS: 'functionalities/modules/options',
   POST_FUNCTIONALITY_PARENT_OPTIONS: 'functionalities/parents/options',
+  POST_FUNCTIONALITY_LANGUAGE_OPTIONS: 'functionalities/languages/options',
   POST_SYSTEM_MODULE: 'modules',
   POST_SYSTEM_MODULE_LIST: 'modules/list',
 } as const;

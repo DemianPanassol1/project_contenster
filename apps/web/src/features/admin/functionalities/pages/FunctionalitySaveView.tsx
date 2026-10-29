@@ -1,6 +1,6 @@
 'use client';
 
-import type { GetFunctionalityByIdResponse, SaveFunctionalityRequest } from '@contenster/shared';
+import type { GetFunctionalityByIdResponse } from '@contenster/shared';
 import { useTranslations } from 'next-intl';
 
 import { useGlobalContext } from '@/core/providers';
@@ -11,6 +11,7 @@ import { API_ROUTES } from '@/routes';
 import { Button, FormWrapper, Page } from '@/shared';
 
 import { FunctionalityForm } from '../components/FunctionalityForm';
+import type { FunctionalityFormValues } from '../types/functionality-form.types';
 import {
   getFunctionalityDefaultValues,
   mapFunctionalityContent,
@@ -58,7 +59,7 @@ export function FunctionalitySaveView({
       }
       module={presentation.moduleName}
     >
-      <FormWrapper<SaveFunctionalityRequest>
+      <FormWrapper<FunctionalityFormValues>
         contentUrl={isEditing ? API_ROUTES.ADMIN.GET_FUNCTIONALITY(entityId) : undefined}
         fields={getFunctionalityDefaultValues(presentation.languages)}
         id={FUNCTIONALITY_FORM_ID}
@@ -68,7 +69,7 @@ export function FunctionalitySaveView({
         onSubmit={async (values) =>
           (
             await apiRequest<GetFunctionalityByIdResponse>({
-              body: mapFunctionalityPayload(values),
+              body: mapFunctionalityPayload(values, presentation.languages),
               endpoint: API_ROUTES.ADMIN.POST_FUNCTIONALITY,
               method: 'POST',
               onSuccess: () => router.push(listPath),

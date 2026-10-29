@@ -10,6 +10,7 @@ import { I18nService } from 'nestjs-i18n';
 import type { I18nTranslations } from '@/i18n/translations';
 import { SystemModulesRepository } from '@/modules/access-control/modules/system-module.repository';
 import { SessionSynchronizationService } from '@/modules/identity/authentication/session/session-synchronization.service';
+import { ClientsRepository } from '@/modules/identity/clients/clients.repository';
 import {
   type DeleteRecordsRequestDto,
   DeleteRecordsResponseDto,
@@ -32,6 +33,7 @@ export class FunctionalityService {
   constructor(
     private readonly repository: FunctionalityRepository,
     private readonly modulesRepository: SystemModulesRepository,
+    private readonly clientsRepository: ClientsRepository,
     private readonly i18n: I18nService<I18nTranslations>,
     private readonly sessionSynchronizationService: SessionSynchronizationService,
   ) {}
@@ -73,6 +75,17 @@ export class FunctionalityService {
       label: resolveTranslation(functionality.translations, locale, 'name'),
       metadata: null,
       value: functionality.id,
+    }));
+  }
+
+  async listLanguageOptions(clientId: number, request: PaginateRequestDto): Promise<AppOption[]> {
+    const [languages] = await this.clientsRepository.listAvailableLanguages(clientId, request);
+
+    return languages.map((language) => ({
+      disabled: false,
+      label: language.name,
+      metadata: { locale: language.languageCode },
+      value: language.id,
     }));
   }
 
@@ -123,14 +136,25 @@ export class FunctionalityService {
 
     const languageIds = request.languageLinks.map((link) => link.languageId);
 
+    if (languageIds.length === 0) {
+      throw new BadRequestException(
+        this.i18n.t('errors.access_control.functionality_language_required'),
+      );
+    }
+
     if (new Set(languageIds).size !== languageIds.length) {
       throw new BadRequestException(this.i18n.t('errors.translations.language_not_found'));
     }
 
-    const languages = await this.repository.findLanguagesByIds(languageIds);
+    const languages = await this.clientsRepository.findAvailableLanguagesByIds(
+      clientId,
+      languageIds,
+    );
 
     if (languages.length !== languageIds.length) {
-      throw new BadRequestException(this.i18n.t('errors.translations.language_not_found'));
+      throw new BadRequestException(
+        this.i18n.t('errors.access_control.functionality_language_not_available'),
+      );
     }
 
     const languageByCode = resolveTranslationLanguages(

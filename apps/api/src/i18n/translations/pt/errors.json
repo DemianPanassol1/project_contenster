@@ -39,7 +39,9 @@
     "profile_functionality_not_found": "Uma das funcionalidades informadas não foi encontrada para este cliente.",
     "profile_has_users": "O perfil não pode ser excluído porque possui usuários vinculados.",
     "profile_not_found": "Perfil não encontrado.",
-    "profile_permission_duplicate": "Uma permissão não pode ser informada mais de uma vez."
+    "profile_permission_duplicate": "Uma permissão não pode ser informada mais de uma vez.",
+    "functionality_language_not_available": "Um dos idiomas informados não está habilitado para este cliente.",
+    "functionality_language_required": "A funcionalidade deve possuir ao menos um idioma habilitado."
   },
   "infrastructure": {
     "database_unavailable": "O banco de dados está temporariamente indisponível.",

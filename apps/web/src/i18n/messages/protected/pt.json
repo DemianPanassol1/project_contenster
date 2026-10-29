@@ -28,6 +28,7 @@
     "delete_selected": "Excluir módulos selecionados",
     "delete_title": "Excluir módulo",
     "description": "Descrição",
+    "enabled_languages": "Idiomas habilitados",
     "edit_title": "{functionality} - Editar",
     "go_back": "Voltar",
     "is_active": "Ativo",
@@ -127,6 +128,8 @@
     "state": "Estado"
   },
   "functionalities": {
+    "enabled_languages": "Idiomas habilitados",
+    "navigation_group_helper": "Use este item somente para expandir e recolher funcionalidades filhas; ele não abrirá uma página.",
     "cancel": "Cancelar",
     "create_register": "Criar registro",
     "create_title": "{functionality} - Criar",
@@ -141,6 +144,7 @@
     "icon": "Ícone",
     "is_active": "Ativo",
     "is_navigation_group": "Grupo de navegação",
+    "navigation_group_helper": "Use este item somente para expandir e recolher funcionalidades filhas; ele não abrirá uma página.",
     "module": "Módulo",
     "name": "Nome",
     "order": "Ordem",

@@ -39,7 +39,9 @@
     "profile_functionality_not_found": "One of the provided functionalities was not found for this client.",
     "profile_has_users": "The profile cannot be deleted because it has assigned users.",
     "profile_not_found": "Profile not found.",
-    "profile_permission_duplicate": "A permission cannot be provided more than once."
+    "profile_permission_duplicate": "A permission cannot be provided more than once.",
+    "functionality_language_not_available": "One of the selected languages is not enabled for this client.",
+    "functionality_language_required": "The functionality must have at least one enabled language."
   },
   "infrastructure": {
     "database_unavailable": "The database is temporarily unavailable.",

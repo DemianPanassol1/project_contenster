@@ -34,6 +34,12 @@ export class FunctionalityController {
     return this.service.listParentOptions(clientId, request);
   }
 
+  @Post('languages/options')
+  @RequirePermission(functionalities, ActionType.view)
+  listLanguageOptions(@CurrentClientId() clientId: number, @Body() request: PaginateRequestDto) {
+    return this.service.listLanguageOptions(clientId, request);
+  }
+
   @Get(':id')
   @RequirePermission(functionalities, ActionType.view)
   getById(@CurrentClientId() clientId: number, @Param('id', ParseIntPipe) id: number) {

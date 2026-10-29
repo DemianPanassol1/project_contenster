@@ -28,6 +28,7 @@
     "delete_selected": "Delete selected modules",
     "delete_title": "Delete module",
     "description": "Description",
+    "enabled_languages": "Enabled languages",
     "edit_title": "{functionality} - Edit",
     "go_back": "Back",
     "is_active": "Active",
@@ -127,6 +128,8 @@
     "state": "State"
   },
   "functionalities": {
+    "enabled_languages": "Enabled languages",
+    "navigation_group_helper": "Use this item only to expand and collapse child functionalities; it will not open a page.",
     "cancel": "Cancel",
     "create_register": "Create record",
     "create_title": "{functionality} - Create",
@@ -141,6 +144,7 @@
     "icon": "Icon",
     "is_active": "Active",
     "is_navigation_group": "Navigation group",
+    "navigation_group_helper": "Use this item only to expand and collapse child functionalities; it will not open a page.",
     "module": "Module",
     "name": "Name",
     "order": "Order",

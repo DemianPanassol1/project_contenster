@@ -5,6 +5,7 @@ import { SystemModule } from '@/modules/access-control/modules/entities/system-m
 import { SystemModulesModule } from '@/modules/access-control/modules/system-module.module';
 import { Language } from '@/modules/communication/languages/entities/language.entity';
 import { AuthenticationModule } from '@/modules/identity/authentication/authentication.module';
+import { ClientsModule } from '@/modules/identity/clients/clients.module';
 
 import { Functionality } from './entities/functionality.entity';
 import { FunctionalityClientLanguage } from './entities/functionality-client-language.entity';
@@ -23,6 +24,7 @@ import { FunctionalityService } from './functionality.service';
       Language,
     ]),
     AuthenticationModule,
+    ClientsModule,
     SystemModulesModule,
   ],
   controllers: [FunctionalityController],

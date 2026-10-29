@@ -39,7 +39,9 @@
     "profile_functionality_not_found": "No se encontró una de las funcionalidades informadas para este cliente.",
     "profile_has_users": "El perfil no se puede eliminar porque tiene usuarios vinculados.",
     "profile_not_found": "Perfil no encontrado.",
-    "profile_permission_duplicate": "Una autorización no puede informarse más de una vez."
+    "profile_permission_duplicate": "Una autorización no puede informarse más de una vez.",
+    "functionality_language_not_available": "Uno de los idiomas informados no está habilitado para este cliente.",
+    "functionality_language_required": "La funcionalidad debe tener al menos un idioma habilitado."
   },
   "infrastructure": {
     "database_unavailable": "La base de datos no está disponible temporalmente.",

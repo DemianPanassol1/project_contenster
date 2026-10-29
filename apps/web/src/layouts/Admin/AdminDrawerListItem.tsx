@@ -214,7 +214,12 @@ export function AdminDrawerListItem({
         <Collapse id={childrenListId} in={expanded} timeout="auto">
           <List
             disablePadding
-            sx={{ borderColor: 'divider', borderLeft: '1px solid', ml: '18px', mt: 0.5, pl: 1.5 }}
+            sx={{
+              borderLeft: '1px solid #E5E7EB',
+              ml: '18px',
+              mt: 0.5,
+              pl: 1.5,
+            }}
           >
             {functionality.children.map((child) => (
               <AdminDrawerListItem
