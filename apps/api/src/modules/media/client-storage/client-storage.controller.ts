@@ -23,6 +23,15 @@ export class ClientStorageController {
     return this.service.listConfigurations(clientId, request);
   }
 
+  @Post('rules/configurations/options')
+  @RequirePermission(clientStorage, ActionType.view)
+  listConfigurationOptions(
+    @CurrentClientId() clientId: number,
+    @Body() request: PaginateRequestDto,
+  ) {
+    return this.service.listConfigurationOptions(clientId, request);
+  }
+
   @Get('configurations/:id')
   @RequirePermission(clientStorage, ActionType.view)
   getConfiguration(@CurrentClientId() clientId: number, @Param('id', ParseIntPipe) id: number) {

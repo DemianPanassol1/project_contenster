@@ -5,6 +5,10 @@ import { type StorageConfigurationListItem, StorageProvider } from '@contenster/
 
 export class StorageConfigurationListItemResponseDto implements StorageConfigurationListItem {
   @Expose()
+  @ApiPropertyOptional({ nullable: true })
+  declare bucketName: string | null;
+
+  @Expose()
   @ApiProperty()
   declare hasCredential: boolean;
 

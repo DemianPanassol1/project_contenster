@@ -24,6 +24,7 @@ export interface SaveStorageConfigurationRequest extends StorageConfigurationCre
 }
 
 export interface StorageConfigurationListItem {
+  bucketName: string | null;
   hasCredential: boolean;
   id: number;
   identifier: string | null;

@@ -1,4 +1,4 @@
-import type { PaginatedBody } from '@contenster/shared';
+import type { AppOption, PaginatedBody } from '@contenster/shared';
 import {
   BadRequestException,
   ConflictException,
@@ -54,6 +54,7 @@ export class ClientStorageService {
       items: toResponseDto(
         StorageConfigurationListItemResponseDto,
         configurations.map((item) => ({
+          bucketName: item.bucketName,
           hasCredential: item.credential !== null,
           id: item.id,
           identifier: item.identifier,
@@ -64,6 +65,20 @@ export class ClientStorageService {
       ),
       meta: buildPaginationMeta(request, total),
     };
+  }
+
+  async listConfigurationOptions(
+    clientId: number,
+    request: PaginateRequestDto,
+  ): Promise<AppOption[]> {
+    const [configurations] = await this.repository.listConfigurations(clientId, request);
+
+    return configurations.map((configuration) => ({
+      disabled: null,
+      label: configuration.name,
+      metadata: null,
+      value: configuration.id,
+    }));
   }
 
   async listRules(
@@ -151,6 +166,7 @@ export class ClientStorageService {
     );
 
     return toResponseDto(StorageConfigurationListItemResponseDto, {
+      bucketName: saved.bucketName,
       hasCredential:
         this.hasCredentialInput(request) || (existing !== null && existing.credential !== null),
       id: saved.id,
