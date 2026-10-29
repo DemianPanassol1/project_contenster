@@ -1,9 +1,20 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import type { AppOption } from '@contenster/shared';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
 
 import type { I18nTranslations } from '@/i18n/translations';
+import { LanguagesRepository } from '@/modules/communication/languages/languages.repository';
 import { SessionSynchronizationService } from '@/modules/identity/authentication/session/session-synchronization.service';
+import { CitiesRepository } from '@/modules/locations/cities/cities.repository';
+import type { PaginateRequestDto } from '@/shared/dtos';
+import { getCurrentLocale } from '@/shared/i18n';
 import { toResponseDto } from '@/shared/responses';
+import { resolveTranslation } from '@/shared/translations';
 
 import type { SaveClientRequestDto } from './dto/req/save-client.request.dto';
 import { GetClientByIdResponseDto } from './dto/res/get-client-by-id.response.dto';
@@ -14,6 +25,8 @@ import { ClientsRepository } from './clients.repository';
 export class ClientsService {
   constructor(
     private readonly repository: ClientsRepository,
+    private readonly citiesRepository: CitiesRepository,
+    private readonly languagesRepository: LanguagesRepository,
     private readonly i18n: I18nService<I18nTranslations>,
     private readonly sessionSynchronizationService: SessionSynchronizationService,
   ) {}
@@ -25,28 +38,60 @@ export class ClientsService {
     );
   }
 
+  async listCityOptions(request: PaginateRequestDto): Promise<AppOption[]> {
+    const locale = getCurrentLocale();
+    const [cities] = await this.citiesRepository.list(request, locale);
+
+    return cities.map((city) => ({
+      disabled: !city.isActive,
+      label: this.toCityOptionLabel(city, locale),
+      metadata: null,
+      value: city.id,
+    }));
+  }
+
+  async listLanguageOptions(request: PaginateRequestDto): Promise<AppOption[]> {
+    const [languages] = await this.languagesRepository.list(request);
+
+    return languages.map((language) => ({
+      disabled: false,
+      label: language.name,
+      metadata: { locale: language.languageCode },
+      value: language.id,
+    }));
+  }
+
   async save(clientId: number, request: SaveClientRequestDto): Promise<GetClientByIdResponseDto> {
-    if (request.id !== clientId) {
-      throw new BadRequestException(this.i18n.t('errors.common.record_not_found'));
+    const client = await this.getEntityByIdOrFail(clientId);
+
+    if (request.id !== client.id) {
+      throw new BadRequestException(this.i18n.t('errors.clients.client_not_found'));
     }
 
-    const client = await this.getEntityByIdOrFail(clientId);
+    if (request.isActive !== client.isActive) {
+      throw new ForbiddenException(this.i18n.t('errors.clients.status_change_not_allowed'));
+    }
+
+    if (request.languageLinks.length === 0) {
+      throw new BadRequestException(this.i18n.t('errors.clients.language_required'));
+    }
+
     const city = request.cityId === null ? null : await this.repository.findCity(request.cityId);
 
     if (request.cityId !== null && !city) {
-      throw new BadRequestException(this.i18n.t('errors.common.record_not_found'));
+      throw new BadRequestException(this.i18n.t('errors.clients.city_not_found'));
     }
 
     const languageIds = request.languageLinks.map((link) => link.languageId);
 
     if (new Set(languageIds).size !== languageIds.length) {
-      throw new BadRequestException(this.i18n.t('errors.translations.language_not_found'));
+      throw new BadRequestException(this.i18n.t('errors.clients.language_duplicate'));
     }
 
     const languages = await this.repository.findLanguages(languageIds);
 
     if (languages.length !== languageIds.length) {
-      throw new BadRequestException(this.i18n.t('errors.translations.language_not_found'));
+      throw new BadRequestException(this.i18n.t('errors.clients.language_not_found'));
     }
 
     await this.repository.save({
@@ -81,7 +126,7 @@ export class ClientsService {
     const client = await this.repository.findById(id);
 
     if (!client) {
-      throw new NotFoundException(this.i18n.t('errors.common.record_not_found'));
+      throw new NotFoundException(this.i18n.t('errors.clients.client_not_found'));
     }
 
     return client;
@@ -110,5 +155,16 @@ export class ClientsService {
         languageId: link.language.id,
       })),
     };
+  }
+
+  private toCityOptionLabel(
+    city: Awaited<ReturnType<CitiesRepository['list']>>[0][number],
+    locale: string,
+  ): string {
+    const cityName = resolveTranslation(city.translations, locale, 'name');
+    const stateName = resolveTranslation(city.state.translations, locale, 'name');
+    const countryName = resolveTranslation(city.state.country.translations, locale, 'name');
+
+    return `${cityName} - ${stateName}, ${countryName}`;
   }
 }

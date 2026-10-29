@@ -17,6 +17,14 @@
     "user_not_found": "Usuario no encontrado.",
     "user_profile_not_found": "El vínculo de acceso del usuario no fue encontrado para este cliente."
   },
+  "clients": {
+    "city_not_found": "La ciudad informada no fue encontrada.",
+    "client_not_found": "Cliente no encontrado.",
+    "language_duplicate": "Un idioma no se puede informar más de una vez.",
+    "language_not_found": "Uno de los idiomas informados no fue encontrado.",
+    "language_required": "El cliente debe tener al menos un idioma habilitado.",
+    "status_change_not_allowed": "La activación del propio cliente solo se puede cambiar en el panel global."
+  },
   "authorization": {
     "client_context_required": "Esta operación requiere un contexto de cliente.",
     "global_context_required": "Esta operación requiere el contexto global.",

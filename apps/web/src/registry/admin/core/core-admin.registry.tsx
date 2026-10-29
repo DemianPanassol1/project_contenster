@@ -1,6 +1,7 @@
 import { ActionType, CORE_FUNCTIONALITY_IDENTITIES } from '@contenster/shared';
 import { ActionSaveView, ActionsListView } from '@/features/admin/actions';
 import { CitiesListView, CitySaveView } from '@/features/admin/cities';
+import { ClientView } from '@/features/admin/clients';
 import { CountriesListView, CountrySaveView } from '@/features/admin/countries';
 import { FunctionalitiesListView, FunctionalitySaveView } from '@/features/admin/functionalities';
 import { LanguageSaveView, LanguagesListView } from '@/features/admin/languages';
@@ -12,6 +13,12 @@ import { UserSaveView, UsersListView } from '@/features/admin/users';
 import type { AdminFeatureBinding } from '../admin.registry.type';
 
 export const CORE_ADMIN_FEATURE_BINDINGS: readonly AdminFeatureBinding[] = [
+  {
+    modes: {
+      list: { action: ActionType.view, View: ClientView },
+    },
+    slug: CORE_FUNCTIONALITY_IDENTITIES.clients,
+  },
   {
     modes: {
       create: { action: ActionType.create, View: UserSaveView },

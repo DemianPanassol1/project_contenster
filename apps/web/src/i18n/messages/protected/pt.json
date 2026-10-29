@@ -189,6 +189,23 @@
     "name": "Nome",
     "save": "Salvar"
   },
+  "clients": {
+    "address": "Endereço",
+    "address_number": "Número",
+    "city": "Cidade",
+    "corporate_name": "Razão social",
+    "document": "Documento",
+    "document_type": "Tipo de documento",
+    "email": "E-mail",
+    "image": "Imagem",
+    "languages": "Idiomas habilitados",
+    "neighborhood": "Bairro",
+    "primary_phone": "Telefone principal",
+    "save": "Salvar",
+    "secondary_phone": "Telefone secundário",
+    "trade_name": "Nome fantasia",
+    "zip_code": "CEP"
+  },
   "users": {
     "cancel": "Cancelar",
     "create_register": "Criar registro",

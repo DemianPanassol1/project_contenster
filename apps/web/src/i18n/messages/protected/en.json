@@ -189,6 +189,23 @@
     "name": "Name",
     "save": "Save"
   },
+  "clients": {
+    "address": "Address",
+    "address_number": "Number",
+    "city": "City",
+    "corporate_name": "Corporate name",
+    "document": "Document",
+    "document_type": "Document type",
+    "email": "Email",
+    "image": "Image",
+    "languages": "Enabled languages",
+    "neighborhood": "Neighborhood",
+    "primary_phone": "Primary phone",
+    "save": "Save",
+    "secondary_phone": "Secondary phone",
+    "trade_name": "Trade name",
+    "zip_code": "Postal code"
+  },
   "users": {
     "cancel": "Cancel",
     "create_register": "Create record",

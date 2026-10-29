@@ -17,6 +17,14 @@
     "user_not_found": "User not found.",
     "user_profile_not_found": "The user's access link was not found for this client."
   },
+  "clients": {
+    "city_not_found": "The selected city was not found.",
+    "client_not_found": "Client not found.",
+    "language_duplicate": "A language cannot be provided more than once.",
+    "language_not_found": "One of the selected languages was not found.",
+    "language_required": "The client must have at least one enabled language.",
+    "status_change_not_allowed": "The current client's activation can only be changed in the global panel."
+  },
   "authorization": {
     "client_context_required": "This operation requires a client context.",
     "global_context_required": "This operation requires the global context.",

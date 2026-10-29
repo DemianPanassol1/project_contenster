@@ -47,6 +47,11 @@ bloqueado, um cliente inativo ou um perfil desativado.
 
 Toda consulta ou escrita pertencente a cliente deve usar o `clientId` confiável do contexto autenticado. Um identificador recebido no corpo, query, rota ou header não comprova acesso.
 
+Na configuração do próprio cliente, o estado de ativação não pode ser alterado. Desativar um
+cliente pertence ao contexto global, pois invalida as sessões e o acesso de todos os seus vínculos.
+Todo cliente deve manter ao menos um idioma habilitado, já que os idiomas compõem a sessão e a
+apresentação administrativa do contexto.
+
 ## Autorização
 
 RBAC é deny-by-default. Guards e serviços exigem funcionalidade e ação adequadas; regras de ownership continuam no caso de uso específico. O slug isolado não deve ser tratado como identidade suficiente fora do limite definido pelo catálogo.

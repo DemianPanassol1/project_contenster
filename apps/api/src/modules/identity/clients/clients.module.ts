@@ -2,7 +2,9 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { Language } from '@/modules/communication/languages/entities/language.entity';
+import { LanguagesModule } from '@/modules/communication/languages/languages.module';
 import { AuthenticationModule } from '@/modules/identity/authentication/authentication.module';
+import { CitiesModule } from '@/modules/locations/cities/cities.module';
 import { City } from '@/modules/locations/cities/entities/city.entity';
 
 import { Client } from './entities/client.entity';
@@ -14,6 +16,8 @@ import { ClientsService } from './clients.service';
   imports: [
     TypeOrmModule.forFeature([Client, ClientLanguage, Language, City]),
     AuthenticationModule,
+    CitiesModule,
+    LanguagesModule,
   ],
   controllers: [ClientsController],
   providers: [ClientsRepository, ClientsService],

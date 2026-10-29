@@ -189,6 +189,23 @@
     "name": "Nombre",
     "save": "Guardar"
   },
+  "clients": {
+    "address": "Dirección",
+    "address_number": "Número",
+    "city": "Ciudad",
+    "corporate_name": "Razón social",
+    "document": "Documento",
+    "document_type": "Tipo de documento",
+    "email": "Correo electrónico",
+    "image": "Imagen",
+    "languages": "Idiomas habilitados",
+    "neighborhood": "Barrio",
+    "primary_phone": "Teléfono principal",
+    "save": "Guardar",
+    "secondary_phone": "Teléfono secundario",
+    "trade_name": "Nombre comercial",
+    "zip_code": "Código postal"
+  },
   "users": {
     "cancel": "Cancelar",
     "create_register": "Crear registro",
