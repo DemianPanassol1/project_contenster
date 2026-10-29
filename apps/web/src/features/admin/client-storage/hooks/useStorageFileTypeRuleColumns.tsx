@@ -24,7 +24,9 @@ export function useStorageFileTypeRuleColumns(): DataTableColumn<StorageFileType
     () => [
       {
         field: 'fileType',
+        selector: 'fileType',
         name: t('fields.file_type'),
+        filterable: true,
         renderCell: ({ row }: { row: StorageFileTypeRuleListItem }) =>
           getStorageFileTypeLabel(row.fileType, fileTypeLabels),
         sortable: true,
@@ -32,14 +34,18 @@ export function useStorageFileTypeRuleColumns(): DataTableColumn<StorageFileType
       },
       {
         field: 'storageConfigurationName',
+        selector: 'storageConfigurationName',
         name: t('fields.storage_configuration'),
+        filterable: true,
         sortable: true,
         type: 'text' as const,
       },
       {
         align: 'center' as const,
         field: 'isActive',
+        selector: 'isActive',
         name: t('fields.is_active'),
+        filterable: true,
         sortable: true,
         type: 'boolean' as const,
         width: 112,

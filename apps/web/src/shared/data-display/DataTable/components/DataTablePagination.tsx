@@ -32,6 +32,14 @@ export const DataTablePagination = ({
       labelRowsPerPage={t('data_table.rows_per_page')}
       onPageChange={(_, nextPage) => onPageChange(nextPage + 1)}
       onRowsPerPageChange={(event) => onPerPageChange(Number(event.target.value))}
+      slotProps={{
+        menuItem: {
+          sx: { fontSize: 13, minHeight: 32 },
+        },
+        select: {
+          sx: { fontSize: 14 },
+        },
+      }}
       sx={{
         overflow: 'visible',
         borderTop: (theme) => `1px solid ${theme.palette.divider}`,

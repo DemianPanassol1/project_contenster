@@ -26,31 +26,18 @@ export function SystemModuleForm({ languages }: SystemModuleFormProps) {
         },
       }}
     >
-      <Box sx={{ gridColumn: { md: '1 / -1' } }}>
-        <TranslationsFields<SaveSystemModuleRequest>
-          label={t('name')}
-          languages={languages}
-          name="translations"
-          rules={createValidationRules('required')}
-          textProperty="name"
-        />
-      </Box>
-
-      <Box sx={{ gridColumn: { md: '1 / -1' } }}>
-        <TranslationsFields<SaveSystemModuleRequest>
-          label={t('description')}
-          languages={languages}
-          name="translations"
-          textProperty="description"
-          type="textarea"
-        />
-      </Box>
+      <TranslationsFields<SaveSystemModuleRequest>
+        label={t('name')}
+        languages={languages}
+        name="translations"
+        rules={createValidationRules('required')}
+        textProperty="name"
+      />
 
       <Box
         sx={{
           display: 'grid',
           gridTemplateColumns: { xs: '1fr', md: 'repeat(4, 1fr)' },
-          gridColumn: { md: '1 / -1' },
         }}
       >
         <FormInput<SaveSystemModuleRequest>
@@ -64,6 +51,16 @@ export function SystemModuleForm({ languages }: SystemModuleFormProps) {
         <Box sx={{ alignSelf: 'center' }}>
           <FormSwitch<SaveSystemModuleRequest> label={t('is_active')} name="isActive" />
         </Box>
+      </Box>
+
+      <Box sx={{ gridColumn: { md: '1 / -1' } }}>
+        <TranslationsFields<SaveSystemModuleRequest>
+          label={t('description')}
+          languages={languages}
+          name="translations"
+          textProperty="description"
+          type="textarea"
+        />
       </Box>
     </Box>
   );

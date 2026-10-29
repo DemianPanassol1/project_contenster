@@ -12,6 +12,7 @@ export function useProfileColumns(): DataTableColumn<ProfileListItem>[] {
   return [
     {
       field: 'name',
+      selector: 'name',
       name: t('name'),
       renderCell: ({ row }) => (
         <Box sx={{ alignItems: 'center', display: 'flex', gap: 0.75 }}>
@@ -20,10 +21,18 @@ export function useProfileColumns(): DataTableColumn<ProfileListItem>[] {
         </Box>
       ),
       searchable: true,
+      filterable: true,
       sortable: true,
       type: 'custom',
     },
     { field: 'description', name: t('description'), searchable: true, type: 'text' },
-    { field: 'isActive', name: t('is_active'), sortable: true, type: 'boolean' },
+    {
+      field: 'isActive',
+      selector: 'isActive',
+      name: t('is_active'),
+      filterable: true,
+      sortable: true,
+      type: 'boolean',
+    },
   ];
 }

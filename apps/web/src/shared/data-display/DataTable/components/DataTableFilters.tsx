@@ -5,7 +5,6 @@ import {
   Button,
   Chip,
   FormControl,
-  InputLabel,
   MenuItem,
   Popover,
   Select,
@@ -153,17 +152,50 @@ export const DataTableFilters = <T extends object>({
 
             if (shouldRenderOptions) {
               return (
-                <FormControl key={columnKey} fullWidth size="small">
-                  <InputLabel>{column.name}</InputLabel>
+                <FormControl
+                  key={columnKey}
+                  fullWidth
+                  size="small"
+                  sx={{
+                    '& .MuiOutlinedInput-root': { height: 40 },
+                    '& .MuiSelect-select': {
+                      alignItems: 'center',
+                      display: 'flex',
+                      fontSize: 14,
+                      py: 0,
+                    },
+                  }}
+                >
                   <Select
-                    label={column.name}
                     disabled={isLoadingOptions}
+                    displayEmpty
                     value={toSelectValue(draft[columnKey])}
+                    renderValue={(value) => {
+                      const option = options?.find((item) => String(item.value) === String(value));
+
+                      return (
+                        <Box
+                          component="span"
+                          sx={{ color: option ? 'text.primary' : 'text.secondary', fontSize: 14 }}
+                        >
+                          {option?.label ?? column.name}
+                        </Box>
+                      );
+                    }}
                     onChange={(event) => {
                       setDraft((current) => ({
                         ...current,
                         [columnKey]: parseOptionValue(String(event.target.value), options ?? []),
                       }));
+                    }}
+                    MenuProps={{
+                      slotProps: {
+                        paper: {
+                          sx: {
+                            '& .MuiMenuItem-root': { fontSize: 13, minHeight: 32 },
+                          },
+                        },
+                      },
                     }}
                   >
                     {(options ?? []).map((option) => (
@@ -202,6 +234,10 @@ export const DataTableFilters = <T extends object>({
                       }))
                     }
                     slotProps={{ inputLabel: { shrink: true } }}
+                    sx={{
+                      '& .MuiInputBase-input': { fontSize: 14 },
+                      '& .MuiInputLabel-root': { fontSize: 13 },
+                    }}
                   />
                   <TextField
                     size="small"
@@ -215,6 +251,10 @@ export const DataTableFilters = <T extends object>({
                       }))
                     }
                     slotProps={{ inputLabel: { shrink: true } }}
+                    sx={{
+                      '& .MuiInputBase-input': { fontSize: 14 },
+                      '& .MuiInputLabel-root': { fontSize: 13 },
+                    }}
                   />
                 </Box>
               );
@@ -232,16 +272,30 @@ export const DataTableFilters = <T extends object>({
                     [columnKey]: event.target.value,
                   }))
                 }
+                sx={{
+                  '& .MuiInputBase-input': { fontSize: 14 },
+                  '& .MuiInputLabel-root': { fontSize: 13 },
+                }}
               />
             );
           })}
         </Box>
 
         <Box sx={{ mt: 1.5, display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
-          <Button size="small" variant="text" onClick={handleReset}>
+          <Button
+            size="small"
+            variant="text"
+            onClick={handleReset}
+            sx={{ fontSize: 12, fontWeight: 500, minHeight: 32, px: 1.25 }}
+          >
             {t('data_table.reset')}
           </Button>
-          <Button size="small" variant="contained" onClick={handleApply}>
+          <Button
+            size="small"
+            variant="contained"
+            onClick={handleApply}
+            sx={{ fontSize: 12, fontWeight: 500, minHeight: 32, px: 1.25 }}
+          >
             {t('data_table.apply_filters')}
           </Button>
         </Box>

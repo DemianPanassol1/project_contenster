@@ -200,7 +200,18 @@ export function AdminHeaderActions() {
           }}
         >
           <Typography
-            sx={{ cursor: 'default', fontSize: '12px', fontWeight: 500, textAlign: 'center' }}
+            sx={{
+              color: 'primary.main',
+              cursor: 'pointer',
+              fontSize: '12px',
+              fontWeight: 500,
+              textAlign: 'center',
+              textDecoration: 'none',
+              transition: 'text-decoration-color .15s ease',
+              '&:hover': {
+                textDecoration: 'underline',
+              },
+            }}
           >
             {t('global.see_all_notifications')}
           </Typography>

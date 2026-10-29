@@ -35,23 +35,37 @@ export function useClientStorageFileColumns(): DataTableColumn<ClientStorageFile
       },
       {
         field: 'originalName',
+        selector: 'originalName',
         name: t('fields.original_name'),
         searchable: true,
+        filterable: true,
         sortable: true,
         type: 'text' as const,
       },
       {
         field: 'fileType',
+        selector: 'fileType',
         name: t('fields.file_type'),
+        filterable: true,
         renderCell: ({ row }: { row: ClientStorageFileListItem }) =>
           getStorageFileTypeLabel(row.fileType, fileTypeLabels),
         sortable: true,
         type: 'text' as const,
       },
-      { field: 'mimeType', name: 'MIME', searchable: true, sortable: true, type: 'text' as const },
+      {
+        field: 'mimeType',
+        selector: 'mimeType',
+        name: 'MIME',
+        searchable: true,
+        filterable: true,
+        sortable: true,
+        type: 'text' as const,
+      },
       {
         field: 'provider',
+        selector: 'provider',
         name: t('fields.provider'),
+        filterable: true,
         renderCell: ({ row }: { row: ClientStorageFileListItem }) =>
           getStorageProviderLabel(row.provider),
         sortable: true,
@@ -67,14 +81,18 @@ export function useClientStorageFileColumns(): DataTableColumn<ClientStorageFile
       },
       {
         field: 'uploadedByName',
+        selector: 'uploadedByName',
         name: t('fields.uploaded_by'),
         searchable: true,
+        filterable: true,
         sortable: true,
         type: 'text' as const,
       },
       {
         field: 'createdAt',
+        selector: 'createdAt',
         name: t('fields.uploaded_at'),
+        filterable: true,
         renderCell: ({ row }: { row: ClientStorageFileListItem }) =>
           formatDateTime(row.createdAt, locale),
         sortable: true,

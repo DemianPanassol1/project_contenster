@@ -9,10 +9,47 @@ export function useUserColumns(): DataTableColumn<UserListItem>[] {
   const t = useTranslations('protected.users');
 
   return [
-    { field: 'name', name: t('name'), searchable: true, sortable: true },
-    { field: 'username', name: t('username'), searchable: true, sortable: true },
-    { field: 'email', name: t('email'), searchable: true, sortable: true },
-    { field: 'isActive', name: t('is_active'), sortable: true, type: 'boolean', width: 112 },
-    { field: 'isBlocked', name: t('is_blocked'), sortable: true, type: 'boolean', width: 128 },
+    {
+      field: 'name',
+      selector: 'name',
+      name: t('name'),
+      searchable: true,
+      filterable: true,
+      sortable: true,
+    },
+    {
+      field: 'username',
+      selector: 'username',
+      name: t('username'),
+      searchable: true,
+      filterable: true,
+      sortable: true,
+    },
+    {
+      field: 'email',
+      selector: 'email',
+      name: t('email'),
+      searchable: true,
+      filterable: true,
+      sortable: true,
+    },
+    {
+      field: 'isActive',
+      selector: 'isActive',
+      name: t('is_active'),
+      filterable: true,
+      sortable: true,
+      type: 'boolean',
+      width: 112,
+    },
+    {
+      field: 'isBlocked',
+      selector: 'isBlocked',
+      name: t('is_blocked'),
+      filterable: true,
+      sortable: true,
+      type: 'boolean',
+      width: 128,
+    },
   ];
 }

@@ -24,32 +24,40 @@ export function useRequestLogColumns(): DataTableColumn<RequestLogListItem>[] {
     () => [
       {
         field: 'createdAt',
+        selector: 'createdAt',
         name: t('columns.date_time'),
         renderCell: ({ row }: { row: RequestLogListItem }) =>
           formatDateTime.format(new Date(row.createdAt)),
         sortable: true,
+        filterable: true,
         type: 'datetime' as const,
       },
       {
         field: 'method',
+        selector: 'method',
         name: t('columns.method'),
         renderCell: ({ row }: { row: RequestLogListItem }) => (
           <HttpMethodChip method={row.method} />
         ),
         searchable: true,
+        filterable: true,
         sortable: true,
         type: 'text' as const,
       },
       {
         field: 'route',
+        selector: 'route',
         name: t('columns.route'),
         searchable: true,
+        filterable: true,
         sortable: true,
         type: 'text' as const,
       },
       {
         field: 'statusCode',
+        selector: 'statusCode',
         name: t('columns.status'),
+        filterable: true,
         sortable: true,
         type: 'number' as const,
       },
@@ -62,15 +70,19 @@ export function useRequestLogColumns(): DataTableColumn<RequestLogListItem>[] {
       },
       {
         field: 'userName',
+        selector: 'userName',
         name: t('columns.user'),
         searchable: true,
+        filterable: true,
         sortable: true,
         type: 'text' as const,
       },
       {
         field: 'ip',
+        selector: 'ip',
         name: t('columns.ip'),
         searchable: true,
+        filterable: true,
         type: 'text' as const,
       },
     ],

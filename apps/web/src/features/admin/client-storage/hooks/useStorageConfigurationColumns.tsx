@@ -15,14 +15,18 @@ export function useStorageConfigurationColumns(): DataTableColumn<StorageConfigu
     () => [
       {
         field: 'name',
+        selector: 'name',
         name: t('fields.name'),
         searchable: true,
+        filterable: true,
         sortable: true,
         type: 'text' as const,
       },
       {
         field: 'provider',
+        selector: 'provider',
         name: t('fields.provider'),
+        filterable: true,
         renderCell: ({ row }: { row: StorageConfigurationListItem }) =>
           getStorageProviderLabel(row.provider),
         sortable: true,
@@ -44,7 +48,9 @@ export function useStorageConfigurationColumns(): DataTableColumn<StorageConfigu
       {
         align: 'center' as const,
         field: 'isActive',
+        selector: 'isActive',
         name: t('fields.is_active'),
+        filterable: true,
         sortable: true,
         type: 'boolean' as const,
         width: 112,

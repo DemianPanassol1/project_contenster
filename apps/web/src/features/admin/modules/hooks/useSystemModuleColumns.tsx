@@ -11,8 +11,10 @@ export const useSystemModuleColumns = (): DataTableColumn<SystemModuleListItem>[
   return [
     {
       field: 'name',
+      selector: 'name',
       name: t('name'),
       searchable: true,
+      filterable: true,
       sortable: true,
     },
     {
@@ -22,7 +24,9 @@ export const useSystemModuleColumns = (): DataTableColumn<SystemModuleListItem>[
     {
       align: 'center',
       field: 'order',
+      selector: 'order',
       name: t('order'),
+      filterable: true,
       sortable: true,
       type: 'number',
       width: 112,
@@ -30,7 +34,9 @@ export const useSystemModuleColumns = (): DataTableColumn<SystemModuleListItem>[
     {
       align: 'center',
       field: 'isActive',
+      selector: 'isActive',
       name: t('is_active'),
+      filterable: true,
       sortable: true,
       type: 'boolean',
       width: 112,

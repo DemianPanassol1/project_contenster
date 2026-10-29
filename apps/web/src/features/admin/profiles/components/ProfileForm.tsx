@@ -99,7 +99,7 @@ export function ProfileForm({ languages }: ProfileFormProps) {
       sx={{
         display: 'grid',
         gap: '1.5rem 2rem',
-        gridTemplateColumns: { xs: '1fr', md: '1fr auto' },
+        gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' },
       }}
     >
       <TranslationsFields<ProfileFormValues>
@@ -110,7 +110,7 @@ export function ProfileForm({ languages }: ProfileFormProps) {
         textProperty="name"
       />
 
-      <Box sx={{ alignSelf: 'center', display: 'flex', gap: 1, justifyContent: 'flex-end' }}>
+      <Box sx={{ alignItems: 'center', display: 'flex', gap: 1, justifyContent: 'flex-start' }}>
         {isAdmin && <Chip color="info" label={t('administrator')} />}
         <FormSwitch<ProfileFormValues> disabled={isAdmin} label={t('is_active')} name="isActive" />
       </Box>
