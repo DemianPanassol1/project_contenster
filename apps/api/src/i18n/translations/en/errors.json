@@ -17,7 +17,14 @@
     "superuser_access_denied": "Superuser access is not available for this session."
   },
   "access_control": {
-    "module_has_functionalities": "The module cannot be deleted because it has related functionalities."
+    "module_has_functionalities": "The module cannot be deleted because it has related functionalities.",
+    "admin_profile_immutable": "The administrative profile must remain active and does not allow permission changes.",
+    "admin_profile_cannot_be_deleted": "The administrative profile cannot be deleted.",
+    "profile_action_not_found": "One of the provided actions was not found.",
+    "profile_functionality_not_found": "One of the provided functionalities was not found for this client.",
+    "profile_has_users": "The profile cannot be deleted because it has assigned users.",
+    "profile_not_found": "Profile not found.",
+    "profile_permission_duplicate": "A permission cannot be provided more than once."
   },
   "infrastructure": {
     "database_unavailable": "The database is temporarily unavailable.",

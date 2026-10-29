@@ -9,6 +9,10 @@ export class ProfileListItemResponseDto implements ProfileListItem {
 
   @Expose()
   @ApiProperty()
+  declare isAdmin: boolean;
+
+  @Expose()
+  @ApiProperty()
   declare isActive: boolean;
 
   @Expose()

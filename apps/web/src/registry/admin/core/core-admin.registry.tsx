@@ -5,11 +5,20 @@ import { CountriesListView, CountrySaveView } from '@/features/admin/countries';
 import { FunctionalitiesListView, FunctionalitySaveView } from '@/features/admin/functionalities';
 import { LanguageSaveView, LanguagesListView } from '@/features/admin/languages';
 import { SystemModuleSaveView, SystemModulesListView } from '@/features/admin/modules';
+import { ProfileSaveView, ProfilesListView } from '@/features/admin/profiles';
 import { StateSaveView, StatesListView } from '@/features/admin/states';
 
 import type { AdminFeatureBinding } from '../admin.registry.type';
 
 export const CORE_ADMIN_FEATURE_BINDINGS: readonly AdminFeatureBinding[] = [
+  {
+    modes: {
+      create: { action: ActionType.create, View: ProfileSaveView },
+      list: { action: ActionType.view, View: ProfilesListView },
+      update: { action: ActionType.edit, View: ProfileSaveView },
+    },
+    slug: CORE_FUNCTIONALITY_IDENTITIES.profiles,
+  },
   {
     modes: {
       create: { action: ActionType.create, View: FunctionalitySaveView },

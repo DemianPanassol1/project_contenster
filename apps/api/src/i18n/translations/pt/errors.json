@@ -17,7 +17,14 @@
     "superuser_access_denied": "O acesso de superusuário não está disponível para esta sessão."
   },
   "access_control": {
-    "module_has_functionalities": "O módulo não pode ser excluído porque possui funcionalidades vinculadas."
+    "module_has_functionalities": "O módulo não pode ser excluído porque possui funcionalidades vinculadas.",
+    "admin_profile_immutable": "O perfil administrativo deve permanecer ativo e não permite alterações nas permissões.",
+    "admin_profile_cannot_be_deleted": "O perfil administrativo não pode ser excluído.",
+    "profile_action_not_found": "Uma das ações informadas não foi encontrada.",
+    "profile_functionality_not_found": "Uma das funcionalidades informadas não foi encontrada para este cliente.",
+    "profile_has_users": "O perfil não pode ser excluído porque possui usuários vinculados.",
+    "profile_not_found": "Perfil não encontrado.",
+    "profile_permission_duplicate": "Uma permissão não pode ser informada mais de uma vez."
   },
   "infrastructure": {
     "database_unavailable": "O banco de dados está temporariamente indisponível.",

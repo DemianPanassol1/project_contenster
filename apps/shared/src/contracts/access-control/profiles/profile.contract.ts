@@ -33,6 +33,7 @@ export interface SaveProfileRequest {
 
 export interface ProfileListItem {
   id: number;
+  isAdmin: boolean;
   isActive: boolean;
   name: string;
   description: string | null;

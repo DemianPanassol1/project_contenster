@@ -118,7 +118,7 @@ export class ProfilesService {
           currentPermissionKeys.length !== requestedPermissionKeys.length ||
           currentPermissionKeys.some((key, index) => key !== requestedPermissionKeys[index])
         ) {
-          throw new ConflictException(this.i18n.t('errors.common.record_not_found'));
+          throw new ConflictException(this.i18n.t('errors.access_control.admin_profile_immutable'));
         }
       }
     }
@@ -134,7 +134,9 @@ export class ProfilesService {
     const functionalities = await this.repository.findFunctionalities(clientId, functionalityIds);
 
     if (functionalities.length !== new Set(functionalityIds).size) {
-      throw new BadRequestException(this.i18n.t('errors.common.record_not_found'));
+      throw new BadRequestException(
+        this.i18n.t('errors.access_control.profile_functionality_not_found'),
+      );
     }
 
     const actionIds = request.permissions.map((permission) => permission.actionId);
@@ -143,13 +145,15 @@ export class ProfilesService {
     );
 
     if (new Set(permissionKeys).size !== permissionKeys.length) {
-      throw new BadRequestException(this.i18n.t('errors.common.record_not_found'));
+      throw new BadRequestException(
+        this.i18n.t('errors.access_control.profile_permission_duplicate'),
+      );
     }
 
     const actions = await this.repository.findActions(actionIds);
 
     if (actions.length !== new Set(actionIds).size) {
-      throw new BadRequestException(this.i18n.t('errors.common.record_not_found'));
+      throw new BadRequestException(this.i18n.t('errors.access_control.profile_action_not_found'));
     }
 
     const functionalityById = new Map(
@@ -190,8 +194,14 @@ export class ProfilesService {
       throw new NotFoundException(this.i18n.t('errors.common.record_not_found'));
     }
 
-    if (profiles.some((profile) => profile.isAdmin) || (await this.repository.hasUsers(ids))) {
-      throw new ConflictException(this.i18n.t('errors.common.record_not_found'));
+    if (profiles.some((profile) => profile.isAdmin)) {
+      throw new ConflictException(
+        this.i18n.t('errors.access_control.admin_profile_cannot_be_deleted'),
+      );
+    }
+
+    if (await this.repository.hasUsers(ids)) {
+      throw new ConflictException(this.i18n.t('errors.access_control.profile_has_users'));
     }
 
     const result = await this.repository.delete(profiles);
@@ -204,7 +214,7 @@ export class ProfilesService {
   private async getEntityByIdOrFail(clientId: number, id: number): Promise<Profile> {
     const profile = await this.repository.findById(clientId, id);
     if (!profile) {
-      throw new NotFoundException(this.i18n.t('errors.common.record_not_found'));
+      throw new NotFoundException(this.i18n.t('errors.access_control.profile_not_found'));
     }
 
     return profile;
@@ -213,6 +223,7 @@ export class ProfilesService {
   private toListItem(profile: Profile, locale: string) {
     return {
       id: profile.id,
+      isAdmin: profile.isAdmin,
       isActive: profile.isActive,
       name: resolveTranslation(profile.translations, locale, 'name'),
       description: resolveTranslation(profile.translations, locale, 'description'),

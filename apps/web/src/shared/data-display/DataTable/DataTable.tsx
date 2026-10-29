@@ -347,12 +347,15 @@ export const DataTable = <T extends object>({
   };
 
   const customRowActions = actions.filter(Boolean) as DataTableAction<T>[];
+  const isRowActionVisible = (visibility: boolean | ((row: T) => boolean), row: T): boolean =>
+    typeof visibility === 'function' ? visibility(row) : visibility;
   const rowActions: DataTableAction<T>[] = [
     ...(showRowEditAction && canEdit
       ? [
           {
             label: t('form.edit'),
             icon: 'square-pen' as const,
+            hidden: (row: T) => !isRowActionVisible(showRowEditAction, row),
             onClick: (row: T, rowId: string | number) => {
               const editPath = getRowEditPath?.(row, rowId) ?? getDefaultEditPath(pathname, rowId);
 
@@ -372,6 +375,7 @@ export const DataTable = <T extends object>({
             label: deleteConfirmation?.confirmLabel ?? t('data_table.delete'),
             icon: 'trash' as const,
             color: 'error' as const,
+            hidden: (row: T) => !isRowActionVisible(showRowDeleteAction, row),
             onClick: (_row: T, rowId: string | number) => executeDelete([rowId]),
           },
         ]

@@ -165,6 +165,30 @@
     "name": "Nombre",
     "save": "Guardar"
   },
+  "profiles": {
+    "action": "Acción",
+    "additional_actions": "{count} acciones",
+    "add_permission": "Agregar permiso",
+    "administrator": "Administrador",
+    "cancel": "Cancelar",
+    "create_register": "Crear registro",
+    "create_title": "{functionality} - Crear",
+    "delete": "Eliminar",
+    "delete_many_message": "¿Desea eliminar los {count} perfiles seleccionados? Esta acción no se puede deshacer.",
+    "delete_message": "¿Desea eliminar este perfil? Esta acción no se puede deshacer.",
+    "delete_permission_message": "¿Desea eliminar este permiso? Esta acción no se puede deshacer.",
+    "delete_permission_title": "Eliminar permiso",
+    "delete_selected": "Eliminar perfiles seleccionados",
+    "delete_title": "Eliminar perfil",
+    "description": "Descripción",
+    "edit_permission": "Editar permiso",
+    "edit_title": "{functionality} - Editar",
+    "functionality": "Funcionalidad",
+    "go_back": "Volver",
+    "is_active": "Activo",
+    "name": "Nombre",
+    "save": "Guardar"
+  },
   "system_admin": {
     "home_title": "Panel de administración global",
     "not_found": "Página global no encontrada."

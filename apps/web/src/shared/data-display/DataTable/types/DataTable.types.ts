@@ -126,8 +126,8 @@ export interface DataTableProps<T extends object> {
   canDelete?: boolean;
   canExport?: boolean;
   deleteConfirmation?: DataTableDeleteConfirmationConfig;
-  showRowEditAction?: boolean;
-  showRowDeleteAction?: boolean;
+  showRowEditAction?: boolean | ((row: T) => boolean);
+  showRowDeleteAction?: boolean | ((row: T) => boolean);
   getRowEditPath?: (row: T, rowId: string | number) => string | null | undefined;
   data?: T[];
   rows?: T[];
