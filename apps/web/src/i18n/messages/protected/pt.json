@@ -410,7 +410,22 @@
     },
     "access_links": {
       "title": "Vínculos de acesso",
-      "description": "Gerencie os vínculos entre usuários, clientes e perfis."
+      "description": "Gerencie os vínculos entre usuários, clientes e perfis.",
+      "actions": "Ações",
+      "add_link": "Adicionar vínculo",
+      "client": "Cliente",
+      "complete_rows_required": "Preencha cliente e perfil em todos os vínculos.",
+      "empty_user": "Selecione um usuário para consultar e alterar seus vínculos.",
+      "inactive": "Inativo",
+      "no_rows": "Este usuário não possui vínculos de acesso.",
+      "profile": "Perfil",
+      "remove_link": "Remover vínculo",
+      "replace_warning": "Ao salvar, os vínculos listados substituem todos os vínculos atuais deste usuário. Sem linhas, o usuário ficará sem acesso aos clientes.",
+      "save_links": "Salvar vínculos",
+      "select_user_required": "Selecione um usuário antes de salvar os vínculos.",
+      "superuser": "Superusuário",
+      "unnamed_profile": "Perfil sem nome",
+      "user": "Usuário"
     },
     "request_logs": {
       "title": "Logs de requisição",
@@ -501,7 +516,19 @@
     },
     "files": {
       "title": "Arquivos",
-      "description": "Consulte os arquivos armazenados por cliente."
+      "description": "Consulte os arquivos armazenados por cliente.",
+      "open_file": "Visualizar arquivo",
+      "without_client": "Sem cliente",
+      "columns": {
+        "client": "Cliente",
+        "file_type": "Tipo",
+        "original_name": "Nome original",
+        "preview": "Pré-visualização",
+        "provider": "Provedor",
+        "size": "Tamanho",
+        "uploaded_at": "Data de upload",
+        "uploaded_by": "Enviado por"
+      }
     },
     "portals": {
       "title": "Portais",

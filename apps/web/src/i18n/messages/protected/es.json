@@ -410,7 +410,22 @@
     },
     "access_links": {
       "title": "Vínculos de acceso",
-      "description": "Administre los vínculos entre usuarios, clientes y perfiles."
+      "description": "Administre los vínculos entre usuarios, clientes y perfiles.",
+      "actions": "Acciones",
+      "add_link": "Agregar vínculo",
+      "client": "Cliente",
+      "complete_rows_required": "Complete el cliente y el perfil en todos los vínculos.",
+      "empty_user": "Seleccione un usuario para consultar y administrar sus vínculos.",
+      "inactive": "Inactivo",
+      "no_rows": "Este usuario no tiene vínculos de acceso.",
+      "profile": "Perfil",
+      "remove_link": "Eliminar vínculo",
+      "replace_warning": "Al guardar, los vínculos mostrados reemplazan todos los vínculos actuales de este usuario. Sin filas, el usuario perderá el acceso a los clientes.",
+      "save_links": "Guardar vínculos",
+      "select_user_required": "Seleccione un usuario antes de guardar los vínculos.",
+      "superuser": "Superusuario",
+      "unnamed_profile": "Perfil sin nombre",
+      "user": "Usuario"
     },
     "request_logs": {
       "title": "Registros de solicitudes",
@@ -501,7 +516,19 @@
     },
     "files": {
       "title": "Archivos",
-      "description": "Consulte los archivos almacenados por cliente."
+      "description": "Consulte los archivos almacenados por cliente.",
+      "open_file": "Ver archivo",
+      "without_client": "Sin cliente",
+      "columns": {
+        "client": "Cliente",
+        "file_type": "Tipo",
+        "original_name": "Nombre original",
+        "preview": "Vista previa",
+        "provider": "Proveedor",
+        "size": "Tamaño",
+        "uploaded_at": "Fecha de carga",
+        "uploaded_by": "Enviado por"
+      }
     },
     "portals": {
       "title": "Portales",

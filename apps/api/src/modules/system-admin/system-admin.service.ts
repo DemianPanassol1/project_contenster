@@ -11,6 +11,7 @@ import {
   type PaginateRequest,
   type SystemAdminAccessLinkRequest,
   type SystemAdminClientListItem,
+  type SystemAdminFileListItem,
   type SystemAdminRequestLogListItem,
 } from '@contenster/shared';
 import type { I18nTranslations } from '@/i18n/translations';
@@ -25,14 +26,19 @@ import { SessionAuthenticationService } from '@/modules/identity/authentication/
 import { SessionSynchronizationService } from '@/modules/identity/authentication/session/session-synchronization.service';
 import type { SaveClientRequestDto } from '@/modules/identity/clients/dto/req/save-client.request.dto';
 import { Client } from '@/modules/identity/clients/entities/client.entity';
+import { File } from '@/modules/media/files/entities/file.entity';
 import { resolveFilePublicUrl } from '@/modules/media/files/helpers/file-public-url.helper';
 import { RequestLog } from '@/modules/observability/request-logs/entities/request-log.entity';
 import { CronExecutionLog } from '@/modules/scheduling/cron-execution-log/entities/cron-execution-log.entity';
+import { getCurrentLocale } from '@/shared/i18n';
 import { buildPaginationMeta } from '@/shared/pagination';
 import { toResponseDto } from '@/shared/responses';
+import { resolveTranslation } from '@/shared/translations';
 
 import { ReplaceUserAccessLinksRequestDto } from './dto/req/replace-user-access-links.request.dto';
+import { SystemAdminAccessLinkUserDetailsResponseDto } from './dto/res/system-admin-access-link-user-details.response.dto';
 import { SystemAdminClientListItemResponseDto } from './dto/res/system-admin-client-list-item.response.dto';
+import { SystemAdminFileListItemResponseDto } from './dto/res/system-admin-file-list-item.response.dto';
 import { SystemAdminJobLogDetailResponseDto } from './dto/res/system-admin-job-log-detail.response.dto';
 import { SystemAdminJobLogListItemResponseDto } from './dto/res/system-admin-job-log-list-item.response.dto';
 import { SystemAdminRequestLogDetailResponseDto } from './dto/res/system-admin-request-log-detail.response.dto';
@@ -336,13 +342,73 @@ export class SystemAdminService {
     return this.repository.listRequestLogClientOptions(request);
   }
 
-  listFiles(clientId?: number) {
-    return this.repository.listFiles(clientId);
+  listFileClientOptions(request: PaginateRequest) {
+    return this.repository.listFileClientOptions(request);
+  }
+
+  async listFiles(clientId?: number): Promise<SystemAdminFileListItemResponseDto[]> {
+    const files = await this.repository.listFiles(clientId);
+
+    return toResponseDto(
+      SystemAdminFileListItemResponseDto,
+      files.map((file) => this.toFileListItem(file)),
+    );
   }
 
   async listFilesPaginated(request: PaginateRequest) {
-    const [items, total] = await this.repository.listFilesPaginated(request);
-    return { items, meta: buildPaginationMeta(request, total) };
+    const [files, total] = await this.repository.listFilesPaginated(request);
+
+    return {
+      items: toResponseDto(
+        SystemAdminFileListItemResponseDto,
+        files.map((file) => this.toFileListItem(file)),
+      ),
+      meta: buildPaginationMeta(request, total),
+    };
+  }
+
+  async listAccessLinkUserOptions(request: PaginateRequest) {
+    return this.repository.listAccessLinkUserOptions(request);
+  }
+
+  async getAccessLinkUserDetails(id: number): Promise<SystemAdminAccessLinkUserDetailsResponseDto> {
+    const [user, clients] = await Promise.all([
+      this.repository.findAccessLinkUserDetails(id),
+      this.repository.listAccessLinkClients(),
+    ]);
+
+    if (!user) {
+      throw new NotFoundException(this.i18n.t('errors.system_admin.user_not_found'));
+    }
+
+    const locale = getCurrentLocale();
+
+    return toResponseDto(SystemAdminAccessLinkUserDetailsResponseDto, {
+      clients: clients.map((client) => ({
+        document: client.document,
+        id: client.id,
+        isActive: client.isActive,
+        profiles: client.profiles.map((profile) => ({
+          id: profile.id,
+          isActive: profile.isActive,
+          name: resolveTranslation(profile.translations, locale, 'name'),
+        })),
+        tradeName: client.tradeName,
+      })),
+      links: user.userProfiles.flatMap((link) => {
+        if (!link.client || !link.profile) {
+          return [];
+        }
+
+        return [{ clientId: link.client.id, profileId: link.profile.id }];
+      }),
+      user: {
+        id: user.id,
+        isSuperuser: user.isSuperuser,
+        name: user.name,
+        username: user.username,
+      },
+    });
   }
 
   async replaceUserAccessLinks(userId: number, request: ReplaceUserAccessLinksRequestDto) {
@@ -446,6 +512,22 @@ export class SystemAdminService {
       isActive: client.isActive,
       tradeName: client.tradeName,
       userCount,
+    };
+  }
+
+  private toFileListItem(file: File): SystemAdminFileListItem {
+    return {
+      clientId: file.client?.id ?? null,
+      clientName: file.client?.tradeName ?? null,
+      createdAt: serializeApplicationDateTime(file.createdAt),
+      fileType: file.fileType,
+      id: file.id,
+      mimeType: file.mimeType,
+      originalName: file.originalName,
+      provider: file.storageProvider,
+      sizeInBytes: file.sizeInBytes,
+      uploadedByName: file.uploadedBy?.name ?? null,
+      url: resolveFilePublicUrl(file),
     };
   }
 

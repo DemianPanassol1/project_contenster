@@ -84,6 +84,21 @@ export class SystemAdminController {
     return this.service.listFilesPaginated(request);
   }
 
+  @Post('files/client-options')
+  listFileClientOptions(@Body() request: PaginateRequestDto) {
+    return this.service.listFileClientOptions(request);
+  }
+
+  @Post('access-links/users/options')
+  listAccessLinkUserOptions(@Body() request: PaginateRequestDto) {
+    return this.service.listAccessLinkUserOptions(request);
+  }
+
+  @Get('access-links/users/:userId')
+  getAccessLinkUserDetails(@Param('userId', ParseIntPipe) userId: number) {
+    return this.service.getAccessLinkUserDetails(userId);
+  }
+
   @Post('users/:userId/access-links')
   replaceUserAccessLinks(
     @Param('userId', ParseIntPipe) userId: number,

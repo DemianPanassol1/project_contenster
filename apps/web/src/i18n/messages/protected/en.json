@@ -410,7 +410,22 @@
     },
     "access_links": {
       "title": "Access links",
-      "description": "Manage links between users, clients and profiles."
+      "description": "Manage links between users, clients and profiles.",
+      "actions": "Actions",
+      "add_link": "Add link",
+      "client": "Client",
+      "complete_rows_required": "Complete the client and profile for every link.",
+      "empty_user": "Select a user to view and manage their access links.",
+      "inactive": "Inactive",
+      "no_rows": "This user does not have any access links.",
+      "profile": "Profile",
+      "remove_link": "Remove link",
+      "replace_warning": "When saved, the listed links replace all of this user's current links. Without rows, the user will no longer have access to clients.",
+      "save_links": "Save links",
+      "select_user_required": "Select a user before saving access links.",
+      "superuser": "Superuser",
+      "unnamed_profile": "Unnamed profile",
+      "user": "User"
     },
     "request_logs": {
       "title": "Request logs",
@@ -501,7 +516,19 @@
     },
     "files": {
       "title": "Files",
-      "description": "View files stored for each client."
+      "description": "View files stored for each client.",
+      "open_file": "View file",
+      "without_client": "Without client",
+      "columns": {
+        "client": "Client",
+        "file_type": "Type",
+        "original_name": "Original name",
+        "preview": "Preview",
+        "provider": "Provider",
+        "size": "Size",
+        "uploaded_at": "Upload date",
+        "uploaded_by": "Uploaded by"
+      }
     },
     "portals": {
       "title": "Portals",

@@ -26,6 +26,7 @@ export class SystemAdminRepository {
     @InjectRepository(File) private readonly files: Repository<File>,
     @InjectRepository(CronExecutionLog) private readonly jobLogs: Repository<CronExecutionLog>,
     @InjectRepository(RequestLog) private readonly requestLogs: Repository<RequestLog>,
+    @InjectRepository(User) private readonly users: Repository<User>,
     @InjectRepository(UserProfile) private readonly userProfiles: Repository<UserProfile>,
   ) {}
 
@@ -164,7 +165,10 @@ export class SystemAdminRepository {
   }
 
   filesQuery() {
-    return this.files.createQueryBuilder('file').leftJoinAndSelect('file.client', 'client');
+    return this.files
+      .createQueryBuilder('file')
+      .leftJoinAndSelect('file.client', 'client')
+      .leftJoinAndSelect('file.uploadedBy', 'uploadedBy');
   }
 
   listFilesPaginated(request: PaginateRequest) {
@@ -173,10 +177,75 @@ export class SystemAdminRepository {
       fields: {
         clientId: 'client.id',
         createdAt: 'file.criado_em',
+        fileType: 'file.tipo_arquivo',
+        mimeType: 'file.tipo_mime',
         originalName: 'file.nome_original',
+        provider: 'file.provedor_storage',
         sizeInBytes: 'file.tamanho_bytes',
+        uploadedByName: 'uploadedBy.nome',
       },
       tieBreaker: 'file.id',
+    });
+  }
+
+  async listFileClientOptions(request: PaginateRequest): Promise<AppOption[]> {
+    const [clients] = await applyPaginatedQueryBuilder(
+      this.clients.createQueryBuilder('client'),
+      request,
+      {
+        defaultSort: [{ field: 'tradeName', direction: 'asc' }],
+        fields: CLIENT_LIST_FIELDS,
+        tieBreaker: 'client.id',
+      },
+    );
+
+    return clients.map((client) => ({
+      disabled: false,
+      label: `${client.tradeName} (${client.document})`,
+      metadata: null,
+      value: client.id,
+    }));
+  }
+
+  async listAccessLinkUserOptions(request: PaginateRequest): Promise<AppOption[]> {
+    const [users] = await applyPaginatedQueryBuilder(
+      this.users.createQueryBuilder('user'),
+      request,
+      {
+        defaultSort: [{ field: 'name', direction: 'asc' }],
+        fields: {
+          email: 'user.email',
+          name: 'user.nome',
+          username: 'user.nome_usuario',
+        },
+        tieBreaker: 'user.id',
+      },
+    );
+
+    return users.map((user) => ({
+      disabled: false,
+      label: `${user.name} (${user.username})`,
+      metadata: null,
+      value: user.id,
+    }));
+  }
+
+  findAccessLinkUserDetails(id: number): Promise<User | null> {
+    return this.users.findOne({
+      relations: {
+        userProfiles: {
+          client: true,
+          profile: { translations: { language: true } },
+        },
+      },
+      where: { id },
+    });
+  }
+
+  listAccessLinkClients(): Promise<Client[]> {
+    return this.clients.find({
+      order: { tradeName: 'ASC' },
+      relations: { profiles: { translations: { language: true } } },
     });
   }
 

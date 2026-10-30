@@ -1,7 +1,12 @@
 export const SYSTEM_ADMIN_ROUTES = {
+  GET_ACCESS_LINK_USER_DETAILS: (userId: number) => `system-admin/access-links/users/${userId}`,
   DELETE_CLIENT: (id: number) => `system-admin/clients/${id}`,
   PATCH_CLIENT_ACTIVE: (id: number) => `system-admin/clients/${id}/active`,
+  POST_ACCESS_LINK_USER_OPTIONS: 'system-admin/access-links/users/options',
+  POST_ACCESS_LINKS: (userId: number) => `system-admin/users/${userId}/access-links`,
   POST_CLIENT_LIST: 'system-admin/clients/list',
+  POST_FILE_CLIENT_OPTIONS: 'system-admin/files/client-options',
+  POST_FILE_LIST: 'system-admin/files/list',
   GET_REQUEST_LOG: (id: number) => `system-admin/request-logs/${id}`,
   GET_JOB_LOG: (id: number) => `system-admin/job-logs/${id}`,
   POST_REQUEST_LOG_CLIENT_OPTIONS: 'system-admin/request-logs/client-options',
