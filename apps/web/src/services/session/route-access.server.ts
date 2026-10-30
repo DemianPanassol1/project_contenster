@@ -19,7 +19,9 @@ export const isClientSession = (
 ): session is AuthenticatedSession & { context: { type: SessionContextType.client } } =>
   session?.context.type === SessionContextType.client;
 
-export const isGlobalSuperuserSession = (session: AuthenticatedSession | null): boolean =>
+export const isGlobalSuperuserSession = (
+  session: AuthenticatedSession | null,
+): session is AuthenticatedSession & { context: { type: SessionContextType.global } } =>
   session?.context.type === SessionContextType.global && session.user.isSuperuser;
 
 export const getSessionFeaturePresentation = (

@@ -377,6 +377,41 @@
   },
   "system_admin": {
     "home_title": "Panel de administración global",
-    "not_found": "Página global no encontrada."
+    "home_description": "Administración del sistema",
+    "module": "Administración global",
+    "not_found": "Página global no encontrada.",
+    "navigation": {
+      "navigation_title": "Sistema",
+      "clients": "Clientes",
+      "access_links": "Vínculos de acceso",
+      "request_logs": "Registros de solicitudes",
+      "job_logs": "Registros de trabajos",
+      "files": "Archivos",
+      "portals": "Portales"
+    },
+    "clients": {
+      "title": "Clientes",
+      "description": "Administre los clientes registrados en el sistema."
+    },
+    "access_links": {
+      "title": "Vínculos de acceso",
+      "description": "Administre los vínculos entre usuarios, clientes y perfiles."
+    },
+    "request_logs": {
+      "title": "Registros de solicitudes",
+      "description": "Consulte los registros globales de solicitudes del sistema."
+    },
+    "job_logs": {
+      "title": "Registros de trabajos",
+      "description": "Consulte las ejecuciones de las tareas programadas del sistema."
+    },
+    "files": {
+      "title": "Archivos",
+      "description": "Consulte los archivos almacenados por cliente."
+    },
+    "portals": {
+      "title": "Portales",
+      "description": "Administre las identidades públicas disponibles en el sistema."
+    }
   }
 }

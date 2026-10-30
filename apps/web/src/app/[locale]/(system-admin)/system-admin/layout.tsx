@@ -29,10 +29,14 @@ export default async function SystemAdminRouteLayout({
 
   if (isClientSession(session)) {
     redirect({ href: '/admin', locale });
+
+    return null;
   }
 
   if (!isGlobalSuperuserSession(session)) {
     redirect({ href: '/auth/login', locale });
+
+    return null;
   }
 
   const portal = await getPublicPortal();
@@ -42,7 +46,7 @@ export default async function SystemAdminRouteLayout({
       <PortalColorSchemeScript />
       <PortalProvider portal={portal}>
         <AdminProviders closeSnackbarLabel={t('close_snackbar')} locale={locale} portal={portal}>
-          <SystemLayout>{children}</SystemLayout>
+          <SystemLayout user={session.user}>{children}</SystemLayout>
         </AdminProviders>
       </PortalProvider>
     </>

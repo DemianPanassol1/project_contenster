@@ -21,6 +21,7 @@
     "notifications_empty": "No notifications",
     "see_all_notifications": "See all notifications",
     "change_client": "Change client",
+    "access_client_context": "Access client context",
     "return_to_global_panel": "Return to global panel",
     "returning_to_global_panel": "Returning to global panel...",
     "my_profile": "My profile",
@@ -30,6 +31,7 @@
     "show_password": "Show password",
     "hide_password": "Hide password",
     "open_user_menu": "Open user menu",
+    "superuser": "Superuser",
     "password_changed_successfully": "Password changed successfully!",
     "close": "Close",
     "logout": "Log out"

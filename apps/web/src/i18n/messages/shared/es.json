@@ -21,6 +21,7 @@
     "notifications_empty": "Sin notificaciones",
     "see_all_notifications": "Ver todas las notificaciones",
     "change_client": "Cambiar cliente",
+    "access_client_context": "Acceder al contexto del cliente",
     "return_to_global_panel": "Volver al panel global",
     "returning_to_global_panel": "Volviendo al panel global...",
     "my_profile": "Mi perfil",
@@ -30,6 +31,7 @@
     "show_password": "Mostrar contraseña",
     "hide_password": "Ocultar contraseña",
     "open_user_menu": "Abrir menú de usuario",
+    "superuser": "Superusuario",
     "password_changed_successfully": "¡Contraseña cambiada correctamente!",
     "close": "Cerrar",
     "logout": "Salir"

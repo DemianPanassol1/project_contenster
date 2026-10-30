@@ -377,6 +377,41 @@
   },
   "system_admin": {
     "home_title": "Global administration panel",
-    "not_found": "Global page not found."
+    "home_description": "System administration",
+    "module": "Global administration",
+    "not_found": "Global page not found.",
+    "navigation": {
+      "navigation_title": "System",
+      "clients": "Clients",
+      "access_links": "Access links",
+      "request_logs": "Request logs",
+      "job_logs": "Job logs",
+      "files": "Files",
+      "portals": "Portals"
+    },
+    "clients": {
+      "title": "Clients",
+      "description": "Manage the clients registered in the system."
+    },
+    "access_links": {
+      "title": "Access links",
+      "description": "Manage links between users, clients and profiles."
+    },
+    "request_logs": {
+      "title": "Request logs",
+      "description": "View the system-wide request records."
+    },
+    "job_logs": {
+      "title": "Job logs",
+      "description": "View the executions of scheduled system tasks."
+    },
+    "files": {
+      "title": "Files",
+      "description": "View files stored for each client."
+    },
+    "portals": {
+      "title": "Portals",
+      "description": "Manage the public identities available in the system."
+    }
   }
 }
