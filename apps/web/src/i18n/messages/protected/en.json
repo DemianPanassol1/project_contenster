@@ -1,6 +1,12 @@
 {
   "home": {
-    "title": "Administration"
+    "description": "Go directly to the main features available to your access profile.",
+    "empty": {
+      "description": "Your profile does not have view permission for this page's quick access links.",
+      "title": "No access available"
+    },
+    "module": "Contenster",
+    "title": "Quick access"
   },
   "not_found": {
     "message": "Administrative page not found."

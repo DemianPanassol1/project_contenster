@@ -1,6 +1,12 @@
 {
   "home": {
-    "title": "Administración"
+    "description": "Accede directamente a las principales funcionalidades disponibles para tu perfil.",
+    "empty": {
+      "description": "Tu perfil no tiene permiso de visualización para los accesos rápidos de esta página.",
+      "title": "No hay accesos disponibles"
+    },
+    "module": "Contenster",
+    "title": "Accesos rápidos"
   },
   "not_found": {
     "message": "Página administrativa no encontrada."
