@@ -532,7 +532,169 @@
     },
     "portals": {
       "title": "Portals",
-      "description": "Manage the public identities available in the system."
+      "description": "Manage the public identities available in the system.",
+      "save_description": "Configure hosts, visual identity and the login presentation.",
+      "create": "Create record",
+      "create_title": "Portals - Create",
+      "edit_title": "Portals - Edit",
+      "go_back": "Back",
+      "save": "Save",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "delete_title": "Delete portal",
+      "delete_message": "Do you want to delete this portal? This action cannot be undone.",
+      "delete_many_message": "Do you want to delete the {count} selected portals? This action cannot be undone.",
+      "delete_selected": "Delete selected portals",
+      "detail_load_error": "The portal information could not be loaded.",
+      "columns": { "internal_name": "Internal name", "hosts": "Hosts", "updated_at": "Updated at" },
+      "tabs": {
+        "label": "Portal configuration",
+        "general": "General",
+        "domains": "Hosts",
+        "identity": "Identity",
+        "login": "Login"
+      },
+      "general": {
+        "administrative_title": "Administrative configuration",
+        "administrative_description": "Define the internal identity and support contact.",
+        "translations_title": "Translatable texts",
+        "translations_description": "Customize public texts for every available language."
+      },
+      "domains": {
+        "title": "Portal hosts",
+        "description": "Each host points to this public identity. Include the port for localhost.",
+        "placeholder": "app.example.com"
+      },
+      "identity": {
+        "palette_title": "Color palette",
+        "palette_description": "Define the colors used in light and dark modes.",
+        "light_palette": "Light mode",
+        "dark_palette": "Dark mode",
+        "colors": {
+          "select": "Select {color}",
+          "primary": {
+            "label": "Primary color",
+            "helper": "Primary emphasis for buttons, links and actions. Default: {value}"
+          },
+          "secondary": {
+            "label": "Secondary color",
+            "helper": "Secondary emphasis and supplementary information. Default: {value}"
+          },
+          "background": {
+            "label": "Background color",
+            "helper": "Main background for public pages. Default: {value}"
+          },
+          "paper": {
+            "label": "Surface color",
+            "helper": "Surface for cards and content areas. Default: {value}"
+          },
+          "success": {
+            "label": "Success",
+            "helper": "Confirmations and completed operations. Default: {value}"
+          },
+          "warning": {
+            "label": "Warning",
+            "helper": "Alerts that require the user's attention. Default: {value}"
+          },
+          "error": { "label": "Error", "helper": "Failures and error messages. Default: {value}" }
+        },
+        "typography_title": "Typography",
+        "typography_description": "Choose the identity typography scale.",
+        "assets_title": "Identity files",
+        "assets_description": "Upload the files that represent this public identity.",
+        "favicon_upload": {
+          "title": "Add an icon",
+          "description": "PNG, static SVG or ICO.",
+          "action": "Upload icon"
+        }
+      },
+      "login": {
+        "configuration_title": "Login presentation",
+        "configuration_description": "Define the structure and header of the authentication screen.",
+        "media_title": "Login media",
+        "media_description": "Assign images or videos to the visual spaces of the selected layout."
+      },
+      "media": {
+        "description": "Files are specific to desktop and mobile devices.",
+        "slots": {
+          "centered_background_desktop": "Centered background — desktop",
+          "centered_background_mobile": "Centered background — mobile",
+          "split_panel_desktop": "Split panel — desktop",
+          "split_panel_mobile": "Split panel — mobile"
+        }
+      },
+      "fields": {
+        "internal_name": "Internal name",
+        "support_url": "Support link",
+        "application_name": "Application name",
+        "application_description": "Application description",
+        "login_title": "Login title",
+        "login_description": "Login description",
+        "support_text": "Support text",
+        "brand_asset_alt": "Brand description",
+        "host": "Host",
+        "primary": "Primary",
+        "secondary": "Secondary",
+        "background": "Background",
+        "paper": "Surface",
+        "success": "Success",
+        "warning": "Warning",
+        "error": "Error",
+        "font_scale": "Font scale",
+        "favicon": "Favicon",
+        "header_icon": "Header icon",
+        "brand_asset": "Brand",
+        "login_layout": "Login layout",
+        "split_media_position": "Media position",
+        "login_header_mode": "Login header",
+        "media_type": "Media type",
+        "media_file": "Media file",
+        "poster": "Poster image"
+      },
+      "helpers": {
+        "internal_name": "Administrative identifier used to recognize this portal in the global panel.",
+        "support_url": "HTTPS address opened when the user requests support.",
+        "application_name": "Name shown in the header and titles of the public application.",
+        "application_description": "Supporting text that identifies the application to the public.",
+        "login_title": "Main title shown in the authentication form.",
+        "login_description": "Guidance text displayed with the authentication form.",
+        "support_text": "Text shown before the support link on the login page.",
+        "brand_asset_alt": "Alternative description of the brand for screen readers and when the image cannot load.",
+        "host": "Domain that must load this identity. Include the port for localhost.",
+        "font_scale": "Defines the relative text size on public pages.",
+        "favicon": "Identifies the site in the browser tab. PNG, static SVG or ICO.",
+        "header_icon": "Icon shown next to the name when the login header uses text.",
+        "brand_asset": "Image or logo shown when the login header uses a brand.",
+        "login_layout": "Defines whether the form is centered or displayed beside media.",
+        "split_media_position": "Defines which side displays the media in the split layout.",
+        "login_header_mode": "Chooses whether the login is identified by text or a visual brand.",
+        "media_type": "Choose whether the visual space receives an image or video.",
+        "media_file": "File shown in this visual space of the login page.",
+        "poster": "Image shown before the video starts and while it loads."
+      },
+      "values": {
+        "no_hosts": "No hosts",
+        "font_scale": { "small": "Small", "standard": "Standard", "large": "Large" },
+        "login_layout": { "centered": "Centered", "split": "Split" },
+        "split_position": { "left": "Left", "right": "Right" },
+        "header_mode": { "text": "Text", "brand_asset": "Brand" },
+        "media_type": { "image": "Image", "video": "Video" }
+      },
+      "validation": {
+        "host_required": "Enter the host.",
+        "host_too_long": "The host must contain at most 253 characters.",
+        "host_invalid": "Enter a valid host.",
+        "host_duplicate": "This host was already added.",
+        "color_required": "Enter the color.",
+        "color_invalid": "Enter a hexadecimal color in #RRGGBB format.",
+        "font_scale_required": "Select the font scale.",
+        "brand_asset_required": "Upload the brand for this header mode.",
+        "brand_asset_alt_required": "Enter the brand description.",
+        "login_layout_required": "Select the login layout.",
+        "split_position_required": "Select the media position.",
+        "login_header_mode_required": "Select the header mode."
+      },
+      "actions": { "add_domain": "Add host", "remove_domain": "Remove host" }
     }
   }
 }

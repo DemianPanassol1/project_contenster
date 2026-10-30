@@ -7,6 +7,8 @@ import {
 import { I18nService } from 'nestjs-i18n';
 
 import {
+  type AppOption,
+  type FileResponse,
   isPortalAssetCompatible,
   normalizePortalHost,
   type PaginatedBody,
@@ -35,7 +37,6 @@ import { buildPaginationMeta } from '@/shared/pagination';
 import { SavePortalRequestDto } from './dto/req/save-portal.request.dto';
 import { Portal, PortalDomain, PortalLoginMedia, PortalTranslation } from './entities';
 import { PortalsRepository } from './portals.repository';
-import { type PortalMediaUploadResult } from './types';
 
 const TRANSLATION_FIELDS = [
   'applicationName',
@@ -68,8 +69,23 @@ export class PortalsService {
     };
   }
 
+  async listLanguageOptions(request: PaginateRequestDto): Promise<AppOption[]> {
+    const [languages] = await this.repository.listLanguages(request);
+
+    return languages.map((language) => ({
+      disabled: false,
+      label: language.name,
+      metadata: { locale: language.languageCode },
+      value: language.id,
+    }));
+  }
+
   async getById(id: number): Promise<PortalDetail> {
     return this.toDetail(await this.getEntityOrFail(id));
+  }
+
+  getMediaById(id: number): Promise<FileResponse> {
+    return this.fileService.findGlobalById(id);
   }
 
   async save(request: SavePortalRequestDto): Promise<PortalDetail> {
@@ -118,15 +134,8 @@ export class PortalsService {
   async uploadMedia(
     file: UploadedMultipartFile | undefined,
     uploadedByUserId: number,
-  ): Promise<PortalMediaUploadResult> {
-    const uploadedFile = await this.fileService.uploadGlobal(file, uploadedByUserId);
-    const portalMediaFile = this.toMediaFile(uploadedFile);
-
-    if (!portalMediaFile) {
-      throw new BadRequestException(this.i18n.t('errors.portal.invalid_file'));
-    }
-
-    return { file: portalMediaFile };
+  ): Promise<FileResponse> {
+    return this.fileService.uploadGlobal(file, uploadedByUserId);
   }
 
   private async getEntityOrFail(id: number): Promise<Portal> {

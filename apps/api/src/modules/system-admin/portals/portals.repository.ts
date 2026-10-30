@@ -58,6 +58,18 @@ export class PortalsRepository {
     return this.languages.find({ where: { languageCode: In(languageCodes) } });
   }
 
+  listLanguages(request: PaginateRequest): Promise<[Language[], number]> {
+    return applyPaginatedQueryBuilder(this.languages.createQueryBuilder('language'), request, {
+      defaultSort: [{ direction: 'asc', field: 'name' }],
+      fields: {
+        id: 'language.id',
+        languageCode: 'language.codigo_idioma',
+        name: 'language.nome',
+      },
+      tieBreaker: 'language.id',
+    });
+  }
+
   findConflictingDomains(hosts: string[], portalId: number | null): Promise<PortalDomain[]> {
     return this.domains.find({
       where: {

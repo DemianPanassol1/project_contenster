@@ -12,4 +12,11 @@ export const SYSTEM_ADMIN_ROUTES = {
   POST_REQUEST_LOG_CLIENT_OPTIONS: 'system-admin/request-logs/client-options',
   POST_REQUEST_LOG_LIST: 'system-admin/request-logs/list',
   POST_JOB_LOG_LIST: 'system-admin/job-logs/list',
+  GET_PORTAL: (id: number) => `system-admin/portals/${id}`,
+  GET_PORTAL_MEDIA: (id: number) => `system-admin/portals/media/${id}`,
+  POST_PORTAL: 'system-admin/portals',
+  POST_PORTAL_DELETE: 'system-admin/portals/delete',
+  POST_PORTAL_LANGUAGE_OPTIONS: 'system-admin/portals/languages/options',
+  POST_PORTAL_LIST: 'system-admin/portals/list',
+  POST_PORTAL_MEDIA: 'system-admin/portals/media/upload',
 } as const;

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { type DeepPartial, LessThanOrEqual, Repository } from 'typeorm';
+import { type DeepPartial, IsNull, LessThanOrEqual, Repository } from 'typeorm';
 
 import { FileType } from '@contenster/shared';
 
@@ -20,6 +20,13 @@ export class FileRepository {
     return this.files.findOne({
       relations: { client: true, storageConfiguration: true, uploadedBy: true },
       where: { id, client: { id: clientId } },
+    });
+  }
+
+  findGlobalById(id: number): Promise<File | null> {
+    return this.files.findOne({
+      relations: { client: true, storageConfiguration: true, uploadedBy: true },
+      where: { client: IsNull(), id },
     });
   }
 

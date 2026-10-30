@@ -49,6 +49,14 @@ export class FileService {
     return this.toResponse(file);
   }
 
+  async findGlobalById(id: number): Promise<FileResponseDto> {
+    const file = await this.fileRepository.findGlobalById(id);
+
+    if (!file) throw new NotFoundException(this.i18n.t('errors.media.file_not_found'));
+
+    return this.toResponse(file);
+  }
+
   async upload(
     file: UploadedMultipartFile | undefined,
     clientId: number,
@@ -79,7 +87,7 @@ export class FileService {
   async uploadGlobal(
     file: UploadedMultipartFile | undefined,
     uploadedByUserId: number,
-  ): Promise<File> {
+  ): Promise<FileResponseDto> {
     const validation = validateUploadedFile(file, settings.MAX_UPLOAD_FILE_SIZE_BYTES);
 
     if (!validation.ok) {
@@ -93,7 +101,9 @@ export class FileService {
     const uploadedBy = new User();
     uploadedBy.id = uploadedByUserId;
 
-    return this.storeDefaultLocal(validation.file, uploadedBy);
+    const storedFile = await this.storeDefaultLocal(validation.file, uploadedBy);
+
+    return this.toResponse(storedFile);
   }
 
   private async store(

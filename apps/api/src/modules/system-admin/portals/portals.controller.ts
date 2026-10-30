@@ -32,6 +32,17 @@ export class PortalsController {
     return this.service.list(request);
   }
 
+  @Post('languages/options')
+  listLanguageOptions(@Body() request: PaginateRequestDto) {
+    return this.service.listLanguageOptions(request);
+  }
+
+  @Get('media/:id')
+  @ApiParam({ name: 'id', type: Number })
+  getMediaById(@Param('id', ParseIntPipe) id: number) {
+    return this.service.getMediaById(id);
+  }
+
   @Get(':id')
   @ApiParam({ name: 'id', type: Number })
   getById(@Param('id', ParseIntPipe) id: number) {

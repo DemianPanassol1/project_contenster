@@ -1,0 +1,128 @@
+import {
+  normalizePortalHost,
+  type PortalDetail,
+  PortalFontScale,
+  PortalLoginHeaderMode,
+  PortalLoginLayout,
+  PortalLoginMediaSlot,
+  PortalLoginMediaType,
+  type PortalPalette,
+  PortalSplitMediaPosition,
+  type SavePortalRequest,
+  type SessionLanguage,
+} from '@contenster/shared';
+
+import type { PortalFormValues } from './portal-form.types';
+
+export const defaultPortalLightPalette: PortalPalette = {
+  background: '#F8FAFC',
+  error: '#E11D48',
+  paper: '#FFFFFF',
+  primary: '#5B5BD6',
+  secondary: '#64748B',
+  success: '#16A34A',
+  warning: '#D97706',
+};
+
+export const defaultPortalDarkPalette: PortalPalette = {
+  background: '#111827',
+  error: '#FDA4AF',
+  paper: '#1F2937',
+  primary: '#A5B4FC',
+  secondary: '#94A3B8',
+  success: '#4ADE80',
+  warning: '#FBBF24',
+};
+
+const portalMediaSlots = Object.values(PortalLoginMediaSlot);
+
+const createPortalMedia = (detail: PortalDetail | null): PortalFormValues['loginMedia'] =>
+  Object.fromEntries(
+    portalMediaSlots.map((slot) => {
+      const media = detail?.loginMedia.find((item) => item.slot === slot);
+
+      return [
+        slot,
+        {
+          fileId: media?.fileId ?? null,
+          mediaType: media?.mediaType ?? PortalLoginMediaType.image,
+          posterFileId: media?.posterFileId ?? null,
+        },
+      ];
+    }),
+  ) as PortalFormValues['loginMedia'];
+
+export const createPortalFormValues = (
+  languages: SessionLanguage[],
+  detail: PortalDetail | null = null,
+): PortalFormValues => ({
+  brandAssetFileId: detail?.brandAssetFileId ?? null,
+  darkPalette: { ...(detail?.darkPalette ?? defaultPortalDarkPalette) },
+  faviconFileId: detail?.faviconFileId ?? null,
+  fontScale: detail?.fontScale ?? PortalFontScale.standard,
+  headerIconFileId: detail?.headerIconFileId ?? null,
+  hosts: (detail?.hosts ?? ['']).map((host) => ({ id: crypto.randomUUID(), host })),
+  id: detail?.id ?? null,
+  internalName: detail?.internalName ?? '',
+  lightPalette: { ...(detail?.lightPalette ?? defaultPortalLightPalette) },
+  loginHeaderMode: detail?.loginHeaderMode ?? PortalLoginHeaderMode.text,
+  loginLayout: detail?.loginLayout ?? PortalLoginLayout.centered,
+  loginMedia: createPortalMedia(detail),
+  splitMediaPosition:
+    detail?.loginLayout === PortalLoginLayout.split
+      ? (detail.splitMediaPosition ?? PortalSplitMediaPosition.right)
+      : null,
+  supportUrl: detail?.supportUrl ?? '',
+  translations: languages.map((language) => {
+    const translation = detail?.translations.find((item) => item.locale === language.locale);
+
+    return {
+      applicationDescription: translation?.applicationDescription ?? null,
+      applicationName: translation?.applicationName ?? null,
+      locale: language.locale,
+      loginBrandAssetAlt: translation?.loginBrandAssetAlt ?? null,
+      loginDescription: translation?.loginDescription ?? null,
+      loginTitle: translation?.loginTitle ?? null,
+      supportText: translation?.supportText ?? null,
+    };
+  }),
+});
+
+export const mapPortalPayload = (values: PortalFormValues): SavePortalRequest => ({
+  brandAssetFileId:
+    values.loginHeaderMode === PortalLoginHeaderMode.brandAsset ? values.brandAssetFileId : null,
+  darkPalette: values.darkPalette,
+  faviconFileId: values.faviconFileId,
+  fontScale: values.fontScale,
+  headerIconFileId:
+    values.loginHeaderMode === PortalLoginHeaderMode.text ? values.headerIconFileId : null,
+  hosts: values.hosts.map((item) => normalizePortalHost(item.host) ?? item.host),
+  id: values.id,
+  internalName: values.internalName,
+  lightPalette: values.lightPalette,
+  loginHeaderMode: values.loginHeaderMode,
+  loginLayout: values.loginLayout,
+  loginMedia: portalMediaSlots.flatMap((slot) => {
+    const media = values.loginMedia[slot];
+
+    return !media.fileId
+      ? []
+      : [
+          {
+            fileId: media.fileId,
+            mediaType: media.mediaType,
+            posterFileId:
+              media.mediaType === PortalLoginMediaType.video ? media.posterFileId : null,
+            slot,
+          },
+        ];
+  }),
+  splitMediaPosition:
+    values.loginLayout === PortalLoginLayout.split ? values.splitMediaPosition : null,
+  supportUrl: values.supportUrl || null,
+  translations: values.translations.filter((translation) =>
+    Object.entries(translation).some(
+      ([field, value]) => field !== 'locale' && value !== null && value !== '',
+    ),
+  ),
+});

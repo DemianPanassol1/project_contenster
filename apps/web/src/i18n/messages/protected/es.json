@@ -532,7 +532,176 @@
     },
     "portals": {
       "title": "Portales",
-      "description": "Administre las identidades públicas disponibles en el sistema."
+      "description": "Administre las identidades públicas disponibles en el sistema.",
+      "save_description": "Configure hosts, identidad visual y la presentación del inicio de sesión.",
+      "create": "Crear registro",
+      "create_title": "Portales - Crear",
+      "edit_title": "Portales - Editar",
+      "go_back": "Volver",
+      "save": "Guardar",
+      "cancel": "Cancelar",
+      "delete": "Eliminar",
+      "delete_title": "Eliminar portal",
+      "delete_message": "¿Desea eliminar este portal? Esta acción no se puede deshacer.",
+      "delete_many_message": "¿Desea eliminar los {count} portales seleccionados? Esta acción no se puede deshacer.",
+      "delete_selected": "Eliminar portales seleccionados",
+      "detail_load_error": "No se pudo cargar la información del portal.",
+      "columns": {
+        "internal_name": "Nombre interno",
+        "hosts": "Hosts",
+        "updated_at": "Actualizado el"
+      },
+      "tabs": {
+        "label": "Configuración del portal",
+        "general": "General",
+        "domains": "Hosts",
+        "identity": "Identidad",
+        "login": "Inicio de sesión"
+      },
+      "general": {
+        "administrative_title": "Configuración administrativa",
+        "administrative_description": "Defina la identidad interna y el contacto de soporte.",
+        "translations_title": "Textos traducibles",
+        "translations_description": "Personalice los textos públicos para cada idioma disponible."
+      },
+      "domains": {
+        "title": "Hosts del portal",
+        "description": "Cada host apunta a esta identidad pública. Incluya el puerto para localhost.",
+        "placeholder": "app.ejemplo.com"
+      },
+      "identity": {
+        "palette_title": "Paleta de colores",
+        "palette_description": "Defina los colores usados en los modos claro y oscuro.",
+        "light_palette": "Modo claro",
+        "dark_palette": "Modo oscuro",
+        "colors": {
+          "select": "Seleccionar {color}",
+          "primary": {
+            "label": "Color primario",
+            "helper": "Énfasis principal para botones, enlaces y acciones. Predeterminado: {value}"
+          },
+          "secondary": {
+            "label": "Color secundario",
+            "helper": "Énfasis secundario e información complementaria. Predeterminado: {value}"
+          },
+          "background": {
+            "label": "Color de fondo",
+            "helper": "Fondo principal de las páginas públicas. Predeterminado: {value}"
+          },
+          "paper": {
+            "label": "Color de superficie",
+            "helper": "Superficie de tarjetas y áreas de contenido. Predeterminado: {value}"
+          },
+          "success": {
+            "label": "Éxito",
+            "helper": "Confirmaciones y operaciones finalizadas. Predeterminado: {value}"
+          },
+          "warning": {
+            "label": "Atención",
+            "helper": "Alertas que requieren atención del usuario. Predeterminado: {value}"
+          },
+          "error": {
+            "label": "Error",
+            "helper": "Fallos y mensajes de error. Predeterminado: {value}"
+          }
+        },
+        "typography_title": "Tipografía",
+        "typography_description": "Elija la escala tipográfica de la identidad.",
+        "assets_title": "Archivos de identidad",
+        "assets_description": "Cargue los archivos que representan esta identidad pública.",
+        "favicon_upload": {
+          "title": "Agregar un icono",
+          "description": "PNG, SVG estático o ICO.",
+          "action": "Subir icono"
+        }
+      },
+      "login": {
+        "configuration_title": "Presentación del inicio de sesión",
+        "configuration_description": "Defina la estructura y el encabezado de la pantalla de autenticación.",
+        "media_title": "Medios de inicio de sesión",
+        "media_description": "Asigne imágenes o videos a los espacios visuales del diseño seleccionado."
+      },
+      "media": {
+        "description": "Los archivos son específicos para equipos de escritorio y móviles.",
+        "slots": {
+          "centered_background_desktop": "Fondo centrado — escritorio",
+          "centered_background_mobile": "Fondo centrado — móvil",
+          "split_panel_desktop": "Panel dividido — escritorio",
+          "split_panel_mobile": "Panel dividido — móvil"
+        }
+      },
+      "fields": {
+        "internal_name": "Nombre interno",
+        "support_url": "Enlace de soporte",
+        "application_name": "Nombre de la aplicación",
+        "application_description": "Descripción de la aplicación",
+        "login_title": "Título del inicio de sesión",
+        "login_description": "Descripción del inicio de sesión",
+        "support_text": "Texto de soporte",
+        "brand_asset_alt": "Descripción de marca",
+        "host": "Host",
+        "primary": "Primaria",
+        "secondary": "Secundaria",
+        "background": "Fondo",
+        "paper": "Superficie",
+        "success": "Éxito",
+        "warning": "Aviso",
+        "error": "Error",
+        "font_scale": "Escala de fuente",
+        "favicon": "Favicon",
+        "header_icon": "Icono del encabezado",
+        "brand_asset": "Marca",
+        "login_layout": "Diseño del inicio de sesión",
+        "split_media_position": "Posición del medio",
+        "login_header_mode": "Encabezado del inicio de sesión",
+        "media_type": "Tipo de medio",
+        "media_file": "Archivo multimedia",
+        "poster": "Imagen de portada"
+      },
+      "helpers": {
+        "internal_name": "Identificador administrativo utilizado para reconocer este portal en el panel global.",
+        "support_url": "Dirección HTTPS que se abre cuando el usuario solicita soporte.",
+        "application_name": "Nombre mostrado en el encabezado y títulos de la aplicación pública.",
+        "application_description": "Texto complementario que identifica la aplicación para el público.",
+        "login_title": "Título principal mostrado en el formulario de autenticación.",
+        "login_description": "Texto de orientación mostrado junto al formulario de autenticación.",
+        "support_text": "Texto mostrado antes del enlace de soporte en la pantalla de inicio de sesión.",
+        "brand_asset_alt": "Descripción alternativa de la marca para lectores de pantalla y cuando la imagen no carga.",
+        "host": "Dominio que debe cargar esta identidad. Incluya el puerto para localhost.",
+        "font_scale": "Define el tamaño relativo del texto en las páginas públicas.",
+        "favicon": "Identifica el sitio en la pestaña del navegador. PNG, SVG estático o ICO.",
+        "header_icon": "Icono mostrado junto al nombre cuando el encabezado del inicio de sesión usa texto.",
+        "brand_asset": "Imagen o logotipo mostrado cuando el encabezado del inicio de sesión usa una marca.",
+        "login_layout": "Define si el formulario aparece centrado o junto a un medio.",
+        "split_media_position": "Define en qué lado aparece el medio en el diseño dividido.",
+        "login_header_mode": "Elige si el inicio de sesión se identifica por texto o por una marca visual.",
+        "media_type": "Elija si el espacio visual recibe una imagen o un video.",
+        "media_file": "Archivo mostrado en este espacio visual de la pantalla de inicio de sesión.",
+        "poster": "Imagen mostrada antes de iniciar el video y durante su carga."
+      },
+      "values": {
+        "no_hosts": "Sin hosts",
+        "font_scale": { "small": "Pequeña", "standard": "Estándar", "large": "Grande" },
+        "login_layout": { "centered": "Centrado", "split": "Dividido" },
+        "split_position": { "left": "Izquierda", "right": "Derecha" },
+        "header_mode": { "text": "Texto", "brand_asset": "Marca" },
+        "media_type": { "image": "Imagen", "video": "Vídeo" }
+      },
+      "validation": {
+        "host_required": "Informe el host.",
+        "host_too_long": "El host debe tener como máximo 253 caracteres.",
+        "host_invalid": "Informe un host válido.",
+        "host_duplicate": "Este host ya fue informado.",
+        "color_required": "Informe el color.",
+        "color_invalid": "Informe un color hexadecimal en formato #RRGGBB.",
+        "font_scale_required": "Seleccione la escala de fuente.",
+        "brand_asset_required": "Cargue la marca para este modo de encabezado.",
+        "brand_asset_alt_required": "Informe la descripción de marca.",
+        "login_layout_required": "Seleccione el diseño de inicio de sesión.",
+        "split_position_required": "Seleccione la posición del medio.",
+        "login_header_mode_required": "Seleccione el modo del encabezado."
+      },
+      "actions": { "add_domain": "Agregar host", "remove_domain": "Eliminar host" }
     }
   }
 }

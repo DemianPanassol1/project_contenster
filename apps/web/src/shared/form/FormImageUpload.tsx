@@ -3,7 +3,7 @@
 import type { FileResponse } from '@contenster/shared';
 import { Box, Button, FormControl, FormHelperText, Typography } from '@mui/material';
 import { useLocale, useTranslations } from 'next-intl';
-import { type ChangeEvent, useEffect, useId, useReducer, useState } from 'react';
+import { type ChangeEvent, type ReactNode, useEffect, useId, useReducer, useState } from 'react';
 import { Controller, type FieldValues, useFormContext, useWatch } from 'react-hook-form';
 
 import { useGlobalContext } from '@/core/providers';
@@ -26,6 +26,9 @@ interface FormImageUploadProps<T extends FieldValues> extends BaseFormFieldProps
   uploadEndpoint?: string;
   onUploadSuccess?: (file: FileResponse) => void;
   onDelete?: () => void;
+  emptyStateTitle?: ReactNode;
+  emptyStateDescription?: ReactNode;
+  uploadButtonLabel?: ReactNode;
 }
 
 export const FormImageUpload = <T extends FieldValues>({
@@ -41,6 +44,9 @@ export const FormImageUpload = <T extends FieldValues>({
   disabled = false,
   initialFile = null,
   previewMode = 'local',
+  emptyStateTitle,
+  emptyStateDescription,
+  uploadButtonLabel,
 }: FormImageUploadProps<T>) => {
   const inputId = useId();
   const locale = useLocale();
@@ -252,7 +258,7 @@ export const FormImageUpload = <T extends FieldValues>({
                         fontWeight: 700,
                       }}
                     >
-                      {t('form.upload.image_empty_title')}
+                      {emptyStateTitle ?? t('form.upload.image_empty_title')}
                     </Typography>
 
                     <Typography
@@ -262,7 +268,7 @@ export const FormImageUpload = <T extends FieldValues>({
                         color: 'text.secondary',
                       }}
                     >
-                      {t('form.upload.image_empty_description')}
+                      {emptyStateDescription ?? t('form.upload.image_empty_description')}
                     </Typography>
                   </Box>
 
@@ -288,7 +294,9 @@ export const FormImageUpload = <T extends FieldValues>({
                       },
                     }}
                   >
-                    {isUploading ? t('form.upload.uploading') : t('form.upload.upload_image')}
+                    {isUploading
+                      ? t('form.upload.uploading')
+                      : (uploadButtonLabel ?? t('form.upload.upload_image'))}
 
                     <input
                       hidden
