@@ -5,4 +5,3 @@ export * from './forgot-password-response.dto';
 export * from './reset-password-response.dto';
 export * from './session.response.dto';
 export * from './sign-out.response.dto';
-export * from './synchronize-session.response.dto';

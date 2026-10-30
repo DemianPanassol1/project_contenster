@@ -18,10 +18,8 @@ import {
   ResetPasswordResponseDto,
   SessionResponseDto,
   SignOutResponseDto,
-  SynchronizeSessionResponseDto,
 } from './dto/res';
 import { SessionAuthenticationService } from './session/session-authentication.service';
-import { SessionSynchronizationService } from './session/session-synchronization.service';
 import { CookieResponse } from './types/cookie-response.type';
 import { AuthenticationService } from './authentication.service';
 
@@ -30,7 +28,6 @@ export class AuthenticationController {
   constructor(
     private readonly authenticationService: AuthenticationService,
     private readonly sessionAuthenticationService: SessionAuthenticationService,
-    private readonly sessionSynchronizationService: SessionSynchronizationService,
   ) {}
 
   @Post('authorize')
@@ -174,11 +171,5 @@ export class AuthenticationController {
     );
 
     return signedOut;
-  }
-
-  @Post('session/sync')
-  @Authenticate()
-  async synchronize(@Req() request: ApiHttpRequest): Promise<SynchronizeSessionResponseDto> {
-    return this.sessionSynchronizationService.synchronize(request.headers.cookie);
   }
 }

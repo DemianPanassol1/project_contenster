@@ -55,7 +55,3 @@ export interface ResetPasswordRequest {
 export interface ResetPasswordResponse {
   passwordReset: boolean;
 }
-
-export interface SynchronizeSessionResponse extends SessionResponse {
-  sessionChanged: boolean;
-}

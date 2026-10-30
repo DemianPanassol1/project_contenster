@@ -1,14 +1,9 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { I18nService } from 'nestjs-i18n';
 
 import { RequestLogAccessType, SessionContextType } from '@contenster/shared';
-import type { I18nTranslations } from '@/i18n/translations';
-import { toResponseDto } from '@/shared/responses';
 
 import { AuthenticationService } from '../authentication.service';
-import { SynchronizeSessionResponseDto } from '../dto/res';
 
-import { readCookieValue } from './helpers/session-cookie.util';
 import type { StoredSession } from './types/stored-session.type';
 import { SessionAuthenticationService } from './session-authentication.service';
 
@@ -17,37 +12,7 @@ export class SessionSynchronizationService {
   constructor(
     private readonly authenticationService: AuthenticationService,
     private readonly sessionAuthenticationService: SessionAuthenticationService,
-    private readonly i18n: I18nService<I18nTranslations>,
   ) {}
-
-  async synchronize(cookieHeader: string | undefined): Promise<SynchronizeSessionResponseDto> {
-    const token = readCookieValue(cookieHeader, this.sessionAuthenticationService.cookieName);
-    if (!token) {
-      throw new UnauthorizedException(
-        this.i18n.t('errors.authentication.session_not_authenticated'),
-      );
-    }
-
-    return this.synchronizeByToken(token);
-  }
-
-  async synchronizeByToken(token: string): Promise<SynchronizeSessionResponseDto> {
-    const tokenHash = this.sessionAuthenticationService.tokenHash(token);
-    const storedSession = await this.sessionAuthenticationService.getByToken(token);
-    if (!storedSession) {
-      throw new UnauthorizedException(
-        this.i18n.t('errors.authentication.session_not_authenticated'),
-      );
-    }
-
-    const updated = await this.synchronizeStoredSession(tokenHash, storedSession);
-
-    return toResponseDto(SynchronizeSessionResponseDto, {
-      sessionChanged: JSON.stringify(updated.session) !== JSON.stringify(storedSession.session),
-      expiresAt: updated.expiresAt,
-      session: updated.session,
-    });
-  }
 
   async synchronizeAll(): Promise<void> {
     for await (const tokenHash of this.sessionAuthenticationService.iterateTokenHashes()) {

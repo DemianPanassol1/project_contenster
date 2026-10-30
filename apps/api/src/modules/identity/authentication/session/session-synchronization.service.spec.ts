@@ -80,7 +80,6 @@ describe('SessionSynchronizationService', () => {
     const service = new SessionSynchronizationService(
       authenticationService as never,
       sessionAuthenticationService as never,
-      { t: vi.fn() } as never,
     );
 
     await service.synchronizeAll();
@@ -93,34 +92,23 @@ describe('SessionSynchronizationService', () => {
     expect(sessionAuthenticationService.destroyByHash).toHaveBeenCalledWith('hash-2');
   });
 
-  it('rejects synchronization without the opaque session cookie', async () => {
-    const service = new SessionSynchronizationService(
-      {} as never,
-      { cookieName: 'contenster_session' } as never,
-      { t: vi.fn().mockReturnValue('Unauthorized') } as never,
-    );
-
-    await expect(service.synchronize(undefined)).rejects.toBeInstanceOf(UnauthorizedException);
-  });
-
   it('rebuilds global sessions with the global resolver', async () => {
     const globalSession = globalStoredSession().session;
     const authenticationService = {
       resolveGlobalSession: vi.fn().mockResolvedValue(globalSession),
     };
     const sessionAuthenticationService = {
-      getByToken: vi.fn().mockResolvedValue(globalStoredSession()),
+      getByHash: vi.fn().mockResolvedValue(globalStoredSession()),
       getTtlByHash: vi.fn().mockResolvedValue(300),
+      iterateTokenHashes: () => tokenHashes('hash'),
       replace: vi.fn().mockResolvedValue(undefined),
-      tokenHash: vi.fn().mockReturnValue('hash'),
     };
     const service = new SessionSynchronizationService(
       authenticationService as never,
       sessionAuthenticationService as never,
-      { t: vi.fn() } as never,
     );
 
-    await service.synchronizeByToken('token');
+    await service.synchronizeAll();
 
     expect(authenticationService.resolveGlobalSession).toHaveBeenCalledWith(1);
   });

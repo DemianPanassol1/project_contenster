@@ -4,7 +4,6 @@ export const AUTH_ROUTES = {
   POST_AUTHORIZE: 'auth/authorize',
   POST_FORGOT_PASSWORD: 'auth/forgot-password',
   POST_RESET_PASSWORD: 'auth/reset-password',
-  POST_SESSION_SYNC: 'auth/session/sync',
   POST_SIGN_IN: 'auth/sign-in',
   POST_SIGN_IN_GLOBAL: 'auth/sign-in-global',
   POST_SIGN_OUT: 'auth/sign-out',

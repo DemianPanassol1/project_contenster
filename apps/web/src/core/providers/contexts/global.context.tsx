@@ -4,8 +4,8 @@ import { useColorScheme } from '@mui/material/styles';
 import { useLocale, useTranslations } from 'next-intl';
 import { createContext, type ReactNode, useCallback, useContext, useMemo, useState } from 'react';
 
+import { useOptionalSessionRevalidation } from '@/core/session/AuthenticatedSessionRevalidator';
 import { useToast, useWebResponseErrorToast } from '@/hooks';
-import { useRouter } from '@/i18n/navigation';
 import {
   type ApiRequestActionResponse,
   createRequestInProgressResponse,
@@ -30,7 +30,6 @@ export interface ApiRequestOptions<TBody = unknown> {
   method: HttpMethod;
   onError?: (response: ApiRequestActionResponse<TBody>) => Promise<void> | void;
   onSuccess?: (response: ApiRequestActionResponse<TBody>) => Promise<void> | void;
-  shouldRefreshPage?: boolean;
   showErrorMessage?: boolean;
   showSuccessMessage?: boolean;
   successMessage?: string | null;
@@ -58,12 +57,12 @@ interface GlobalProviderProps {
 }
 
 export function GlobalProvider({ children }: GlobalProviderProps) {
-  const router = useRouter();
   const locale = useLocale();
   const t = useTranslations('protected.feedback');
   const { errorMessage, successMessage } = useToast();
   const showResponseErrors = useWebResponseErrorToast();
   const { mode, setMode, systemMode } = useColorScheme();
+  const sessionRevalidation = useOptionalSessionRevalidation();
 
   const [state, setState] = useState<Omit<GlobalState, 'theme'>>(initialState);
 
@@ -118,6 +117,10 @@ export function GlobalProvider({ children }: GlobalProviderProps) {
         });
 
         if (response.success) {
+          if (options.method !== 'GET') {
+            await sessionRevalidation?.requestSessionRevalidation();
+          }
+
           if (options.showSuccessMessage !== false) {
             successMessage(options.successMessage ?? t('operation_succeeded'));
           }
@@ -152,13 +155,17 @@ export function GlobalProvider({ children }: GlobalProviderProps) {
         return response;
       } finally {
         setState((current) => ({ ...current, isLoading: false }));
-
-        if (options.shouldRefreshPage) {
-          router.refresh();
-        }
       }
     },
-    [errorMessage, locale, router, showResponseErrors, successMessage, t, state.isLoading],
+    [
+      errorMessage,
+      locale,
+      sessionRevalidation,
+      showResponseErrors,
+      successMessage,
+      t,
+      state.isLoading,
+    ],
   );
 
   const stateWithTheme = useMemo<GlobalState>(

@@ -9,6 +9,7 @@ import {
   GlobalProvider,
   ModalProvider,
 } from '@/core/providers/contexts';
+import { AuthenticatedSessionRevalidator } from '@/core/session/AuthenticatedSessionRevalidator';
 import type { Locale } from '@/i18n/routing';
 
 import { MuiThemeProvider } from './MuiThemeProvider';
@@ -18,6 +19,7 @@ interface AdminProvidersProps {
   closeSnackbarLabel: string;
   locale: Locale;
   portal: ResolvedPublicPortal;
+  sessionFingerprint?: string;
 }
 
 export function AdminProviders({
@@ -25,8 +27,9 @@ export function AdminProviders({
   closeSnackbarLabel,
   locale,
   portal,
+  sessionFingerprint,
 }: AdminProvidersProps) {
-  return (
+  const providers = (
     <MuiThemeProvider portal={portal}>
       <AppSnackbarProvider closeSnackbarLabel={closeSnackbarLabel}>
         <GlobalProvider>
@@ -36,5 +39,15 @@ export function AdminProviders({
         </GlobalProvider>
       </AppSnackbarProvider>
     </MuiThemeProvider>
+  );
+
+  if (!sessionFingerprint) {
+    return providers;
+  }
+
+  return (
+    <AuthenticatedSessionRevalidator initialFingerprint={sessionFingerprint} locale={locale}>
+      {providers}
+    </AuthenticatedSessionRevalidator>
   );
 }

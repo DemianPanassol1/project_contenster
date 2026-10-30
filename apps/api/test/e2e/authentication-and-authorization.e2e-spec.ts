@@ -681,14 +681,7 @@ describe('authentication and authorization', () => {
     await agent.post('/users/list').send({ page: 1, pageSize: 10 }).expect(403);
   });
 
-  it('synchronizes the session and invalidates it at sign-out', async () => {
-    const synchronized = await agent.post('/auth/session/sync').send({}).expect(201);
-
-    expect(
-      (synchronized.body as ApiResponse<{ session: { context: { client: { id: number } } } }>).body
-        .session.context.client.id,
-    ).toBe(secondaryClientId);
-
+  it('invalidates the session at sign-out', async () => {
     await agent.post('/auth/sign-out').send({}).expect(201);
     await agent.get('/auth/session').expect(401);
   });

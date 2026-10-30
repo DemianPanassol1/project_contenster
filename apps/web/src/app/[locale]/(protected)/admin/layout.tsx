@@ -3,6 +3,7 @@ import { getTranslations } from 'next-intl/server';
 import type { ReactNode } from 'react';
 
 import { AdminProviders, PortalColorSchemeScript, PortalProvider } from '@/core/providers';
+import { createSessionFingerprint } from '@/core/session/session-fingerprint.server';
 import { redirect } from '@/i18n/navigation';
 import { isLocale } from '@/i18n/routing';
 import { AdminLayout } from '@/layouts';
@@ -40,7 +41,12 @@ export default async function AdminRouteLayout({ children, params }: AdminRouteL
     <>
       <PortalColorSchemeScript />
       <PortalProvider portal={portal}>
-        <AdminProviders closeSnackbarLabel={t('close_snackbar')} locale={locale} portal={portal}>
+        <AdminProviders
+          closeSnackbarLabel={t('close_snackbar')}
+          locale={locale}
+          portal={portal}
+          sessionFingerprint={createSessionFingerprint(session)}
+        >
           <AdminLayout session={session}>{children}</AdminLayout>
         </AdminProviders>
       </PortalProvider>

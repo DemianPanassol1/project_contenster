@@ -20,6 +20,12 @@ O perfil pertence a um cliente. Um usuário pode ter vínculos com vários clien
 
 O estado persistido no Redis inclui contexto, autorização calculada e informações de revogação e expiração. Uma reinicialização do Redis invalida sessões e exige nova autenticação.
 
+A API sincroniza sessões persistidas no Redis após operações críticas. No Web administrativo, um
+revalidador central consulta `GET /auth/session` após mutações bem-sucedidas, ao voltar à aba,
+receber foco, recuperar conectividade e após um minuto sem interação. Ele atualiza a página apenas
+quando a sessão recebida diverge da sessão que renderizou o layout. Não existe uma rota pública de
+"sincronização de sessão": a manutenção do Redis é uma responsabilidade interna da API.
+
 ## Senhas e recuperação de acesso
 
 - A alteração de senha pelo usuário autenticado exige a senha atual. Ao concluir, as demais sessões

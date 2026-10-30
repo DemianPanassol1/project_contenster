@@ -9,9 +9,9 @@ export {
 export {
   getAvailableClients,
   getSession,
+  getSessionFingerprint,
   signOut,
   switchClient,
   switchClientAsSuperuser,
   switchGlobal,
-  synchronizeSession,
 } from './session.action';

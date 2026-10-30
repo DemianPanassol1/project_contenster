@@ -6,8 +6,8 @@ import {
   type SessionResponse,
   type SignOutResponse,
   type SwitchClientRequest,
-  type SynchronizeSessionResponse,
 } from '@contenster/shared';
+import { createSessionFingerprint } from '@/core/session/session-fingerprint.server';
 import type { Locale } from '@/i18n/routing';
 import { API_ROUTES } from '@/routes';
 import {
@@ -25,14 +25,22 @@ const persistSession = async (
   return { ...response, body: null, statusCode: 500, success: false };
 };
 
-export const getSession = async (): Promise<AuthenticatedSession | null> => {
-  const response = await apiInstance.get<AuthenticatedSession>(API_ROUTES.AUTH.GET_SESSION);
+export const getSession = async (locale?: Locale): Promise<AuthenticatedSession | null> => {
+  const response = await apiInstance.get<AuthenticatedSession>(API_ROUTES.AUTH.GET_SESSION, {
+    locale,
+  });
 
   if (response.success) return response.body;
 
   if (response.statusCode === 401 || response.statusCode === 403) return null;
 
   throw new Error(`Session API request failed with status ${response.statusCode}.`);
+};
+
+export const getSessionFingerprint = async (locale: Locale): Promise<string | null> => {
+  const session = await getSession(locale);
+
+  return session ? createSessionFingerprint(session) : null;
 };
 
 export const switchClient = async (
@@ -56,11 +64,6 @@ export const switchClientAsSuperuser = async (
 
 export const switchGlobal = async (locale: Locale): Promise<WebResponse<SessionResponse>> =>
   persistSession(await apiInstance.post(API_ROUTES.AUTH.POST_SWITCH_GLOBAL, { locale }));
-
-export const synchronizeSession = async (
-  locale: Locale,
-): Promise<WebResponse<SynchronizeSessionResponse>> =>
-  apiInstance.post(API_ROUTES.AUTH.POST_SESSION_SYNC, { locale });
 
 export const signOut = async (locale: Locale): Promise<WebResponse<SignOutResponse>> => {
   const response = await apiInstance.post<SignOutResponse>(API_ROUTES.AUTH.POST_SIGN_OUT, {
