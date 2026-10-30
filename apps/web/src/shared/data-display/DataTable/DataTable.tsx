@@ -5,13 +5,13 @@ import { useTranslations } from 'next-intl';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { useGlobalContext, useModalContext } from '@/core/providers';
+import { useDebouncedValue } from '@/hooks';
 import { usePathname, useRouter } from '@/i18n/navigation';
 import { type OptionsSource, useOptionsCollection } from '@/services/hooks';
 import { DEFAULT_PER_PAGE_OPTIONS } from '@/utils';
 
 import { useDataTableLocal } from './hooks/useDataTableLocal';
 import { useDataTableRemote } from './hooks/useDataTableRemote';
-import { useDebouncedValue } from './hooks/useDebouncedValue';
 import { type FilterOption, Order, type SortOption } from './types/data-table-query.types';
 import type {
   DataTableAction,

@@ -391,7 +391,22 @@
     },
     "clients": {
       "title": "Clients",
-      "description": "Manage the clients registered in the system."
+      "description": "Manage the clients registered in the system.",
+      "active": "Active",
+      "inactive": "Inactive",
+      "user_count": "{count} user(s)",
+      "search_placeholder": "Search by legal name, trade name, or document",
+      "clear_search": "Clear search",
+      "empty": "No clients found.",
+      "activate_client": "Activate client",
+      "deactivate_client": "Deactivate client",
+      "delete_client": "Delete client",
+      "activate_confirmation_title": "Activate client",
+      "activate_confirmation_message": "Do you want to activate this client? Its linked users will be able to access it again.",
+      "deactivate_confirmation_title": "Deactivate client",
+      "deactivate_confirmation_message": "Do you want to deactivate this client? Its linked users will no longer be able to access it.",
+      "delete_confirmation_title": "Delete client",
+      "delete_confirmation_message": "Do you want to delete this client? Deletion is logical and the client will no longer be accessible."
     },
     "access_links": {
       "title": "Access links",

@@ -12,6 +12,13 @@ import { RequestLog } from '@/modules/observability/request-logs/entities/reques
 import { CronExecutionLog } from '@/modules/scheduling/cron-execution-log/entities/cron-execution-log.entity';
 import { applyPaginatedQueryBuilder } from '@/shared/pagination';
 
+const CLIENT_LIST_FIELDS = {
+  corporateName: 'client.razao_social',
+  document: 'client.documento',
+  isActive: 'client.eh_ativo',
+  tradeName: 'client.nome_fantasia',
+};
+
 @Injectable()
 export class SystemAdminRepository {
   constructor(
@@ -19,10 +26,36 @@ export class SystemAdminRepository {
     @InjectRepository(File) private readonly files: Repository<File>,
     @InjectRepository(CronExecutionLog) private readonly jobLogs: Repository<CronExecutionLog>,
     @InjectRepository(RequestLog) private readonly requestLogs: Repository<RequestLog>,
+    @InjectRepository(UserProfile) private readonly userProfiles: Repository<UserProfile>,
   ) {}
 
-  listClients() {
-    return this.clients.find({ withDeleted: false, order: { tradeName: 'ASC' } });
+  listClients(request: PaginateRequest) {
+    const query = this.clients
+      .createQueryBuilder('client')
+      .leftJoinAndSelect('client.image', 'image');
+
+    return applyPaginatedQueryBuilder(query, request, {
+      defaultSort: [{ field: 'tradeName', direction: 'asc' }],
+      fields: CLIENT_LIST_FIELDS,
+      tieBreaker: 'client.id',
+    });
+  }
+
+  async countUsersByClientIds(clientIds: number[]): Promise<Map<number, number>> {
+    if (clientIds.length === 0) {
+      return new Map();
+    }
+
+    const rows = await this.userProfiles
+      .createQueryBuilder('userProfile')
+      .innerJoin('userProfile.user', 'user', 'user.deletado_em IS NULL')
+      .select('userProfile.cliente_id', 'clientId')
+      .addSelect('COUNT(userProfile.id)', 'userCount')
+      .where('userProfile.cliente_id IN (:...clientIds)', { clientIds })
+      .groupBy('userProfile.cliente_id')
+      .getRawMany<{ clientId: string; userCount: string }>();
+
+    return new Map(rows.map((row) => [Number(row.clientId), Number(row.userCount)]));
   }
 
   findClient(id: number) {

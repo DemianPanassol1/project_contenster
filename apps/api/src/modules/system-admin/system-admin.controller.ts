@@ -18,6 +18,7 @@ import { SaveClientRequestDto } from '../identity/clients/dto/req/save-client.re
 
 import { CreateSystemAdminClientRequestDto } from './dto/req/create-system-admin-client.request.dto';
 import { ReplaceUserAccessLinksRequestDto } from './dto/req/replace-user-access-links.request.dto';
+import { SetSystemAdminClientActiveRequestDto } from './dto/req/set-system-admin-client-active.request.dto';
 import { SystemAdminService } from './system-admin.service';
 
 @ApiTags('System administration')
@@ -26,8 +27,9 @@ import { SystemAdminService } from './system-admin.service';
 export class SystemAdminController {
   constructor(private readonly service: SystemAdminService) {}
 
-  @Get('clients') listClients() {
-    return this.service.listClients();
+  @Post('clients/list')
+  listClients(@Body() request: PaginateRequestDto) {
+    return this.service.listClients(request);
   }
 
   @Post('clients')
@@ -44,7 +46,7 @@ export class SystemAdminController {
 
   @Patch('clients/:id/active') setClientActive(
     @Param('id', ParseIntPipe) id: number,
-    @Body() body: { isActive: boolean },
+    @Body() body: SetSystemAdminClientActiveRequestDto,
   ) {
     return this.service.setClientActive(id, body.isActive);
   }

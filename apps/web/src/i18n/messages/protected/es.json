@@ -391,7 +391,22 @@
     },
     "clients": {
       "title": "Clientes",
-      "description": "Administre los clientes registrados en el sistema."
+      "description": "Administre los clientes registrados en el sistema.",
+      "active": "Activo",
+      "inactive": "Inactivo",
+      "user_count": "{count} usuario(s)",
+      "search_placeholder": "Buscar por razón social, nombre comercial o documento",
+      "clear_search": "Limpiar búsqueda",
+      "empty": "No se encontraron clientes.",
+      "activate_client": "Activar cliente",
+      "deactivate_client": "Desactivar cliente",
+      "delete_client": "Eliminar cliente",
+      "activate_confirmation_title": "Activar cliente",
+      "activate_confirmation_message": "¿Desea activar este cliente? Sus usuarios vinculados podrán acceder nuevamente.",
+      "deactivate_confirmation_title": "Desactivar cliente",
+      "deactivate_confirmation_message": "¿Desea desactivar este cliente? Sus usuarios vinculados ya no podrán acceder.",
+      "delete_confirmation_title": "Eliminar cliente",
+      "delete_confirmation_message": "¿Desea eliminar este cliente? La eliminación es lógica y el cliente ya no podrá accederse."
     },
     "access_links": {
       "title": "Vínculos de acceso",

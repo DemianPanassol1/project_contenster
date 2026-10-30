@@ -6,8 +6,10 @@ import { DataSource, type DeepPartial, In, Repository } from 'typeorm';
 import {
   CORE_FUNCTIONALITY_CATALOG,
   type CreateSystemAdminClientRequest,
+  type PaginatedBody,
   type PaginateRequest,
   type SystemAdminAccessLinkRequest,
+  type SystemAdminClientListItem,
 } from '@contenster/shared';
 import type { I18nTranslations } from '@/i18n/translations';
 import { Functionality } from '@/modules/access-control/functionalities/entities/functionality.entity';
@@ -17,11 +19,15 @@ import { Profile } from '@/modules/access-control/profiles/entities/profiles.ent
 import { Action } from '@/modules/authorization/actions/entities/action.entity';
 import { Language } from '@/modules/communication/languages/entities/language.entity';
 import { SessionAuthenticationService } from '@/modules/identity/authentication/session/session-authentication.service';
+import { SessionSynchronizationService } from '@/modules/identity/authentication/session/session-synchronization.service';
 import type { SaveClientRequestDto } from '@/modules/identity/clients/dto/req/save-client.request.dto';
 import { Client } from '@/modules/identity/clients/entities/client.entity';
+import { resolveFilePublicUrl } from '@/modules/media/files/helpers/file-public-url.helper';
 import { buildPaginationMeta } from '@/shared/pagination';
+import { toResponseDto } from '@/shared/responses';
 
 import { ReplaceUserAccessLinksRequestDto } from './dto/req/replace-user-access-links.request.dto';
+import { SystemAdminClientListItemResponseDto } from './dto/res/system-admin-client-list-item.response.dto';
 import { SystemAdminRepository } from './system-admin.repository';
 
 @Injectable()
@@ -32,10 +38,26 @@ export class SystemAdminService {
     private readonly repository: SystemAdminRepository,
     private readonly i18n: I18nService<I18nTranslations>,
     private readonly sessionAuthentication: SessionAuthenticationService,
+    private readonly sessionSynchronizationService: SessionSynchronizationService,
   ) {}
 
-  listClients() {
-    return this.repository.listClients();
+  async listClients(
+    request: PaginateRequest,
+  ): Promise<PaginatedBody<SystemAdminClientListItemResponseDto>> {
+    const [clients, total] = await this.repository.listClients(request);
+    const userCountByClientId = await this.repository.countUsersByClientIds(
+      clients.map((client) => client.id),
+    );
+
+    return {
+      items: toResponseDto(
+        SystemAdminClientListItemResponseDto,
+        clients.map((client) =>
+          this.toClientListItem(client, userCountByClientId.get(client.id) ?? 0),
+        ),
+      ),
+      meta: buildPaginationMeta(request, total),
+    };
   }
 
   async updateClient(id: number, request: SaveClientRequestDto) {
@@ -72,7 +94,11 @@ export class SystemAdminService {
       availableLanguageLinks: languages.map((language) => ({ language })),
     });
 
-    return this.repository.saveClient(client);
+    const savedClient = await this.repository.saveClient(client);
+
+    await this.sessionSynchronizationService.synchronizeAll();
+
+    return savedClient;
   }
 
   async createClient(request: CreateSystemAdminClientRequest) {
@@ -212,7 +238,11 @@ export class SystemAdminService {
 
     client.isActive = isActive;
 
-    return this.repository.saveClient(client);
+    const savedClient = await this.repository.saveClient(client);
+
+    await this.sessionSynchronizationService.synchronizeAll();
+
+    return savedClient;
   }
 
   async deleteClient(id: number) {
@@ -223,6 +253,7 @@ export class SystemAdminService {
     }
 
     await this.repository.softDeleteClient(client);
+    await this.sessionSynchronizationService.synchronizeAll();
 
     return { id };
   }
@@ -343,6 +374,19 @@ export class SystemAdminService {
 
   private toAccessLinkKey(clientId: number, profileId: number): string {
     return `${clientId}:${profileId}`;
+  }
+
+  private toClientListItem(client: Client, userCount: number): SystemAdminClientListItem {
+    return {
+      corporateName: client.corporateName,
+      document: client.document,
+      documentType: client.documentType,
+      id: client.id,
+      imageUrl: resolveFilePublicUrl(client.image),
+      isActive: client.isActive,
+      tradeName: client.tradeName,
+      userCount,
+    };
   }
 
   private clientNotFound(): NotFoundException {
