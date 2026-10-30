@@ -596,7 +596,19 @@
             "label": "Warning",
             "helper": "Alerts that require the user's attention. Default: {value}"
           },
-          "error": { "label": "Error", "helper": "Failures and error messages. Default: {value}" }
+          "error": { "label": "Error", "helper": "Failures and error messages. Default: {value}" },
+          "textPrimary": {
+            "label": "Primary text color",
+            "helper": "Headings and primary textual content. Default: {value}"
+          },
+          "textSecondary": {
+            "label": "Secondary text color",
+            "helper": "Descriptions and supporting information. Default: {value}"
+          },
+          "link": {
+            "label": "Link color",
+            "helper": "Navigable links and textual actions. Default: {value}"
+          }
         },
         "typography_title": "Typography",
         "typography_description": "Choose the identity typography scale.",

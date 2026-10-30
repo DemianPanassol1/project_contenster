@@ -1,4 +1,6 @@
 import {
+  defaultPortalDarkPalette as sharedDefaultPortalDarkPalette,
+  defaultPortalLightPalette as sharedDefaultPortalLightPalette,
   normalizePortalHost,
   type PortalDetail,
   PortalFontScale,
@@ -14,25 +16,9 @@ import {
 
 import type { PortalFormValues } from './portal-form.types';
 
-export const defaultPortalLightPalette: PortalPalette = {
-  background: '#F8FAFC',
-  error: '#E11D48',
-  paper: '#FFFFFF',
-  primary: '#5B5BD6',
-  secondary: '#64748B',
-  success: '#16A34A',
-  warning: '#D97706',
-};
+export const defaultPortalLightPalette: PortalPalette = sharedDefaultPortalLightPalette;
 
-export const defaultPortalDarkPalette: PortalPalette = {
-  background: '#111827',
-  error: '#FDA4AF',
-  paper: '#1F2937',
-  primary: '#A5B4FC',
-  secondary: '#94A3B8',
-  success: '#4ADE80',
-  warning: '#FBBF24',
-};
+export const defaultPortalDarkPalette: PortalPalette = sharedDefaultPortalDarkPalette;
 
 const portalMediaSlots = Object.values(PortalLoginMediaSlot);
 

@@ -7,7 +7,7 @@ export function AdminColorSchemeScript() {
     <InitColorSchemeScript
       attribute="data"
       colorSchemeStorageKey={ADMIN_COLOR_SCHEME_STORAGE_KEY}
-      defaultMode="system"
+      defaultMode="dark"
       modeStorageKey={ADMIN_MODE_STORAGE_KEY}
     />
   );

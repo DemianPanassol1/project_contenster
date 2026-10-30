@@ -7,7 +7,7 @@ export function PortalColorSchemeScript() {
     <InitColorSchemeScript
       attribute="data"
       colorSchemeStorageKey={PORTAL_COLOR_SCHEME_STORAGE_KEY}
-      defaultMode="system"
+      defaultMode="dark"
       modeStorageKey={PORTAL_MODE_STORAGE_KEY}
     />
   );

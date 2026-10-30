@@ -603,6 +603,18 @@
           "error": {
             "label": "Error",
             "helper": "Fallos y mensajes de error. Predeterminado: {value}"
+          },
+          "textPrimary": {
+            "label": "Color de texto primario",
+            "helper": "Títulos y contenido textual principal. Predeterminado: {value}"
+          },
+          "textSecondary": {
+            "label": "Color de texto secundario",
+            "helper": "Descripciones e información complementaria. Predeterminado: {value}"
+          },
+          "link": {
+            "label": "Color de enlaces",
+            "helper": "Enlaces y acciones textuales navegables. Predeterminado: {value}"
           }
         },
         "typography_title": "Tipografía",

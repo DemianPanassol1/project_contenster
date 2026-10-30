@@ -67,6 +67,21 @@ export class PortalPaletteRequestDto implements PortalPalette {
   @Matches(HEX_COLOR_PATTERN, { message: i18n('validation.matches') })
   @ApiProperty()
   declare error: string;
+
+  @Transform(toString)
+  @Matches(HEX_COLOR_PATTERN, { message: i18n('validation.matches') })
+  @ApiProperty()
+  declare textPrimary: string;
+
+  @Transform(toString)
+  @Matches(HEX_COLOR_PATTERN, { message: i18n('validation.matches') })
+  @ApiProperty()
+  declare textSecondary: string;
+
+  @Transform(toString)
+  @Matches(HEX_COLOR_PATTERN, { message: i18n('validation.matches') })
+  @ApiProperty()
+  declare link: string;
 }
 
 export class PortalTranslationRequestDto implements PortalTranslationRequest {

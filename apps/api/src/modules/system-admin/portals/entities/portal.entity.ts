@@ -62,6 +62,15 @@ export class Portal {
   @Column({ length: 7, name: 'cor_light_error', type: 'char' })
   declare lightError: string;
 
+  @Column({ length: 7, name: 'cor_light_text_primary', type: 'char' })
+  declare lightTextPrimary: string;
+
+  @Column({ length: 7, name: 'cor_light_text_secondary', type: 'char' })
+  declare lightTextSecondary: string;
+
+  @Column({ length: 7, name: 'cor_light_link', type: 'char' })
+  declare lightLink: string;
+
   @Column({ length: 7, name: 'cor_dark_primary', type: 'char' })
   declare darkPrimary: string;
 
@@ -82,6 +91,15 @@ export class Portal {
 
   @Column({ length: 7, name: 'cor_dark_error', type: 'char' })
   declare darkError: string;
+
+  @Column({ length: 7, name: 'cor_dark_text_primary', type: 'char' })
+  declare darkTextPrimary: string;
+
+  @Column({ length: 7, name: 'cor_dark_text_secondary', type: 'char' })
+  declare darkTextSecondary: string;
+
+  @Column({ length: 7, name: 'cor_dark_link', type: 'char' })
+  declare darkLink: string;
 
   @Column({
     enum: PortalFontScale,

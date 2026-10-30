@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 
 import {
+  defaultPortalDarkPalette,
+  defaultPortalLightPalette,
   isPortalAssetCompatible,
   normalizePortalHost,
   PortalFontScale,
@@ -18,26 +20,6 @@ import { PortalTranslation } from '@/modules/system-admin/portals/entities/porta
 import { getCurrentLocale } from '@/shared/i18n';
 
 import { PublicPortalRepository } from './public-portal.repository';
-
-const defaultLightPalette: PortalPalette = {
-  background: '#F8FAFC',
-  error: '#E11D48',
-  paper: '#FFFFFF',
-  primary: '#5B5BD6',
-  secondary: '#64748B',
-  success: '#16A34A',
-  warning: '#D97706',
-};
-
-const defaultDarkPalette: PortalPalette = {
-  background: '#111827',
-  error: '#FDA4AF',
-  paper: '#1F2937',
-  primary: '#A5B4FC',
-  secondary: '#94A3B8',
-  success: '#4ADE80',
-  warning: '#FBBF24',
-};
 
 type PortalTranslationTextField =
   | 'applicationDescription'
@@ -149,7 +131,10 @@ export class PublicPortalService {
       primary: portal[`${mode}Primary`],
       secondary: portal[`${mode}Secondary`],
       success: portal[`${mode}Success`],
+      textPrimary: portal[`${mode}TextPrimary`],
+      textSecondary: portal[`${mode}TextSecondary`],
       warning: portal[`${mode}Warning`],
+      link: portal[`${mode}Link`],
     };
   }
 
@@ -158,10 +143,10 @@ export class PublicPortalService {
       identity: {
         applicationDescription: 'Enterprise Administration',
         applicationName: 'Contenster Core',
-        darkPalette: defaultDarkPalette,
+        darkPalette: defaultPortalDarkPalette,
         favicon: null,
         fontScale: PortalFontScale.standard,
-        lightPalette: defaultLightPalette,
+        lightPalette: defaultPortalLightPalette,
         supportText: 'Fale com o suporte',
         supportUrl: 'https://www.google.com',
       },

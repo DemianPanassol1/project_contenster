@@ -1,4 +1,10 @@
-import { createTheme, type PaletteOptions, type Theme } from '@mui/material/styles';
+import {
+  createTheme,
+  type PaletteColor,
+  type PaletteOptions,
+  type SimplePaletteColorOptions,
+  type Theme,
+} from '@mui/material/styles';
 
 import { PortalFontScale, type PortalPalette, type ResolvedPublicPortal } from '@contenster/shared';
 import { baseThemeOptions } from '@/core/theme';
@@ -6,18 +12,26 @@ import { baseThemeOptions } from '@/core/theme';
 export const PORTAL_COLOR_SCHEME_STORAGE_KEY = 'contenster-portal-color-scheme';
 export const PORTAL_MODE_STORAGE_KEY = 'contenster-portal-mode';
 
+declare module '@mui/material/styles' {
+  interface Palette {
+    link: PaletteColor;
+  }
+
+  interface PaletteOptions {
+    link?: SimplePaletteColorOptions;
+  }
+}
+
 const toPalette = (mode: 'dark' | 'light', palette: PortalPalette): PaletteOptions => ({
   background: { default: palette.background, paper: palette.paper },
   divider: mode === 'light' ? '#E5E7EB' : '#1E293B',
   error: { main: palette.error },
+  link: { main: palette.link },
   mode,
   primary: { main: palette.primary },
   secondary: { main: palette.secondary },
   success: { main: palette.success },
-  text:
-    mode === 'light'
-      ? { primary: '#111827', secondary: '#6B7280' }
-      : { primary: '#F8FAFC', secondary: '#94A3B8' },
+  text: { primary: palette.textPrimary, secondary: palette.textSecondary },
   warning: { main: palette.warning },
 });
 
@@ -52,5 +66,22 @@ export const createPortalTheme = (portal: ResolvedPublicPortal): Theme =>
       light: { palette: toPalette('light', portal.identity.lightPalette) },
     },
     cssVariables: { colorSchemeSelector: 'data' },
+    components: {
+      MuiCssBaseline: {
+        styleOverrides: {
+          a: {
+            color: 'var(--mui-palette-link-main)',
+            textDecorationColor: 'currentcolor',
+          },
+        },
+      },
+      MuiLink: {
+        styleOverrides: {
+          root: {
+            color: 'var(--mui-palette-link-main)',
+          },
+        },
+      },
+    },
     typography: createPortalTypography(portal.identity.fontScale),
   });

@@ -356,6 +356,9 @@ export class PortalsService {
     portal[`${mode}Success`] = palette.success.toUpperCase();
     portal[`${mode}Warning`] = palette.warning.toUpperCase();
     portal[`${mode}Error`] = palette.error.toUpperCase();
+    portal[`${mode}TextPrimary`] = palette.textPrimary.toUpperCase();
+    portal[`${mode}TextSecondary`] = palette.textSecondary.toUpperCase();
+    portal[`${mode}Link`] = palette.link.toUpperCase();
   }
 
   private toDetail(portal: Portal): PortalDetail {
@@ -422,7 +425,10 @@ export class PortalsService {
       primary: portal[`${mode}Primary`],
       secondary: portal[`${mode}Secondary`],
       success: portal[`${mode}Success`],
+      textPrimary: portal[`${mode}TextPrimary`],
+      textSecondary: portal[`${mode}TextSecondary`],
       warning: portal[`${mode}Warning`],
+      link: portal[`${mode}Link`],
     };
   }
 }

@@ -7,16 +7,7 @@ import type {
   PortalLoginMediaType,
   PortalSplitMediaPosition,
 } from '../../../domain/portal/portal.enum.js';
-
-export interface PortalPalette {
-  background: string;
-  error: string;
-  paper: string;
-  primary: string;
-  secondary: string;
-  success: string;
-  warning: string;
-}
+import type { PortalPalette } from '../../../domain/portal/portal-palette.js';
 
 export interface PortalTranslationRequest {
   id: number | null;

@@ -27,6 +27,9 @@ const paletteFields = [
   'success',
   'warning',
   'error',
+  'textPrimary',
+  'textSecondary',
+  'link',
 ] as const;
 
 function PortalColorField({

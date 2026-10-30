@@ -23,7 +23,7 @@ export function MuiThemeProvider({ children, portal }: MuiThemeProviderProps) {
     <AppRouterCacheProvider>
       <ThemeProvider
         colorSchemeStorageKey={PORTAL_COLOR_SCHEME_STORAGE_KEY}
-        defaultMode="system"
+        defaultMode="light"
         disableTransitionOnChange
         modeStorageKey={PORTAL_MODE_STORAGE_KEY}
         theme={theme}

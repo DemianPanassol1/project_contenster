@@ -600,7 +600,19 @@
             "label": "Atenção",
             "helper": "Alertas que exigem atenção do usuário. Padrão: {value}"
           },
-          "error": { "label": "Erro", "helper": "Falhas e mensagens de erro. Padrão: {value}" }
+          "error": { "label": "Erro", "helper": "Falhas e mensagens de erro. Padrão: {value}" },
+          "textPrimary": {
+            "label": "Cor do texto primária",
+            "helper": "Títulos e conteúdo textual principal. Padrão: {value}"
+          },
+          "textSecondary": {
+            "label": "Cor do texto secundária",
+            "helper": "Descrições e informações auxiliares. Padrão: {value}"
+          },
+          "link": {
+            "label": "Cor de links",
+            "helper": "Links e ações textuais navegáveis. Padrão: {value}"
+          }
         },
         "typography_title": "Tipografia",
         "typography_description": "Escolha a escala tipográfica da identidade.",
