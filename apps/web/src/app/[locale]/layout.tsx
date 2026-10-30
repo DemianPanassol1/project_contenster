@@ -4,11 +4,7 @@ import { getLocale, getMessages } from 'next-intl/server';
 import type { ReactNode } from 'react';
 
 import { locales } from '@/i18n/routing';
-
-export const metadata: Metadata = {
-  title: 'Contenster Slim Core',
-  description: 'Core administrativo enxuto do Contenster.',
-};
+import { getPublicPortal } from '@/services/actions';
 
 type LocaleLayoutProps = Readonly<{
   children: ReactNode;
@@ -16,6 +12,16 @@ type LocaleLayoutProps = Readonly<{
 
 export function generateStaticParams(): { locale: string }[] {
   return locales.map((locale) => ({ locale }));
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  const portal = await getPublicPortal();
+
+  return {
+    description: portal.identity.applicationDescription,
+    icons: portal.identity.favicon ? { icon: portal.identity.favicon.url } : undefined,
+    title: portal.identity.applicationName,
+  };
 }
 
 export default async function LocaleLayout({ children }: LocaleLayoutProps) {
