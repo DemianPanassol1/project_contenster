@@ -1,12 +1,9 @@
 'use client';
 
-/* eslint-disable @next/next/no-img-element -- Portal media comes from a runtime-configured origin. */
-
-import { Box, Link } from '@mui/material';
+import { Box } from '@mui/material';
 import type { ReactNode } from 'react';
 
 import {
-  PortalLoginHeaderMode,
   PortalLoginLayout,
   PortalLoginMediaSlot,
   PortalSplitMediaPosition,
@@ -20,7 +17,7 @@ interface AuthLayoutProps {
 }
 
 export function AuthLayout({ children }: AuthLayoutProps) {
-  const { identity, login } = usePortal();
+  const { login } = usePortal();
   const isSplit = login.layout === PortalLoginLayout.split;
   const media = isSplit
     ? {
@@ -85,43 +82,7 @@ export function AuthLayout({ children }: AuthLayoutProps) {
           zIndex: 1,
         }}
       >
-        <Box sx={{ maxWidth: 440, width: '100%' }}>
-          <Box sx={{ mb: 3 }}>
-            {login.headerMode === PortalLoginHeaderMode.brandAsset && login.brandAsset ? (
-              <img
-                alt={login.brandAssetAlt ?? identity.applicationName}
-                src={login.brandAsset.url}
-                style={{ maxHeight: 56, maxWidth: '100%' }}
-              />
-            ) : (
-              <>
-                {login.headerIcon && (
-                  <img
-                    alt=""
-                    src={login.headerIcon.url}
-                    style={{ display: 'block', height: 40, marginBottom: 12, width: 40 }}
-                  />
-                )}
-                <Box component="h1" sx={{ fontSize: '1.4rem', m: 0 }}>
-                  {login.title ?? identity.applicationName}
-                </Box>
-                {(login.description ?? identity.applicationDescription) && (
-                  <Box sx={{ color: 'text.secondary', mt: 0.5 }}>
-                    {login.description ?? identity.applicationDescription}
-                  </Box>
-                )}
-              </>
-            )}
-          </Box>
-          {children}
-          {identity.supportText && identity.supportUrl && (
-            <Box sx={{ color: 'text.secondary', mt: 4, textAlign: 'center' }}>
-              <Link href={identity.supportUrl} rel="noreferrer" target="_blank">
-                {identity.supportText}
-              </Link>
-            </Box>
-          )}
-        </Box>
+        <Box sx={{ maxWidth: 460, width: '100%' }}>{children}</Box>
       </Box>
     </Box>
   );

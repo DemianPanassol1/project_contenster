@@ -1,7 +1,7 @@
 'use client';
 
 import type { AuthorizeResponse } from '@contenster/shared';
-import { Alert, Box, Divider, Link as MuiLink, Stack } from '@mui/material';
+import { Alert, Box, Divider, Link as MuiLink, Stack, Typography } from '@mui/material';
 import { useTranslations } from 'next-intl';
 import type { ElementType } from 'react';
 
@@ -43,7 +43,14 @@ export function LoginForm({
       onSubmit={onSubmit}
     >
       {({ getValues }) => (
-        <Stack spacing={2}>
+        <Box
+          sx={{
+            display: 'grid',
+            gap: '1rem 2rem',
+            gridTemplateColumns: '1fr',
+            margin: '0 0 1rem',
+          }}
+        >
           {!authorization ? (
             <>
               <FormInput<LoginFormValues>
@@ -54,10 +61,14 @@ export function LoginForm({
                 rules={createValidationRules('required')}
               />
               <Box>
-                <Stack direction="row" sx={{ justifyContent: 'flex-end', mb: 0.75 }}>
+                <Stack
+                  direction="row"
+                  sx={{ alignItems: 'center', justifyContent: 'flex-end', mb: 0.75 }}
+                >
                   <MuiLink
                     component={Link as ElementType}
                     href="/auth/forgot-password"
+                    sx={{ fontWeight: 600 }}
                     underline="hover"
                     variant="body2"
                   >
@@ -76,23 +87,30 @@ export function LoginForm({
                 disabled={isPending}
                 label={t('stay_signed_in')}
                 name="staySignedIn"
+                sx={{ ml: -1 }}
               />
             </>
           ) : (
             <>
               {authorization.isEligibleToGlobalContext && (
-                <Button
-                  disabled={isPending}
-                  label={t('global_context')}
-                  type="button"
-                  variant="outlined"
-                  onClick={() => {
-                    void onGlobalContextSignIn(getValues());
-                  }}
-                />
+                <Box sx={{ display: 'grid', gap: 1.5 }}>
+                  <Typography color="text.secondary" variant="body2">
+                    {t('choose_access')}
+                  </Typography>
+                  <Button
+                    disabled={isPending}
+                    label={t('global_context')}
+                    sx={{ height: 40, width: '100%' }}
+                    type="button"
+                    variant="outlined"
+                    onClick={() => {
+                      void onGlobalContextSignIn(getValues());
+                    }}
+                  />
+                </Box>
               )}
               {authorization.isEligibleToGlobalContext && authorization.clients.length > 0 && (
-                <Divider>{t('or')}</Divider>
+                <Divider sx={{ typography: 'caption' }}>{t('or')}</Divider>
               )}
               {authorization.clients.length > 0 && (
                 <FormSelect<LoginFormValues>
@@ -117,9 +135,10 @@ export function LoginForm({
             }
             form={LOGIN_FORM_ID}
             label={t('submit')}
+            sx={{ height: 40, width: '100%' }}
             type="submit"
           />
-        </Stack>
+        </Box>
       )}
     </FormWrapper>
   );

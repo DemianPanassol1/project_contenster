@@ -2,7 +2,11 @@
   "feedback": {
     "close_snackbar": "Dismiss message"
   },
+  "common": {
+    "need_help": "Need help?"
+  },
   "login": {
+    "choose_access": "Choose how you want to access the system.",
     "client": "Client",
     "forgot_password": "Forgot password",
     "global_context": "Enter global administration",
@@ -21,6 +25,7 @@
     "submit": "Send instructions",
     "success": "If the email is registered, you will receive instructions shortly.",
     "success_title": "Check your email",
+    "subtitle": "Enter your email address to receive reset instructions.",
     "title": "Forgot password",
     "unexpected_error": "The request could not be completed. Please try again."
   },

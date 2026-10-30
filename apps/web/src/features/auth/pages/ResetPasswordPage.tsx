@@ -1,12 +1,13 @@
 'use client';
 
 import type { ResetPasswordRequest } from '@contenster/shared';
-import { Alert, Stack, Typography } from '@mui/material';
+import { Alert, Stack } from '@mui/material';
 import { useLocale, useTranslations } from 'next-intl';
 import { useState } from 'react';
 
 import { useToast, useWebResponseErrorToast } from '@/hooks';
 import { useRouter } from '@/i18n/navigation';
+import { AuthCard } from '@/layouts';
 import { resetPassword } from '@/services/actions';
 import { Button } from '@/shared';
 
@@ -76,46 +77,41 @@ export function ResetPasswordView({ token }: ResetPasswordViewProps) {
 
   if (isInvalidToken) {
     return (
-      <Stack spacing={2.5}>
-        <Typography component="h2" variant="h5">
-          {t('invalid_title')}
-        </Typography>
-        <Alert severity="warning" variant="outlined">
-          {t('invalid_token')}
-        </Alert>
-        <Button
-          label={t('request_new_link')}
-          onClick={() => router.push('/auth/forgot-password')}
-        />
-        <Button
-          label={t('back_to_login')}
-          onClick={() => router.push('/auth/login')}
-          variant="text"
-        />
-      </Stack>
+      <AuthCard title={t('invalid_title')}>
+        <Stack spacing={2.5}>
+          <Alert severity="warning" variant="outlined">
+            {t('invalid_token')}
+          </Alert>
+          <Button
+            label={t('request_new_link')}
+            onClick={() => router.push('/auth/forgot-password')}
+          />
+          <Button
+            label={t('back_to_login')}
+            onClick={() => router.push('/auth/login')}
+            variant="text"
+          />
+        </Stack>
+      </AuthCard>
     );
   }
 
   if (isReset) {
     return (
-      <Stack spacing={2.5}>
-        <Typography component="h2" variant="h5">
-          {t('success_title')}
-        </Typography>
-        <Alert severity="success" variant="outlined">
-          {t('success')}
-        </Alert>
-        <Button label={t('go_to_login')} onClick={() => router.push('/auth/login')} />
-      </Stack>
+      <AuthCard title={t('success_title')}>
+        <Stack spacing={2.5}>
+          <Alert severity="success" variant="outlined">
+            {t('success')}
+          </Alert>
+          <Button label={t('go_to_login')} onClick={() => router.push('/auth/login')} />
+        </Stack>
+      </AuthCard>
     );
   }
 
   return (
-    <Stack spacing={2}>
-      <Typography component="h2" variant="h5">
-        {t('title')}
-      </Typography>
+    <AuthCard title={t('title')}>
       <ResetPasswordForm isPending={isPending} onSubmit={handleSubmit} />
-    </Stack>
+    </AuthCard>
   );
 }

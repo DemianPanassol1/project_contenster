@@ -1,12 +1,12 @@
 'use client';
 
 import type { AuthorizeResponse } from '@contenster/shared';
-import { Stack, Typography } from '@mui/material';
 import { useLocale, useTranslations } from 'next-intl';
 import { useState } from 'react';
 
 import { useToast, useWebResponseErrorToast } from '@/hooks';
 import { useRouter } from '@/i18n/navigation';
+import { AuthCard } from '@/layouts';
 import { authorize, signIn, signInGlobal } from '@/services/actions';
 
 import { LoginForm } from '../components/LoginForm';
@@ -108,16 +108,13 @@ export function LoginView() {
   };
 
   return (
-    <Stack spacing={2}>
-      <Typography component="h2" variant="h5">
-        {t('title')}
-      </Typography>
+    <AuthCard fallbackTitle={t('title')}>
       <LoginForm
         authorization={authorization}
         isPending={isPending}
         onGlobalContextSignIn={handleGlobalContextSignIn}
         onSubmit={handleSubmit}
       />
-    </Stack>
+    </AuthCard>
   );
 }

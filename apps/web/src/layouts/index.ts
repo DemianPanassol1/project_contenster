@@ -1,3 +1,3 @@
 export { AdminLayout } from './Admin';
-export { AuthLayout } from './Auth';
+export { AuthCard, AuthLayout } from './Auth';
 export { SystemLayout } from './System';

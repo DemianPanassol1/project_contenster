@@ -2,7 +2,11 @@
   "feedback": {
     "close_snackbar": "Fechar mensagem"
   },
+  "common": {
+    "need_help": "Precisa de ajuda?"
+  },
   "login": {
+    "choose_access": "Escolha como deseja acessar o sistema.",
     "client": "Cliente",
     "forgot_password": "Esqueci minha senha",
     "global_context": "Entrar no painel global",
@@ -21,6 +25,7 @@
     "submit": "Enviar instruções",
     "success": "Se o e-mail estiver cadastrado, você receberá as instruções em instantes.",
     "success_title": "Verifique seu e-mail",
+    "subtitle": "Informe seu e-mail para receber as instruções de redefinição.",
     "title": "Recuperar senha",
     "unexpected_error": "Não foi possível concluir a solicitação. Tente novamente."
   },

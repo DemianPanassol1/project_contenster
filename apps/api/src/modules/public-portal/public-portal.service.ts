@@ -156,14 +156,14 @@ export class PublicPortalService {
   private fallback(): ResolvedPublicPortal {
     return {
       identity: {
-        applicationDescription: null,
-        applicationName: 'Contenster Slim Core',
+        applicationDescription: 'Enterprise Administration',
+        applicationName: 'Contenster Core',
         darkPalette: defaultDarkPalette,
         favicon: null,
         fontScale: PortalFontScale.standard,
         lightPalette: defaultLightPalette,
-        supportText: null,
-        supportUrl: null,
+        supportText: 'Fale com o suporte',
+        supportUrl: 'https://www.google.com',
       },
       login: {
         brandAsset: null,

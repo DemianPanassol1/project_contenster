@@ -2,7 +2,11 @@
   "feedback": {
     "close_snackbar": "Cerrar mensaje"
   },
+  "common": {
+    "need_help": "¿Necesitas ayuda?"
+  },
   "login": {
+    "choose_access": "Elige cómo deseas acceder al sistema.",
     "client": "Cliente",
     "forgot_password": "Olvidé mi contraseña",
     "global_context": "Entrar al panel global",
@@ -21,6 +25,7 @@
     "submit": "Enviar instrucciones",
     "success": "Si el correo está registrado, recibirás las instrucciones en breve.",
     "success_title": "Revisa tu correo electrónico",
+    "subtitle": "Ingresa tu correo electrónico para recibir las instrucciones de restablecimiento.",
     "title": "Recuperar contraseña",
     "unexpected_error": "No fue posible completar la solicitud. Inténtalo de nuevo."
   },

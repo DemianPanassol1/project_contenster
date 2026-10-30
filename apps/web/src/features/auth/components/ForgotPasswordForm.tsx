@@ -51,6 +51,7 @@ export function ForgotPasswordForm({ isPending, onSubmit }: ForgotPasswordFormPr
             href="/auth/login"
             underline="hover"
             variant="body2"
+            sx={{ fontWeight: 600 }}
           >
             {t('back_to_login')}
           </MuiLink>
