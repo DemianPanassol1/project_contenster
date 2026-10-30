@@ -42,6 +42,14 @@ describe('database and session integration', () => {
     expect(Number(functionalities)).toBeGreaterThanOrEqual(12);
   });
 
+  it('uses the configured operational timezone for application connections', async () => {
+    const [{ timeZone }] = await dataSource.query<{ timeZone: string }[]>(
+      'SELECT current_setting(\'TimeZone\') AS "timeZone"',
+    );
+
+    expect(timeZone).toBe('America/Sao_Paulo');
+  });
+
   it('keeps the explicitly named foreign keys created by migrations', async () => {
     const constraints = await dataSource.query<{ conname: string }[]>(
       `SELECT conname

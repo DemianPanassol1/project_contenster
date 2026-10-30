@@ -4,6 +4,7 @@ import { DataSource } from 'typeorm';
 
 import { SkipRequestLog } from '@/common/decorators/skip-request-log.decorator';
 import type { I18nTranslations } from '@/i18n/translations';
+import { serializeApplicationDateTime } from '@/infrastructure/date-time';
 
 interface HealthCheckResponse {
   status: 'ok';
@@ -30,7 +31,7 @@ export class HealthController {
   check(): HealthCheckResponse {
     return {
       status: 'ok',
-      timestamp: new Date().toISOString(),
+      timestamp: serializeApplicationDateTime(new Date()),
       uptime: process.uptime(),
     };
   }
@@ -51,7 +52,7 @@ export class HealthController {
         database: 'ok',
       },
       status: 'ok',
-      timestamp: new Date().toISOString(),
+      timestamp: serializeApplicationDateTime(new Date()),
       uptime: process.uptime(),
     };
   }

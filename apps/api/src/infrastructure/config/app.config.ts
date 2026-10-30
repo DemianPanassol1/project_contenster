@@ -18,6 +18,7 @@ export interface AppSettings {
   PORT: number;
   APP_NAME: string;
   APP_URL: string;
+  APP_TIMEZONE: string;
   API_PREFIX: string | null;
   API_VERSION: string | null;
   DATABASE_HOST: string;
@@ -88,6 +89,18 @@ const optionalString = (name: string): string | null => {
 };
 
 const stringValue = (name: string, fallback: string): string => optionalString(name) ?? fallback;
+
+const timeZoneValue = (name: string, fallback: string): string => {
+  const value = stringValue(name, fallback);
+
+  try {
+    new Intl.DateTimeFormat('en-US', { timeZone: value });
+  } catch {
+    throw new Error(`Invalid time zone value for ${name}: ${value}`);
+  }
+
+  return value;
+};
 
 const numberValue = (name: string, fallback: number): number => {
   const value = optionalString(name);
@@ -246,6 +259,7 @@ export const settings: AppSettings = {
   PORT: positiveIntegerValue('PORT', 8080),
   APP_NAME: stringValue('APP_NAME', 'Contenster Slim Core API'),
   APP_URL: stringValue('APP_URL', 'http://localhost:8080'),
+  APP_TIMEZONE: timeZoneValue('APP_TIMEZONE', 'America/Sao_Paulo'),
   API_PREFIX: optionalString('API_PREFIX'),
   API_VERSION: optionalString('API_VERSION'),
   DATABASE_HOST: stringValue('DATABASE_HOST', 'localhost'),

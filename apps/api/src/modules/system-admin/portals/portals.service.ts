@@ -19,6 +19,7 @@ import {
   type PortalPalette,
 } from '@contenster/shared';
 import type { I18nTranslations } from '@/i18n/translations';
+import { serializeApplicationDateTime } from '@/infrastructure/date-time';
 import { Language } from '@/modules/communication/languages/entities/language.entity';
 import { File } from '@/modules/media/files/entities/file.entity';
 import { FileService } from '@/modules/media/files/file.service';
@@ -61,7 +62,7 @@ export class PortalsService {
         hosts: portal.domains.map((domain) => domain.host).sort(),
         id: portal.id,
         internalName: portal.internalName,
-        updatedAt: portal.updatedAt.toISOString(),
+        updatedAt: serializeApplicationDateTime(portal.updatedAt),
       })),
       meta: buildPaginationMeta(request, total),
     };
@@ -345,7 +346,7 @@ export class PortalsService {
         loginTitle: translation.loginTitle,
         supportText: translation.supportText,
       })),
-      updatedAt: portal.updatedAt.toISOString(),
+      updatedAt: serializeApplicationDateTime(portal.updatedAt),
     };
   }
 

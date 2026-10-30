@@ -22,7 +22,7 @@ describe('PublicPortalService', () => {
 
     await expect(service.resolve(undefined)).resolves.toMatchObject({
       identity: {
-        applicationName: 'Contenster Slim Core',
+        applicationName: 'Contenster Core',
         darkPalette: { background: '#111827', paper: '#1F2937' },
         lightPalette: { background: '#F8FAFC', paper: '#FFFFFF' },
       },

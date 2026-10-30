@@ -9,6 +9,7 @@ import {
 import { I18nService } from 'nestjs-i18n';
 
 import type { I18nTranslations } from '@/i18n/translations';
+import { serializeApplicationDateTime } from '@/infrastructure/date-time';
 import {
   generatePasswordHash,
   validatePasswordHash,
@@ -89,7 +90,7 @@ export class UsersService {
       clientId,
       userProfileId: userProfile.id,
       profileId: userProfile.profile.id,
-      lastLoginAt: user.lastLoginAt?.toISOString() ?? null,
+      lastLoginAt: user.lastLoginAt ? serializeApplicationDateTime(user.lastLoginAt) : null,
     });
   }
 

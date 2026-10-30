@@ -6,27 +6,18 @@ import { useMemo } from 'react';
 
 import type { DataTableColumn } from '@/shared';
 import { HttpMethodChip } from '@/shared/observability';
+import { formatDateTime } from '@/utils';
 
 export function useRequestLogColumns(): DataTableColumn<RequestLogListItem>[] {
   const locale = useLocale();
   const t = useTranslations('protected.client_logs');
-  const formatDateTime = useMemo(
-    () =>
-      new Intl.DateTimeFormat(locale, {
-        dateStyle: 'short',
-        timeStyle: 'medium',
-      }),
-    [locale],
-  );
-
   return useMemo(
     () => [
       {
         field: 'createdAt',
         selector: 'createdAt',
         name: t('columns.date_time'),
-        renderCell: ({ row }: { row: RequestLogListItem }) =>
-          formatDateTime.format(new Date(row.createdAt)),
+        renderCell: ({ row }: { row: RequestLogListItem }) => formatDateTime(row.createdAt, locale),
         sortable: true,
         filterable: true,
         type: 'datetime' as const,
@@ -85,6 +76,6 @@ export function useRequestLogColumns(): DataTableColumn<RequestLogListItem>[] {
         type: 'text' as const,
       },
     ],
-    [formatDateTime, t],
+    [locale, t],
   );
 }

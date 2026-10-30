@@ -7,6 +7,7 @@ import { createTestApplication } from '../runner/app.factory';
 interface HealthResponseBody {
   body: {
     status: string;
+    timestamp: string;
   };
   errors: {
     count: number;
@@ -15,6 +16,7 @@ interface HealthResponseBody {
   lang: string;
   requestId: string;
   statusCode: number;
+  datetime: string;
 }
 
 interface PublicPortalResponseBody {
@@ -53,6 +55,8 @@ describe('Application smoke', () => {
       statusCode: 200,
     });
     expect(body.requestId).toEqual(expect.any(String));
+    expect(body.datetime).toMatch(/-03:00$/);
+    expect(body.body.timestamp).toMatch(/-03:00$/);
   });
 
   it('returns the public portal fallback when the Host has no configured portal', async () => {
@@ -64,7 +68,7 @@ describe('Application smoke', () => {
     const body = response.body as PublicPortalResponseBody;
 
     expect(body.body).toMatchObject({
-      identity: { applicationName: 'Contenster Slim Core' },
+      identity: { applicationName: 'Contenster Core' },
       login: { headerMode: 'text', layout: 'centered' },
     });
   });

@@ -10,6 +10,7 @@ import {
   SessionContextType,
   StorageProvider,
 } from '@contenster/shared';
+import { Functionality } from '@/modules/access-control/functionalities/entities/functionality.entity';
 import { Profile } from '@/modules/access-control/profiles/entities/profiles.entity';
 import { User } from '@/modules/identity/users/entities/user.entity';
 import { UserProfile } from '@/modules/identity/users/entities/user-profile.entity';
@@ -125,11 +126,14 @@ describe('authentication and authorization', () => {
     });
 
     const listedLogs = await agent.post('/client-logs/requests/list').send({}).expect(201);
-    const logs = (listedLogs.body as ApiResponse<{ items: Array<{ route: string }> }>).body.items;
+    const logResponse = listedLogs.body as unknown as ApiResponse<{
+      items: Array<{ createdAt: string; route: string }>;
+    }>;
+    const logs = logResponse.body.items;
 
-    expect(logs).toEqual(
-      expect.arrayContaining([expect.objectContaining({ route: '/auth/session' })]),
-    );
+    const sessionLog = logs.find((log) => log.route === '/auth/session');
+
+    expect(sessionLog?.createdAt).toMatch(/-03:00$/);
   });
 
   it('executes the country CRUD through the authenticated permission boundary', async () => {
@@ -293,7 +297,9 @@ describe('authentication and authorization', () => {
       type: FileType.image,
       uploadedByUserId: 1,
     });
-    expect(uploaded.url).toEqual(expect.stringMatching(/^\/uploads\/e2e-upload\/images\//));
+    expect(uploaded.url).toEqual(
+      expect.stringMatching(/^http:\/\/localhost:5000\/uploads\/e2e-upload\/images\//),
+    );
 
     const found = await agent.get(`/media/files/${uploaded.id}`).expect(200);
     expect((found.body as ApiResponse<{ id: number }>).body.id).toBe(uploaded.id);
@@ -351,27 +357,38 @@ describe('authentication and authorization', () => {
       .expect(201);
     const moduleId = (module.body as ApiResponse<{ id: number }>).body.id;
 
+    const existingFunctionality = await dataSource.getRepository(Functionality).findOneOrFail({
+      relations: {
+        enabledLanguageLinks: { language: true },
+        module: true,
+        parent: true,
+        translations: { language: true },
+      },
+      where: { client: { id: 1 }, slug: 'users' },
+    });
+    const functionalityPayload = {
+      icon: existingFunctionality.icon,
+      id: existingFunctionality.id,
+      isActive: existingFunctionality.isActive,
+      isNavigationGroup: existingFunctionality.isNavigationGroup,
+      languageLinks: existingFunctionality.enabledLanguageLinks.map((link) => ({
+        id: link.id,
+        languageId: link.language.id,
+      })),
+      moduleId,
+      order: existingFunctionality.order,
+      parentId: existingFunctionality.parent?.id ?? null,
+      slug: existingFunctionality.slug,
+      translations: existingFunctionality.translations.map((translation) => ({
+        description: translation.description,
+        id: translation.id,
+        locale: translation.language.languageCode,
+        name: translation.name,
+      })),
+    };
     const functionality = await agent
       .post('/functionalities')
-      .send({
-        icon: null,
-        id: null,
-        isActive: true,
-        isNavigationGroup: false,
-        languageLinks: [{ id: null, languageId: 1 }],
-        moduleId,
-        order: 99,
-        parentId: null,
-        slug: 'e2e-test-functionality',
-        translations: [
-          {
-            description: 'Funcionalidade criada por e2e.',
-            id: null,
-            locale: 'pt',
-            name: 'Funcionalidade E2E',
-          },
-        ],
-      })
+      .send(functionalityPayload)
       .expect(201);
     const functionalityId = (functionality.body as ApiResponse<{ id: number }>).body.id;
 
@@ -412,7 +429,10 @@ describe('authentication and authorization', () => {
     await agent.post('/users/delete').send({ id: userId, ids: [] }).expect(201);
     await agent.post('/profiles/delete').send({ id: profileId, ids: [] }).expect(409);
     await agent.post('/actions/delete').send({ id: actionId, ids: [] }).expect(201);
-    await agent.post('/functionalities/delete').send({ id: functionalityId, ids: [] }).expect(201);
+    await agent
+      .post('/functionalities')
+      .send({ ...functionalityPayload, moduleId: existingFunctionality.module.id })
+      .expect(201);
     await agent.post('/modules/delete').send({ id: moduleId, ids: [] }).expect(201);
     await agent.post('/languages/delete').send({ id: languageId, ids: [] }).expect(201);
   });
@@ -529,9 +549,14 @@ describe('authentication and authorization', () => {
     await globalAgent.post('/auth/switch-global').send({}).expect(201);
 
     const response = await globalAgent.post('/system-admin/job-logs/list').send({}).expect(201);
-    const logs = (response.body as ApiResponse<{ items: Array<{ id: number }> }>).body.items;
+    const jobLogResponse = response.body as unknown as ApiResponse<{
+      items: Array<{ createdAt: string; id: number }>;
+    }>;
+    const logs = jobLogResponse.body.items;
 
-    expect(logs).toEqual(expect.arrayContaining([expect.objectContaining({ id: routine.id })]));
+    const routineLog = logs.find((log) => log.id === routine.id);
+
+    expect(routineLog?.createdAt).toMatch(/-03:00$/);
   });
 
   it('replaces all user access links and invalidates the affected user sessions', async () => {

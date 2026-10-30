@@ -5,6 +5,7 @@ import sharp from 'sharp';
 import { type FileResponse, FileType, PORTAL_UPLOAD_MIME_TYPES } from '@contenster/shared';
 import type { I18nPath, I18nTranslations } from '@/i18n/translations';
 import { settings } from '@/infrastructure/config/app.config';
+import { serializeApplicationDateTime } from '@/infrastructure/date-time';
 import { Client } from '@/modules/identity/clients/entities/client.entity';
 import { User } from '@/modules/identity/users/entities/user.entity';
 import { StorageService } from '@/modules/media/storage/storage.service';
@@ -225,7 +226,7 @@ export class FileService {
   private toResponse(file: File): FileResponseDto {
     const response: FileResponse = {
       clientId: file.client?.id ?? null,
-      createdAt: file.createdAt.toISOString(),
+      createdAt: serializeApplicationDateTime(file.createdAt),
       extension: file.extension,
       fileName: file.storedName,
       height: file.height,

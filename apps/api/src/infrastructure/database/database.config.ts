@@ -24,6 +24,7 @@ export const createDataSourceOptions = (): DataSourceOptions => ({
   migrations,
   extra: {
     max: settings.DATABASE_POOL_MAX,
+    options: `-c timezone=${settings.APP_TIMEZONE}`,
   },
 });
 

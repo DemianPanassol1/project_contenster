@@ -4,6 +4,7 @@ import { I18nContext } from 'nestjs-i18n';
 
 import type { ApiHttpRequest } from '@/common/types/http-context.type';
 import { DEFAULT_API_LOCALE } from '@/i18n/i18n.config';
+import { serializeApplicationDateTime } from '@/infrastructure/date-time';
 import { millisecondsToString } from '@/shared/utils/duration.util';
 
 import type { ApiError, ApiResponse } from './api-response.types';
@@ -30,6 +31,6 @@ export const createApiResponse = <TData = unknown>({
     count: errors.length,
     items: errors,
   },
-  datetime: new Date().toISOString(),
+  datetime: serializeApplicationDateTime(new Date()),
   requestTime: millisecondsToString(Date.now() - (request?.requestStartedAt ?? Date.now())),
 });

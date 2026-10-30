@@ -26,7 +26,8 @@ Estar listado aqui ou possuir diretório no código não significa que o módulo
 - Interface Web consumidora da resolução pública de portais.
 - Perfil virtual, sessão virtual e acesso administrativo em nome de outro cliente.
 - Multi-schema e seleção de schema por contexto, request ou navegador.
-- Controle manual de timezone.
+- Controle manual de timezone por usuário, cliente ou sessão. O ambiente define um único fuso
+  operacional fixo, usado para persistência e apresentação de datas.
 
 ## Bootstrap inicial
 

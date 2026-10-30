@@ -14,6 +14,7 @@ import {
   type SystemAdminRequestLogListItem,
 } from '@contenster/shared';
 import type { I18nTranslations } from '@/i18n/translations';
+import { serializeApplicationDateTime } from '@/infrastructure/date-time';
 import { Functionality } from '@/modules/access-control/functionalities/entities/functionality.entity';
 import { SystemModule } from '@/modules/access-control/modules/entities/system-module.entity';
 import { ProfilePermission } from '@/modules/access-control/profiles/entities/profile-permission.entity';
@@ -326,8 +327,8 @@ export class SystemAdminService {
     return toResponseDto(SystemAdminJobLogDetailResponseDto, {
       ...this.toJobLogListItem(log),
       error: log.error,
-      finishedAt: log.finishedAt?.toISOString() ?? null,
-      startedAt: log.startedAt.toISOString(),
+      finishedAt: log.finishedAt ? serializeApplicationDateTime(log.finishedAt) : null,
+      startedAt: serializeApplicationDateTime(log.startedAt),
     });
   }
 
@@ -453,7 +454,7 @@ export class SystemAdminService {
       accessType: log.accessType,
       clientId: log.client?.id ?? null,
       clientName: log.client?.tradeName ?? null,
-      createdAt: log.createdAt.toISOString(),
+      createdAt: serializeApplicationDateTime(log.createdAt),
       id: log.id,
       ip: log.ip,
       level: log.level,
@@ -467,7 +468,7 @@ export class SystemAdminService {
 
   private toJobLogListItem(log: CronExecutionLog): CronExecutionLogListItem {
     return {
-      createdAt: log.createdAt.toISOString(),
+      createdAt: serializeApplicationDateTime(log.createdAt),
       durationMs: log.durationMs,
       id: log.id,
       message: log.message,

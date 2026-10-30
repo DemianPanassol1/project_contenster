@@ -3,9 +3,9 @@
 import type { RequestLogDetail } from '@contenster/shared';
 import { Box, Divider, Typography } from '@mui/material';
 import { useLocale, useTranslations } from 'next-intl';
-import { useMemo } from 'react';
 
 import { HttpMethodChip, LogField, LogJsonSection, LogSection } from '@/shared/observability';
+import { formatDateTime } from '@/utils';
 
 interface RequestLogDetailsContentProps {
   log: RequestLogDetail;
@@ -14,14 +14,6 @@ interface RequestLogDetailsContentProps {
 export function RequestLogDetailsContent({ log }: RequestLogDetailsContentProps) {
   const locale = useLocale();
   const t = useTranslations('protected.client_logs');
-  const formatDateTime = useMemo(
-    () =>
-      new Intl.DateTimeFormat(locale, {
-        dateStyle: 'short',
-        timeStyle: 'medium',
-      }),
-    [locale],
-  );
   const emptyLabel = t('not_available');
 
   return (
@@ -37,7 +29,7 @@ export function RequestLogDetailsContent({ log }: RequestLogDetailsContentProps)
         <LogField
           emptyLabel={emptyLabel}
           label={t('fields.created_at')}
-          value={formatDateTime.format(new Date(log.createdAt))}
+          value={formatDateTime(log.createdAt, locale)}
         />
         <LogField emptyLabel={emptyLabel} label={t('fields.user')} value={log.userName} />
         <LogField emptyLabel={emptyLabel} label={t('fields.event_type')} value={log.eventType} />

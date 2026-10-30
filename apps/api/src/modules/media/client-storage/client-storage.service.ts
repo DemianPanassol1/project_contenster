@@ -9,6 +9,7 @@ import { I18nService } from 'nestjs-i18n';
 import type { DeepPartial } from 'typeorm';
 
 import type { I18nTranslations } from '@/i18n/translations';
+import { serializeApplicationDateTime } from '@/infrastructure/date-time';
 import {
   decryptStorageCredential,
   encryptStorageCredential,
@@ -113,7 +114,7 @@ export class ClientStorageService {
       items: toResponseDto(
         ClientStorageFileListItemResponseDto,
         files.map((item) => ({
-          createdAt: item.createdAt.toISOString(),
+          createdAt: serializeApplicationDateTime(item.createdAt),
           fileType: item.fileType,
           id: item.id,
           mimeType: item.mimeType,

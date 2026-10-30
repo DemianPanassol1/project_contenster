@@ -3,6 +3,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
 
 import type { I18nTranslations } from '@/i18n/translations';
+import { serializeApplicationDateTime } from '@/infrastructure/date-time';
 import type { PaginateRequestDto } from '@/shared/dtos';
 import { buildPaginationMeta } from '@/shared/pagination';
 import { toResponseDto } from '@/shared/responses';
@@ -29,7 +30,7 @@ export class ClientLogsService {
         RequestLogListItemResponseDto,
         logs.map((log) => ({
           clientId: log.client?.id ?? null,
-          createdAt: log.createdAt.toISOString(),
+          createdAt: serializeApplicationDateTime(log.createdAt),
           id: log.id,
           ip: log.ip,
           level: log.level,
@@ -53,7 +54,7 @@ export class ClientLogsService {
 
     return toResponseDto(RequestLogDetailResponseDto, {
       clientId: log.client?.id ?? null,
-      createdAt: log.createdAt.toISOString(),
+      createdAt: serializeApplicationDateTime(log.createdAt),
       error: log.error,
       eventType: log.eventType,
       id: log.id,

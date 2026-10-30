@@ -1,3 +1,5 @@
+import { webEnv } from '@/core/config';
+
 type DateTimeValue = Date | number | string;
 type DateTimeStyle = 'medium' | 'short';
 
@@ -6,7 +8,6 @@ const parseDateTime = (value: DateTimeValue): Date | null => {
 
   return Number.isNaN(date.getTime()) ? null : date;
 };
-
 export const formatDateTime = (
   value: DateTimeValue,
   locale: string,
@@ -19,5 +20,6 @@ export const formatDateTime = (
   return new Intl.DateTimeFormat(locale, {
     dateStyle: 'short',
     timeStyle,
+    timeZone: webEnv.appTimeZone,
   }).format(date);
 };
