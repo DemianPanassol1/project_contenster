@@ -4,7 +4,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { type DeepPartial, In, Repository } from 'typeorm';
 
 import { SystemModule } from '@/modules/access-control/modules/entities/system-module.entity';
-import { Language } from '@/modules/communication/languages/entities/language.entity';
 import { applyPaginatedQueryBuilder, type QueryFieldMap } from '@/shared/pagination';
 import {
   buildTranslatedLabelExpression,
@@ -35,7 +34,6 @@ export class FunctionalityRepository {
   constructor(
     @InjectRepository(Functionality) private readonly functionalities: Repository<Functionality>,
     @InjectRepository(SystemModule) private readonly modules: Repository<SystemModule>,
-    @InjectRepository(Language) private readonly languages: Repository<Language>,
   ) {}
 
   list(
@@ -81,10 +79,6 @@ export class FunctionalityRepository {
 
   findParent(clientId: number, id: number): Promise<Functionality | null> {
     return this.functionalities.findOne({ where: { id, client: { id: clientId } } });
-  }
-
-  findLanguagesByIds(ids: number[]): Promise<Language[]> {
-    return this.languages.findBy({ id: In(ids) });
   }
 
   async save(
