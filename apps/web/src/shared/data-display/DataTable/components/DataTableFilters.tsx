@@ -25,6 +25,7 @@ import {
 } from '../utils/data-table.util';
 
 const NULL_OPTION_VALUE = '__data_table_null_option__';
+const FILTER_FIELD_FOCUS_DELAY_MS = 150;
 
 interface DataTableFiltersProps<T extends object> {
   columns: DataTableColumn<T>[];
@@ -87,11 +88,10 @@ export const DataTableFilters = <T extends object>({
     const column = filterableColumns.find((item) => getColumnKey(item) === focusedFilter.key);
     const hasOptions = Boolean(column?.filter?.options?.length || column?.filter?.optionsEndpoint);
 
-    setOpenedSelectKey(hasOptions || column?.type === 'boolean' ? focusedFilter.key : null);
-
     const timeout = window.setTimeout(() => {
       fieldRefs.current[focusedFilter.key]?.focus();
-    }, 0);
+      setOpenedSelectKey(hasOptions || column?.type === 'boolean' ? focusedFilter.key : null);
+    }, FILTER_FIELD_FOCUS_DELAY_MS);
 
     return () => window.clearTimeout(timeout);
   }, [filterableColumns, focusedFilter]);
