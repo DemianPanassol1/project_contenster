@@ -1,0 +1,83 @@
+'use client';
+
+import type { SystemAdminRequestLogDetail } from '@contenster/shared';
+import { Box, Divider } from '@mui/material';
+import { useLocale, useTranslations } from 'next-intl';
+
+import { HttpMethodChip, LogField, LogJsonSection, LogSection } from '@/shared/observability';
+import { formatDateTime } from '@/utils';
+
+export function SystemAdminRequestLogDetailsContent({ log }: { log: SystemAdminRequestLogDetail }) {
+  const locale = useLocale();
+  const t = useTranslations('protected.system_admin.request_logs');
+  const emptyLabel = t('not_available');
+
+  return (
+    <Box sx={{ display: 'grid', gap: 2, maxHeight: '70vh', overflow: 'auto', pr: 0.5 }}>
+      <LogSection title={t('sections.identification')}>
+        <LogField emptyLabel={emptyLabel} label={t('fields.internal_id')} value={log.id} />
+        <LogField emptyLabel={emptyLabel} label={t('fields.request_id')} value={log.requestId} />
+        <LogField emptyLabel={emptyLabel} label={t('fields.client')} value={log.clientName} />
+        <LogField
+          emptyLabel={emptyLabel}
+          label={t('fields.access_type')}
+          value={t(`access_types.${log.accessType}`)}
+        />
+        <LogField
+          emptyLabel={emptyLabel}
+          label={t('fields.created_at')}
+          value={formatDateTime(log.createdAt, locale)}
+        />
+        <LogField emptyLabel={emptyLabel} label={t('fields.user')} value={log.userName} />
+      </LogSection>
+      <Divider />
+      <LogSection title={t('sections.request')}>
+        <Box>
+          <HttpMethodChip method={log.method} />
+        </Box>
+        <LogField emptyLabel={emptyLabel} label={t('fields.route')} value={log.route} />
+        <LogField emptyLabel={emptyLabel} label={t('fields.client_ip')} value={log.ip} />
+        <LogField emptyLabel={emptyLabel} label={t('fields.user_agent')} value={log.userAgent} />
+        <LogJsonSection
+          emptyLabel={t('empty.no_params')}
+          label={t('fields.query_params')}
+          value={log.queryParams}
+        />
+        <LogJsonSection
+          emptyLabel={t('empty.no_headers')}
+          label={t('fields.request_headers')}
+          value={log.requestHeaders}
+        />
+        <LogJsonSection
+          emptyLabel={t('empty.no_request_body')}
+          label={t('fields.request_body')}
+          value={log.requestBody}
+        />
+      </LogSection>
+      <Divider />
+      <LogSection title={t('sections.response')}>
+        <LogField emptyLabel={emptyLabel} label={t('fields.http_status')} value={log.statusCode} />
+        <LogField
+          emptyLabel={emptyLabel}
+          label={t('fields.response_time')}
+          value={log.responseTimeDescription}
+        />
+        <LogJsonSection
+          emptyLabel={t('empty.no_headers')}
+          label={t('fields.response_headers')}
+          value={log.responseHeaders}
+        />
+        <LogJsonSection
+          emptyLabel={t('empty.no_response_body')}
+          label={t('fields.response_body')}
+          value={log.responseBody}
+        />
+        <LogJsonSection
+          emptyLabel={t('empty.no_errors')}
+          label={t('fields.error')}
+          value={log.error}
+        />
+      </LogSection>
+    </Box>
+  );
+}

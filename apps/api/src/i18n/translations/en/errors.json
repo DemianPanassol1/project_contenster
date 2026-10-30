@@ -91,7 +91,9 @@
     "access_link_duplicate_client": "A client cannot be provided more than once in access links.",
     "access_link_duplicate_profile": "A profile cannot be provided more than once in access links.",
     "access_link_inactive_client": "A new link cannot be created for an inactive client.",
-    "access_link_inactive_profile": "A new link cannot be created for an inactive profile."
+    "access_link_inactive_profile": "A new link cannot be created for an inactive profile.",
+    "request_log_not_found": "The requested request log was not found.",
+    "job_log_not_found": "The requested job log was not found."
   },
   "portal": {
     "not_found": "Portal not found.",

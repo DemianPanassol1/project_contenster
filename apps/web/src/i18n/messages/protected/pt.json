@@ -414,11 +414,90 @@
     },
     "request_logs": {
       "title": "Logs de requisição",
-      "description": "Consulte os registros globais de requisições do sistema."
+      "description": "Consulte os registros globais de requisições do sistema.",
+      "details": "Visualizar detalhes",
+      "details_title": "Detalhes do log de requisição",
+      "close": "Fechar",
+      "not_available": "Não informado",
+      "without_client": "Sem cliente",
+      "columns": {
+        "date_time": "Data/hora",
+        "client": "Cliente",
+        "method": "Método",
+        "route": "Rota",
+        "status": "Status",
+        "time": "Tempo",
+        "user": "Usuário",
+        "access_type": "Tipo de acesso",
+        "ip": "IP"
+      },
+      "access_types": { "client": "Cliente", "superuser": "Superusuário" },
+      "sections": {
+        "identification": "Identificação",
+        "request": "Requisição",
+        "response": "Resposta"
+      },
+      "fields": {
+        "internal_id": "ID interno",
+        "request_id": "ID da requisição",
+        "client": "Cliente",
+        "access_type": "Tipo de acesso",
+        "created_at": "Criado em",
+        "user": "Usuário",
+        "route": "Rota",
+        "client_ip": "IP do cliente",
+        "user_agent": "User agent",
+        "query_params": "Parâmetros",
+        "request_headers": "Headers da requisição",
+        "request_body": "Corpo da requisição",
+        "http_status": "Status HTTP",
+        "response_time": "Tempo de resposta",
+        "response_headers": "Headers da resposta",
+        "response_body": "Corpo da resposta",
+        "error": "Erro"
+      },
+      "empty": {
+        "no_params": "Nenhum parâmetro informado.",
+        "no_headers": "Nenhum header informado.",
+        "no_request_body": "Nenhum corpo de requisição informado.",
+        "no_response_body": "Nenhum corpo de resposta informado.",
+        "no_errors": "Nenhum erro registrado."
+      }
     },
     "job_logs": {
       "title": "Logs de jobs",
-      "description": "Consulte as execuções das tarefas agendadas do sistema."
+      "description": "Consulte as execuções das tarefas agendadas do sistema.",
+      "details": "Visualizar detalhes",
+      "details_title": "Detalhes do log de job",
+      "close": "Fechar",
+      "not_available": "Não informado",
+      "columns": {
+        "date_time": "Data/hora",
+        "task": "Tarefa",
+        "status": "Status",
+        "duration": "Duração"
+      },
+      "statuses": { "sucesso": "Sucesso", "parcial": "Parcial", "erro": "Erro" },
+      "sections": {
+        "identification": "Identificação",
+        "execution": "Execução",
+        "result": "Resultado"
+      },
+      "fields": {
+        "internal_id": "ID interno",
+        "task": "Tarefa",
+        "status": "Status",
+        "created_at": "Criado em",
+        "started_at": "Iniciado em",
+        "finished_at": "Finalizado em",
+        "duration": "Duração",
+        "message": "Mensagem",
+        "total_processed": "Total processado",
+        "total_success": "Total com sucesso",
+        "total_error": "Total com erro",
+        "error": "Erro"
+      },
+      "empty": { "no_errors": "Nenhum erro registrado." }
     },
     "files": {
       "title": "Arquivos",

@@ -27,6 +27,7 @@ import {
   getColumnKey,
   getColumnSelector,
   getDefaultRowId,
+  getFilterColumn,
 } from './utils/data-table.util';
 import {
   AppliedFilterChips,
@@ -141,6 +142,7 @@ export const DataTable = <T extends object>({
   const debouncedSearch = useDebouncedValue(search, 450);
   const [excludedSearchFields, setExcludedSearchFields] = useState<string[]>([]);
   const [draftFilters, setDraftFilters] = useState<FilterOption[]>(initialFilters);
+  const [focusedFilter, setFocusedFilter] = useState<{ key: string; token: number } | null>(null);
   const draftFiltersRef = useRef(draftFilters);
   const excludedSearchFieldsRef = useRef(excludedSearchFields);
   const setTableFiltersRef = useRef(state.setFilters);
@@ -393,6 +395,16 @@ export const DataTable = <T extends object>({
     <AppliedFilterChips
       columns={resolvedColumns}
       filters={draftFilters}
+      onClick={(filter) => {
+        const column = getFilterColumn(resolvedColumns, filter);
+
+        if (column) {
+          setFocusedFilter((current) => ({
+            key: getColumnKey(column),
+            token: (current?.token ?? 0) + 1,
+          }));
+        }
+      }}
       onRemove={(filter) => {
         const nextDraftFilters = draftFilters.filter((item) => item !== filter);
         setDraftFilters(nextDraftFilters);
@@ -452,6 +464,7 @@ export const DataTable = <T extends object>({
         <DataTableFilters
           columns={resolvedColumns}
           activeFiltersCount={draftFilters.length}
+          focusedFilter={focusedFilter}
           onApply={handleApplyFilters}
         />
         <DataTableColumnsPanel

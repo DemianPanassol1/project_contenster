@@ -91,7 +91,9 @@
     "access_link_duplicate_client": "Um cliente não pode ser informado mais de uma vez nos vínculos de acesso.",
     "access_link_duplicate_profile": "Um perfil não pode ser informado mais de uma vez nos vínculos de acesso.",
     "access_link_inactive_client": "Não é possível criar um novo vínculo para um cliente inativo.",
-    "access_link_inactive_profile": "Não é possível criar um novo vínculo para um perfil inativo."
+    "access_link_inactive_profile": "Não é possível criar um novo vínculo para um perfil inativo.",
+    "request_log_not_found": "O log de requisição informado não foi encontrado.",
+    "job_log_not_found": "O log de job informado não foi encontrado."
   },
   "portal": {
     "not_found": "Portal não encontrado.",

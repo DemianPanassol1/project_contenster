@@ -414,11 +414,90 @@
     },
     "request_logs": {
       "title": "Request logs",
-      "description": "View the system-wide request records."
+      "description": "View the system-wide request records.",
+      "details": "View details",
+      "details_title": "Request log details",
+      "close": "Close",
+      "not_available": "Not provided",
+      "without_client": "No client",
+      "columns": {
+        "date_time": "Date/time",
+        "client": "Client",
+        "method": "Method",
+        "route": "Route",
+        "status": "Status",
+        "time": "Time",
+        "user": "User",
+        "access_type": "Access type",
+        "ip": "IP"
+      },
+      "access_types": { "client": "Client", "superuser": "Superuser" },
+      "sections": {
+        "identification": "Identification",
+        "request": "Request",
+        "response": "Response"
+      },
+      "fields": {
+        "internal_id": "Internal ID",
+        "request_id": "Request ID",
+        "client": "Client",
+        "access_type": "Access type",
+        "created_at": "Created at",
+        "user": "User",
+        "route": "Route",
+        "client_ip": "Client IP",
+        "user_agent": "User agent",
+        "query_params": "Parameters",
+        "request_headers": "Request headers",
+        "request_body": "Request body",
+        "http_status": "HTTP status",
+        "response_time": "Response time",
+        "response_headers": "Response headers",
+        "response_body": "Response body",
+        "error": "Error"
+      },
+      "empty": {
+        "no_params": "No parameters provided.",
+        "no_headers": "No headers provided.",
+        "no_request_body": "No request body provided.",
+        "no_response_body": "No response body provided.",
+        "no_errors": "No error recorded."
+      }
     },
     "job_logs": {
       "title": "Job logs",
-      "description": "View the executions of scheduled system tasks."
+      "description": "View the executions of scheduled system tasks.",
+      "details": "View details",
+      "details_title": "Job log details",
+      "close": "Close",
+      "not_available": "Not provided",
+      "columns": {
+        "date_time": "Date/time",
+        "task": "Task",
+        "status": "Status",
+        "duration": "Duration"
+      },
+      "statuses": { "sucesso": "Success", "parcial": "Partial", "erro": "Error" },
+      "sections": {
+        "identification": "Identification",
+        "execution": "Execution",
+        "result": "Result"
+      },
+      "fields": {
+        "internal_id": "Internal ID",
+        "task": "Task",
+        "status": "Status",
+        "created_at": "Created at",
+        "started_at": "Started at",
+        "finished_at": "Finished at",
+        "duration": "Duration",
+        "message": "Message",
+        "total_processed": "Total processed",
+        "total_success": "Total successful",
+        "total_error": "Total failed",
+        "error": "Error"
+      },
+      "empty": { "no_errors": "No error recorded." }
     },
     "files": {
       "title": "Files",

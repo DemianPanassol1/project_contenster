@@ -1,4 +1,4 @@
-import type { PaginateRequest } from '@contenster/shared';
+import type { AppOption, PaginateRequest } from '@contenster/shared';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EntityManager, In, Repository } from 'typeorm';
@@ -74,24 +74,10 @@ export class SystemAdminRepository {
     return this.clients.softRemove(client);
   }
 
-  listRequestLogs(clientId?: number) {
-    const query = this.requestLogs
-      .createQueryBuilder('requestLog')
-      .leftJoinAndSelect('requestLog.client', 'client')
-      .leftJoinAndSelect('requestLog.user', 'user')
-      .orderBy('requestLog.criado_em', 'DESC')
-      .take(100);
-
-    if (clientId !== undefined) {
-      query.where('requestLog.cliente_id = :clientId', { clientId });
-    }
-
-    return query.getMany();
-  }
-
   requestLogsQuery() {
     return this.requestLogs
       .createQueryBuilder('requestLog')
+      .withDeleted()
       .leftJoinAndSelect('requestLog.client', 'client')
       .leftJoinAndSelect('requestLog.user', 'user');
   }
@@ -103,15 +89,25 @@ export class SystemAdminRepository {
         accessType: 'requestLog.tipo_acesso',
         clientId: 'client.id',
         createdAt: 'requestLog.criado_em',
+        ip: 'requestLog.ip',
         level: 'requestLog.nivel',
+        method: 'requestLog.metodo_http',
         route: 'requestLog.rota',
+        statusCode: 'requestLog.status_code',
+        userName: 'user.nome',
       },
       tieBreaker: 'requestLog.id',
     });
   }
 
-  listJobLogs() {
-    return this.jobLogs.find({ order: { createdAt: 'DESC' }, take: 100 });
+  findRequestLog(id: number) {
+    return this.requestLogs
+      .createQueryBuilder('requestLog')
+      .withDeleted()
+      .leftJoinAndSelect('requestLog.client', 'client')
+      .leftJoinAndSelect('requestLog.user', 'user')
+      .where('requestLog.id = :id', { id })
+      .getOne();
   }
 
   jobLogsQuery() {
@@ -128,6 +124,29 @@ export class SystemAdminRepository {
       },
       tieBreaker: 'jobLog.id',
     });
+  }
+
+  findJobLog(id: number): Promise<CronExecutionLog | null> {
+    return this.jobLogs.createQueryBuilder('jobLog').where('jobLog.id = :id', { id }).getOne();
+  }
+
+  async listRequestLogClientOptions(request: PaginateRequest): Promise<AppOption[]> {
+    const [clients] = await applyPaginatedQueryBuilder(
+      this.clients.createQueryBuilder('client').withDeleted(),
+      request,
+      {
+        defaultSort: [{ field: 'tradeName', direction: 'asc' }],
+        fields: CLIENT_LIST_FIELDS,
+        tieBreaker: 'client.id',
+      },
+    );
+
+    return clients.map((client) => ({
+      disabled: false,
+      label: `${client.tradeName} (${client.document})${client.deletedAt ? ' — excluído' : ''}`,
+      metadata: { isDeleted: Boolean(client.deletedAt) },
+      value: client.id,
+    }));
   }
 
   listFiles(clientId?: number) {

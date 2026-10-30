@@ -133,6 +133,16 @@ export const buildColumnFilter = <T extends object>(
   column: DataTableColumn<T>,
   value: DataTableFilterDraftValue,
 ): FilterOption | null => {
+  if (value === null && column.filter?.nullOperation === Operation.IS_NULL) {
+    return {
+      field: getColumnSelector(column),
+      value: null,
+      disjunctive: false,
+      type: inferFilterType(column),
+      operation: column.filter.nullOperation,
+    };
+  }
+
   if (isEmptyFilterValue(value)) {
     return null;
   }

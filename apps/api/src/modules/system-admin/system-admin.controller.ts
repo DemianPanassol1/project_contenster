@@ -55,20 +55,25 @@ export class SystemAdminController {
     return this.service.deleteClient(id);
   }
 
-  @Get('request-logs') listRequestLogs(@Query('clientId') clientId?: string) {
-    return this.service.listRequestLogs(clientId === undefined ? undefined : Number(clientId));
-  }
-
   @Post('request-logs/list') listRequestLogsPaginated(@Body() request: PaginateRequestDto) {
     return this.service.listRequestLogsPaginated(request);
   }
 
-  @Get('job-logs') listJobLogs() {
-    return this.service.listJobLogs();
+  @Post('request-logs/client-options')
+  listRequestLogClientOptions(@Body() request: PaginateRequestDto) {
+    return this.service.listRequestLogClientOptions(request);
+  }
+
+  @Get('request-logs/:id') getRequestLog(@Param('id', ParseIntPipe) id: number) {
+    return this.service.getRequestLog(id);
   }
 
   @Post('job-logs/list') listJobLogsPaginated(@Body() request: PaginateRequestDto) {
     return this.service.listJobLogsPaginated(request);
+  }
+
+  @Get('job-logs/:id') getJobLog(@Param('id', ParseIntPipe) id: number) {
+    return this.service.getJobLog(id);
   }
 
   @Get('files') listFiles(@Query('clientId') clientId?: string) {

@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useMemo, useState } from 'react';
 
 import { useToast } from '@/hooks';
@@ -11,7 +11,7 @@ import { getWebResponseErrorToastMessages } from '@/services/utils/web-error.uti
 import { useGET, usePOST } from './swr.hook';
 
 export interface SelectOption {
-  value: string | number | boolean;
+  value: string | number | boolean | null;
   label: string;
   disabled?: boolean | null;
   metadata?: Record<string, unknown> | null;
@@ -196,7 +196,8 @@ const isSelectOption = (value: unknown): value is SelectOption => {
   }
 
   return (
-    ['string', 'number', 'boolean'].includes(typeof value.value) && typeof value.label === 'string'
+    (value.value === null || ['string', 'number', 'boolean'].includes(typeof value.value)) &&
+    typeof value.label === 'string'
   );
 };
 
@@ -205,6 +206,7 @@ const isObjectRecord = (value: unknown): value is Record<string, unknown> =>
 
 export const useOptionsCollection = (sources: OptionsSource[]) => {
   const router = useRouter();
+  const locale = useLocale();
   const t = useTranslations();
   const { errorMessage } = useToast();
   const [remoteOptions, setRemoteOptions] = useState<OptionsByKey>({});
@@ -247,6 +249,7 @@ export const useOptionsCollection = (sources: OptionsSource[]) => {
               method,
               endpoint: source.optionsEndpoint as string,
               body: method === 'POST' ? (source.optionsBody ?? {}) : undefined,
+              locale,
             });
 
             if (response.statusCode === 401) {
@@ -285,7 +288,7 @@ export const useOptionsCollection = (sources: OptionsSource[]) => {
     return () => {
       isMounted = false;
     };
-  }, [errorMessage, router, sourceSnapshots, webErrorMessages]);
+  }, [errorMessage, locale, router, sourceSnapshots, webErrorMessages]);
 
   const options = useMemo(() => {
     return sourceSnapshots.reduce<OptionsByKey>((acc, source) => {

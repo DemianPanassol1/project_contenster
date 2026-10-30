@@ -8,25 +8,18 @@ interface LogJsonViewerProps {
   value: unknown;
 }
 
-const isEmptyValue = (value: unknown): boolean => {
-  if (value === null || value === undefined || value === '') {
-    return true;
-  }
-
-  if (Array.isArray(value)) {
-    return value.length === 0;
-  }
-
-  return typeof value === 'object' && Object.keys(value).length === 0;
-};
-
+const isEmptyValue = (value: unknown): boolean =>
+  value === null ||
+  value === undefined ||
+  value === '' ||
+  (Array.isArray(value) && value.length === 0) ||
+  (typeof value === 'object' && !Array.isArray(value) && Object.keys(value).length === 0);
 const formatValue = (value: unknown): string =>
   typeof value === 'string' ? value : JSON.stringify(value, null, 2);
 
 export function LogJsonViewer({ value, emptyLabel, maxHeight = 240 }: LogJsonViewerProps) {
-  if (isEmptyValue(value)) {
+  if (isEmptyValue(value))
     return <Typography sx={{ color: 'text.secondary', fontSize: 12.5 }}>{emptyLabel}</Typography>;
-  }
 
   return (
     <Box

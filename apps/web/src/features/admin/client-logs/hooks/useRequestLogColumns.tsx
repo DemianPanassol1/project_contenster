@@ -5,8 +5,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useMemo } from 'react';
 
 import type { DataTableColumn } from '@/shared';
-
-import { HttpMethodChip } from '../components/HttpMethodChip';
+import { HttpMethodChip } from '@/shared/observability';
 
 export function useRequestLogColumns(): DataTableColumn<RequestLogListItem>[] {
   const locale = useLocale();

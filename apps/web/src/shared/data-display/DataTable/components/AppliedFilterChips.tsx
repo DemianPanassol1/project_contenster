@@ -11,6 +11,7 @@ interface AppliedFilterChipsProps<T extends object> {
   columns: DataTableColumn<T>[];
   filters: FilterOption[];
   fullWidth?: boolean;
+  onClick?: (filter: FilterOption) => void;
   onRemove: (filter: FilterOption) => void;
   onClearAll: () => void;
 }
@@ -19,6 +20,7 @@ export const AppliedFilterChips = <T extends object>({
   columns,
   filters,
   fullWidth = false,
+  onClick,
   onRemove,
   onClearAll,
 }: AppliedFilterChipsProps<T>) => {
@@ -56,6 +58,7 @@ export const AppliedFilterChips = <T extends object>({
             key={`${filter.field}-${filter.operation}-${String(filter.value)}-${index}`}
             size="small"
             label={`${label}: ${getFilterDisplayValue(filter, column, labels)}`}
+            onClick={onClick ? () => onClick(filter) : undefined}
             onDelete={() => onRemove(filter)}
             sx={{
               height: 28,

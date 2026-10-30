@@ -20,7 +20,6 @@ const methodColorMap: Partial<Record<string, MethodColor>> = {
 export function HttpMethodChip({ method }: HttpMethodChipProps) {
   const normalizedMethod = method.trim().toUpperCase() || '-';
   const paletteKey = methodColorMap[normalizedMethod];
-
   const sx: SxProps<Theme> = (theme) => {
     if (!paletteKey) {
       return {
@@ -50,7 +49,6 @@ export function HttpMethodChip({ method }: HttpMethodChipProps) {
           fontSize: 11,
           fontWeight: 800,
           height: 22,
-          letterSpacing: 0,
           minWidth: 58,
         },
         sx,

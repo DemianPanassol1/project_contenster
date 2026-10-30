@@ -12,7 +12,7 @@ import {
   Typography,
 } from '@mui/material';
 import { useTranslations } from 'next-intl';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { Icon } from '@/shared/ui/Icon';
 
@@ -24,13 +24,17 @@ import {
   getColumnKey,
 } from '../utils/data-table.util';
 
+const NULL_OPTION_VALUE = '__data_table_null_option__';
+
 interface DataTableFiltersProps<T extends object> {
   columns: DataTableColumn<T>[];
   activeFiltersCount: number;
+  focusedFilter?: { key: string; token: number } | null;
   onApply: (filters: FilterOption[]) => void;
 }
 
 const toSelectValue = (value: DataTableFilterDraftValue): string => {
+  if (value === null) return NULL_OPTION_VALUE;
   if (typeof value === 'boolean') return String(value);
   if (typeof value === 'number') return String(value);
   if (typeof value === 'string') return value;
@@ -40,11 +44,13 @@ const toSelectValue = (value: DataTableFilterDraftValue): string => {
 
 const parseOptionValue = (
   rawValue: string,
-  options: Array<{ value: string | number | boolean }>,
+  options: Array<{ value: string | number | boolean | null }>,
 ) => {
-  const option = options.find((item) => String(item.value) === rawValue);
+  const option = options.find((item) =>
+    item.value === null ? rawValue === NULL_OPTION_VALUE : String(item.value) === rawValue,
+  );
 
-  return option?.value ?? rawValue;
+  return option ? option.value : rawValue;
 };
 
 const getRangeValue = (value: DataTableFilterDraftValue): { from?: string; to?: string } => {
@@ -58,13 +64,37 @@ const getRangeValue = (value: DataTableFilterDraftValue): { from?: string; to?: 
 export const DataTableFilters = <T extends object>({
   columns,
   activeFiltersCount,
+  focusedFilter,
   onApply,
 }: DataTableFiltersProps<T>) => {
   const t = useTranslations();
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const [draft, setDraft] = useState<Record<string, DataTableFilterDraftValue>>({});
+  const [openedSelectKey, setOpenedSelectKey] = useState<string | null>(null);
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
+  const fieldRefs = useRef<Record<string, HTMLElement | null>>({});
+  const setFieldRef = (key: string, element: unknown) => {
+    fieldRefs.current[key] = element instanceof HTMLElement ? element : null;
+  };
 
   const filterableColumns = useMemo(() => columns.filter((column) => column.filterable), [columns]);
+
+  useEffect(() => {
+    if (!focusedFilter) return;
+
+    setAnchorEl(buttonRef.current);
+
+    const column = filterableColumns.find((item) => getColumnKey(item) === focusedFilter.key);
+    const hasOptions = Boolean(column?.filter?.options?.length || column?.filter?.optionsEndpoint);
+
+    setOpenedSelectKey(hasOptions || column?.type === 'boolean' ? focusedFilter.key : null);
+
+    const timeout = window.setTimeout(() => {
+      fieldRefs.current[focusedFilter.key]?.focus();
+    }, 0);
+
+    return () => window.clearTimeout(timeout);
+  }, [filterableColumns, focusedFilter]);
 
   if (!filterableColumns.length) {
     return null;
@@ -84,6 +114,7 @@ export const DataTableFilters = <T extends object>({
   return (
     <>
       <Button
+        ref={buttonRef}
         size="small"
         variant="outlined"
         startIcon={<Icon name="funnel" size={16} />}
@@ -167,11 +198,19 @@ export const DataTableFilters = <T extends object>({
                   }}
                 >
                   <Select
+                    inputRef={(element) => {
+                      setFieldRef(columnKey, element);
+                    }}
                     disabled={isLoadingOptions}
                     displayEmpty
+                    open={openedSelectKey === columnKey}
                     value={toSelectValue(draft[columnKey])}
                     renderValue={(value) => {
-                      const option = options?.find((item) => String(item.value) === String(value));
+                      const option = options?.find((item) =>
+                        item.value === null
+                          ? value === NULL_OPTION_VALUE
+                          : String(item.value) === String(value),
+                      );
 
                       return (
                         <Box
@@ -183,11 +222,14 @@ export const DataTableFilters = <T extends object>({
                       );
                     }}
                     onChange={(event) => {
+                      setOpenedSelectKey(null);
                       setDraft((current) => ({
                         ...current,
                         [columnKey]: parseOptionValue(String(event.target.value), options ?? []),
                       }));
                     }}
+                    onOpen={() => setOpenedSelectKey(columnKey)}
+                    onClose={() => setOpenedSelectKey(null)}
                     MenuProps={{
                       slotProps: {
                         paper: {
@@ -199,7 +241,10 @@ export const DataTableFilters = <T extends object>({
                     }}
                   >
                     {(options ?? []).map((option) => (
-                      <MenuItem key={String(option.value)} value={String(option.value)}>
+                      <MenuItem
+                        key={option.value === null ? NULL_OPTION_VALUE : String(option.value)}
+                        value={option.value === null ? NULL_OPTION_VALUE : String(option.value)}
+                      >
                         {option.label}
                       </MenuItem>
                     ))}
@@ -223,6 +268,9 @@ export const DataTableFilters = <T extends object>({
                   sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1 }}
                 >
                   <TextField
+                    inputRef={(element) => {
+                      setFieldRef(columnKey, element);
+                    }}
                     size="small"
                     type={inputType}
                     label={`${column.name} ${t('data_table.from')}`}
@@ -263,6 +311,9 @@ export const DataTableFilters = <T extends object>({
             return (
               <TextField
                 key={columnKey}
+                inputRef={(element) => {
+                  setFieldRef(columnKey, element);
+                }}
                 size="small"
                 label={column.name}
                 value={toSelectValue(draft[columnKey])}

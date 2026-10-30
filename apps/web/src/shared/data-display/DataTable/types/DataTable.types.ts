@@ -26,7 +26,7 @@ export type DataTableColumnType =
 
 export interface DataTableOption {
   label: string;
-  value: string | number | boolean;
+  value: string | number | boolean | null;
 }
 
 export interface DataTableColumn<T extends object> {
@@ -53,6 +53,7 @@ export interface DataTableColumn<T extends object> {
   filter?: {
     type: FieldType;
     operation?: Operation;
+    nullOperation?: Operation;
     options?: DataTableOption[];
     optionsEndpoint?: string | null;
     optionsMethod?: OptionsMethod;

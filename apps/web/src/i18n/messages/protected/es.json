@@ -414,11 +414,90 @@
     },
     "request_logs": {
       "title": "Registros de solicitudes",
-      "description": "Consulte los registros globales de solicitudes del sistema."
+      "description": "Consulte los registros globales de solicitudes del sistema.",
+      "details": "Ver detalles",
+      "details_title": "Detalles del registro de solicitud",
+      "close": "Cerrar",
+      "not_available": "No informado",
+      "without_client": "Sin cliente",
+      "columns": {
+        "date_time": "Fecha/hora",
+        "client": "Cliente",
+        "method": "Método",
+        "route": "Ruta",
+        "status": "Estado",
+        "time": "Tiempo",
+        "user": "Usuario",
+        "access_type": "Tipo de acceso",
+        "ip": "IP"
+      },
+      "access_types": { "client": "Cliente", "superuser": "Superusuario" },
+      "sections": {
+        "identification": "Identificación",
+        "request": "Solicitud",
+        "response": "Respuesta"
+      },
+      "fields": {
+        "internal_id": "ID interno",
+        "request_id": "ID de solicitud",
+        "client": "Cliente",
+        "access_type": "Tipo de acceso",
+        "created_at": "Creado en",
+        "user": "Usuario",
+        "route": "Ruta",
+        "client_ip": "IP del cliente",
+        "user_agent": "User agent",
+        "query_params": "Parámetros",
+        "request_headers": "Headers de solicitud",
+        "request_body": "Cuerpo de solicitud",
+        "http_status": "Estado HTTP",
+        "response_time": "Tiempo de respuesta",
+        "response_headers": "Headers de respuesta",
+        "response_body": "Cuerpo de respuesta",
+        "error": "Error"
+      },
+      "empty": {
+        "no_params": "No se informaron parámetros.",
+        "no_headers": "No se informaron headers.",
+        "no_request_body": "No se informó cuerpo de solicitud.",
+        "no_response_body": "No se informó cuerpo de respuesta.",
+        "no_errors": "No se registraron errores."
+      }
     },
     "job_logs": {
       "title": "Registros de trabajos",
-      "description": "Consulte las ejecuciones de las tareas programadas del sistema."
+      "description": "Consulte las ejecuciones de las tareas programadas del sistema.",
+      "details": "Ver detalles",
+      "details_title": "Detalles del registro de trabajo",
+      "close": "Cerrar",
+      "not_available": "No informado",
+      "columns": {
+        "date_time": "Fecha/hora",
+        "task": "Tarea",
+        "status": "Estado",
+        "duration": "Duración"
+      },
+      "statuses": { "sucesso": "Éxito", "parcial": "Parcial", "erro": "Error" },
+      "sections": {
+        "identification": "Identificación",
+        "execution": "Ejecución",
+        "result": "Resultado"
+      },
+      "fields": {
+        "internal_id": "ID interno",
+        "task": "Tarea",
+        "status": "Estado",
+        "created_at": "Creado en",
+        "started_at": "Iniciado en",
+        "finished_at": "Finalizado en",
+        "duration": "Duración",
+        "message": "Mensaje",
+        "total_processed": "Total procesado",
+        "total_success": "Total exitoso",
+        "total_error": "Total con error",
+        "error": "Error"
+      },
+      "empty": { "no_errors": "No se registraron errores." }
     },
     "files": {
       "title": "Archivos",

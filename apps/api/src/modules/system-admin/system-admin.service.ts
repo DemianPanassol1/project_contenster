@@ -6,10 +6,12 @@ import { DataSource, type DeepPartial, In, Repository } from 'typeorm';
 import {
   CORE_FUNCTIONALITY_CATALOG,
   type CreateSystemAdminClientRequest,
+  type CronExecutionLogListItem,
   type PaginatedBody,
   type PaginateRequest,
   type SystemAdminAccessLinkRequest,
   type SystemAdminClientListItem,
+  type SystemAdminRequestLogListItem,
 } from '@contenster/shared';
 import type { I18nTranslations } from '@/i18n/translations';
 import { Functionality } from '@/modules/access-control/functionalities/entities/functionality.entity';
@@ -23,11 +25,17 @@ import { SessionSynchronizationService } from '@/modules/identity/authentication
 import type { SaveClientRequestDto } from '@/modules/identity/clients/dto/req/save-client.request.dto';
 import { Client } from '@/modules/identity/clients/entities/client.entity';
 import { resolveFilePublicUrl } from '@/modules/media/files/helpers/file-public-url.helper';
+import { RequestLog } from '@/modules/observability/request-logs/entities/request-log.entity';
+import { CronExecutionLog } from '@/modules/scheduling/cron-execution-log/entities/cron-execution-log.entity';
 import { buildPaginationMeta } from '@/shared/pagination';
 import { toResponseDto } from '@/shared/responses';
 
 import { ReplaceUserAccessLinksRequestDto } from './dto/req/replace-user-access-links.request.dto';
 import { SystemAdminClientListItemResponseDto } from './dto/res/system-admin-client-list-item.response.dto';
+import { SystemAdminJobLogDetailResponseDto } from './dto/res/system-admin-job-log-detail.response.dto';
+import { SystemAdminJobLogListItemResponseDto } from './dto/res/system-admin-job-log-list-item.response.dto';
+import { SystemAdminRequestLogDetailResponseDto } from './dto/res/system-admin-request-log-detail.response.dto';
+import { SystemAdminRequestLogListItemResponseDto } from './dto/res/system-admin-request-log-list-item.response.dto';
 import { SystemAdminRepository } from './system-admin.repository';
 
 @Injectable()
@@ -258,22 +266,73 @@ export class SystemAdminService {
     return { id };
   }
 
-  listRequestLogs(clientId?: number) {
-    return this.repository.listRequestLogs(clientId);
+  async listRequestLogsPaginated(
+    request: PaginateRequest,
+  ): Promise<PaginatedBody<SystemAdminRequestLogListItemResponseDto>> {
+    const [logs, total] = await this.repository.listRequestLogsPaginated(request);
+
+    return {
+      items: toResponseDto(
+        SystemAdminRequestLogListItemResponseDto,
+        logs.map((log) => this.toRequestLogListItem(log)),
+      ),
+      meta: buildPaginationMeta(request, total),
+    };
   }
 
-  async listRequestLogsPaginated(request: PaginateRequest) {
-    const [items, total] = await this.repository.listRequestLogsPaginated(request);
-    return { items, meta: buildPaginationMeta(request, total) };
+  async getRequestLog(id: number): Promise<SystemAdminRequestLogDetailResponseDto> {
+    const log = await this.repository.findRequestLog(id);
+
+    if (!log) {
+      throw new NotFoundException(this.i18n.t('errors.system_admin.request_log_not_found'));
+    }
+
+    return toResponseDto(SystemAdminRequestLogDetailResponseDto, {
+      ...this.toRequestLogListItem(log),
+      error: log.error,
+      eventType: log.eventType,
+      queryParams: log.queryParams,
+      requestBody: log.requestBody,
+      requestHeaders: log.requestHeaders,
+      requestId: log.requestId,
+      responseBody: log.responseBody,
+      responseHeaders: log.responseHeaders,
+      responseTimeDescription: log.responseTimeDescription,
+      userAgent: log.userAgent,
+    });
   }
 
-  listJobLogs() {
-    return this.repository.listJobLogs();
+  async listJobLogsPaginated(
+    request: PaginateRequest,
+  ): Promise<PaginatedBody<SystemAdminJobLogListItemResponseDto>> {
+    const [logs, total] = await this.repository.listJobLogsPaginated(request);
+
+    return {
+      items: toResponseDto(
+        SystemAdminJobLogListItemResponseDto,
+        logs.map((log) => this.toJobLogListItem(log)),
+      ),
+      meta: buildPaginationMeta(request, total),
+    };
   }
 
-  async listJobLogsPaginated(request: PaginateRequest) {
-    const [items, total] = await this.repository.listJobLogsPaginated(request);
-    return { items, meta: buildPaginationMeta(request, total) };
+  async getJobLog(id: number): Promise<SystemAdminJobLogDetailResponseDto> {
+    const log = await this.repository.findJobLog(id);
+
+    if (!log) {
+      throw new NotFoundException(this.i18n.t('errors.system_admin.job_log_not_found'));
+    }
+
+    return toResponseDto(SystemAdminJobLogDetailResponseDto, {
+      ...this.toJobLogListItem(log),
+      error: log.error,
+      finishedAt: log.finishedAt?.toISOString() ?? null,
+      startedAt: log.startedAt.toISOString(),
+    });
+  }
+
+  listRequestLogClientOptions(request: PaginateRequest) {
+    return this.repository.listRequestLogClientOptions(request);
   }
 
   listFiles(clientId?: number) {
@@ -386,6 +445,37 @@ export class SystemAdminService {
       isActive: client.isActive,
       tradeName: client.tradeName,
       userCount,
+    };
+  }
+
+  private toRequestLogListItem(log: RequestLog): SystemAdminRequestLogListItem {
+    return {
+      accessType: log.accessType,
+      clientId: log.client?.id ?? null,
+      clientName: log.client?.tradeName ?? null,
+      createdAt: log.createdAt.toISOString(),
+      id: log.id,
+      ip: log.ip,
+      level: log.level,
+      method: log.method,
+      responseTimeMs: log.responseTimeMs,
+      route: log.route,
+      statusCode: log.statusCode,
+      userName: log.user?.name ?? null,
+    };
+  }
+
+  private toJobLogListItem(log: CronExecutionLog): CronExecutionLogListItem {
+    return {
+      createdAt: log.createdAt.toISOString(),
+      durationMs: log.durationMs,
+      id: log.id,
+      message: log.message,
+      status: log.status,
+      taskName: log.taskName,
+      totalError: log.totalError,
+      totalProcessed: log.totalProcessed,
+      totalSuccess: log.totalSuccess,
     };
   }
 

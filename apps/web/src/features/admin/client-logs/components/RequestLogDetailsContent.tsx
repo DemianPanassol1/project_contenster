@@ -5,8 +5,7 @@ import { Box, Divider, Typography } from '@mui/material';
 import { useLocale, useTranslations } from 'next-intl';
 import { useMemo } from 'react';
 
-import { HttpMethodChip } from './HttpMethodChip';
-import { LogField, LogJsonSection, LogSection } from './LogDetailsLayout';
+import { HttpMethodChip, LogField, LogJsonSection, LogSection } from '@/shared/observability';
 
 interface RequestLogDetailsContentProps {
   log: RequestLogDetail;
