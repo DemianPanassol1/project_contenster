@@ -9,10 +9,19 @@
     "title": "Acessos rápidos"
   },
   "not_found": {
-    "message": "Página administrativa não encontrada."
+    "back_to_home": "Voltar aos acessos rápidos",
+    "content_description": "Verifique o endereço informado ou volte aos acessos rápidos para escolher uma funcionalidade disponível.",
+    "content_title": "Não foi possível localizar esta página",
+    "description": "A página administrativa solicitada não existe ou ainda não possui uma tela disponível.",
+    "module": "Administração",
+    "title": "Página não encontrada"
   },
   "access_denied": {
-    "message": "Você não possui permissão para acessar esta funcionalidade.",
+    "back_to_home": "Voltar aos acessos rápidos",
+    "content_description": "Seu perfil não possui a permissão necessária para visualizar ou executar esta operação.",
+    "content_title": "Seu acesso foi restringido",
+    "description": "A funcionalidade existe, mas não está disponível para o seu perfil de acesso atual.",
+    "module": "Administração",
     "title": "Acesso negado"
   },
   "feedback": {

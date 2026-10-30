@@ -1,15 +1,20 @@
-import { Alert, Typography } from '@mui/material';
 import { getTranslations } from 'next-intl/server';
+
+import { AdminAccessStateView } from './AdminAccessStateView';
 
 export async function AccessDeniedView() {
   const t = await getTranslations('protected.access_denied');
 
   return (
-    <Alert severity="warning">
-      <Typography component="h1" variant="h6">
-        {t('title')}
-      </Typography>
-      {t('message')}
-    </Alert>
+    <AdminAccessStateView
+      actionLabel={t('back_to_home')}
+      contentDescription={t('content_description')}
+      contentTitle={t('content_title')}
+      description={t('description')}
+      icon="shield"
+      module={t('module')}
+      severity="warning"
+      title={t('title')}
+    />
   );
 }

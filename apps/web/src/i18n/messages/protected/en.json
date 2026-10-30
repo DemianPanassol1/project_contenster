@@ -9,10 +9,19 @@
     "title": "Quick access"
   },
   "not_found": {
-    "message": "Administrative page not found."
+    "back_to_home": "Back to quick access",
+    "content_description": "Check the address or return to quick access to choose an available feature.",
+    "content_title": "This page could not be found",
+    "description": "The requested administrative page does not exist or does not have an available screen yet.",
+    "module": "Administration",
+    "title": "Page not found"
   },
   "access_denied": {
-    "message": "You do not have permission to access this functionality.",
+    "back_to_home": "Back to quick access",
+    "content_description": "Your profile does not have the required permission to view or perform this operation.",
+    "content_title": "Your access is restricted",
+    "description": "This feature exists, but it is not available for your current access profile.",
+    "module": "Administration",
     "title": "Access denied"
   },
   "feedback": {
