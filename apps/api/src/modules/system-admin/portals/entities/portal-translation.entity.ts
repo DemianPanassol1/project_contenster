@@ -13,6 +13,7 @@ export class PortalTranslation {
   @ManyToOne(() => Portal, (portal) => portal.translations, {
     nullable: false,
     onDelete: 'CASCADE',
+    orphanedRowAction: 'delete',
   })
   @JoinColumn({ foreignKeyConstraintName: 'fk_portais_traducoes_portal', name: 'portal_id' })
   declare portal: Portal;

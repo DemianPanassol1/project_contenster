@@ -33,6 +33,7 @@ import { Button, IconButton, Page } from '@/shared';
 
 interface AccessLinkRow {
   clientId: number | null;
+  id: number | null;
   profileId: number | null;
   rowId: string;
 }
@@ -90,7 +91,12 @@ export function SystemAdminAccessLinksView() {
   const createRow = (): AccessLinkRow => {
     rowSequence.current += 1;
 
-    return { clientId: null, profileId: null, rowId: `new-access-link-${rowSequence.current}` };
+    return {
+      clientId: null,
+      id: null,
+      profileId: null,
+      rowId: `new-access-link-${rowSequence.current}`,
+    };
   };
 
   const loadUserAccess = async (userId: number) => {
@@ -110,8 +116,9 @@ export function SystemAdminAccessLinksView() {
     setRows(
       response.body.links.map((link) => ({
         clientId: link.clientId,
+        id: link.id,
         profileId: link.profileId,
-        rowId: `access-link-${link.clientId}`,
+        rowId: `access-link-${link.id}`,
       })),
     );
   };
@@ -197,7 +204,11 @@ export function SystemAdminAccessLinksView() {
     }
 
     const body: ReplaceSystemAdminAccessLinksRequest = {
-      links: rows.map((row) => ({ clientId: row.clientId!, profileId: row.profileId! })),
+      links: rows.map((row) => ({
+        clientId: row.clientId!,
+        id: row.id,
+        profileId: row.profileId!,
+      })),
     };
 
     await apiRequest({

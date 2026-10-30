@@ -86,6 +86,7 @@ export class FunctionalityRepository {
   findLanguagesByIds(ids: number[]): Promise<Language[]> {
     return this.languages.findBy({ id: In(ids) });
   }
+
   async save(
     functionality: DeepPartial<Functionality> & {
       translations: DeepPartial<FunctionalityTranslation>[];

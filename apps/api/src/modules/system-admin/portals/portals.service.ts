@@ -91,7 +91,10 @@ export class PortalsService {
   async save(request: SavePortalRequestDto): Promise<PortalDetail> {
     const portal = request.id === null ? new Portal() : await this.getEntityOrFail(request.id);
     const hosts = this.normalizeHosts(request.hosts);
-    const conflictingDomains = await this.repository.findConflictingDomains(hosts, request.id);
+    const conflictingDomains = await this.repository.findConflictingDomains(
+      hosts.map((domain) => domain.host),
+      request.id,
+    );
 
     if (conflictingDomains.length > 0) {
       throw new ConflictException(this.i18n.t('errors.portal.domain_conflict'));
@@ -99,25 +102,26 @@ export class PortalsService {
 
     const translations = await this.buildTranslations(request);
     const filesById = await this.loadGlobalFiles(request);
-
-    this.validateRequest(request, filesById);
-    this.assignPortal(portal, request, filesById);
-
-    const savedId = await this.repository.saveAggregate(
-      portal,
-      hosts.map((host) => Object.assign(new PortalDomain(), { host })),
-      translations,
-      request.loginMedia.map((item) =>
-        Object.assign(new PortalLoginMedia(), {
-          file: filesById.get(item.fileId)!,
-          mediaType: item.mediaType,
-          posterFile: item.posterFileId === null ? null : filesById.get(item.posterFileId)!,
-          slot: item.slot,
-        }),
-      ),
+    const loginMedia = request.loginMedia.map((item) =>
+      Object.assign(new PortalLoginMedia(), {
+        ...(item.id === null ? {} : { id: item.id }),
+        file: filesById.get(item.fileId)!,
+        mediaType: item.mediaType,
+        posterFile: item.posterFileId === null ? null : filesById.get(item.posterFileId)!,
+        slot: item.slot,
+      }),
     );
 
-    return this.getById(savedId);
+    this.validateRequest(request, filesById);
+    this.validateChildIds(portal, hosts, translations, loginMedia);
+    this.assignPortal(portal, request, filesById);
+    portal.domains = hosts;
+    portal.translations = translations;
+    portal.loginMedia = loginMedia;
+
+    const saved = await this.repository.saveAggregate(portal);
+
+    return this.getById(saved.id);
   }
 
   async delete(request: DeleteRecordsRequestDto): Promise<{ ids: number[] }> {
@@ -148,8 +152,8 @@ export class PortalsService {
     return portal;
   }
 
-  private normalizeHosts(hosts: string[]): string[] {
-    const normalized = hosts.map(normalizePortalHost);
+  private normalizeHosts(requests: SavePortalRequestDto['hosts']): PortalDomain[] {
+    const normalized = requests.map(({ host }) => normalizePortalHost(host));
 
     if (normalized.some((host) => host === null)) {
       throw new BadRequestException(this.i18n.t('errors.portal.invalid_host'));
@@ -161,7 +165,12 @@ export class PortalsService {
       throw new BadRequestException(this.i18n.t('errors.portal.duplicate_host'));
     }
 
-    return hostsToPersist;
+    return requests.map((request, index) =>
+      Object.assign(new PortalDomain(), {
+        ...(request.id === null ? {} : { id: request.id }),
+        host: hostsToPersist[index],
+      }),
+    );
   }
 
   private async buildTranslations(request: SavePortalRequestDto): Promise<PortalTranslation[]> {
@@ -189,10 +198,40 @@ export class PortalsService {
 
     return request.translations.map((translation) =>
       Object.assign(new PortalTranslation(), {
-        ...translation,
+        ...(translation.id === null ? {} : { id: translation.id }),
+        applicationDescription: translation.applicationDescription,
+        applicationName: translation.applicationName,
         language: languagesByCode.get(translation.locale.toLowerCase()) as Language,
+        loginBrandAssetAlt: translation.loginBrandAssetAlt,
+        loginDescription: translation.loginDescription,
+        loginTitle: translation.loginTitle,
+        supportText: translation.supportText,
       }),
     );
+  }
+
+  private validateChildIds(
+    portal: Portal,
+    domains: PortalDomain[],
+    translations: PortalTranslation[],
+    loginMedia: PortalLoginMedia[],
+  ): void {
+    const knownDomainIds = new Set(portal.domains?.map((domain) => domain.id) ?? []);
+    const knownTranslationIds = new Set(
+      portal.translations?.map((translation) => translation.id) ?? [],
+    );
+    const knownMediaIds = new Set(portal.loginMedia?.map((media) => media.id) ?? []);
+
+    const hasUnknownId = <T extends { id?: number }>(items: T[], knownIds: Set<number>) =>
+      items.some((item) => item.id !== undefined && !knownIds.has(item.id));
+
+    if (
+      hasUnknownId(domains, knownDomainIds) ||
+      hasUnknownId(translations, knownTranslationIds) ||
+      hasUnknownId(loginMedia, knownMediaIds)
+    ) {
+      throw new BadRequestException(this.i18n.t('errors.portal.invalid_child'));
+    }
   }
 
   private async loadGlobalFiles(request: SavePortalRequestDto): Promise<Map<number, File>> {
@@ -329,7 +368,9 @@ export class PortalsService {
       fontScale: portal.fontScale,
       headerIconFile: this.toMediaFile(portal.headerIconFile),
       headerIconFileId: portal.headerIconFile?.id ?? null,
-      hosts: portal.domains.map((domain) => domain.host).sort(),
+      hosts: portal.domains
+        .map((domain) => ({ host: domain.host, id: domain.id }))
+        .sort((left, right) => left.host.localeCompare(right.host)),
       id: portal.id,
       internalName: portal.internalName,
       lightPalette: this.toPalette(portal, 'light'),
@@ -349,6 +390,7 @@ export class PortalsService {
       translations: portal.translations.map((translation) => ({
         applicationDescription: translation.applicationDescription,
         applicationName: translation.applicationName,
+        id: translation.id,
         locale: translation.language.languageCode,
         loginBrandAssetAlt: translation.loginBrandAssetAlt,
         loginDescription: translation.loginDescription,

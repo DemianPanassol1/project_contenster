@@ -11,7 +11,11 @@ export class PortalDomain {
   @Column({ length: 253, name: 'host', type: 'varchar' })
   declare host: string;
 
-  @ManyToOne(() => Portal, (portal) => portal.domains, { nullable: false, onDelete: 'CASCADE' })
+  @ManyToOne(() => Portal, (portal) => portal.domains, {
+    nullable: false,
+    onDelete: 'CASCADE',
+    orphanedRowAction: 'delete',
+  })
   @JoinColumn({ foreignKeyConstraintName: 'fk_portais_dominios_portal', name: 'portal_id' })
   declare portal: Portal;
 }

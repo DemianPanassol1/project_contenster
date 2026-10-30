@@ -27,7 +27,11 @@ export class UserProfile {
   @PrimaryGeneratedColumn({ name: 'id', type: 'integer' })
   declare id: number;
 
-  @ManyToOne(() => User, (user) => user.userProfiles, { nullable: false, onDelete: 'CASCADE' })
+  @ManyToOne(() => User, (user) => user.userProfiles, {
+    nullable: false,
+    onDelete: 'CASCADE',
+    orphanedRowAction: 'delete',
+  })
   @JoinColumn({ foreignKeyConstraintName: 'fk_usuarios_perfis_usuario', name: 'usuario_id' })
   declare user: User;
 

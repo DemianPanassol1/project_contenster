@@ -7,7 +7,7 @@ import { Language } from '@/modules/communication/languages/entities/language.en
 import { File } from '@/modules/media/files/entities/file.entity';
 import { applyPaginatedQueryBuilder } from '@/shared/pagination';
 
-import { Portal, PortalDomain, PortalLoginMedia, PortalTranslation } from './entities';
+import { Portal, PortalDomain } from './entities';
 
 @Injectable()
 export class PortalsRepository {
@@ -79,34 +79,8 @@ export class PortalsRepository {
     });
   }
 
-  async saveAggregate(
-    portal: Portal,
-    domains: PortalDomain[],
-    translations: PortalTranslation[],
-    loginMedia: PortalLoginMedia[],
-  ): Promise<number> {
-    return this.dataSource.transaction(async (manager) => {
-      const saved = await manager.save(Portal, portal);
-
-      await manager.delete(PortalDomain, { portal: { id: saved.id } });
-      await manager.delete(PortalTranslation, { portal: { id: saved.id } });
-      await manager.delete(PortalLoginMedia, { portal: { id: saved.id } });
-
-      await manager.save(
-        PortalDomain,
-        domains.map((domain) => ({ ...domain, portal: saved })),
-      );
-      await manager.save(
-        PortalTranslation,
-        translations.map((translation) => ({ ...translation, portal: saved })),
-      );
-      await manager.save(
-        PortalLoginMedia,
-        loginMedia.map((media) => ({ ...media, portal: saved })),
-      );
-
-      return saved.id;
-    });
+  saveAggregate(portal: Portal): Promise<Portal> {
+    return this.dataSource.transaction((manager) => manager.save(Portal, portal));
   }
 
   async delete(portals: Portal[]): Promise<number[]> {

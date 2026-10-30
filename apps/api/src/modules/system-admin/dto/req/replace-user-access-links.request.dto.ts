@@ -2,14 +2,21 @@ import type {
   ReplaceSystemAdminAccessLinksRequest,
   SystemAdminAccessLinkRequest,
 } from '@contenster/shared';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
-import { IsArray, IsInt, Min, ValidateNested } from 'class-validator';
+import { IsArray, IsInt, IsOptional, Min, ValidateNested } from 'class-validator';
 
 import { i18n } from '@/i18n/i18n.util';
 import { toInteger } from '@/shared/transformers/dto';
 
 export class SystemAdminAccessLinkRequestDto implements SystemAdminAccessLinkRequest {
+  @Transform(toInteger)
+  @IsOptional()
+  @IsInt({ message: i18n('validation.integer') })
+  @Min(1, { message: i18n('validation.min') })
+  @ApiPropertyOptional({ nullable: true })
+  declare id: number | null;
+
   @Transform(toInteger)
   @IsInt({ message: i18n('validation.integer') })
   @Min(1, { message: i18n('validation.min') })

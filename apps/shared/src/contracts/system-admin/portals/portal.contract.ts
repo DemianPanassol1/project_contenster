@@ -19,6 +19,7 @@ export interface PortalPalette {
 }
 
 export interface PortalTranslationRequest {
+  id: number | null;
   applicationDescription: string | null;
   applicationName: string | null;
   locale: string;
@@ -28,8 +29,14 @@ export interface PortalTranslationRequest {
   supportText: string | null;
 }
 
+export interface PortalDomainRequest {
+  host: string;
+  id: number | null;
+}
+
 export interface PortalLoginMediaRequest {
   fileId: number;
+  id: number | null;
   mediaType: PortalLoginMediaType;
   posterFileId: number | null;
   slot: PortalLoginMediaSlot;
@@ -41,7 +48,7 @@ export interface SavePortalRequest {
   faviconFileId: number | null;
   fontScale: PortalFontScale;
   headerIconFileId: number | null;
-  hosts: string[];
+  hosts: PortalDomainRequest[];
   id: number | null;
   internalName: string;
   lightPalette: PortalPalette;

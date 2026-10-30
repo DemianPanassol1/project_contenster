@@ -94,7 +94,7 @@ export function PortalDomainsEditor() {
           label={t('actions.add_domain')}
           type="button"
           variant="outlined"
-          onClick={() => append({ host: '', id: crypto.randomUUID() })}
+          onClick={() => append({ host: '', id: null })}
         />
       </Box>
     </Stack>

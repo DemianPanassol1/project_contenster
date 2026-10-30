@@ -250,7 +250,10 @@ export class SystemAdminRepository {
   }
 
   findAccessLinkUser(id: number, manager: EntityManager): Promise<User | null> {
-    return manager.getRepository(User).findOneBy({ id });
+    return manager.getRepository(User).findOne({
+      relations: { userProfiles: true },
+      where: { id },
+    });
   }
 
   findAccessLinkClients(ids: number[], manager: EntityManager): Promise<Client[]> {
@@ -276,22 +279,20 @@ export class SystemAdminRepository {
   }
 
   async replaceAccessLinks(
-    userId: number,
-    links: Array<{ clientId: number; profileId: number }>,
+    user: User,
+    links: Array<{ clientId: number; id: number | null; profileId: number }>,
     manager: EntityManager,
   ): Promise<UserProfile[]> {
-    const userProfiles = manager.getRepository(UserProfile);
-
-    await userProfiles.delete({ user: { id: userId } });
-
-    if (links.length === 0) return [];
-
-    return userProfiles.save(
-      links.map(({ clientId, profileId }) => ({
+    user.userProfiles = links.map(({ clientId, id, profileId }) =>
+      manager.create(UserProfile, {
+        ...(id === null ? {} : { id }),
         client: { id: clientId },
         profile: { id: profileId },
-        user: { id: userId },
-      })),
+      }),
     );
+
+    const saved = await manager.save(User, user);
+
+    return saved.userProfiles;
   }
 }

@@ -400,7 +400,7 @@ export class SystemAdminService {
           return [];
         }
 
-        return [{ clientId: link.client.id, profileId: link.profile.id }];
+        return [{ clientId: link.client.id, id: link.id, profileId: link.profile.id }];
       }),
       user: {
         id: user.id,
@@ -435,6 +435,11 @@ export class SystemAdminService {
       const existingLinkKeys = new Set(
         existingLinks.map((link) => this.toAccessLinkKey(link.client.id, link.profile.id)),
       );
+      const existingLinkIds = new Set(existingLinks.map((link) => link.id));
+
+      if (request.links.some((link) => link.id !== null && !existingLinkIds.has(link.id))) {
+        throw new BadRequestException(this.i18n.t('errors.system_admin.access_link_not_found'));
+      }
 
       for (const link of request.links) {
         const client = clientsById.get(link.clientId);
@@ -468,7 +473,7 @@ export class SystemAdminService {
         }
       }
 
-      return this.repository.replaceAccessLinks(userId, request.links, manager);
+      return this.repository.replaceAccessLinks(user, request.links, manager);
     });
 
     await this.sessionAuthentication.destroyAllByUser(userId);

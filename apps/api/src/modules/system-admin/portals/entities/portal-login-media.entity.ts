@@ -11,7 +11,11 @@ export class PortalLoginMedia {
   @PrimaryGeneratedColumn({ name: 'id', type: 'integer' })
   declare id: number;
 
-  @ManyToOne(() => Portal, (portal) => portal.loginMedia, { nullable: false, onDelete: 'CASCADE' })
+  @ManyToOne(() => Portal, (portal) => portal.loginMedia, {
+    nullable: false,
+    onDelete: 'CASCADE',
+    orphanedRowAction: 'delete',
+  })
   @JoinColumn({ foreignKeyConstraintName: 'fk_portais_midias_login_portal', name: 'portal_id' })
   declare portal: Portal;
 

@@ -27,6 +27,7 @@ export interface SystemAdminAccessLinkUserDetails {
 
 export interface SystemAdminAccessLinkRequest {
   clientId: number;
+  id: number | null;
   profileId: number;
 }
 

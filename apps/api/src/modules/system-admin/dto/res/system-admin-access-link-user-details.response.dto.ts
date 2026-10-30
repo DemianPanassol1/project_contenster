@@ -5,7 +5,7 @@ import type {
   SystemAdminAccessLinkUser,
   SystemAdminAccessLinkUserDetails,
 } from '@contenster/shared';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
 
 export class SystemAdminAccessLinkProfileResponseDto implements SystemAdminAccessLinkProfile {
@@ -49,6 +49,10 @@ export class SystemAdminAccessLinkRequestResponseDto implements SystemAdminAcces
   @Expose()
   @ApiProperty()
   declare clientId: number;
+
+  @Expose()
+  @ApiPropertyOptional({ nullable: true })
+  declare id: number | null;
 
   @Expose()
   @ApiProperty()

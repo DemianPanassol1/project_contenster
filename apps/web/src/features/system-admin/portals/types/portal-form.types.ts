@@ -12,12 +12,13 @@ import type {
 export type PortalFormTab = 'general' | 'domains' | 'identity' | 'login';
 
 export interface PortalHostFormValue {
-  id: string;
   host: string;
+  id: number | null;
 }
 
 export interface PortalMediaFormValue {
   fileId: number | null;
+  id: number | null;
   mediaType: PortalLoginMediaType;
   posterFileId: number | null;
 }

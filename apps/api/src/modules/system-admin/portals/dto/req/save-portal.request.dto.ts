@@ -15,6 +15,7 @@ import {
 } from 'class-validator';
 
 import {
+  type PortalDomainRequest,
   PortalFontScale,
   PortalLoginHeaderMode,
   PortalLoginLayout,
@@ -69,6 +70,13 @@ export class PortalPaletteRequestDto implements PortalPalette {
 }
 
 export class PortalTranslationRequestDto implements PortalTranslationRequest {
+  @Transform(toInteger)
+  @IsOptional()
+  @IsInt({ message: i18n('validation.integer') })
+  @Min(1, { message: i18n('validation.min') })
+  @ApiPropertyOptional({ nullable: true })
+  declare id: number | null;
+
   @Transform(toString)
   @IsString({ message: i18n('validation.string') })
   @MaxLength(2, { message: i18n('validation.max_length', { max: 2 }) })
@@ -118,7 +126,30 @@ export class PortalTranslationRequestDto implements PortalTranslationRequest {
   declare supportText: string | null;
 }
 
+export class PortalDomainRequestDto implements PortalDomainRequest {
+  @Transform(toInteger)
+  @IsOptional()
+  @IsInt({ message: i18n('validation.integer') })
+  @Min(1, { message: i18n('validation.min') })
+  @ApiPropertyOptional({ nullable: true })
+  declare id: number | null;
+
+  @Transform(toString)
+  @IsNotEmpty({ message: i18n('validation.required') })
+  @IsString({ message: i18n('validation.string') })
+  @MaxLength(253, { message: i18n('validation.max_length', { max: 253 }) })
+  @ApiProperty()
+  declare host: string;
+}
+
 export class PortalLoginMediaRequestDto implements PortalLoginMediaRequest {
+  @Transform(toInteger)
+  @IsOptional()
+  @IsInt({ message: i18n('validation.integer') })
+  @Min(1, { message: i18n('validation.min') })
+  @ApiPropertyOptional({ nullable: true })
+  declare id: number | null;
+
   @IsEnum(PortalLoginMediaSlot, { message: i18n('validation.enum') })
   @ApiProperty({ enum: PortalLoginMediaSlot })
   declare slot: PortalLoginMediaSlot;
@@ -158,10 +189,10 @@ export class SavePortalRequestDto implements SavePortalRequest {
 
   @IsArray({ message: i18n('validation.array') })
   @ArrayMinSize(1, { message: i18n('validation.min_items') })
-  @IsString({ each: true, message: i18n('validation.string') })
-  @MaxLength(253, { each: true, message: i18n('validation.max_length', { max: 253 }) })
-  @ApiProperty({ type: [String] })
-  declare hosts: string[];
+  @Type(() => PortalDomainRequestDto)
+  @ValidateNested({ each: true })
+  @ApiProperty({ type: [PortalDomainRequestDto] })
+  declare hosts: PortalDomainRequestDto[];
 
   @Type(() => PortalPaletteRequestDto)
   @ValidateNested()

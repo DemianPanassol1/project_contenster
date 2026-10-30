@@ -45,6 +45,7 @@ const createPortalMedia = (detail: PortalDetail | null): PortalFormValues['login
         slot,
         {
           fileId: media?.fileId ?? null,
+          id: media?.id ?? null,
           mediaType: media?.mediaType ?? PortalLoginMediaType.image,
           posterFileId: media?.posterFileId ?? null,
         },
@@ -61,7 +62,10 @@ export const createPortalFormValues = (
   faviconFileId: detail?.faviconFileId ?? null,
   fontScale: detail?.fontScale ?? PortalFontScale.standard,
   headerIconFileId: detail?.headerIconFileId ?? null,
-  hosts: (detail?.hosts ?? ['']).map((host) => ({ id: crypto.randomUUID(), host })),
+  hosts: (detail?.hosts ?? [{ host: '', id: null }]).map((host) => ({
+    host: host.host,
+    id: host.id,
+  })),
   id: detail?.id ?? null,
   internalName: detail?.internalName ?? '',
   lightPalette: { ...(detail?.lightPalette ?? defaultPortalLightPalette) },
@@ -79,6 +83,7 @@ export const createPortalFormValues = (
     return {
       applicationDescription: translation?.applicationDescription ?? null,
       applicationName: translation?.applicationName ?? null,
+      id: translation?.id ?? null,
       locale: language.locale,
       loginBrandAssetAlt: translation?.loginBrandAssetAlt ?? null,
       loginDescription: translation?.loginDescription ?? null,
@@ -96,7 +101,10 @@ export const mapPortalPayload = (values: PortalFormValues): SavePortalRequest =>
   fontScale: values.fontScale,
   headerIconFileId:
     values.loginHeaderMode === PortalLoginHeaderMode.text ? values.headerIconFileId : null,
-  hosts: values.hosts.map((item) => normalizePortalHost(item.host) ?? item.host),
+  hosts: values.hosts.map((item) => ({
+    host: normalizePortalHost(item.host) ?? item.host,
+    id: item.id,
+  })),
   id: values.id,
   internalName: values.internalName,
   lightPalette: values.lightPalette,
@@ -110,6 +118,7 @@ export const mapPortalPayload = (values: PortalFormValues): SavePortalRequest =>
       : [
           {
             fileId: media.fileId,
+            id: media.id,
             mediaType: media.mediaType,
             posterFileId:
               media.mediaType === PortalLoginMediaType.video ? media.posterFileId : null,
@@ -122,7 +131,7 @@ export const mapPortalPayload = (values: PortalFormValues): SavePortalRequest =>
   supportUrl: values.supportUrl || null,
   translations: values.translations.filter((translation) =>
     Object.entries(translation).some(
-      ([field, value]) => field !== 'locale' && value !== null && value !== '',
+      ([field, value]) => field !== 'id' && field !== 'locale' && value !== null && value !== '',
     ),
   ),
 });

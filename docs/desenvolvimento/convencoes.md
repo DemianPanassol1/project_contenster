@@ -46,6 +46,14 @@ para reconstruir IDs por idioma, combinação de chaves ou mapas auxiliares; ele
 a árvore já validada pelo serviço. Coleções ausentes no payload são removidas por
 `orphanedRowAction: 'delete'` quando a entidade adota essa semântica.
 
+É proibido atualizar coleções filhas por exclusão global seguida de recriação (`DELETE` seguido de
+novos `INSERT`s). Essa abordagem descarta identidades persistidas, produz escrita desnecessária e
+torna o agregado mais vulnerável a falhas intermediárias. Coleções editáveis devem preservar os IDs
+dos itens existentes, usar `id: null` para novos itens, ter `cascade: true` no agregado e
+`orphanedRowAction: 'delete'` na relação filha. Exclusão em lote é aceitável somente para a remoção
+explícita do próprio recurso ou para rotinas de retenção técnica; nunca como mecanismo de atualização
+de uma coleção.
+
 Mantenha um decorator por linha, imediatamente acima da propriedade a que se aplica. Separe os
 blocos de propriedades por uma linha em branco. Esse espaçamento é obrigatório inclusive em DTOs
 pequenos e em DTOs auxiliares aninhados.

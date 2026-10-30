@@ -65,7 +65,7 @@ export class User {
   @DeleteDateColumn({ name: 'deletado_em', nullable: true, type: 'timestamp' })
   declare deletedAt: Date | null;
 
-  @OneToMany(() => UserProfile, (userProfile) => userProfile.user)
+  @OneToMany(() => UserProfile, (userProfile) => userProfile.user, { cascade: true })
   declare userProfiles: UserProfile[];
 
   @OneToMany(() => File, (file) => file.uploadedBy)
