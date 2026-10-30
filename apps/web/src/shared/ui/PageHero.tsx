@@ -2,6 +2,8 @@
 
 import { Box, type SxProps, type Theme, Typography } from '@mui/material';
 
+import { portalFontSize } from '@/core/theme';
+
 interface PageHeroProps {
   module: string;
   functionality: string;
@@ -19,7 +21,7 @@ export const PageHero = ({ module, functionality, description, sx }: PageHeroPro
           lineHeight: 1,
           fontWeight: 500,
           letterSpacing: 0,
-          fontSize: '11px',
+          fontSize: portalFontSize(11),
           color: 'primary.main',
           textTransform: 'uppercase',
         }}
@@ -30,7 +32,7 @@ export const PageHero = ({ module, functionality, description, sx }: PageHeroPro
       <Typography
         variant="h1"
         sx={{
-          fontSize: '18px',
+          fontSize: portalFontSize(18),
           fontWeight: 600,
           lineHeight: 1.25,
           letterSpacing: 0,
@@ -47,7 +49,7 @@ export const PageHero = ({ module, functionality, description, sx }: PageHeroPro
             mt: 0.75,
             lineHeight: 1.55,
             maxWidth: '42rem',
-            fontSize: '13.5px',
+            fontSize: portalFontSize(13.5),
             color: 'text.secondary',
           }}
         >

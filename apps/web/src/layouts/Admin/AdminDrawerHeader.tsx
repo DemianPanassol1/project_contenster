@@ -4,6 +4,7 @@ import type { SessionClient } from '@contenster/shared';
 import { Box, Typography, useTheme } from '@mui/material';
 
 import { useGlobalContext } from '@/core/providers';
+import { portalFontSize } from '@/core/theme';
 import { useRouter } from '@/i18n/navigation';
 import { IconButton } from '@/shared';
 import { FormatUtils, HEADER_HEIGHT } from '@/utils';
@@ -57,7 +58,7 @@ export function AdminDrawerHeader({ client }: AdminDrawerHeaderProps) {
         <Box sx={{ display: 'flex', flexDirection: 'column', lineHeight: 1.1, minWidth: 0 }}>
           <Typography
             sx={{
-              fontSize: '13.5px',
+              fontSize: portalFontSize(13.5),
               fontWeight: 600,
               letterSpacing: '-0.02em',
               lineHeight: 1.1,
@@ -72,7 +73,7 @@ export function AdminDrawerHeader({ client }: AdminDrawerHeaderProps) {
           <Typography
             color="text.secondary"
             sx={{
-              fontSize: '11px',
+              fontSize: portalFontSize(11),
               overflow: 'hidden',
               textOverflow: 'ellipsis',
               whiteSpace: 'nowrap',

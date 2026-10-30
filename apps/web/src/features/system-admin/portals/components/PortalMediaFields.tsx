@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { useFormContext, useWatch } from 'react-hook-form';
 
 import { PortalLoginLayout, PortalLoginMediaSlot, PortalLoginMediaType } from '@contenster/shared';
+import { portalFontSize } from '@/core/theme';
 import { API_ROUTES } from '@/routes';
 import { FormFileUpload, FormImageUpload, FormSelect } from '@/shared';
 
@@ -32,7 +33,9 @@ function PortalMediaSlot({ slot }: { slot: PortalLoginMediaSlot }) {
 
   return (
     <Box sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 1.5, p: 2 }}>
-      <Typography sx={{ fontSize: 13.5, fontWeight: 700 }}>{t(`media.slots.${slot}`)}</Typography>
+      <Typography sx={{ fontSize: portalFontSize(13.5), fontWeight: 700 }}>
+        {t(`media.slots.${slot}`)}
+      </Typography>
       <Stack spacing={2} sx={{ mt: 2 }}>
         <FormSelect<PortalFormValues>
           helperText={t('helpers.media_type')}
@@ -102,7 +105,7 @@ export function PortalMediaFields() {
 
   return (
     <Stack spacing={2}>
-      <Typography sx={{ color: 'text.secondary', fontSize: 12.5 }}>
+      <Typography sx={{ color: 'text.secondary', fontSize: portalFontSize(12.5) }}>
         {t('media.description')}
       </Typography>
       <Box

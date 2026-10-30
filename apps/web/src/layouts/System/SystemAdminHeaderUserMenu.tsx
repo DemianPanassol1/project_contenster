@@ -7,6 +7,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useCallback, useMemo, useRef, useState } from 'react';
 
 import { useGlobalContext, useModalContext } from '@/core/providers';
+import { portalFontSize } from '@/core/theme';
 import { useValidationRules, useWebResponseErrorToast } from '@/hooks';
 import { useRouter } from '@/i18n/navigation';
 import { getSystemAdminClientOptions, signOut, switchClientAsSuperuser } from '@/services/actions';
@@ -178,7 +179,7 @@ export function SystemAdminHeaderUserMenu({ user }: SystemAdminHeaderUserMenuPro
           sx={{
             backgroundColor: avatarColor,
             boxShadow: `0px 2px 8px -2px ${avatarColor}`,
-            fontSize: '11px',
+            fontSize: portalFontSize(11),
             fontWeight: 600,
             height: 28,
             width: 28,
@@ -199,7 +200,7 @@ export function SystemAdminHeaderUserMenu({ user }: SystemAdminHeaderUserMenuPro
           <Typography
             sx={{
               color: 'text.primary',
-              fontSize: '12.5px',
+              fontSize: portalFontSize(12.5),
               fontWeight: 500,
               maxWidth: 180,
               overflow: 'hidden',
@@ -212,7 +213,7 @@ export function SystemAdminHeaderUserMenu({ user }: SystemAdminHeaderUserMenuPro
           <Typography
             sx={{
               color: 'text.secondary',
-              fontSize: '10.5px',
+              fontSize: portalFontSize(10.5),
               maxWidth: 180,
               overflow: 'hidden',
               textOverflow: 'ellipsis',
@@ -262,7 +263,7 @@ export function SystemAdminHeaderUserMenu({ user }: SystemAdminHeaderUserMenuPro
             src={user.imageUrl ?? undefined}
             sx={{
               backgroundColor: avatarColor,
-              fontSize: '13px',
+              fontSize: portalFontSize(13),
               fontWeight: 600,
               height: 56,
               width: 56,
@@ -273,7 +274,7 @@ export function SystemAdminHeaderUserMenu({ user }: SystemAdminHeaderUserMenuPro
           <Box sx={{ minWidth: 0 }}>
             <Typography
               sx={{
-                fontSize: '13px',
+                fontSize: portalFontSize(13),
                 fontWeight: 600,
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
@@ -285,7 +286,7 @@ export function SystemAdminHeaderUserMenu({ user }: SystemAdminHeaderUserMenuPro
             <Typography
               color="text.secondary"
               sx={{
-                fontSize: '11.5px',
+                fontSize: portalFontSize(11.5),
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
                 whiteSpace: 'nowrap',
@@ -300,7 +301,7 @@ export function SystemAdminHeaderUserMenu({ user }: SystemAdminHeaderUserMenuPro
                 borderRadius: '999px',
                 color: 'primary.main',
                 display: 'inline-flex',
-                fontSize: '10px',
+                fontSize: portalFontSize(10),
                 fontWeight: 500,
                 gap: 0.5,
                 height: 18,
@@ -321,10 +322,16 @@ export function SystemAdminHeaderUserMenu({ user }: SystemAdminHeaderUserMenuPro
           <MenuItem
             disabled={state.isLoading}
             onClick={openAccessClientContextModal}
-            sx={{ borderRadius: '8px', fontSize: '12.5px', gap: 1.25, height: 34, px: 1.25 }}
+            sx={{
+              borderRadius: '8px',
+              fontSize: portalFontSize(12.5),
+              gap: 1.25,
+              height: 34,
+              px: 1.25,
+            }}
           >
             <Building2 size={15} strokeWidth={2} />
-            <Typography sx={{ flex: 1, fontSize: '12.5px' }}>
+            <Typography sx={{ flex: 1, fontSize: portalFontSize(12.5) }}>
               {t('access_client_context')}
             </Typography>
           </MenuItem>
@@ -337,7 +344,7 @@ export function SystemAdminHeaderUserMenu({ user }: SystemAdminHeaderUserMenuPro
             sx={{
               borderRadius: '8px',
               color: 'error.main',
-              fontSize: '12.5px',
+              fontSize: portalFontSize(12.5),
               gap: 1.25,
               height: 34,
               px: 1.25,
@@ -345,7 +352,7 @@ export function SystemAdminHeaderUserMenu({ user }: SystemAdminHeaderUserMenuPro
             }}
           >
             <LogOut size={15} strokeWidth={2} />
-            <Typography sx={{ fontSize: '12.5px' }}>{t('logout')}</Typography>
+            <Typography sx={{ fontSize: portalFontSize(12.5) }}>{t('logout')}</Typography>
           </MenuItem>
         </Box>
       </Menu>

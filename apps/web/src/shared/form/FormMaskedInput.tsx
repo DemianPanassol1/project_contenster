@@ -17,6 +17,7 @@ import {
 } from 'react-hook-form';
 import { NumericFormat, PatternFormat } from 'react-number-format';
 
+import { portalFontSize } from '@/core/theme';
 import { type BaseFormFieldProps, type MaskType, type PhoneCountry } from '@/types';
 import { toDisplayText, toSxArray } from '@/utils';
 
@@ -332,10 +333,10 @@ const PhoneMaskedInput = <T extends FieldValues>({
             },
           },
           '& .MuiInputLabel-root': {
-            fontSize: 13,
+            fontSize: portalFontSize(13),
           },
           '& .MuiInputBase-input': {
-            fontSize: 14,
+            fontSize: portalFontSize(14),
           },
           '& .MuiFormHelperText-root': {
             mr: 0,
@@ -402,10 +403,10 @@ export const FormMaskedInput = <T extends FieldValues>({
               },
             },
             '& .MuiInputLabel-root': {
-              fontSize: 13,
+              fontSize: portalFontSize(13),
             },
             '& .MuiInputBase-input': {
-              fontSize: 14,
+              fontSize: portalFontSize(14),
             },
             '& .MuiFormHelperText-root': {
               mx: 0,

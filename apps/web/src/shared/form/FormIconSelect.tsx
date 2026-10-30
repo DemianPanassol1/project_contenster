@@ -4,6 +4,7 @@ import { Box } from '@mui/material';
 import { useMemo } from 'react';
 import { type FieldValues, useFormContext } from 'react-hook-form';
 
+import { portalFontSize } from '@/core/theme';
 import { Icon, type IconName, iconNames, icons } from '@/shared/ui/Icon';
 import type { BaseFormFieldProps } from '@/types';
 
@@ -69,7 +70,10 @@ const renderIconOptionLabel = (option: SelectOption) => (
 );
 
 const renderSelectedIconLabel = (option: SelectOption) => (
-  <Box component="span" sx={{ display: 'inline-flex', alignItems: 'center', gap: 1, fontSize: 14 }}>
+  <Box
+    component="span"
+    sx={{ display: 'inline-flex', alignItems: 'center', gap: 1, fontSize: portalFontSize(14) }}
+  >
     {isIconName(option.value) && (
       <Icon name={option.value} size={16} strokeWidth={1.9} aria-hidden="true" />
     )}

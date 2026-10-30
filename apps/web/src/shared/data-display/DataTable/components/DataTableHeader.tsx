@@ -3,6 +3,8 @@
 import { Checkbox, TableCell, TableHead, TableRow, TableSortLabel } from '@mui/material';
 import { useTranslations } from 'next-intl';
 
+import { portalFontSize } from '@/core/theme';
+
 import { Order, type SortOption } from '../types/data-table-query.types';
 import type { DataTableColumn } from '../types/DataTable.types';
 import { getColumnKey, getColumnSelector } from '../utils/data-table.util';
@@ -41,7 +43,7 @@ export const DataTableHeader = <T extends object>({
           bgcolor: 'action.hover',
           '& .MuiTableCell-root': {
             height: 40,
-            fontSize: 12,
+            fontSize: portalFontSize(12),
             fontWeight: 600,
             color: 'text.secondary',
             borderBottom: (theme) => `1px solid ${theme.palette.divider}`,

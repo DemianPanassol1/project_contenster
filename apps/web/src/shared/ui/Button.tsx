@@ -5,6 +5,7 @@ import { alpha } from '@mui/material/styles';
 import { memo } from 'react';
 
 import { useOptionalGlobalContext } from '@/core/providers';
+import { portalFontSize } from '@/core/theme';
 
 import { Icon, type icons } from './Icon';
 
@@ -59,7 +60,7 @@ export const Button = memo(
           height: 36,
           px: 1.75,
           borderRadius: '10px',
-          fontSize: '12.5px',
+          fontSize: portalFontSize(12.5),
           fontWeight: 500,
           textTransform: 'none',
           ...(variant === 'contained' && {

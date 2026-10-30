@@ -22,7 +22,7 @@ export function AuthSupportFooter() {
     <Typography color="text.secondary" variant="caption">
       {t('need_help')}{' '}
       {supportLink ? (
-        <Link sx={{ color: 'text.primary', fontWeight: 600 }} underline="hover" {...supportLink}>
+        <Link sx={{ color: 'link.main', fontWeight: 600 }} underline="hover" {...supportLink}>
           {identity.supportText}
         </Link>
       ) : (

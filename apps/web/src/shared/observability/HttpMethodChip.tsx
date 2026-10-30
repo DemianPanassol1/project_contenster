@@ -3,6 +3,8 @@
 import { Chip, type SxProps, type Theme } from '@mui/material';
 import { alpha } from '@mui/material/styles';
 
+import { portalFontSize } from '@/core/theme';
+
 interface HttpMethodChipProps {
   method: string;
 }
@@ -46,7 +48,7 @@ export function HttpMethodChip({ method }: HttpMethodChipProps) {
         {
           '& .MuiChip-label': { px: 0.75 },
           borderRadius: 1,
-          fontSize: 11,
+          fontSize: portalFontSize(11),
           fontWeight: 800,
           height: 22,
           minWidth: 58,

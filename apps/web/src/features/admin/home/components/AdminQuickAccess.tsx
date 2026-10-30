@@ -3,6 +3,7 @@
 import { Box, Paper, Typography } from '@mui/material';
 import { useTranslations } from 'next-intl';
 
+import { portalFontSize } from '@/core/theme';
 import { crudListPath } from '@/features/shared/navigation';
 import { Link } from '@/i18n/navigation';
 import { Icon, Page } from '@/shared';
@@ -28,7 +29,7 @@ export function AdminQuickAccess({ modules }: AdminQuickAccessProps) {
             textAlign: 'center',
           }}
         >
-          <Typography sx={{ fontSize: '15px', fontWeight: 600, mb: 0.75 }} variant="h6">
+          <Typography sx={{ fontSize: portalFontSize(15), fontWeight: 600, mb: 0.75 }} variant="h6">
             {t('empty.title')}
           </Typography>
           <Typography color="text.secondary" variant="body2">
@@ -44,7 +45,7 @@ export function AdminQuickAccess({ modules }: AdminQuickAccessProps) {
                 id={`module-${module.id}`}
                 sx={{
                   color: 'text.secondary',
-                  fontSize: '13px',
+                  fontSize: portalFontSize(13),
                   fontWeight: 600,
                   letterSpacing: '0.08em',
                   mb: 1.25,
@@ -118,14 +119,17 @@ export function AdminQuickAccess({ modules }: AdminQuickAccessProps) {
                       </Box>
 
                       <Box sx={{ flex: '1 1 auto', minWidth: 0 }}>
-                        <Typography sx={{ fontSize: '14px', fontWeight: 600 }} variant="h6">
+                        <Typography
+                          sx={{ fontSize: portalFontSize(14), fontWeight: 600 }}
+                          variant="h6"
+                        >
                           {item.title}
                         </Typography>
                         {item.description && (
                           <Typography
                             sx={{
                               color: 'text.secondary',
-                              fontSize: '12.5px',
+                              fontSize: portalFontSize(12.5),
                               lineHeight: 1.4,
                               mt: 0.375,
                             }}

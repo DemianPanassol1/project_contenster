@@ -26,6 +26,7 @@ import { useTranslations } from 'next-intl';
 import { useMemo, useRef, useState } from 'react';
 
 import { useGlobalContext } from '@/core/providers';
+import { portalFontSize } from '@/core/theme';
 import { useToast } from '@/hooks';
 import { API_ROUTES } from '@/routes';
 import { type SelectOption, usePOST } from '@/services/hooks';
@@ -231,7 +232,7 @@ export function SystemAdminAccessLinksView() {
             <Box>
               <Typography
                 component="h2"
-                sx={{ color: 'text.primary', fontSize: 18, fontWeight: 700 }}
+                sx={{ color: 'text.primary', fontSize: portalFontSize(18), fontWeight: 700 }}
               >
                 {t('title')}
               </Typography>
@@ -241,14 +242,14 @@ export function SystemAdminAccessLinksView() {
                   spacing={1}
                   sx={{ alignItems: 'center', flexWrap: 'wrap', mt: 0.75 }}
                 >
-                  <Typography sx={{ color: 'text.secondary', fontSize: 13 }}>
+                  <Typography sx={{ color: 'text.secondary', fontSize: portalFontSize(13) }}>
                     {accessData.user.name} ({accessData.user.username})
                   </Typography>
                   {accessData.user.isSuperuser && (
                     <Chip
                       label={t('superuser')}
                       size="small"
-                      sx={{ borderRadius: 1, fontSize: 11, height: 22 }}
+                      sx={{ borderRadius: 1, fontSize: portalFontSize(11), height: 22 }}
                     />
                   )}
                 </Stack>
@@ -391,7 +392,9 @@ export function SystemAdminAccessLinksView() {
                     ) : (
                       <TableRow>
                         <TableCell colSpan={3}>
-                          <Typography sx={{ color: 'text.secondary', fontSize: 13, py: 2 }}>
+                          <Typography
+                            sx={{ color: 'text.secondary', fontSize: portalFontSize(13), py: 2 }}
+                          >
                             {t('no_rows')}
                           </Typography>
                         </TableCell>

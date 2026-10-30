@@ -14,6 +14,7 @@ import {
   type SwitchClientRequest,
 } from '@contenster/shared';
 import { useGlobalContext, useModalContext } from '@/core/providers';
+import { portalFontSize } from '@/core/theme';
 import { useValidationRules, useWebResponseErrorToast } from '@/hooks';
 import { useRouter } from '@/i18n/navigation';
 import { API_ROUTES } from '@/routes';
@@ -266,7 +267,7 @@ export function AdminHeaderUserMenu({
           sx={{
             backgroundColor: avatarColor,
             boxShadow: `0px 2px 8px -2px ${avatarColor}`,
-            fontSize: '11px',
+            fontSize: portalFontSize(11),
             fontWeight: 600,
             height: 28,
             width: 28,
@@ -287,7 +288,7 @@ export function AdminHeaderUserMenu({
           <Typography
             sx={{
               color: 'text.primary',
-              fontSize: '12.5px',
+              fontSize: portalFontSize(12.5),
               fontWeight: 500,
               maxWidth: 140,
               overflow: 'hidden',
@@ -300,7 +301,7 @@ export function AdminHeaderUserMenu({
           <Typography
             color="text.secondary"
             sx={{
-              fontSize: '10.5px',
+              fontSize: portalFontSize(10.5),
               maxWidth: 140,
               overflow: 'hidden',
               textOverflow: 'ellipsis',
@@ -350,7 +351,7 @@ export function AdminHeaderUserMenu({
             src={user.imageUrl ?? undefined}
             sx={{
               backgroundColor: avatarColor,
-              fontSize: '13px',
+              fontSize: portalFontSize(13),
               fontWeight: 600,
               height: 56,
               width: 56,
@@ -361,7 +362,7 @@ export function AdminHeaderUserMenu({
           <Box sx={{ minWidth: 0 }}>
             <Typography
               sx={{
-                fontSize: '13px',
+                fontSize: portalFontSize(13),
                 fontWeight: 600,
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
@@ -373,7 +374,7 @@ export function AdminHeaderUserMenu({
             <Typography
               color="text.secondary"
               sx={{
-                fontSize: '11.5px',
+                fontSize: portalFontSize(11.5),
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
                 whiteSpace: 'nowrap',
@@ -388,7 +389,7 @@ export function AdminHeaderUserMenu({
                 borderRadius: '999px',
                 color: 'primary.main',
                 display: 'inline-flex',
-                fontSize: '10px',
+                fontSize: portalFontSize(10),
                 fontWeight: 500,
                 gap: 0.5,
                 height: 18,
@@ -408,28 +409,52 @@ export function AdminHeaderUserMenu({
         <Box sx={{ p: 0.75 }}>
           <MenuItem
             onClick={() => router.push('/admin/profile')}
-            sx={{ borderRadius: '8px', fontSize: '12.5px', gap: 1.25, height: 34, px: 1.25 }}
+            sx={{
+              borderRadius: '8px',
+              fontSize: portalFontSize(12.5),
+              gap: 1.25,
+              height: 34,
+              px: 1.25,
+            }}
           >
             <User size={15} strokeWidth={2} />
-            <Typography sx={{ flex: 1, fontSize: '12.5px' }}>{t('my_profile')}</Typography>
+            <Typography sx={{ flex: 1, fontSize: portalFontSize(12.5) }}>
+              {t('my_profile')}
+            </Typography>
           </MenuItem>
           <MenuItem
             onClick={openChangePasswordModal}
-            sx={{ borderRadius: '8px', fontSize: '12.5px', gap: 1.25, height: 34, px: 1.25 }}
+            sx={{
+              borderRadius: '8px',
+              fontSize: portalFontSize(12.5),
+              gap: 1.25,
+              height: 34,
+              px: 1.25,
+            }}
           >
             <KeyRound size={15} strokeWidth={2} />
-            <Typography sx={{ flex: 1, fontSize: '12.5px' }}>{t('change_password')}</Typography>
+            <Typography sx={{ flex: 1, fontSize: portalFontSize(12.5) }}>
+              {t('change_password')}
+            </Typography>
           </MenuItem>
           <MenuItem
             onClick={openChangeClientModal}
-            sx={{ borderRadius: '8px', fontSize: '12.5px', gap: 1.25, height: 34, px: 1.25 }}
+            sx={{
+              borderRadius: '8px',
+              fontSize: portalFontSize(12.5),
+              gap: 1.25,
+              height: 34,
+              px: 1.25,
+            }}
           >
             <Building2 size={15} strokeWidth={2} />
-            <Typography sx={{ flex: 1, fontSize: '12.5px' }}>{t('change_client')}</Typography>
+            <Typography sx={{ flex: 1, fontSize: portalFontSize(12.5) }}>
+              {t('change_client')}
+            </Typography>
             <Typography
               color="text.secondary"
               sx={{
-                fontSize: '10.5px',
+                fontSize: portalFontSize(10.5),
                 maxWidth: 90,
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
@@ -447,7 +472,7 @@ export function AdminHeaderUserMenu({
               sx={{
                 borderRadius: '8px',
                 color: 'primary.main',
-                fontSize: '12.5px',
+                fontSize: portalFontSize(12.5),
                 gap: 1.25,
                 height: 34,
                 px: 1.25,
@@ -458,7 +483,7 @@ export function AdminHeaderUserMenu({
               ) : (
                 <Landmark size={15} strokeWidth={2} />
               )}
-              <Typography sx={{ flex: 1, fontSize: '12.5px' }}>
+              <Typography sx={{ flex: 1, fontSize: portalFontSize(12.5) }}>
                 {t(isReturningToGlobal ? 'returning_to_global_panel' : 'return_to_global_panel')}
               </Typography>
             </MenuItem>
@@ -472,7 +497,7 @@ export function AdminHeaderUserMenu({
             sx={{
               borderRadius: '8px',
               color: 'error.main',
-              fontSize: '12.5px',
+              fontSize: portalFontSize(12.5),
               gap: 1.25,
               height: 34,
               px: 1.25,
@@ -480,7 +505,7 @@ export function AdminHeaderUserMenu({
             }}
           >
             <LogOut size={15} strokeWidth={2} />
-            <Typography sx={{ fontSize: '12.5px' }}>{t('logout')}</Typography>
+            <Typography sx={{ fontSize: portalFontSize(12.5) }}>{t('logout')}</Typography>
           </MenuItem>
         </Box>
       </Menu>

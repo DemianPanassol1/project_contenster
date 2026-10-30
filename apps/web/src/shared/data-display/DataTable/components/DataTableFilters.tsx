@@ -14,6 +14,7 @@ import {
 import { useTranslations } from 'next-intl';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
+import { portalFontSize } from '@/core/theme';
 import { Icon } from '@/shared/ui/Icon';
 
 import type { FilterOption } from '../types/data-table-query.types';
@@ -123,7 +124,7 @@ export const DataTableFilters = <T extends object>({
             <Chip
               size="small"
               label={activeFiltersCount}
-              sx={{ height: 20, borderRadius: 1, fontSize: 11 }}
+              sx={{ height: 20, borderRadius: 1, fontSize: portalFontSize(11) }}
             />
           ) : undefined
         }
@@ -132,7 +133,7 @@ export const DataTableFilters = <T extends object>({
           height: 36,
           borderRadius: 1.5,
           px: 1.25,
-          fontSize: 12.5,
+          fontSize: portalFontSize(12.5),
           fontWeight: 500,
           color: 'text.primary',
           borderColor: 'divider',
@@ -161,7 +162,7 @@ export const DataTableFilters = <T extends object>({
           },
         }}
       >
-        <Typography sx={{ mb: 1.5, fontSize: 13, fontWeight: 600 }}>
+        <Typography sx={{ mb: 1.5, fontSize: portalFontSize(13), fontWeight: 600 }}>
           {t('data_table.filters')}
         </Typography>
 
@@ -192,7 +193,7 @@ export const DataTableFilters = <T extends object>({
                     '& .MuiSelect-select': {
                       alignItems: 'center',
                       display: 'flex',
-                      fontSize: 14,
+                      fontSize: portalFontSize(14),
                       py: 0,
                     },
                   }}
@@ -215,7 +216,10 @@ export const DataTableFilters = <T extends object>({
                       return (
                         <Box
                           component="span"
-                          sx={{ color: option ? 'text.primary' : 'text.secondary', fontSize: 14 }}
+                          sx={{
+                            color: option ? 'text.primary' : 'text.secondary',
+                            fontSize: portalFontSize(14),
+                          }}
                         >
                           {option?.label ?? column.name}
                         </Box>
@@ -234,7 +238,7 @@ export const DataTableFilters = <T extends object>({
                       slotProps: {
                         paper: {
                           sx: {
-                            '& .MuiMenuItem-root': { fontSize: 13, minHeight: 32 },
+                            '& .MuiMenuItem-root': { fontSize: portalFontSize(13), minHeight: 32 },
                           },
                         },
                       },
@@ -283,8 +287,8 @@ export const DataTableFilters = <T extends object>({
                     }
                     slotProps={{ inputLabel: { shrink: true } }}
                     sx={{
-                      '& .MuiInputBase-input': { fontSize: 14 },
-                      '& .MuiInputLabel-root': { fontSize: 13 },
+                      '& .MuiInputBase-input': { fontSize: portalFontSize(14) },
+                      '& .MuiInputLabel-root': { fontSize: portalFontSize(13) },
                     }}
                   />
                   <TextField
@@ -300,8 +304,8 @@ export const DataTableFilters = <T extends object>({
                     }
                     slotProps={{ inputLabel: { shrink: true } }}
                     sx={{
-                      '& .MuiInputBase-input': { fontSize: 14 },
-                      '& .MuiInputLabel-root': { fontSize: 13 },
+                      '& .MuiInputBase-input': { fontSize: portalFontSize(14) },
+                      '& .MuiInputLabel-root': { fontSize: portalFontSize(13) },
                     }}
                   />
                 </Box>
@@ -324,8 +328,8 @@ export const DataTableFilters = <T extends object>({
                   }))
                 }
                 sx={{
-                  '& .MuiInputBase-input': { fontSize: 14 },
-                  '& .MuiInputLabel-root': { fontSize: 13 },
+                  '& .MuiInputBase-input': { fontSize: portalFontSize(14) },
+                  '& .MuiInputLabel-root': { fontSize: portalFontSize(13) },
                 }}
               />
             );
@@ -337,7 +341,7 @@ export const DataTableFilters = <T extends object>({
             size="small"
             variant="text"
             onClick={handleReset}
-            sx={{ fontSize: 12, fontWeight: 500, minHeight: 32, px: 1.25 }}
+            sx={{ fontSize: portalFontSize(12), fontWeight: 500, minHeight: 32, px: 1.25 }}
           >
             {t('data_table.reset')}
           </Button>
@@ -345,7 +349,7 @@ export const DataTableFilters = <T extends object>({
             size="small"
             variant="contained"
             onClick={handleApply}
-            sx={{ fontSize: 12, fontWeight: 500, minHeight: 32, px: 1.25 }}
+            sx={{ fontSize: portalFontSize(12), fontWeight: 500, minHeight: 32, px: 1.25 }}
           >
             {t('data_table.apply_filters')}
           </Button>

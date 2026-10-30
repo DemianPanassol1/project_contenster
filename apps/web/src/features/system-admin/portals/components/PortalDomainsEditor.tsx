@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 
 import { normalizePortalHost } from '@contenster/shared';
+import { portalFontSize } from '@/core/theme';
 import { Button, FormInput, IconButton } from '@/shared';
 
 import type { PortalFormValues } from '../types/portal-form.types';
@@ -22,8 +23,10 @@ export function PortalDomainsEditor() {
   return (
     <Stack spacing={2}>
       <Box>
-        <Typography sx={{ fontSize: 14, fontWeight: 700 }}>{t('domains.title')}</Typography>
-        <Typography sx={{ color: 'text.secondary', fontSize: 12.5, mt: 0.25 }}>
+        <Typography sx={{ fontSize: portalFontSize(14), fontWeight: 700 }}>
+          {t('domains.title')}
+        </Typography>
+        <Typography sx={{ color: 'text.secondary', fontSize: portalFontSize(12.5), mt: 0.25 }}>
           {t('domains.description')}
         </Typography>
       </Box>

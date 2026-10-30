@@ -1,6 +1,8 @@
 import { Collapse, List, ListSubheader, Typography } from '@mui/material';
 import type { ReactNode } from 'react';
 
+import { portalFontSize } from '@/core/theme';
+
 interface AdminDrawerListModuleProps {
   children: ReactNode;
   drawerOpen: boolean;
@@ -20,7 +22,7 @@ export function AdminDrawerListModule({ children, drawerOpen, title }: AdminDraw
             <Typography
               color="text.secondary"
               sx={{
-                fontSize: '11px',
+                fontSize: portalFontSize(11),
                 fontWeight: 600,
                 letterSpacing: '0.08em',
                 textTransform: 'uppercase',

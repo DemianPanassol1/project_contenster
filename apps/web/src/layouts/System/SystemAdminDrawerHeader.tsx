@@ -4,6 +4,7 @@ import { Box, Typography } from '@mui/material';
 import { useTranslations } from 'next-intl';
 
 import { useGlobalContext } from '@/core/providers';
+import { portalFontSize } from '@/core/theme';
 import { useRouter } from '@/i18n/navigation';
 import { IconButton } from '@/shared';
 import { HEADER_HEIGHT } from '@/utils';
@@ -55,7 +56,7 @@ export function SystemAdminDrawerHeader({ collapsed }: SystemAdminDrawerHeaderPr
           <Typography
             sx={{
               color: 'primary.contrastText',
-              fontSize: '13.5px',
+              fontSize: portalFontSize(13.5),
               fontWeight: 600,
               letterSpacing: '-0.02em',
               lineHeight: 1.1,
@@ -70,7 +71,7 @@ export function SystemAdminDrawerHeader({ collapsed }: SystemAdminDrawerHeaderPr
           <Typography
             sx={{
               color: 'rgba(255, 255, 255, 0.78)',
-              fontSize: '11px',
+              fontSize: portalFontSize(11),
               overflow: 'hidden',
               textOverflow: 'ellipsis',
               whiteSpace: 'nowrap',

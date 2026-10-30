@@ -9,6 +9,7 @@ import {
 import type { ReactNode } from 'react';
 import { Controller, type FieldValues, useFormContext } from 'react-hook-form';
 
+import { portalFontSize } from '@/core/theme';
 import {
   type FetchOptionsResponse,
   type OptionsBody,
@@ -175,10 +176,10 @@ export const FormSelect = <T extends FieldValues>({
                           },
                         },
                         '& .MuiInputLabel-root': {
-                          fontSize: 13,
+                          fontSize: portalFontSize(13),
                         },
                         '& .MuiInputBase-input': {
-                          fontSize: 14,
+                          fontSize: portalFontSize(14),
                         },
                         '& .MuiFormHelperText-root': {
                           mr: 0,
@@ -202,13 +203,13 @@ export const FormSelect = <T extends FieldValues>({
                 '& .MuiAutocomplete-inputRoot': {
                   gap: 0.5,
                   alignItems: 'center',
-                  fontSize: 14,
+                  fontSize: portalFontSize(14),
                   flexWrap: multiple ? 'wrap' : 'nowrap',
                   maxHeight: multiple ? 92 : undefined,
                   overflowY: multiple ? 'auto' : undefined,
                 },
                 '& .MuiAutocomplete-input': {
-                  fontSize: 14,
+                  fontSize: portalFontSize(14),
                   minWidth: multiple ? '56px !important' : 0,
                 },
                 '& .MuiAutocomplete-tag': {
@@ -222,7 +223,7 @@ export const FormSelect = <T extends FieldValues>({
                   border: `1px solid ${theme.palette.divider}`,
                   bgcolor: theme.palette.action.hover,
                   color: theme.palette.text.primary,
-                  fontSize: 12,
+                  fontSize: portalFontSize(12),
                   fontWeight: 600,
                 },
                 '& .MuiChip-label': {
@@ -251,7 +252,7 @@ export const FormSelect = <T extends FieldValues>({
               paper: {
                 sx: {
                   '& .MuiAutocomplete-option': {
-                    fontSize: 13,
+                    fontSize: portalFontSize(13),
                   },
                 },
               },

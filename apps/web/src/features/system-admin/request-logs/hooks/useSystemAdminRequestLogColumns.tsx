@@ -5,6 +5,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useMemo } from 'react';
 
 import { RequestLogAccessType, type SystemAdminRequestLogListItem } from '@contenster/shared';
+import { portalFontSize } from '@/core/theme';
 import { API_ROUTES } from '@/routes';
 import { type DataTableColumn, FieldType, Operation } from '@/shared';
 import { HttpMethodChip } from '@/shared/observability';
@@ -110,7 +111,7 @@ export function useSystemAdminRequestLogColumns(): DataTableColumn<SystemAdminRe
             color={row.accessType === RequestLogAccessType.superuser ? 'secondary' : 'primary'}
             label={t(`access_types.${row.accessType}`)}
             size="small"
-            sx={{ fontSize: 11 }}
+            sx={{ fontSize: portalFontSize(11) }}
           />
         ),
         filterable: true,

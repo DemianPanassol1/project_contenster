@@ -4,6 +4,7 @@ import { Box, Button, Chip, Popover, Switch, Typography } from '@mui/material';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
+import { portalFontSize, portalFontSizeImportant } from '@/core/theme';
 import { Icon } from '@/shared/ui/Icon';
 
 import type { DataTableColumn } from '../types/DataTable.types';
@@ -54,7 +55,7 @@ export const DataTableColumnsPanel = <T extends object>({
           <Chip
             size="small"
             label={`${visibleCount}/${totalCount}`}
-            sx={{ height: 20, borderRadius: 1, fontSize: '12px !important' }}
+            sx={{ height: 20, borderRadius: 1, fontSize: portalFontSizeImportant(12) }}
           />
         }
         onClick={(event) => setAnchorEl(event.currentTarget)}
@@ -62,7 +63,7 @@ export const DataTableColumnsPanel = <T extends object>({
           height: 36,
           borderRadius: 1.5,
           px: 1.25,
-          fontSize: 12.5,
+          fontSize: portalFontSize(12.5),
           fontWeight: 500,
           color: 'text.primary',
           borderColor: 'divider',
@@ -100,10 +101,10 @@ export const DataTableColumnsPanel = <T extends object>({
             borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
           }}
         >
-          <Typography sx={{ flex: 1, fontSize: 13, fontWeight: 600 }}>
+          <Typography sx={{ flex: 1, fontSize: portalFontSize(13), fontWeight: 600 }}>
             {t('data_table.columns')}
           </Typography>
-          <Typography sx={{ fontSize: 12, color: 'text.secondary' }}>
+          <Typography sx={{ fontSize: portalFontSize(12), color: 'text.secondary' }}>
             {t('data_table.visible_columns', {
               visible: String(visibleCount),
               total: String(totalCount),
@@ -146,7 +147,7 @@ export const DataTableColumnsPanel = <T extends object>({
             variant="text"
             startIcon={<Icon name="check" size={14} />}
             onClick={() => onHiddenColumnKeysChange([])}
-            sx={{ textTransform: 'none', fontSize: 12 }}
+            sx={{ textTransform: 'none', fontSize: portalFontSize(12) }}
           >
             {t('data_table.show_all')}
           </Button>
@@ -155,7 +156,7 @@ export const DataTableColumnsPanel = <T extends object>({
             variant="text"
             startIcon={<Icon name="refresh-cw" size={14} />}
             onClick={() => onHiddenColumnKeysChange(initialHiddenColumnKeys)}
-            sx={{ textTransform: 'none', fontSize: 12 }}
+            sx={{ textTransform: 'none', fontSize: portalFontSize(12) }}
           >
             {t('data_table.reset')}
           </Button>
@@ -185,7 +186,7 @@ const ColumnSwitchRow = ({ label, checked, locked, onChange }: ColumnSwitchRowPr
       <Typography
         sx={{
           flex: 1,
-          fontSize: 12.5,
+          fontSize: portalFontSize(12.5),
           color: locked ? 'text.secondary' : 'text.primary',
         }}
       >

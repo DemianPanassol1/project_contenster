@@ -5,6 +5,7 @@ import { Avatar, Box, Paper, Typography } from '@mui/material';
 import { Building2, UsersRound } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
+import { portalFontSize } from '@/core/theme';
 import { Button } from '@/shared';
 import { FormatUtils } from '@/utils';
 
@@ -54,7 +55,7 @@ export function SystemAdminClientCard({
               <Typography
                 sx={{
                   color: 'text.primary',
-                  fontSize: '16px',
+                  fontSize: portalFontSize(16),
                   fontWeight: 600,
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
@@ -68,7 +69,7 @@ export function SystemAdminClientCard({
                   alignItems: 'center',
                   color: 'text.secondary',
                   display: 'inline-flex',
-                  fontSize: '11.5px',
+                  fontSize: portalFontSize(11.5),
                   gap: 0.75,
                 }}
               >
@@ -84,21 +85,21 @@ export function SystemAdminClientCard({
               </Box>
             </Box>
 
-            <Typography color="text.secondary" sx={{ fontSize: '12px', mt: 0.25 }}>
+            <Typography color="text.secondary" sx={{ fontSize: portalFontSize(12), mt: 0.25 }}>
               {client.tradeName}
             </Typography>
 
             <Box
               sx={{ alignItems: 'center', display: 'flex', flexWrap: 'wrap', gap: 1.25, mt: 0.75 }}
             >
-              <Typography color="text.secondary" sx={{ fontSize: '11.5px' }}>
+              <Typography color="text.secondary" sx={{ fontSize: portalFontSize(11.5) }}>
                 {formattedDocument}
               </Typography>
               <Box
                 sx={{ alignItems: 'center', color: 'text.secondary', display: 'flex', gap: 0.5 }}
               >
                 <UsersRound size={14} />
-                <Typography sx={{ fontSize: '11.5px' }}>
+                <Typography sx={{ fontSize: portalFontSize(11.5) }}>
                   {t('user_count', { count: client.userCount })}
                 </Typography>
               </Box>

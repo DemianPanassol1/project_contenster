@@ -5,6 +5,7 @@ import { Tooltip, Typography } from '@mui/material';
 import { useLocale, useTranslations } from 'next-intl';
 import { useMemo } from 'react';
 
+import { portalFontSize } from '@/core/theme';
 import type { DataTableColumn } from '@/shared';
 import { formatDateTime } from '@/utils/date-time.util';
 
@@ -34,7 +35,7 @@ export function usePortalColumns(): DataTableColumn<PortalListItem>[] {
 
           return (
             <Tooltip disableHoverListener={otherHosts.length === 0} title={row.hosts.join(', ')}>
-              <Typography sx={{ fontSize: 13 }}>{label}</Typography>
+              <Typography sx={{ fontSize: portalFontSize(13) }}>{label}</Typography>
             </Tooltip>
           );
         },
@@ -44,7 +45,9 @@ export function usePortalColumns(): DataTableColumn<PortalListItem>[] {
         field: 'updatedAt',
         name: t('columns.updated_at'),
         renderCell: ({ row }: { row: PortalListItem }) => (
-          <Typography sx={{ fontSize: 13 }}>{formatDateTime(row.updatedAt, locale)}</Typography>
+          <Typography sx={{ fontSize: portalFontSize(13) }}>
+            {formatDateTime(row.updatedAt, locale)}
+          </Typography>
         ),
         selector: 'updatedAt',
         sortable: true,

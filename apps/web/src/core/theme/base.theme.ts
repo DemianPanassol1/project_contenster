@@ -1,5 +1,7 @@
 import type { ThemeOptions } from '@mui/material/styles';
 
+import { portalFontSize } from './portal-font-scale';
+
 export const baseThemeOptions = {
   shape: {
     borderRadius: 12,
@@ -14,11 +16,11 @@ export const baseThemeOptions = {
     h5: { fontWeight: 600 },
     h6: { fontWeight: 600 },
     body1: {
-      fontSize: 15,
+      fontSize: portalFontSize(15),
       fontWeight: 400,
     },
     body2: {
-      fontSize: 14,
+      fontSize: portalFontSize(14),
       fontWeight: 400,
     },
   },

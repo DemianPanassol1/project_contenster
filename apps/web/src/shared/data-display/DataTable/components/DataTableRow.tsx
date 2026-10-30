@@ -2,6 +2,7 @@
 
 import { Checkbox, TableCell, TableRow } from '@mui/material';
 
+import { portalFontSize } from '@/core/theme';
 import { toSxArray } from '@/utils';
 
 import type { DataTableRowProps } from '../types/DataTable.types';
@@ -31,7 +32,7 @@ export const DataTableRow = <T extends object>({
         {
           '& .MuiTableCell-root': {
             height: 44,
-            fontSize: 13,
+            fontSize: portalFontSize(13),
             borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
           },
         },

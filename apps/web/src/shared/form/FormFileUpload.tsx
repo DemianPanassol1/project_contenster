@@ -7,6 +7,7 @@ import { type ChangeEvent, useEffect, useId, useReducer, useState } from 'react'
 import { Controller, type FieldValues, useFormContext, useWatch } from 'react-hook-form';
 
 import { useGlobalContext } from '@/core/providers';
+import { portalFontSize } from '@/core/theme';
 import { useGET } from '@/services/hooks';
 import {
   getMediaFileEndpoint,
@@ -161,7 +162,7 @@ export const FormFileUpload = <T extends FieldValues>({
                 sx={{
                   mb: 0.75,
                   display: 'block',
-                  fontSize: 13,
+                  fontSize: portalFontSize(13),
                   fontWeight: 600,
                   color: disabled ? 'text.disabled' : 'text.primary',
                 }}
@@ -224,7 +225,7 @@ export const FormFileUpload = <T extends FieldValues>({
                     <Typography
                       title={fileData.originalName}
                       sx={{
-                        fontSize: 13,
+                        fontSize: portalFontSize(13),
                         fontWeight: 700,
                         overflow: 'hidden',
                         whiteSpace: 'nowrap',
@@ -239,7 +240,7 @@ export const FormFileUpload = <T extends FieldValues>({
                         title={fileMeta}
                         sx={{
                           mt: 0.25,
-                          fontSize: 12,
+                          fontSize: portalFontSize(12),
                           color: 'text.secondary',
                           overflow: 'hidden',
                           whiteSpace: 'nowrap',
@@ -254,7 +255,7 @@ export const FormFileUpload = <T extends FieldValues>({
                   <Typography
                     title={selectedFileName ?? undefined}
                     sx={{
-                      fontSize: 13,
+                      fontSize: portalFontSize(13),
                       color: 'text.secondary',
                       overflow: 'hidden',
                       whiteSpace: 'nowrap',
@@ -295,7 +296,7 @@ export const FormFileUpload = <T extends FieldValues>({
               <Typography
                 sx={{
                   mt: 0.75,
-                  fontSize: 12,
+                  fontSize: portalFontSize(12),
                   color: hasLoadError ? 'error.main' : 'text.secondary',
                 }}
               >

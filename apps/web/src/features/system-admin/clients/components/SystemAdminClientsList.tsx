@@ -4,6 +4,8 @@ import type { SystemAdminClientListItem } from '@contenster/shared';
 import { Box, Typography } from '@mui/material';
 import { useTranslations } from 'next-intl';
 
+import { portalFontSize } from '@/core/theme';
+
 import { SystemAdminClientCard } from './SystemAdminClientCard';
 
 interface SystemAdminClientsListProps {
@@ -21,7 +23,10 @@ export function SystemAdminClientsList({
 
   if (clients.length === 0) {
     return (
-      <Typography color="text.secondary" sx={{ fontSize: '13px', py: 6, textAlign: 'center' }}>
+      <Typography
+        color="text.secondary"
+        sx={{ fontSize: portalFontSize(13), py: 6, textAlign: 'center' }}
+      >
         {t('empty')}
       </Typography>
     );

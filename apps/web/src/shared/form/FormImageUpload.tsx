@@ -7,6 +7,7 @@ import { type ChangeEvent, type ReactNode, useEffect, useId, useReducer, useStat
 import { Controller, type FieldValues, useFormContext, useWatch } from 'react-hook-form';
 
 import { useGlobalContext } from '@/core/providers';
+import { portalFontSize } from '@/core/theme';
 import { useGET } from '@/services/hooks';
 import {
   getMediaFileEndpoint,
@@ -202,7 +203,7 @@ export const FormImageUpload = <T extends FieldValues>({
                 sx={{
                   mb: 0.75,
                   display: 'block',
-                  fontSize: 13,
+                  fontSize: portalFontSize(13),
                   fontWeight: 600,
                   color: disabled ? 'text.disabled' : 'text.primary',
                 }}
@@ -254,7 +255,7 @@ export const FormImageUpload = <T extends FieldValues>({
                   <Box sx={{ minWidth: 0 }}>
                     <Typography
                       sx={{
-                        fontSize: 14,
+                        fontSize: portalFontSize(14),
                         fontWeight: 700,
                       }}
                     >
@@ -264,7 +265,7 @@ export const FormImageUpload = <T extends FieldValues>({
                     <Typography
                       sx={{
                         mt: 0.25,
-                        fontSize: 12,
+                        fontSize: portalFontSize(12),
                         color: 'text.secondary',
                       }}
                     >
@@ -346,7 +347,7 @@ export const FormImageUpload = <T extends FieldValues>({
                         <Typography
                           title={fileData.originalName}
                           sx={{
-                            fontSize: 14,
+                            fontSize: portalFontSize(14),
                             fontWeight: 700,
                             overflow: 'hidden',
                             whiteSpace: 'nowrap',
@@ -371,7 +372,7 @@ export const FormImageUpload = <T extends FieldValues>({
                             <Box key={item.label} component="div" sx={{ display: 'contents' }}>
                               <Typography
                                 component="dt"
-                                sx={{ fontSize: 12, color: 'text.secondary' }}
+                                sx={{ fontSize: portalFontSize(12), color: 'text.secondary' }}
                               >
                                 {item.label}
                               </Typography>
@@ -382,7 +383,7 @@ export const FormImageUpload = <T extends FieldValues>({
                                 sx={{
                                   m: 0,
                                   minWidth: 0,
-                                  fontSize: 12,
+                                  fontSize: portalFontSize(12),
                                   fontWeight: 600,
                                   overflow: 'hidden',
                                   whiteSpace: 'nowrap',
@@ -396,7 +397,7 @@ export const FormImageUpload = <T extends FieldValues>({
                         </Box>
                       </>
                     ) : (
-                      <Typography sx={{ fontSize: 13, color: 'text.secondary' }}>
+                      <Typography sx={{ fontSize: portalFontSize(13), color: 'text.secondary' }}>
                         {t('form.upload.local_image_selected')}
                       </Typography>
                     )}
@@ -445,7 +446,7 @@ export const FormImageUpload = <T extends FieldValues>({
               <Typography
                 sx={{
                   mt: 0.75,
-                  fontSize: 12,
+                  fontSize: portalFontSize(12),
                   color: hasLoadError ? 'error.main' : 'text.secondary',
                 }}
               >

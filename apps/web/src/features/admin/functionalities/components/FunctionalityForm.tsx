@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { useWatch } from 'react-hook-form';
 
 import { FUNCTIONALITY_CATALOG, type SessionLanguage } from '@contenster/shared';
+import { portalFontSize } from '@/core/theme';
 import { useValidationRules } from '@/hooks';
 import { API_ROUTES } from '@/routes';
 import { FormCheckbox, FormIconSelect, FormInput, FormSelect, TranslationsFields } from '@/shared';
@@ -111,7 +112,9 @@ export function FunctionalityForm({ languages }: FunctionalityFormProps) {
           label={t('is_navigation_group')}
           name="isNavigationGroup"
         />
-        <FormHelperText sx={{ color: 'text.secondary', fontSize: 12, m: '3px 0 4px' }}>
+        <FormHelperText
+          sx={{ color: 'text.secondary', fontSize: portalFontSize(12), m: '3px 0 4px' }}
+        >
           {t('navigation_group_helper')}
         </FormHelperText>
       </Box>

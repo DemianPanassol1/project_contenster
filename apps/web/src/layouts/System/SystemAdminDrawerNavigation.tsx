@@ -12,6 +12,7 @@ import {
 import { useTranslations } from 'next-intl';
 
 import { useGlobalContext } from '@/core/providers';
+import { portalFontSize } from '@/core/theme';
 import { usePathname, useRouter } from '@/i18n/navigation';
 import { Icon } from '@/shared';
 
@@ -55,7 +56,7 @@ export function SystemAdminDrawerNavigation({
           <Typography
             sx={{
               color: 'rgba(255, 255, 255, 0.72)',
-              fontSize: '10.5px',
+              fontSize: portalFontSize(10.5),
               fontWeight: 600,
               letterSpacing: '0.08em',
               mb: 0.75,
@@ -107,7 +108,7 @@ export function SystemAdminDrawerNavigation({
                         noWrap
                         sx={{
                           color: 'inherit',
-                          fontSize: '13px',
+                          fontSize: portalFontSize(13),
                           fontWeight: selected ? 600 : 500,
                         }}
                       >

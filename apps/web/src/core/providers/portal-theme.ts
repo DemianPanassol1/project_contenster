@@ -1,3 +1,4 @@
+import type { PortalPalette, ResolvedPublicPortal } from '@contenster/shared';
 import {
   createTheme,
   type PaletteColor,
@@ -6,8 +7,7 @@ import {
   type Theme,
 } from '@mui/material/styles';
 
-import { PortalFontScale, type PortalPalette, type ResolvedPublicPortal } from '@contenster/shared';
-import { baseThemeOptions } from '@/core/theme';
+import { baseThemeOptions, getPortalFontScaleMultiplier, portalFontSize } from '@/core/theme';
 
 export const PORTAL_COLOR_SCHEME_STORAGE_KEY = 'contenster-portal-color-scheme';
 export const PORTAL_MODE_STORAGE_KEY = 'contenster-portal-mode';
@@ -35,26 +35,28 @@ const toPalette = (mode: 'dark' | 'light', palette: PortalPalette): PaletteOptio
   warning: { main: palette.warning },
 });
 
-const fontPresetByScale: Record<PortalFontScale, { body1: number; body2: number }> = {
-  [PortalFontScale.small]: { body1: 14, body2: 13 },
-  [PortalFontScale.standard]: { body1: 15, body2: 14 },
-  [PortalFontScale.large]: { body1: 16, body2: 15 },
-};
-
-const createPortalTypography = (fontScale: PortalFontScale) => {
-  const preset = fontPresetByScale[fontScale];
-
+const createPortalTypography = () => {
   return {
     ...baseThemeOptions.typography,
     body1: {
       ...baseThemeOptions.typography.body1,
-      fontSize: `${preset.body1 / 16}rem`,
+      fontSize: portalFontSize(15),
     },
     body2: {
       ...baseThemeOptions.typography.body2,
-      fontSize: `${preset.body2 / 16}rem`,
+      fontSize: portalFontSize(14),
     },
-    fontSize: preset.body2,
+    button: { fontSize: portalFontSize(14) },
+    caption: { fontSize: portalFontSize(12) },
+    h1: { ...baseThemeOptions.typography.h1, fontSize: portalFontSize(96) },
+    h2: { ...baseThemeOptions.typography.h2, fontSize: portalFontSize(60) },
+    h3: { ...baseThemeOptions.typography.h3, fontSize: portalFontSize(48) },
+    h4: { ...baseThemeOptions.typography.h4, fontSize: portalFontSize(34) },
+    h5: { ...baseThemeOptions.typography.h5, fontSize: portalFontSize(24) },
+    h6: { ...baseThemeOptions.typography.h6, fontSize: portalFontSize(20) },
+    overline: { fontSize: portalFontSize(12) },
+    subtitle1: { fontSize: portalFontSize(16) },
+    subtitle2: { fontSize: portalFontSize(14) },
   };
 };
 
@@ -73,6 +75,10 @@ export const createPortalTheme = (portal: ResolvedPublicPortal): Theme =>
             color: 'var(--mui-palette-link-main)',
             textDecorationColor: 'currentcolor',
           },
+          body: {
+            '--portal-font-scale': String(getPortalFontScaleMultiplier(portal.identity.fontScale)),
+            fontSize: portalFontSize(14),
+          },
         },
       },
       MuiLink: {
@@ -83,5 +89,5 @@ export const createPortalTheme = (portal: ResolvedPublicPortal): Theme =>
         },
       },
     },
-    typography: createPortalTypography(portal.identity.fontScale),
+    typography: createPortalTypography(),
   });

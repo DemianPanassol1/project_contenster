@@ -12,6 +12,7 @@ import {
   PortalSplitMediaPosition,
   type SessionLanguage,
 } from '@contenster/shared';
+import { portalFontSize } from '@/core/theme';
 import { useValidationRules } from '@/hooks';
 import { FormInput, FormSelect, TranslationsFields } from '@/shared';
 
@@ -74,7 +75,7 @@ export function PortalForm({ languages }: { languages: SessionLanguage[] }) {
             label={t(`tabs.${value}`)}
             value={value}
             sx={{
-              fontSize: 12.5,
+              fontSize: portalFontSize(12.5),
               minHeight: 44,
               textTransform: 'none',
               '& .MuiTab-iconWrapper': { mb: '0 !important', mr: 0.75 },

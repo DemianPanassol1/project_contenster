@@ -11,6 +11,7 @@ import {
   type StorageFileTypeRuleListItem,
 } from '@contenster/shared';
 import { useGlobalContext, useModalContext } from '@/core/providers';
+import { portalFontSize } from '@/core/theme';
 import { hasPermissionAction } from '@/features/shared/navigation';
 import type { AdminFeatureViewProps } from '@/registry/admin';
 import { API_ROUTES } from '@/routes';
@@ -310,10 +311,12 @@ export function ClientStorageListView({ presentation }: AdminFeatureViewProps) {
                 }}
               >
                 <Icon name="scan-search" size={24} />
-                <Typography sx={{ fontSize: 13, fontWeight: 700 }}>
+                <Typography sx={{ fontSize: portalFontSize(13), fontWeight: 700 }}>
                   {t('no_files_title')}
                 </Typography>
-                <Typography sx={{ fontSize: 12.5 }}>{t('no_files_description')}</Typography>
+                <Typography sx={{ fontSize: portalFontSize(12.5) }}>
+                  {t('no_files_description')}
+                </Typography>
               </Box>
             }
             getRowId={(row) => row.id}

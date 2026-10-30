@@ -3,6 +3,8 @@
 import { Box, Button, Chip } from '@mui/material';
 import { useTranslations } from 'next-intl';
 
+import { portalFontSize } from '@/core/theme';
+
 import type { FilterOption } from '../types/data-table-query.types';
 import type { DataTableColumn, FilterDisplayLabels } from '../types/DataTable.types';
 import { getFilterColumn, getFilterDisplayValue } from '../utils/data-table.util';
@@ -66,7 +68,7 @@ export const AppliedFilterChips = <T extends object>({
               bgcolor: 'background.paper',
               border: (theme) => `1px solid ${theme.palette.divider}`,
               '& .MuiChip-label': {
-                fontSize: 12,
+                fontSize: portalFontSize(12),
               },
             }}
           />
@@ -78,7 +80,7 @@ export const AppliedFilterChips = <T extends object>({
           size="small"
           variant="text"
           onClick={onClearAll}
-          sx={{ height: 28, textTransform: 'none', fontSize: 12 }}
+          sx={{ height: 28, textTransform: 'none', fontSize: portalFontSize(12) }}
         >
           {t('data_table.clear_all')}
         </Button>

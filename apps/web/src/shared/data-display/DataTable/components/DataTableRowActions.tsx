@@ -4,6 +4,7 @@ import { Box, IconButton, Tooltip, Typography } from '@mui/material';
 import { useTranslations } from 'next-intl';
 
 import { useModalContext } from '@/core/providers';
+import { portalFontSize } from '@/core/theme';
 import { Icon } from '@/shared/ui/Icon';
 
 import type { DataTableAction } from '../types/DataTable.types';
@@ -52,7 +53,9 @@ export const DataTableRowActions = <T extends object>({
             : t('data_table.confirm_action_title'),
         maxWidth: 'xs',
         content: (
-          <Typography sx={{ fontSize: 13, color: 'text.secondary' }}>{confirmMessage}</Typography>
+          <Typography sx={{ fontSize: portalFontSize(13), color: 'text.secondary' }}>
+            {confirmMessage}
+          </Typography>
         ),
         actions: [
           {

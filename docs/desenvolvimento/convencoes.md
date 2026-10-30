@@ -136,6 +136,18 @@ atualiza API, Shared e Web de forma coordenada. Se uma migração de sessões pe
 realmente necessária, ela deve ser uma decisão explícita e uma estratégia centralizada na API;
 nunca uma heurística por campo no consumidor Web.
 
+## Tema e tipografia do Web
+
+O tema do portal é a fonte de verdade para as cores configuráveis de fundo, superfície, texto e
+links. Elementos técnicos ou semânticos específicos — como estados de sucesso, atenção, erro e
+controles com identidade própria — podem usar cores fixas quando não representam uma escolha de
+identidade visual do portal.
+
+Todos os tamanhos de texto explícitos no Web devem usar `portalFontSize()` de
+`apps/web/src/core/theme`. O helper aplica `--portal-font-scale` definido pelo portal e preserva a
+proporção entre títulos, textos de apoio, formulários, tabelas e menus. Não use valores literais
+em `fontSize`; dimensões de controles, ícones, espaçamentos e raios não participam da escala.
+
 ## Chaves estrangeiras e constraints
 
 Toda relação persistida deve declarar explicitamente `foreignKeyConstraintName` em `@JoinColumn` — ou `name` em `@ForeignKey` quando a relação integra uma constraint composta manual — e a migration correspondente deve criar e remover a constraint com o mesmo nome. Os nomes devem ser semânticos, estáveis e em minúsculas, por exemplo `fk_estados_pais`; nunca dependa dos identificadores automáticos e hashados gerados pelo TypeORM.

@@ -4,6 +4,8 @@ import { Box, Chip as MuiChip } from '@mui/material';
 import { alpha } from '@mui/material/styles';
 import type { ReactNode } from 'react';
 
+import { portalFontSize } from '@/core/theme';
+
 import { Icon, type IconName } from './Icon';
 
 type ChipColor = 'default' | 'error' | 'info' | 'primary' | 'secondary' | 'success' | 'warning';
@@ -38,7 +40,7 @@ export const Chip = ({ color = 'default', icon, label }: ChipProps) => (
         border: 0,
         bgcolor: palette ? alpha(palette.main, 0.14) : theme.palette.action.hover,
         color: palette ? palette.dark : theme.palette.text.secondary,
-        fontSize: 11.5,
+        fontSize: portalFontSize(11.5),
         fontWeight: 600,
         '& .MuiChip-icon': {
           ml: 1,

@@ -4,6 +4,7 @@ import type { RequestLogDetail } from '@contenster/shared';
 import { Box, Divider, Typography } from '@mui/material';
 import { useLocale, useTranslations } from 'next-intl';
 
+import { portalFontSize } from '@/core/theme';
 import { HttpMethodChip, LogField, LogJsonSection, LogSection } from '@/shared/observability';
 import { formatDateTime } from '@/utils';
 
@@ -39,7 +40,14 @@ export function RequestLogDetailsContent({ log }: RequestLogDetailsContentProps)
 
       <LogSection title={t('sections.request')}>
         <Box>
-          <Typography sx={{ color: 'text.secondary', fontSize: 11, fontWeight: 700, mb: 0.25 }}>
+          <Typography
+            sx={{
+              color: 'text.secondary',
+              fontSize: portalFontSize(11),
+              fontWeight: 700,
+              mb: 0.25,
+            }}
+          >
             {t('fields.http_method')}
           </Typography>
           <HttpMethodChip method={log.method} />

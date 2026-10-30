@@ -7,3 +7,8 @@ export {
 } from './create-admin-theme';
 export { darkPaletteOptions } from './dark.theme';
 export { lightPaletteOptions } from './light.theme';
+export {
+  getPortalFontScaleMultiplier,
+  portalFontSize,
+  portalFontSizeImportant,
+} from './portal-font-scale';

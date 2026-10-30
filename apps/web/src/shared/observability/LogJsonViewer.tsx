@@ -2,6 +2,8 @@
 
 import { Box, Typography } from '@mui/material';
 
+import { portalFontSize } from '@/core/theme';
+
 interface LogJsonViewerProps {
   emptyLabel: string;
   maxHeight?: number | string | null;
@@ -19,7 +21,11 @@ const formatValue = (value: unknown): string =>
 
 export function LogJsonViewer({ value, emptyLabel, maxHeight = 240 }: LogJsonViewerProps) {
   if (isEmptyValue(value))
-    return <Typography sx={{ color: 'text.secondary', fontSize: 12.5 }}>{emptyLabel}</Typography>;
+    return (
+      <Typography sx={{ color: 'text.secondary', fontSize: portalFontSize(12.5) }}>
+        {emptyLabel}
+      </Typography>
+    );
 
   return (
     <Box
@@ -30,7 +36,7 @@ export function LogJsonViewer({ value, emptyLabel, maxHeight = 240 }: LogJsonVie
         borderRadius: 1,
         color: 'text.primary',
         fontFamily: 'monospace',
-        fontSize: 12,
+        fontSize: portalFontSize(12),
         lineHeight: 1.55,
         m: 0,
         maxHeight: maxHeight ?? undefined,

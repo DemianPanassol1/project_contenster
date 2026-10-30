@@ -3,6 +3,7 @@
 import { Box, Paper, Typography } from '@mui/material';
 import { alpha } from '@mui/material/styles';
 
+import { portalFontSize } from '@/core/theme';
 import { useRouter } from '@/i18n/navigation';
 import { Button, Icon, type IconName, Page } from '@/shared';
 
@@ -62,7 +63,7 @@ export function AdminAccessStateView({
         <Box>
           <Typography
             component="h2"
-            sx={{ fontSize: '18px', fontWeight: 600, letterSpacing: 0, mb: 1 }}
+            sx={{ fontSize: portalFontSize(18), fontWeight: 600, letterSpacing: 0, mb: 1 }}
             variant="h2"
           >
             {contentTitle}
@@ -70,7 +71,7 @@ export function AdminAccessStateView({
           <Typography
             sx={{
               color: 'text.secondary',
-              fontSize: '13.5px',
+              fontSize: portalFontSize(13.5),
               lineHeight: 1.55,
               maxWidth: '34rem',
             }}

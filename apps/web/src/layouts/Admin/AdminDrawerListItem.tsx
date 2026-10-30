@@ -16,6 +16,7 @@ import {
 import { ChevronDown } from 'lucide-react';
 import { useId, useState } from 'react';
 
+import { portalFontSize } from '@/core/theme';
 import { usePathname, useRouter } from '@/i18n/navigation';
 import { Icon, iconNames } from '@/shared';
 
@@ -110,7 +111,7 @@ export function AdminDrawerListItem({
               noWrap
               sx={{
                 color: selected ? 'primary.dark' : isNested ? 'text.secondary' : 'text.primary',
-                fontSize: isNested ? '12.5px' : '13px',
+                fontSize: portalFontSize(isNested ? 12.5 : 13),
                 fontWeight: selected ? 600 : 500,
               }}
             >

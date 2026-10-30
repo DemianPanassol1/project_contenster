@@ -15,6 +15,7 @@ import { useTranslations } from 'next-intl';
 import { useMemo, useState } from 'react';
 
 import { useGlobalContext, useModalContext } from '@/core/providers';
+import { portalFontSize } from '@/core/theme';
 import { useDebouncedValue } from '@/hooks';
 import { API_ROUTES } from '@/routes';
 import { usePOST } from '@/services/hooks';
@@ -97,7 +98,9 @@ export function SystemAdminClientsView() {
         },
       ],
       content: (
-        <Typography sx={{ fontSize: '13px' }}>{t('delete_confirmation_message')}</Typography>
+        <Typography sx={{ fontSize: portalFontSize(13) }}>
+          {t('delete_confirmation_message')}
+        </Typography>
       ),
       title: t('delete_confirmation_title'),
     });
@@ -128,7 +131,7 @@ export function SystemAdminClientsView() {
         },
       ],
       content: (
-        <Typography sx={{ fontSize: '13px' }}>
+        <Typography sx={{ fontSize: portalFontSize(13) }}>
           {nextActiveState
             ? t('activate_confirmation_message')
             : t('deactivate_confirmation_message')}

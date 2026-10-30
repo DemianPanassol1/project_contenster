@@ -1,6 +1,7 @@
 import { Box, ButtonBase, Tooltip } from '@mui/material';
 import { useTranslations } from 'next-intl';
 
+import { portalFontSize } from '@/core/theme';
 import { toDisplayText } from '@/utils';
 
 import type { TranslationLanguageSelectorProps } from '../types/translations-fields.types';
@@ -66,7 +67,7 @@ export const TranslationLanguageSelector = ({
                 color: selected ? 'primary.dark' : 'text.secondary',
                 bgcolor: selected ? 'action.selected' : 'transparent',
                 boxShadow: selected ? '0 1px 3px rgba(15, 23, 42, 0.12)' : 'none',
-                fontSize: 11,
+                fontSize: portalFontSize(11),
                 fontWeight: 700,
                 lineHeight: 1,
                 textTransform: 'uppercase',

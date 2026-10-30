@@ -1,5 +1,6 @@
 import type { FieldError, FieldErrors, FieldValues, RegisterOptions } from 'react-hook-form';
 
+import { portalFontSize } from '@/core/theme';
 import { toDisplayText } from '@/utils';
 import { splitValidationRules } from '@/utils/validation-rules.util';
 
@@ -165,10 +166,10 @@ export const getBaseTextFieldSx = () => ({
     },
   },
   '& .MuiInputLabel-root': {
-    fontSize: 13,
+    fontSize: portalFontSize(13),
   },
   '& .MuiInputBase-input': {
-    fontSize: 14,
+    fontSize: portalFontSize(14),
   },
   '& .MuiFormHelperText-root': {
     mr: 0,

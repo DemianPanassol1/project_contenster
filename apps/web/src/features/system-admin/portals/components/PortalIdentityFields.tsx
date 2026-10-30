@@ -11,6 +11,7 @@ import {
   PortalLoginHeaderMode,
   SVG_MIME_TYPE,
 } from '@contenster/shared';
+import { portalFontSize } from '@/core/theme';
 import { API_ROUTES } from '@/routes';
 import { FormImageUpload, FormSelect } from '@/shared';
 
@@ -72,7 +73,7 @@ function PortalColorField({
             <Typography
               component="label"
               htmlFor={inputId}
-              sx={{ display: 'block', fontSize: 13, fontWeight: 700 }}
+              sx={{ display: 'block', fontSize: portalFontSize(13), fontWeight: 700 }}
             >
               {t(`identity.colors.${color}.label`)}
               <Box component="span" sx={{ color: 'error.main' }}>
@@ -81,7 +82,12 @@ function PortalColorField({
               </Box>
             </Typography>
             <Typography
-              sx={{ color: 'text.secondary', fontFamily: 'monospace', fontSize: 11, mt: 0.15 }}
+              sx={{
+                color: 'text.secondary',
+                fontFamily: 'monospace',
+                fontSize: portalFontSize(11),
+                mt: 0.15,
+              }}
               title={`color_${color}`}
             >
               {`color_${color}`}
@@ -143,7 +149,11 @@ function PortalColorField({
                   htmlInput: { 'aria-describedby': helperId, maxLength: 7, spellCheck: false },
                 }}
                 sx={{
-                  '& .MuiInputBase-input': { fontFamily: 'monospace', fontSize: 12, px: 1.25 },
+                  '& .MuiInputBase-input': {
+                    fontFamily: 'monospace',
+                    fontSize: portalFontSize(12),
+                    px: 1.25,
+                  },
                   '& .MuiOutlinedInput-root': { borderRadius: 1, height: 34 },
                 }}
                 value={value}
@@ -152,7 +162,7 @@ function PortalColorField({
             <FormHelperText
               error={Boolean(fieldState.error)}
               id={helperId}
-              sx={{ fontSize: 11.5, mt: 0.75, mx: 0 }}
+              sx={{ fontSize: portalFontSize(11.5), mt: 0.75, mx: 0 }}
             >
               {fieldState.error?.message ??
                 t(`identity.colors.${color}.helper`, { value: defaultValue })}
@@ -169,7 +179,7 @@ function PortalPalette({ mode }: { mode: 'light' | 'dark' }) {
 
   return (
     <Box sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 1.5, p: 2 }}>
-      <Typography sx={{ fontSize: 14, fontWeight: 700 }}>
+      <Typography sx={{ fontSize: portalFontSize(14), fontWeight: 700 }}>
         {t(`identity.${mode}_palette`)}
       </Typography>
       <Box

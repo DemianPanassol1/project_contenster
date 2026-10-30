@@ -3,6 +3,7 @@
 import { Box, Button, Chip, Typography } from '@mui/material';
 import { useTranslations } from 'next-intl';
 
+import { portalFontSize } from '@/core/theme';
 import { Icon } from '@/shared/ui/Icon';
 
 interface DataTableSelectionBarProps {
@@ -51,14 +52,14 @@ export const DataTableSelectionBar = ({
         label={selectedCount}
         sx={{ height: 24, borderRadius: '50%', minWidth: 24 }}
       />
-      <Typography sx={{ fontSize: 13, fontWeight: 600 }}>
+      <Typography sx={{ fontSize: portalFontSize(13), fontWeight: 600 }}>
         {t('data_table.selected_count', { count: String(selectedCount) })}
       </Typography>
       <Button
         size="small"
         variant="text"
         onClick={onClearSelection}
-        sx={{ textTransform: 'none', fontSize: 12.5 }}
+        sx={{ textTransform: 'none', fontSize: portalFontSize(12.5) }}
       >
         {t('data_table.clear_selection')}
       </Button>
@@ -70,7 +71,7 @@ export const DataTableSelectionBar = ({
           startIcon={<Icon name="download" size={15} />}
           disabled={!selectedRowsCount}
           onClick={onExportSelected}
-          sx={{ borderRadius: 1.5, textTransform: 'none', fontSize: 12.5 }}
+          sx={{ borderRadius: 1.5, textTransform: 'none', fontSize: portalFontSize(12.5) }}
         >
           {t('data_table.export_selected')}
         </Button>
@@ -82,7 +83,7 @@ export const DataTableSelectionBar = ({
           color="error"
           startIcon={<Icon name="trash" size={15} />}
           onClick={onDeleteSelected}
-          sx={{ borderRadius: 1.5, textTransform: 'none', fontSize: 12.5 }}
+          sx={{ borderRadius: 1.5, textTransform: 'none', fontSize: portalFontSize(12.5) }}
         >
           {deleteLabel ?? t('data_table.delete_selected')}
         </Button>

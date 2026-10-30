@@ -14,6 +14,7 @@ import { X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import { useModalContext } from '@/core/providers/contexts/modal.context';
+import { portalFontSize } from '@/core/theme';
 
 export function ModalRenderer() {
   const t = useTranslations('protected.modal');
@@ -38,7 +39,10 @@ export function ModalRenderer() {
     >
       <DialogTitle sx={{ px: 2, py: 1.25 }}>
         <Stack direction="row" sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
-          <Typography component="span" sx={{ fontSize: 18, fontWeight: 600, lineHeight: 1.3 }}>
+          <Typography
+            component="span"
+            sx={{ fontSize: portalFontSize(18), fontWeight: 600, lineHeight: 1.3 }}
+          >
             {modal.title}
           </Typography>
 
@@ -55,8 +59,8 @@ export function ModalRenderer() {
         sx={{
           px: 2,
           py: 1.5,
-          '& .MuiInputBase-input': { fontSize: 14 },
-          '& .MuiInputLabel-root': { fontSize: 13 },
+          '& .MuiInputBase-input': { fontSize: portalFontSize(14) },
+          '& .MuiInputLabel-root': { fontSize: portalFontSize(13) },
         }}
       >
         {modal.content}
@@ -79,7 +83,7 @@ export function ModalRenderer() {
               }}
               type={action.type ?? 'button'}
               variant={action.variant ?? 'text'}
-              sx={{ fontSize: 13, minHeight: 34, px: 1.5 }}
+              sx={{ fontSize: portalFontSize(13), minHeight: 34, px: 1.5 }}
             >
               {action.label}
             </Button>

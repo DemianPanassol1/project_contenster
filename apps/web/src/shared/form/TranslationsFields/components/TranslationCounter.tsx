@@ -1,6 +1,7 @@
 import { Paper } from '@mui/material';
 import { useTranslations } from 'next-intl';
 
+import { portalFontSize } from '@/core/theme';
 import { Icon } from '@/shared/ui/Icon';
 
 import type { TranslationCounterProps } from '../types/translations-fields.types';
@@ -22,7 +23,7 @@ export const TranslationCounter = ({ filledCount, totalCount }: TranslationCount
         borderRadius: 999,
         color: 'text.secondary',
         backgroundColor: 'custom.card',
-        fontSize: 11,
+        fontSize: portalFontSize(11),
         fontWeight: 600,
         lineHeight: 1,
         fontVariantNumeric: 'tabular-nums',

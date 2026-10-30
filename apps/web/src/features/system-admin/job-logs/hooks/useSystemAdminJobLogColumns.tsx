@@ -5,6 +5,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useMemo } from 'react';
 
 import { type CronExecutionLogListItem, CronExecutionStatus } from '@contenster/shared';
+import { portalFontSize } from '@/core/theme';
 import { type DataTableColumn, FieldType } from '@/shared';
 import { formatDateTime } from '@/utils';
 
@@ -47,7 +48,7 @@ export function useSystemAdminJobLogColumns(): DataTableColumn<CronExecutionLogL
             color={statusColor[row.status]}
             label={t(`statuses.${row.status}`)}
             size="small"
-            sx={{ fontSize: 11 }}
+            sx={{ fontSize: portalFontSize(11) }}
           />
         ),
         filterable: true,

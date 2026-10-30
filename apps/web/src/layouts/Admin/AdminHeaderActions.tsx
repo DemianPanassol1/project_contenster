@@ -7,6 +7,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useState } from 'react';
 
 import { useGlobalContext } from '@/core/providers';
+import { portalFontSize } from '@/core/theme';
 import { usePathname, useRouter } from '@/i18n/navigation';
 import { isLocale, type Locale, locales } from '@/i18n/routing';
 import { IconButton } from '@/shared';
@@ -80,7 +81,7 @@ export function AdminHeaderActions() {
         <Typography
           sx={{
             color: 'text.secondary',
-            fontSize: '10.5px',
+            fontSize: portalFontSize(10.5),
             fontWeight: 600,
             letterSpacing: '0.08em',
             mb: 0.75,
@@ -103,24 +104,27 @@ export function AdminHeaderActions() {
               selected={selected}
               sx={{
                 borderRadius: '8px',
-                fontSize: '13px',
+                fontSize: portalFontSize(13),
                 gap: 0.75,
                 mb: 0.15,
                 minHeight: 32,
                 px: 1,
               }}
             >
-              <Typography component="span" sx={{ fontSize: '13px', fontWeight: 600, minWidth: 48 }}>
+              <Typography
+                component="span"
+                sx={{ fontSize: portalFontSize(13), fontWeight: 600, minWidth: 48 }}
+              >
                 {language.locale.toUpperCase()}
                 <Box
                   component="em"
-                  sx={{ color: 'text.secondary', fontSize: '9px', fontWeight: 400 }}
+                  sx={{ color: 'text.secondary', fontSize: portalFontSize(9), fontWeight: 400 }}
                 >
                   ({language.locale})
                 </Box>
               </Typography>
 
-              <Typography sx={{ flex: 1, fontSize: '13px' }} variant="body2">
+              <Typography sx={{ flex: 1, fontSize: portalFontSize(13) }} variant="body2">
                 {labelKey ? t(labelKey as never) : language.name}
               </Typography>
 
@@ -162,10 +166,10 @@ export function AdminHeaderActions() {
           }}
         >
           <Box>
-            <Typography sx={{ fontSize: '14px', fontWeight: 600, lineHeight: 1.3 }}>
+            <Typography sx={{ fontSize: portalFontSize(14), fontWeight: 600, lineHeight: 1.3 }}>
               {t('global.notifications')}
             </Typography>
-            <Typography color="text.secondary" sx={{ fontSize: '11px', mt: 0.25 }}>
+            <Typography color="text.secondary" sx={{ fontSize: portalFontSize(11), mt: 0.25 }}>
               0 {t('global.not_read')}
             </Typography>
           </Box>
@@ -174,7 +178,7 @@ export function AdminHeaderActions() {
             sx={{
               color: 'primary.main',
               cursor: 'pointer',
-              fontSize: '12px',
+              fontSize: portalFontSize(12),
               fontWeight: 500,
               textAlign: 'center',
               textDecoration: 'none',
@@ -197,7 +201,10 @@ export function AdminHeaderActions() {
             px: 3,
           }}
         >
-          <Typography color="text.secondary" sx={{ fontSize: '12px', textAlign: 'center' }}>
+          <Typography
+            color="text.secondary"
+            sx={{ fontSize: portalFontSize(12), textAlign: 'center' }}
+          >
             {t('global.notifications_empty')}
           </Typography>
         </Box>
@@ -214,7 +221,7 @@ export function AdminHeaderActions() {
             sx={{
               color: 'primary.main',
               cursor: 'pointer',
-              fontSize: '12px',
+              fontSize: portalFontSize(12),
               fontWeight: 500,
               textAlign: 'center',
               textDecoration: 'none',

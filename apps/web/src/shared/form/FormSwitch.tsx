@@ -9,6 +9,7 @@ import {
 } from '@mui/material';
 import { Controller, type FieldValues, useFormContext } from 'react-hook-form';
 
+import { portalFontSize } from '@/core/theme';
 import { type BaseFormFieldProps } from '@/types';
 import { toSxArray } from '@/utils';
 
@@ -41,7 +42,7 @@ export const FormSwitch = <T extends FieldValues>({
                 m: 0,
                 alignItems: 'center',
                 '& .MuiFormControlLabel-label': {
-                  fontSize: 13,
+                  fontSize: portalFontSize(13),
                   fontWeight: 500,
                 },
               }}

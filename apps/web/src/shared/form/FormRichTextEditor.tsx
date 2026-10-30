@@ -37,6 +37,7 @@ import { useTranslations } from 'next-intl';
 import { type ReactNode, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Controller, type FieldValues, type RefCallBack, useFormContext } from 'react-hook-form';
 
+import { portalFontSize } from '@/core/theme';
 import type { BaseFormFieldProps } from '@/types';
 
 type RichTextBlock = 'paragraph' | 'heading-1' | 'heading-2' | 'heading-3';
@@ -319,7 +320,7 @@ const RichTextEditorField = ({
         <FormLabel
           sx={{
             mb: 0.75,
-            fontSize: 13,
+            fontSize: portalFontSize(13),
             fontWeight: 500,
             color: hasError ? 'error.main' : 'text.secondary',
           }}
@@ -365,7 +366,7 @@ const RichTextEditorField = ({
             sx={{
               width: 128,
               height: 30,
-              fontSize: 12,
+              fontSize: portalFontSize(12),
               '& .MuiSelect-select': {
                 py: 0.5,
               },
@@ -490,7 +491,7 @@ const RichTextEditorField = ({
               py: 1.25,
               outline: 'none',
               color: disabled ? 'text.disabled' : 'text.primary',
-              fontSize: 14,
+              fontSize: portalFontSize(14),
               lineHeight: 1.65,
             },
             '& .tiptap p': {
@@ -502,13 +503,13 @@ const RichTextEditorField = ({
               lineHeight: 1.25,
             },
             '& .tiptap h1': {
-              fontSize: 24,
+              fontSize: portalFontSize(24),
             },
             '& .tiptap h2': {
-              fontSize: 20,
+              fontSize: portalFontSize(20),
             },
             '& .tiptap h3': {
-              fontSize: 17,
+              fontSize: portalFontSize(17),
             },
             '& .tiptap ul, & .tiptap ol': {
               my: 0.75,

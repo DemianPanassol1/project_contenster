@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { useGlobalContext, useModalContext } from '@/core/providers';
+import { portalFontSize } from '@/core/theme';
 import { useDebouncedValue } from '@/hooks';
 import { usePathname, useRouter } from '@/i18n/navigation';
 import { type OptionsSource, useOptionsCollection } from '@/services/hooks';
@@ -306,7 +307,7 @@ export const DataTable = <T extends object>({
       title: deleteConfirmation?.title ?? t('data_table.confirm_delete_title'),
       maxWidth: 'xs',
       content: (
-        <Typography sx={{ fontSize: 13, color: 'text.secondary' }}>
+        <Typography sx={{ fontSize: portalFontSize(13), color: 'text.secondary' }}>
           {ids.length === 1
             ? (deleteConfirmation?.message ?? t('data_table.confirm_delete_single'))
             : (getDeleteManyMessage(deleteConfirmation?.manyMessage, ids.length) ??

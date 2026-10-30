@@ -3,6 +3,7 @@
 import { TextField, type TextFieldProps } from '@mui/material';
 import { Controller, type FieldValues, useFormContext } from 'react-hook-form';
 
+import { portalFontSize } from '@/core/theme';
 import { type BaseFormFieldProps } from '@/types';
 import { toSxArray } from '@/utils';
 
@@ -52,10 +53,10 @@ export const FormInput = <T extends FieldValues>({
                   },
                 },
                 '& .MuiInputLabel-root': {
-                  fontSize: 13,
+                  fontSize: portalFontSize(13),
                 },
                 '& .MuiInputBase-input': {
-                  fontSize: 14,
+                  fontSize: portalFontSize(14),
                 },
                 '& .MuiFormHelperText-root': {
                   mr: 0,

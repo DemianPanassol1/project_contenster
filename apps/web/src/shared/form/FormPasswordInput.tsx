@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import { Controller, type FieldValues, useFormContext } from 'react-hook-form';
 
+import { portalFontSize } from '@/core/theme';
 import { Icon } from '@/shared/ui';
 import { type BaseFormFieldProps } from '@/types';
 import { toSxArray } from '@/utils';
@@ -69,10 +70,10 @@ export const FormPasswordInput = <T extends FieldValues>({
                   },
                 },
                 '& .MuiInputLabel-root': {
-                  fontSize: 13,
+                  fontSize: portalFontSize(13),
                 },
                 '& .MuiInputBase-input': {
-                  fontSize: 14,
+                  fontSize: portalFontSize(14),
                 },
                 '& .MuiFormHelperText-root': {
                   mr: 0,

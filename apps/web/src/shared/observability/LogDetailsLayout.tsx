@@ -3,6 +3,8 @@
 import { Box, Typography } from '@mui/material';
 import type { ReactNode } from 'react';
 
+import { portalFontSize } from '@/core/theme';
+
 import { LogJsonViewer } from './LogJsonViewer';
 
 interface LogFieldProps {
@@ -31,10 +33,12 @@ const formatTextValue = (value: unknown, emptyLabel: string): string =>
 export function LogField({ label, value, emptyLabel }: LogFieldProps) {
   return (
     <Box sx={{ minWidth: 0 }}>
-      <Typography sx={{ color: 'text.secondary', fontSize: 11, fontWeight: 700, mb: 0.25 }}>
+      <Typography
+        sx={{ color: 'text.secondary', fontSize: portalFontSize(11), fontWeight: 700, mb: 0.25 }}
+      >
         {label}
       </Typography>
-      <Typography sx={{ fontSize: 13, overflowWrap: 'anywhere' }}>
+      <Typography sx={{ fontSize: portalFontSize(13), overflowWrap: 'anywhere' }}>
         {formatTextValue(value, emptyLabel)}
       </Typography>
     </Box>
@@ -43,7 +47,7 @@ export function LogField({ label, value, emptyLabel }: LogFieldProps) {
 export function LogSection({ title, children }: LogSectionProps) {
   return (
     <Box sx={{ display: 'grid', gap: 1.5 }}>
-      <Typography sx={{ fontSize: 14, fontWeight: 700 }}>{title}</Typography>
+      <Typography sx={{ fontSize: portalFontSize(14), fontWeight: 700 }}>{title}</Typography>
       <Box
         sx={{
           display: 'grid',
@@ -59,7 +63,9 @@ export function LogSection({ title, children }: LogSectionProps) {
 export function LogJsonSection({ label, value, emptyLabel, maxHeight }: LogJsonSectionProps) {
   return (
     <Box sx={{ gridColumn: '1 / -1' }}>
-      <Typography sx={{ color: 'text.secondary', fontSize: 11, fontWeight: 700, mb: 0.75 }}>
+      <Typography
+        sx={{ color: 'text.secondary', fontSize: portalFontSize(11), fontWeight: 700, mb: 0.75 }}
+      >
         {label}
       </Typography>
       <LogJsonViewer emptyLabel={emptyLabel} maxHeight={maxHeight} value={value} />

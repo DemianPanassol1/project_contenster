@@ -4,6 +4,7 @@ import { Box, Button, TextField } from '@mui/material';
 import { useTranslations } from 'next-intl';
 import type { ReactNode } from 'react';
 
+import { portalFontSize } from '@/core/theme';
 import { Icon } from '@/shared/ui/Icon';
 
 interface DataTableToolbarProps {
@@ -63,7 +64,7 @@ export const DataTableToolbar = ({
               maxWidth: '100%',
               flexShrink: 0,
               '& .MuiInputBase-input': {
-                fontSize: 13,
+                fontSize: portalFontSize(13),
               },
             }}
             slotProps={{
@@ -100,7 +101,7 @@ export const DataTableToolbar = ({
                 height: 36,
                 borderRadius: 1.5,
                 px: 1.25,
-                fontSize: 12.5,
+                fontSize: portalFontSize(12.5),
                 fontWeight: 500,
                 color: 'text.primary',
                 borderColor: 'divider',
@@ -121,7 +122,7 @@ export const DataTableToolbar = ({
                 height: 36,
                 borderRadius: 1.5,
                 px: 1.25,
-                fontSize: 12.5,
+                fontSize: portalFontSize(12.5),
                 fontWeight: 500,
                 color: 'text.primary',
                 borderColor: 'divider',

@@ -6,6 +6,7 @@ import type { Dayjs } from 'dayjs';
 import { useTranslations } from 'next-intl';
 import { Controller, type FieldValues, useFormContext } from 'react-hook-form';
 
+import { portalFontSize } from '@/core/theme';
 import { type BaseFormFieldProps } from '@/types';
 import { toSxArray } from '@/utils';
 
@@ -92,17 +93,17 @@ export const FormDatetime = <T extends FieldValues>({
                     },
                   },
                   '& .MuiInputLabel-root': {
-                    fontSize: 13,
+                    fontSize: portalFontSize(13),
                   },
                   '& .MuiInputBase-input': {
-                    fontSize: 14,
+                    fontSize: portalFontSize(14),
                   },
                   '& .MuiPickersInputBase-root': {
-                    fontSize: 14,
+                    fontSize: portalFontSize(14),
                   },
                   '& .MuiInputAdornment-root .MuiSvgIcon-root': {
                     color: 'text.secondary',
-                    fontSize: 18,
+                    fontSize: portalFontSize(18),
                   },
                   '& .MuiFormHelperText-root': {
                     mr: 0,

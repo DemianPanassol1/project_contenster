@@ -3,6 +3,7 @@
 import { Box, Typography } from '@mui/material';
 import { useTranslations } from 'next-intl';
 
+import { portalFontSize } from '@/core/theme';
 import { Icon } from '@/shared/ui/Icon';
 
 export const DataTableEmptyState = () => {
@@ -21,7 +22,7 @@ export const DataTableEmptyState = () => {
       }}
     >
       <Icon name="scan-search" size={24} />
-      <Typography sx={{ fontSize: 13 }}>{t('data_table.empty')}</Typography>
+      <Typography sx={{ fontSize: portalFontSize(13) }}>{t('data_table.empty')}</Typography>
     </Box>
   );
 };

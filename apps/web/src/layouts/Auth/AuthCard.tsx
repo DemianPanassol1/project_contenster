@@ -75,7 +75,8 @@ export function AuthCard({ children, fallbackTitle, subtitle, title }: AuthCardP
       {hasSupport && (
         <Box
           sx={{
-            borderTop: '1px solid #E5E7EB',
+            borderTop: (theme) =>
+              `1px solid ${theme.palette.mode === 'dark' ? '#334155' : '#E5E7EB'}`,
             bottom: { md: isSplit ? '1rem' : 'auto' },
             left: { md: isSplit ? '1rem' : 'auto' },
             mt: { md: isSplit ? 0 : 3.5, xs: 3.5 },
