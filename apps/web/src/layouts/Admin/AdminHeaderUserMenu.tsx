@@ -3,7 +3,7 @@
 import { Avatar, Box, Button, CircularProgress, Menu, MenuItem, Typography } from '@mui/material';
 import { Building2, KeyRound, Landmark, LogOut, User } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import {
   type ChangeCurrentUserPasswordRequest,
@@ -79,6 +79,7 @@ export function AdminHeaderUserMenu({
   const showErrors = useWebResponseErrorToast();
   const { createValidationRules } = useValidationRules<ChangeCurrentUserPasswordRequest>();
   const [anchorElement, setAnchorElement] = useState<HTMLElement | null>(null);
+  const [canChangeClient, setCanChangeClient] = useState(false);
   const [isReturningToGlobal, setIsReturningToGlobal] = useState(false);
   const changeClientModalId = useRef('');
   const changePasswordModalId = useRef('');
@@ -86,8 +87,26 @@ export function AdminHeaderUserMenu({
   const userName = user.name || user.username;
   const initials = useMemo(() => getInitials(userName), [userName]);
   const avatarColor = useMemo(() => stringToColor(userName), [userName]);
-  const canReturnToGlobal = user.isSuperuser && accessType === RequestLogAccessType.superuser;
+  const isAssumedSuperuser = user.isSuperuser && accessType === RequestLogAccessType.superuser;
   const menuOpen = Boolean(anchorElement);
+
+  useEffect(() => {
+    let isCurrent = true;
+
+    void getAvailableClients(locale)
+      .then((response) => {
+        if (isCurrent) {
+          setCanChangeClient(response.success && (response.body?.clients.length ?? 0) > 1);
+        }
+      })
+      .catch(() => {
+        if (isCurrent) setCanChangeClient(false);
+      });
+
+    return () => {
+      isCurrent = false;
+    };
+  }, [locale]);
 
   const fetchClientOptions = useCallback(async (): Promise<FetchOptionsResponse> => {
     const response = await getAvailableClients(locale);
@@ -308,7 +327,7 @@ export function AdminHeaderUserMenu({
               whiteSpace: 'nowrap',
             }}
           >
-            {profile.name}
+            {isAssumedSuperuser ? t('superuser') : profile.name}
           </Typography>
         </Box>
       </Button>
@@ -401,7 +420,7 @@ export function AdminHeaderUserMenu({
               <Box
                 sx={{ backgroundColor: 'primary.main', borderRadius: '50%', height: 4, width: 4 }}
               />
-              {profile.name}
+              {isAssumedSuperuser ? t('superuser') : profile.name}
             </Box>
           </Box>
         </Box>
@@ -437,35 +456,37 @@ export function AdminHeaderUserMenu({
               {t('change_password')}
             </Typography>
           </MenuItem>
-          <MenuItem
-            onClick={openChangeClientModal}
-            sx={{
-              borderRadius: '8px',
-              fontSize: portalFontSize(12.5),
-              gap: 1.25,
-              height: 34,
-              px: 1.25,
-            }}
-          >
-            <Building2 size={15} strokeWidth={2} />
-            <Typography sx={{ flex: 1, fontSize: portalFontSize(12.5) }}>
-              {t('change_client')}
-            </Typography>
-            <Typography
-              color="text.secondary"
+          {canChangeClient && (
+            <MenuItem
+              onClick={openChangeClientModal}
               sx={{
-                fontSize: portalFontSize(10.5),
-                maxWidth: 90,
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap',
+                borderRadius: '8px',
+                fontSize: portalFontSize(12.5),
+                gap: 1.25,
+                height: 34,
+                px: 1.25,
               }}
             >
-              {client.name}
-            </Typography>
-          </MenuItem>
+              <Building2 size={15} strokeWidth={2} />
+              <Typography sx={{ flex: 1, fontSize: portalFontSize(12.5) }}>
+                {t('change_client')}
+              </Typography>
+              <Typography
+                color="text.secondary"
+                sx={{
+                  fontSize: portalFontSize(10.5),
+                  maxWidth: 90,
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                {client.name}
+              </Typography>
+            </MenuItem>
+          )}
 
-          {canReturnToGlobal && (
+          {isAssumedSuperuser && (
             <MenuItem
               disabled={isReturningToGlobal || state.isLoading}
               onClick={() => void handleReturnToGlobal()}
