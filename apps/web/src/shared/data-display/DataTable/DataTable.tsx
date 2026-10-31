@@ -467,6 +467,12 @@ export const DataTable = <T extends object>({
           activeFiltersCount={draftFilters.length}
           focusedFilter={focusedFilter}
           onApply={handleApplyFilters}
+          onClose={() => {
+            setFocusedFilter(null);
+          }}
+          onOpenFromButton={() => {
+            setFocusedFilter(null);
+          }}
         />
         <DataTableColumnsPanel
           columns={resolvedColumns}

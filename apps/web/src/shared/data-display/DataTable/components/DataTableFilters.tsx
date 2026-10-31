@@ -12,7 +12,7 @@ import {
   Typography,
 } from '@mui/material';
 import { useTranslations } from 'next-intl';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { type MouseEvent, useEffect, useMemo, useRef, useState } from 'react';
 
 import { portalFontSize } from '@/core/theme';
 import { Icon } from '@/shared/ui/Icon';
@@ -26,13 +26,15 @@ import {
 } from '../utils/data-table.util';
 
 const NULL_OPTION_VALUE = '__data_table_null_option__';
-const FILTER_FIELD_FOCUS_DELAY_MS = 150;
+const FILTER_FIELD_FOCUS_DELAY_MS = 200;
 
 interface DataTableFiltersProps<T extends object> {
   columns: DataTableColumn<T>[];
   activeFiltersCount: number;
   focusedFilter?: { key: string; token: number } | null;
   onApply: (filters: FilterOption[]) => void;
+  onClose: () => void;
+  onOpenFromButton: () => void;
 }
 
 const toSelectValue = (value: DataTableFilterDraftValue): string => {
@@ -68,6 +70,8 @@ export const DataTableFilters = <T extends object>({
   activeFiltersCount,
   focusedFilter,
   onApply,
+  onClose,
+  onOpenFromButton,
 }: DataTableFiltersProps<T>) => {
   const t = useTranslations();
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
@@ -103,12 +107,24 @@ export const DataTableFilters = <T extends object>({
 
   const handleApply = () => {
     onApply(buildDraftFilters(filterableColumns, draft));
+    onClose();
     setAnchorEl(null);
   };
 
   const handleReset = () => {
     setDraft({});
     onApply([]);
+    onClose();
+    setAnchorEl(null);
+  };
+
+  const handleOpen = (event: MouseEvent<HTMLButtonElement>) => {
+    onOpenFromButton();
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    onClose();
     setAnchorEl(null);
   };
 
@@ -128,7 +144,7 @@ export const DataTableFilters = <T extends object>({
             />
           ) : undefined
         }
-        onClick={(event) => setAnchorEl(event.currentTarget)}
+        onClick={handleOpen}
         sx={{
           height: 36,
           borderRadius: 1.5,
@@ -146,9 +162,10 @@ export const DataTableFilters = <T extends object>({
       <Popover
         open={Boolean(anchorEl)}
         anchorEl={anchorEl}
-        onClose={() => setAnchorEl(null)}
+        onClose={handleClose}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+        transitionDuration="auto"
         slotProps={{
           paper: {
             sx: {
