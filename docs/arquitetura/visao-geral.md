@@ -28,3 +28,13 @@ Checagens de permissão no Web controlam apresentação, mas não autorizam requ
 - API não importa componentes, rotas ou dependências de interface do Web.
 
 O ESLint deve preservar essas fronteiras.
+
+## Organização por responsabilidades
+
+Na API, os recursos são agrupados em domínios como `identity`, `access-control`, `authorization`,
+`locations`, `media`, `observability`, `scheduling`, `system-admin` e `public-portal`. Essa divisão
+orienta a composição dos módulos; ela não autoriza dependências arbitrárias entre recursos.
+
+No Web, as superfícies principais estão em `features/admin`, `features/auth`, `features/public` e
+`features/system-admin`. Uma tela administrativa não transfere para o navegador a decisão de acesso
+ou o isolamento dos dados.

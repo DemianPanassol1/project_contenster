@@ -22,7 +22,8 @@ verdade para autorização, contexto de cliente e regras de negócio.
 
 ## Estrutura da feature
 
-Uma feature administrativa deve ficar em `apps/web/src/features/admin/<recurso>`:
+**Convenção recomendada:** uma feature administrativa pode ficar em
+`apps/web/src/features/admin/<recurso>` com a seguinte estrutura representativa:
 
 ```text
 features/admin/<recurso>/
@@ -38,7 +39,8 @@ features/admin/<recurso>/
 └── index.ts
 ```
 
-Crie somente as pastas que tenham responsabilidade real:
+Crie somente as pastas que tenham responsabilidade real; nenhuma delas, exceto o ponto de entrada
+consumido pelo registry, é obrigatória isoladamente:
 
 - `components/`: componentes de apresentação reutilizados dentro da própria feature, como o
   formulário;
@@ -50,6 +52,36 @@ Crie somente as pastas que tenham responsabilidade real:
 Não crie `types/` quando os contratos do Shared já representam o formulário, a listagem e o
 detalhe. Um tipo local só é justificável para estado exclusivamente visual que não pertença ao
 contrato HTTP.
+
+## Exemplo ilustrativo: página e formulário
+
+Esta composição é reduzida da feature de módulos e demonstra a separação de responsabilidades:
+
+```tsx
+<FormWrapper<SaveSystemModuleRequest>
+  contentUrl={isEditing ? API_ROUTES.ADMIN.GET_SYSTEM_MODULE(entityId) : undefined}
+  fields={getSystemModuleDefaultValues(presentation.languages)}
+  mapContent={(content) =>
+    mapSystemModuleContent(content as GetSystemModuleByIdResponse, presentation.languages)
+  }
+  onSubmit={async (values) => {
+    const response = await apiRequest<GetSystemModuleByIdResponse>({
+      body: values,
+      endpoint: API_ROUTES.ADMIN.POST_SYSTEM_MODULE,
+      method: 'POST',
+      onSuccess: () => router.push(listPath),
+    });
+
+    return response.success;
+  }}
+>
+  <SystemModuleForm languages={presentation.languages} />
+</FormWrapper>
+```
+
+**Regra obrigatória:** a view orquestra carregamento, submissão e navegação; o componente de
+formulário contém campos e layout. `utils/` é o local recomendado para valores iniciais, hidratação
+e adaptações estruturais de payload específicas da feature.
 
 ## Registry e rotas protegidas
 
@@ -156,15 +188,14 @@ isoladas para simular o layout.
 
 ### Normalização e sanitização
 
-Não implemente `trim`, conversão de caixa, conversão de valores opcionais ou outras sanitizações
-triviais em `onSubmit`, `map<Resource>Payload` ou componentes de feature. Essas transformações
-duplicam a responsabilidade do formulário e do contrato HTTP, tornam os payloads inconsistentes
-entre telas e dificultam a auditoria do comportamento.
+**Regra obrigatória:** a API valida e normaliza a fronteira HTTP; a autorização nunca depende de
+transformação feita pelo Web. O Web envia o estado controlado por `react-hook-form` e não deve
+implementar `trim`, conversão de caixa, conversão de valores opcionais ou sanitizações triviais em
+`onSubmit`, `map<Resource>Payload` ou componentes da feature.
 
-O Web deve enviar o estado controlado pelo `react-hook-form`. Validação e transformação de dados
-pertencem às regras compartilhadas de formulário, quando já existirem, ou à DTO da API. Uma
-adaptação no Web só é permitida quando for estrutural e específica da tela — por exemplo, agrupar
-um estado visual para o contrato persistido — e deve ter uma justificativa clara.
+Uma adaptação no Web só é adequada quando for estrutural e específica da tela — por exemplo,
+agrupar um estado visual para o contrato persistido. Mantenha-a pura, explícita e próxima da feature;
+não a use como uma segunda camada genérica de validação.
 
 ## Traduções de conteúdo
 

@@ -29,3 +29,9 @@ Configurações de armazenamento podem ser removidas somente quando o PostgreSQL
 tipo de arquivo ainda vinculadas são protegidas por `RESTRICT`, e a violação da FK é convertida pela
 API em uma mensagem de domínio. Não replique essa integridade com consultas prévias apenas para
 antecipar o erro do banco.
+
+## Limite operacional
+
+Este documento descreve decisões de modelagem, ownership e evolução do banco. Preparação de
+PostgreSQL e Redis, variáveis de ambiente e operações locais pertencem à
+[persistência operacional](../infraestrutura/persistencia.md).

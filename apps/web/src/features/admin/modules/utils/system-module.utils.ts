@@ -36,15 +36,3 @@ export const mapSystemModuleContent = (
     };
   }),
 });
-
-export const mapSystemModulePayload = (
-  values: SaveSystemModuleRequest,
-): SaveSystemModuleRequest => ({
-  ...values,
-  order: Number(values.order),
-  translations: values.translations.map((translation) => ({
-    ...translation,
-    description: translation.description?.trim() || null,
-    name: translation.name.trim(),
-  })),
-});

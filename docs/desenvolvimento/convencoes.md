@@ -1,5 +1,11 @@
 # Convenções de desenvolvimento
 
+## Escopo das convenções
+
+Este documento reúne convenções transversais. Estrutura de módulos NestJS, features protegidas e
+limites do pacote compartilhado possuem fontes próprias em [Módulos da API](./modulos-api.md),
+[Features Web administrativas](./features-web-administrativas.md) e [Shared](./shared.md).
+
 ## Organização da API
 
 Módulos ficam em `apps/api/src/modules` e devem preservar responsabilidade clara:
@@ -12,6 +18,21 @@ Módulos ficam em `apps/api/src/modules` e devem preservar responsabilidade clar
 - module compõe as dependências do recurso.
 
 Não extraia helpers ou camadas genéricas para uso único. Antes de criar uma estrutura nova, localize a capacidade equivalente e adapte apenas o necessário.
+
+### Exemplo ilustrativo: responsabilidade de camadas
+
+```typescript
+// Controller: adapta HTTP e delega.
+return this.service.save(clientId, request);
+
+// Service: aplica regra e contexto antes de persistir.
+const entity = await this.repository.findById(clientId, id);
+if (!entity) throw new NotFoundException();
+```
+
+**Regra obrigatória:** contexto, regra de negócio e exceções de domínio não pertencem ao controller.
+O exemplo é reduzido; consulte [Módulos da API](./modulos-api.md) para a estrutura e os decorators
+reais.
 
 ## DTOs de entrada, transformação e validação
 

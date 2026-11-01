@@ -1,42 +1,43 @@
 # Contenster Slim Core
 
-Monorepo para uma aplicação administrativa multi-cliente, focada em identidade, autenticação,
-autorização baseada em perfis e catálogo técnico de funcionalidades.
+O Contenster Slim Core é um monorepo TypeScript para uma aplicação administrativa multi-cliente. Ele reúne capacidades reutilizáveis de identidade, autenticação, sessão, autorização baseada em perfis, isolamento por cliente e administração técnica.
 
-O sistema mantém o isolamento entre clientes por contexto autenticado. Um usuário pode estar
-vinculado a clientes diferentes, mas possui um único perfil ativo em cada cliente.
+O projeto é uma base independente: aplicações futuras partem de uma cópia deste repositório e evoluem com código, infraestrutura e ciclo de vida próprios. Não há sincronização automática entre o Core e os repositórios derivados.
 
-## Escopo
+## Capacidades principais
 
-O Core contempla clientes, usuários, perfis, permissões, funcionalidades, módulos, idiomas,
-localização, arquivos, observabilidade, portais globais e rotinas técnicas. Não contempla produtos,
-perfis virtuais, sessões virtuais ou troca administrativa de contexto.
+- autenticação, recuperação de senha e sessões opacas;
+- usuários, clientes, vínculos, perfis e permissões;
+- contexto autenticado e isolamento de dados por cliente;
+- módulos e catálogo técnico de funcionalidades;
+- localização, arquivos, armazenamento, logs e tarefas técnicas;
+- superfícies administrativas, incluindo as capacidades globais existentes no checkout.
 
-## Pré-requisitos
+## Stack
 
-- Node.js `24.20.0`
-- pnpm `11.24.0`
-- PostgreSQL e Redis para os fluxos que dependem de persistência e sessão
+- Node.js `24.22.1` e pnpm `11.24.0`;
+- NestJS na API, Next.js no Web e TypeScript compartilhado;
+- PostgreSQL para dados autoritativos e Redis para sessão e recursos técnicos.
 
 ## Primeiros passos
+
+Copie e ajuste os arquivos de ambiente de cada aplicação sem versionar segredos. Em seguida:
 
 ```bash
 pnpm install
 pnpm dev
 ```
 
-Os serviços também podem ser executados individualmente:
+Os serviços também podem ser iniciados separadamente:
 
 ```bash
 pnpm --filter api dev
 pnpm --filter web dev
 ```
 
-## Swagger
+O exemplo de ambiente da API define a porta `8080`; a porta efetiva pode ser alterada por `apps/api/.env`. Com Swagger habilitado, a rota é definida por `SWAGGER_PATH` e é registrada na inicialização da API.
 
-Com o ambiente local configurado em `apps/api/.env`, a documentação da API fica disponível em
-`http://localhost:7070/api/v1/docs`. A rota completa também está explícita em `SWAGGER_PATH` e é
-informada no log de inicialização da API quando o Swagger estiver habilitado.
+O bootstrap cria credenciais iniciais genéricas (`admin` / `123456`). Elas servem somente para a instalação inicial e devem ser trocadas antes de qualquer exposição externa.
 
 ## Validação
 
@@ -44,20 +45,13 @@ informada no log de inicialização da API quando o Swagger estiver habilitado.
 pnpm format:check
 pnpm lint
 pnpm typecheck
-pnpm build
 pnpm --filter api test:smoke
+pnpm build
+git diff --check
 ```
 
-## Estrutura
+Esses comandos comprovam aspectos diferentes; build e testes não substituem validação de ambiente, browser, CI ou produção.
 
-```text
-apps/api     API NestJS, segurança, regras de negócio e persistência
-apps/shared  contratos e catálogo técnico compartilhados
-apps/web     aplicação Next.js e interação no navegador
-docs         arquitetura, convenções e decisões do projeto
-```
+## Documentação
 
-O usuário inicial do bootstrap usa as credenciais genéricas `admin` / `123456`. Elas devem ser
-alteradas antes de qualquer uso externo da aplicação.
-
-Para orientações de desenvolvimento e o mapa completo da documentação, consulte [AGENTS.md](./AGENTS.md).
+Consulte o [índice técnico](./docs/README.md) para arquitetura, desenvolvimento, infraestrutura e entrega. O [AGENTS.md](./AGENTS.md) é um guia de trabalho e roteador de contexto para agentes e desenvolvedores, sem substituir a documentação especializada.

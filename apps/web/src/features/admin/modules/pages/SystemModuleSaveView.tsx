@@ -11,11 +11,7 @@ import { API_ROUTES } from '@/routes';
 import { Button, FormWrapper, Page } from '@/shared';
 
 import { SystemModuleForm } from '../components/SystemModuleForm';
-import {
-  getSystemModuleDefaultValues,
-  mapSystemModuleContent,
-  mapSystemModulePayload,
-} from '../utils/system-module.utils';
+import { getSystemModuleDefaultValues, mapSystemModuleContent } from '../utils/system-module.utils';
 
 const SYSTEM_MODULE_FORM_ID = 'system-module-form';
 
@@ -67,7 +63,7 @@ export function SystemModuleSaveView({
         }
         onSubmit={async (values) => {
           const response = await apiRequest<GetSystemModuleByIdResponse>({
-            body: mapSystemModulePayload(values),
+            body: values,
             endpoint: API_ROUTES.ADMIN.POST_SYSTEM_MODULE,
             method: 'POST',
             onSuccess: () => router.push(listPath),

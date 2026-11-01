@@ -1,72 +1,52 @@
 # Guia do projeto
 
-## Propósito
+## Propósito e estrutura
 
-O Contenster Slim Core é uma aplicação administrativa multi-cliente. Seu núcleo é formado por
-clientes, usuários, perfis, permissões, autenticação com sessão opaca e catálogo técnico de
-funcionalidades.
-
-O projeto não possui produtos, portais, administração global, perfis virtuais, sessão virtual,
-seleção de schema por request ou controle manual de timezone.
-
-## Estrutura do monorepo
+A aplicação é administrativa e multi-cliente, concentrando identidade, autenticação, sessões, RBAC,
+contexto de cliente e capacidades técnicas compartilhadas. Este repositório é usado como template
+independente: aplicações derivadas não mantêm sincronização automática com sua origem.
 
 ```text
-apps/api     NestJS: HTTP, autenticação, autorização, persistência e tarefas técnicas
-apps/shared  TypeScript sem dependências de framework: contratos, domínio e catálogo
-apps/web     Next.js: apresentação, sessão no navegador e interação do usuário
-docs         documentação de arquitetura e desenvolvimento
+apps/api     NestJS: HTTP, regras de negócio, segurança e persistência
+apps/shared  TypeScript independente de framework: contratos, domínio e catálogo
+apps/web     Next.js: apresentação, sessão no navegador e interação
+docs         documentação técnica e operacional
 ```
-
-A direção de dependências é obrigatória:
 
 ```text
 apps/api  --->  apps/shared  <---  apps/web
 ```
 
-O Shared não importa NestJS, Next.js, React, TypeORM ou código das aplicações. A API é a fonte de
-verdade para autenticação, autorização, contexto, regras de negócio e persistência. Checagens de
-permissão no Web servem à apresentação e não substituem a segurança da API.
+O Shared não importa NestJS, Next.js, React, TypeORM ou código das aplicações. A API é a fonte de verdade para autenticação, autorização, contexto, regras de negócio e persistência. Permissões no Web controlam apresentação; nunca autorizam requests.
 
-## Stack e versões fixadas
+## Stack
 
-- Node.js `24.20.0`
-- pnpm `11.24.0`
-- TypeScript `6.0.3`
-- NestJS `12.1.3`
-- Next.js `16.4.1`
-- React `19.3.1`
-- PostgreSQL e Redis
+- Node.js `24.22.1`, pnpm `11.24.0` e TypeScript `6.0.2`;
+- NestJS `12.1.3`, Next.js `16.4.1` e React `19.3.1`;
+- PostgreSQL e Redis.
 
-Consulte os `package.json` para a lista completa e as versões exatas das dependências.
+Consulte os `package.json` para versões e scripts completos.
 
-## Regras arquiteturais confirmadas
+## Invariantes essenciais
 
-- Um usuário pode ter vínculos com clientes diferentes e possui no máximo um perfil por cliente.
-- O contexto autenticado reúne usuário, cliente e perfil. A troca de contexto passa por rota
-  autenticada e valida o vínculo persistido.
-- A sessão usa token opaco no cookie HTTP-only e estado no Redis. PostgreSQL permanece a fonte
-  autoritativa para usuário, cliente, perfil e permissões.
-- Toda operação pertencente a cliente usa o contexto autenticado confiável para limitar leitura e
-  escrita. Identificadores enviados pelo navegador nunca comprovam acesso.
-- O banco usa um único schema. TypeORM opera com `synchronize: false` e migrations append-only.
-- Soft delete existe somente para usuário e cliente. Demais exclusões exigem regra explícita.
-- O catálogo técnico de funcionalidades pertence a `apps/shared/src/catalog`. Ele não é banco,
-  roteamento Web nem concessão de permissão.
-- O bootstrap materializa idiomas, ações, localização, módulos, funcionalidades, cliente, perfil,
-  vínculo inicial e usuário inicial genérico. A senha padrão deve ser alterada antes de uso externo.
+- Usuário pode ter vínculos com vários clientes, com no máximo um perfil por cliente.
+- O contexto autenticado reúne usuário, cliente e perfil; sua troca é autenticada e valida o vínculo persistido.
+- A sessão usa token opaco em cookie HTTP-only e estado no Redis; PostgreSQL é autoritativo para identidade, perfil e permissões.
+- Dados de cliente sempre são limitados pelo contexto confiável. Identificadores do navegador não comprovam acesso.
+- O banco usa um schema e TypeORM opera com `synchronize: false`; migrations aplicadas são append-only.
+- Somente usuário e cliente possuem exclusão lógica. O catálogo técnico em `apps/shared/src/catalog` não é banco, rota Web nem concessão de permissão.
+
+Os detalhes e limites normativos estão nos documentos indicados abaixo; não replique suas regras em novas instruções locais sem necessidade.
 
 ## Como trabalhar
 
-1. Leia a documentação aplicável antes de alterar uma fronteira arquitetural.
-2. Localize a capacidade equivalente já existente antes de criar estruturas novas.
-3. Classifique a mudança como preservação, adaptação ou remoção antes de implementá-la.
-4. Mantenha a alteração no proprietário correto: Shared, API ou Web.
-5. Não introduza abstrações, dependências, entidades ou fluxos sem necessidade comprovada.
-6. Preserve contratos, identificadores persistidos, migrations aplicadas e compatibilidade quando
-   não houver decisão explícita de mudança.
+1. Localize a documentação aplicável e uma capacidade equivalente antes de mudar código.
+2. Mantenha a mudança no proprietário correto: Shared, API ou Web.
+3. Preserve contratos, identificadores persistidos, migrations e compatibilidade, salvo decisão explícita em sentido contrário.
+4. Não introduza abstrações, dependências ou fluxos sem necessidade comprovada.
+5. Diferencie evidência executada de inferência documental ou proposta futura.
 
-## Validação mínima
+## Validação
 
 ```bash
 pnpm format:check
@@ -77,21 +57,23 @@ pnpm build
 git diff --check
 ```
 
-Lint, tipagem, testes, build, browser, CI e produção são evidências diferentes. Informe somente
-o que foi efetivamente executado.
+Execute o conjunto proporcional à mudança e informe apenas o que foi efetivamente validado. Lint, tipagem, testes, build, browser, CI e produção são evidências distintas.
 
-## Dicionário da documentação
+## Roteiro de consulta
 
-| Documento                                                                                              | Consulte quando precisar entender                        |
-| ------------------------------------------------------------------------------------------------------ | -------------------------------------------------------- |
-| [docs/README.md](./docs/README.md)                                                                     | O mapa completo da documentação                          |
-| [docs/contexto-e-escopo.md](./docs/contexto-e-escopo.md)                                               | O que pertence ou não ao Core                            |
-| [docs/arquitetura/visao-geral.md](./docs/arquitetura/visao-geral.md)                                   | Limites entre API, Shared e Web                          |
-| [docs/arquitetura/identidade-rbac-e-contexto.md](./docs/arquitetura/identidade-rbac-e-contexto.md)     | Login, sessão, contexto, perfis e isolamento por cliente |
-| [docs/arquitetura/catalogo-de-funcionalidades.md](./docs/arquitetura/catalogo-de-funcionalidades.md)   | Identidade, materialização e uso das funcionalidades     |
-| [docs/arquitetura/persistencia.md](./docs/arquitetura/persistencia.md)                                 | Banco, ownership, migrations, seeds e exclusão lógica    |
-| [docs/desenvolvimento/convencoes.md](./docs/desenvolvimento/convencoes.md)                             | Organização de módulos e responsabilidades de código     |
-| [docs/desenvolvimento/nulidade-e-inicializacao.md](./docs/desenvolvimento/nulidade-e-inicializacao.md) | Uso de `null`, `undefined` e `declare` na API            |
-| [docs/desenvolvimento/testes.md](./docs/desenvolvimento/testes.md)                                     | Unitários, integração, e2e e smoke                       |
-| [docs/desenvolvimento/validacao.md](./docs/desenvolvimento/validacao.md)                               | Evidências de validação esperadas                        |
-| [docs/decisoes-em-aberto.md](./docs/decisoes-em-aberto.md)                                             | Questões que não devem virar regra implícita             |
+| Tarefa                           | Documento principal                                                                           |
+| -------------------------------- | --------------------------------------------------------------------------------------------- |
+| Escopo do Core ou derivação      | [Contexto e escopo](./docs/contexto-e-escopo.md)                                              |
+| Limites entre aplicações         | [Visão geral](./docs/arquitetura/visao-geral.md)                                              |
+| Autenticação, RBAC ou isolamento | [Identidade, RBAC e contexto](./docs/arquitetura/identidade-rbac-e-contexto.md)               |
+| Catálogo e permissões            | [Catálogo de funcionalidades](./docs/arquitetura/catalogo-de-funcionalidades.md)              |
+| Dados, migrations ou bootstrap   | [Persistência arquitetural](./docs/arquitetura/persistencia.md)                               |
+| Contratos API, Shared e Web      | [Contratos e integração](./docs/arquitetura/contratos-e-integracao.md)                        |
+| Novo módulo NestJS               | [Módulos da API](./docs/desenvolvimento/modulos-api.md)                                       |
+| Feature administrativa Web       | [Features Web administrativas](./docs/desenvolvimento/features-web-administrativas.md)        |
+| Mudança no Shared                | [Shared](./docs/desenvolvimento/shared.md)                                                    |
+| Testes e comandos de qualidade   | [Testes](./docs/desenvolvimento/testes.md) e [validação](./docs/desenvolvimento/validacao.md) |
+| Ambiente, Docker e operação      | [Infraestrutura](./docs/README.md#infraestrutura)                                             |
+| CI, deploy ou rollback           | [Entrega](./docs/README.md#entrega)                                                           |
+
+Consulte o [índice da documentação](./docs/README.md) para o mapa completo e para assuntos pendentes de decisão.
