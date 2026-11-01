@@ -12,7 +12,7 @@ Módulos ficam em `apps/api/src/modules` e devem preservar responsabilidade clar
 
 - controller adapta HTTP;
 - service coordena regras de negócio e transações;
-- repository concentra queries, filtros, paginação e ownership;
+- repository concentra consultas, relações de persistência, filtros, paginação, ordenação e comandos ao banco;
 - entity representa persistência;
 - DTOs definem contratos de request e response e implementam obrigatoriamente o contrato correspondente do Shared;
 - module compõe as dependências do recurso.
@@ -33,6 +33,50 @@ if (!entity) throw new NotFoundException();
 **Regra obrigatória:** contexto, regra de negócio e exceções de domínio não pertencem ao controller.
 O exemplo é reduzido; consulte [Módulos da API](./modulos-api.md) para a estrutura e os decorators
 reais.
+
+### Repository e limites de persistência
+
+O repository é a fronteira de persistência do módulo. Consultas, relações, filtros, paginação,
+ordenação e operações de escrita ou exclusão pertencem a ele. Quando o módulo acessa o banco, essa
+operação deve ser exposta por um repository; o service não recebe nem utiliza `Repository<T>`,
+`QueryBuilder` ou métodos equivalentes do TypeORM diretamente.
+
+**Regra obrigatória:** autorização, contexto HTTP, decisões de negócio, mensagens localizadas,
+serialização de resposta e efeitos externos pertencem ao controller, service ou capacidade
+especializada — não ao repository. O repository pode receber `clientId` já confiável para compor a
+consulta; ele não deve inferir acesso a partir de valores recebidos do navegador.
+
+```typescript
+// Repository: consulta persistente limitada pelo contexto já resolvido.
+findById(clientId: number, id: number): Promise<Example | null> {
+  return this.examples.findOne({ where: { client: { id: clientId }, id } });
+}
+
+// Service: decide o erro de domínio e a resposta HTTP.
+const entity = await this.repository.findById(clientId, id);
+
+if (!entity) {
+  throw new NotFoundException(this.i18n.t('errors.common.record_not_found'));
+}
+```
+
+Nem todo módulo exige repository próprio: um módulo sem acesso a persistência pode depender apenas
+de uma capacidade de infraestrutura. Contudo, não é permitido usar uma operação TypeORM local no
+service como substituto de repository. Crie ou estenda o repository do recurso quando houver acesso
+ao banco, sem criar wrappers ou abstrações adicionais sem responsabilidade concreta.
+
+O service pode receber `DataSource` exclusivamente para iniciar e coordenar uma transação que envolve
+vários repositories. Dentro desse callback, ele delega todas as leituras e escritas aos repositories,
+repassando o mesmo `EntityManager`; não chama `manager.find`, `manager.save`, `manager.delete` ou
+equivalentes diretamente. Detalhes e exemplos ficam em [Módulos da API](./modulos-api.md).
+
+```typescript
+// Incorreto: o service executa persistência diretamente.
+await manager.save(Example, entity);
+
+// Correto: o service coordena e o repository persiste no mesmo contexto transacional.
+return this.dataSource.transaction((manager) => this.repository.save(entity, manager));
+```
 
 ## DTOs de entrada, transformação e validação
 

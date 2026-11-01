@@ -19,7 +19,8 @@ resolvam uma necessidade real.
 
 **Convenção recomendada:** recursos CRUD com entidade, payload público e persistência própria tendem
 a usar a estrutura abaixo. Ela é representativa do módulo de módulos administrativos; `entities`,
-`dto` ou `repository` são elementos opcionais quando a responsabilidade do recurso não os exige.
+`dto` ou `repository` são elementos opcionais somente quando a responsabilidade do recurso não
+envolve persistência.
 
 ```text
 apps/api/src/modules/<domain>/<resource>/
@@ -131,9 +132,9 @@ equivalente mais próximo.
 ## Services: fluxo, reuso e legibilidade
 
 **Regra obrigatória:** o service coordena o caso de uso. Ele obtém o contexto confiável recebido do
-controller, carrega relações, verifica invariantes, monta o agregado para persistência, converte a
-resposta e dispara efeitos técnicos necessários. Query SQL, paginação e detalhes de `QueryBuilder`
-permanecem no repository.
+controller, solicita entidades e relações aos repositories, verifica invariantes, monta o agregado
+para persistência, converte a resposta e dispara efeitos técnicos necessários. Query SQL, paginação,
+`Repository<T>`, `QueryBuilder` e operações TypeORM permanecem no repository.
 
 Antes de criar lógica nova, procure primeiro helpers em `apps/api/src/shared` e `apps/shared`. O
 checkout já possui `getCurrentLocale`, `resolveTranslation`, `resolveTranslationLanguages`,
@@ -265,6 +266,92 @@ whitelist de campos, paginação, filtros, ordenação e comandos de persistênc
 exceção de negócio, autorização HTTP ou mensagem localizada; essas responsabilidades pertencem ao
 service e ao contexto autenticado.
 
+### Estrutura, nome e injeção
+
+Quando o recurso acessa persistência, o repository fica na raiz do recurso, junto de controller,
+service e module, com o nome `<resource>.repository.ts`. Ele é um provider NestJS com
+`@Injectable()` e é registrado no array `providers` do módulo. As entidades que ele injeta com
+`@InjectRepository` devem constar em `TypeOrmModule.forFeature` do mesmo módulo.
+
+```text
+apps/api/src/modules/<domain>/<resource>/
+├── entities/
+│   ├── <resource>.entity.ts
+│   └── <related-resource>.entity.ts      # somente quando a persistência precisar dela
+├── <resource>.controller.ts
+├── <resource>.module.ts                  # TypeOrmModule.forFeature([...])
+├── <resource>.repository.ts              # provider de persistência, quando necessário
+└── <resource>.service.ts
+```
+
+Esta é uma estrutura representativa, não uma obrigação de arquivo vazio. Módulos de autenticação,
+tarefas ou infraestrutura podem ter outras fronteiras quando não acessam persistência relacional. Se
+o módulo consulta ou grava dados com TypeORM, essa operação pertence a um repository — não a um
+service que injeta `Repository<T>` como atalho.
+
+```typescript
+@Injectable()
+export class ExampleRepository {
+  constructor(
+    @InjectRepository(Example) private readonly examples: Repository<Example>,
+    @InjectRepository(RelatedExample) private readonly relatedExamples: Repository<RelatedExample>,
+  ) {}
+}
+
+@Module({
+  imports: [TypeOrmModule.forFeature([Example, RelatedExample])],
+  providers: [ExampleRepository, ExampleService],
+})
+export class ExampleModule {}
+```
+
+O exemplo é adaptado dos repositories de módulos, cidades e usuários. Injete apenas as entidades
+consultadas ou persistidas pelo repository; uma dependência de outro módulo deve continuar sendo
+consumida pela fronteira pública adequada, não por acesso direto às suas estruturas internas.
+
+### Operações TypeORM e relacionamentos
+
+Use `Repository<T>.find`, `findOne`, `findOneBy`, `exists`, `save`, `remove` e `softRemove` quando
+eles expressarem a consulta com clareza. Use `QueryBuilder` para joins condicionais, campos
+computados, agregações, filtros e paginação. Relações necessárias para a projeção devem ser
+carregadas explicitamente, seja por `relations` ou por `leftJoinAndSelect`/`innerJoinAndSelect`.
+
+```typescript
+findById(clientId: number, id: number): Promise<Example | null> {
+  return this.examples.findOne({
+    relations: { translations: { language: true } },
+    where: { client: { id: clientId }, id },
+  });
+}
+
+list(clientId: number, request: PaginateRequest): Promise<[Example[], number]> {
+  const query = this.examples
+    .createQueryBuilder('example')
+    .leftJoinAndSelect('example.translations', 'translations')
+    .leftJoinAndSelect('translations.language', 'translationLanguage')
+    .where('example.cliente_id = :clientId', { clientId });
+
+  return applyPaginatedQueryBuilder(query, request, LIST_FIELDS_OPTIONS);
+}
+```
+
+O `clientId` do exemplo vem do contexto que o service recebeu. O repository aplica esse escopo em
+cada leitura e escrita pertinente, mas não valida a permissão do request. Para associações que não
+pertencem ao cliente, não invente um filtro de ownership: siga a entidade e a regra do caso de uso.
+
+### Reuso de helpers e consultas locais
+
+Antes de escrever SQL, filtro ou paginação, procure helpers em `apps/api/src/shared` e contratos em
+`apps/shared`. `applyPaginatedQueryBuilder`, `QueryFieldMap`,
+`buildTranslatedLabelExpression` e `buildTranslationQueryParameters` já concentram regras de
+consulta que não devem ser copiadas entre repositories.
+
+Mantenha a consulta no próprio repository quando ela for específica do recurso, como a lista de
+cidades com joins de estado e país ou uma checagem de vínculo por `exists`. Uma abstração adicional
+só se justifica quando há comportamento persistente reutilizado por mais de um ponto e ela torna a
+responsabilidade mais clara. Não crie base repository, factory de query ou helper genérico para uma
+única consulta.
+
 ### Paginação, filtros e ordenação
 
 Para uma listagem paginada, declare um `QueryFieldMap` local, crie a query com seus joins e delegue
@@ -323,9 +410,43 @@ cubra suas relações.
 
 O repository recebe o agregado já validado pelo service e o persiste com o mecanismo existente,
 como `Repository.save`. Ele não consulta novamente a coleção filha para deduzir identidade, não
-aplica regra de domínio em silêncio e não substitui filhos por exclusão global. Quando uma operação
-envolver múltiplos agregados ou uma invariante multi-registro, o service deve coordenar a transação
-e compartilhar o `EntityManager` apropriado.
+aplica regra de domínio em silêncio e não substitui filhos por exclusão global. Para exclusões, o
+service valida vínculos e decide a exceção; o repository executa `remove` ou `softRemove` conforme
+o comportamento definido pela entidade.
+
+### Transações coordenadas pelo service
+
+**Regra obrigatória:** o service pode abrir `DataSource.transaction` para coordenar uma regra que
+envolve múltiplos repositories. O callback não autoriza chamadas diretas a `manager.find`,
+`manager.save`, `manager.remove`, `manager.update`, `manager.delete` ou `manager.getRepository`.
+Ele somente coordena a ordem, as validações de domínio e delega cada operação ao repository
+correspondente, passando o mesmo `EntityManager`.
+
+```typescript
+return this.dataSource.transaction(async (manager) => {
+  const user = await this.repository.findAccessLinkUser(userId, manager);
+
+  if (!user) {
+    throw new NotFoundException();
+  }
+
+  // O service valida o domínio; o repository usa o mesmo manager para persistir.
+  return this.repository.replaceAccessLinks(user, links, manager);
+});
+```
+
+Todos os acessos que participam da transação usam o `EntityManager` recebido, nunca o repository
+injetado fora dela. O repository pode receber esse manager como argumento e obter a operação TypeORM
+necessária; não introduza Unit of Work, executor transacional ou camada equivalente sem uma repetição
+concreta que os justifique.
+
+```typescript
+// Incorreto no service: persistência direta dentro da transação.
+await manager.save(User, user);
+
+// Correto no service: delegação ao repository transacional.
+await this.usersRepository.saveWithProfile(user, profile, manager);
+```
 
 ## Persistência e testes
 
