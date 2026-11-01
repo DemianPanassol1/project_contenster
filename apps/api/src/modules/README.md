@@ -23,6 +23,17 @@ estáticos, scheduler e health check.
 Não inclua um recurso específico de uma aplicação derivada no Core apenas por ele depender de
 identidade, autorização ou outro recurso da base.
 
+### Agregação por capacidades administrativas
+
+`core/system-admin` é um módulo agregador para capacidades administrativas globais. Ele mantém o
+controller raiz vazio e protegido, e compõe `access-links`, `clients`, `files`, `job-logs`,
+`request-logs` e `portals`. Cada capacidade registra suas próprias dependências, controller,
+service, repository e DTOs; o agregador não concentra regras, persistência ou contratos específicos.
+
+Os controllers das capacidades preservam o prefixo HTTP `system-admin` e declaram
+`@RequireSuperuser()` individualmente. Assim, a organização interna não altera os contratos
+públicos nem enfraquece a autorização.
+
 ## Domínios da aplicação
 
 Uma capacidade especializada deve ficar em um diretório irmão de `core/`, agrupada pelo domínio

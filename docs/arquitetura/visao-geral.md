@@ -37,6 +37,12 @@ Na API, as capacidades da base ficam em `modules/core`, agrupadas em domínios c
 aplicação derivada fica como irmão de `core`, sem misturar sua implementação com a base. Essa
 divisão orienta a composição dos módulos; ela não autoriza dependências arbitrárias entre recursos.
 
+`system-admin` é um agregador de capacidades globais: `access-links`, `clients`, `files`,
+`job-logs`, `request-logs` e `portals`. Cada capacidade é um submódulo com suas dependências e
+fronteiras de HTTP, negócio e persistência próprias. O controller raiz do agregador fica reservado
+para evolução futura; os controllers internos preservam os paths públicos sob `system-admin` e
+declaram a autorização de superusuário explicitamente.
+
 No Web, as superfícies do Core estão em `features/core/admin`, `features/core/auth`,
 `features/core/public` e `features/core/system-admin`. Recursos reutilizáveis entre domínios ficam
 fora dessa árvore, em `features/shared`; uma aplicação derivada deve adicionar suas features como

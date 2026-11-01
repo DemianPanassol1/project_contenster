@@ -1,37 +1,22 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { Profile } from '@/modules/core/access-control/profiles/entities/profiles.entity';
-import { Action } from '@/modules/core/authorization/actions/entities/action.entity';
-import { Language } from '@/modules/core/communication/languages/entities/language.entity';
-import { Client } from '@/modules/core/identity/clients/entities/client.entity';
-import { User } from '@/modules/core/identity/users/entities/user.entity';
-import { UserProfile } from '@/modules/core/identity/users/entities/user-profile.entity';
-import { File } from '@/modules/core/media/files/entities/file.entity';
-import { RequestLog } from '@/modules/core/observability/request-logs/entities/request-log.entity';
-import { CronExecutionLog } from '@/modules/core/scheduling/cron-execution-log/entities/cron-execution-log.entity';
-
+import { AccessLinksModule } from './access-links/access-links.module';
+import { ClientsModule } from './clients/clients.module';
+import { FilesModule } from './files/files.module';
+import { JobLogsModule } from './job-logs/job-logs.module';
+import { RequestLogsModule } from './request-logs/request-logs.module';
 import { PortalsModule } from './portals';
 import { SystemAdminController } from './system-admin.controller';
-import { SystemAdminRepository } from './system-admin.repository';
-import { SystemAdminService } from './system-admin.service';
 
 @Module({
   imports: [
+    AccessLinksModule,
+    ClientsModule,
+    FilesModule,
+    JobLogsModule,
     PortalsModule,
-    TypeOrmModule.forFeature([
-      Client,
-      Action,
-      File,
-      CronExecutionLog,
-      Language,
-      Profile,
-      RequestLog,
-      User,
-      UserProfile,
-    ]),
+    RequestLogsModule,
   ],
   controllers: [SystemAdminController],
-  providers: [SystemAdminRepository, SystemAdminService],
 })
 export class SystemAdminModule {}

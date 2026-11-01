@@ -21,6 +21,29 @@ Nem todo módulo tem a mesma estrutura: autenticação, armazenamento, tarefas a
 público possuem responsabilidades próprias. Não force um recurso a adotar diretórios que não
 resolvam uma necessidade real.
 
+### Exemplo: módulo agregador por capacidade
+
+`system-admin` exemplifica um domínio administrativo global organizado por capacidades coesas, sem
+transformar esse formato em regra para todos os módulos:
+
+```text
+system-admin/
+├── access-links/  # controller, service, repository e DTOs da gestão de vínculos
+├── clients/       # administração e provisionamento inicial de clientes
+├── files/         # consultas globais de arquivos
+├── job-logs/      # consultas globais de execução de tarefas
+├── portals/       # capacidade independente já existente
+├── request-logs/  # consultas globais de logs HTTP
+├── system-admin.controller.ts  # vazio, protegido e reservado para futuras capacidades
+└── system-admin.module.ts      # somente agrega os submódulos
+```
+
+Cada submódulo declara seus providers e `TypeOrmModule.forFeature(...)` reais. O service coordena
+regras, respostas e transações; o repository mantém toda operação TypeORM, inclusive quando recebe
+o `EntityManager` de uma transação iniciada pelo service. Controllers internos podem manter
+`@Controller('system-admin/...')` para preservar os endpoints e devem declarar sua autorização,
+pois decorators do controller agregador não são herdados.
+
 ## Estrutura representativa
 
 **Convenção recomendada:** recursos CRUD com entidade, payload público e persistência própria tendem
