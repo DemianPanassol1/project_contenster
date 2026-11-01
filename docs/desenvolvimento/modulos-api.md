@@ -2,10 +2,16 @@
 
 ## Padrão observado
 
-Os recursos ficam em `apps/api/src/modules`, agrupados por domínio. Módulos como clientes, usuários,
-países, estados, cidades, perfis, módulos e funcionalidades usam uma estrutura local que pode conter
-`controller`, `service`, `repository`, `entities` e `dto/req` e `dto/res`, além de helpers quando
-necessários à responsabilidade do recurso.
+Os recursos do Slim Core ficam em `apps/api/src/modules/core`, agrupados por domínio. Módulos como
+clientes, usuários, países, estados, cidades, perfis, módulos e funcionalidades usam uma estrutura
+local que pode conter `controller`, `service`, `repository`, `entities` e `dto/req` e `dto/res`, além
+de helpers quando necessários à responsabilidade do recurso. `CoreModule` compõe esses domínios para
+o `AppModule`.
+
+Um recurso de uma aplicação derivada fica em `apps/api/src/modules/<domain>`, como irmão de `core`.
+Ele é composto explicitamente pela aplicação e não deve ser movido para o Core apenas por consumir
+identidade, autorização ou outra capacidade compartilhada. Consulte também o guia local em
+`apps/api/src/modules/README.md`.
 
 O `*.module.ts` compõe entidades, serviços e dependências. O controller adapta HTTP e declara os
 decorators de rota e permissão. O service coordena validação de domínio, contexto, transações e
@@ -23,7 +29,7 @@ a usar a estrutura abaixo. Ela é representativa do módulo de módulos administ
 envolve persistência.
 
 ```text
-apps/api/src/modules/<domain>/<resource>/
+apps/api/src/modules/core/<domain>/<resource>/
 ├── dto/
 │   ├── req/
 │   │   └── save-<resource>-request.ts
@@ -274,7 +280,7 @@ service e module, com o nome `<resource>.repository.ts`. Ele é um provider Nest
 `@InjectRepository` devem constar em `TypeOrmModule.forFeature` do mesmo módulo.
 
 ```text
-apps/api/src/modules/<domain>/<resource>/
+apps/api/src/modules/core/<domain>/<resource>/
 ├── entities/
 │   ├── <resource>.entity.ts
 │   └── <related-resource>.entity.ts      # somente quando a persistência precisar dela

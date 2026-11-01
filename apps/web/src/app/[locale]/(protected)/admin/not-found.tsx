@@ -1,4 +1,4 @@
-import { AdminNotFoundView } from '@/features/admin/access/AdminNotFoundView';
+import { AdminNotFoundView } from '@/features/core/admin/access/AdminNotFoundView';
 
 export default function AdminNotFound() {
   return <AdminNotFoundView />;

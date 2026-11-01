@@ -14,7 +14,7 @@ import {
 } from '@/common/decorators/require-permission.decorator';
 import type { ApiHttpRequest } from '@/common/types/http-context.type';
 import type { I18nTranslations } from '@/i18n/translations';
-import { AuthorizationResolverService } from '@/modules/authorization/authorization-resolver.service';
+import { AuthorizationResolverService } from '@/modules/core/authorization/authorization-resolver.service';
 
 @Injectable()
 export class RequirePermissionGuard implements CanActivate {

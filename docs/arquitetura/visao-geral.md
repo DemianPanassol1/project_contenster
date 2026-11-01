@@ -31,10 +31,14 @@ O ESLint deve preservar essas fronteiras.
 
 ## Organização por responsabilidades
 
-Na API, os recursos são agrupados em domínios como `identity`, `access-control`, `authorization`,
-`locations`, `media`, `observability`, `scheduling`, `system-admin` e `public-portal`. Essa divisão
-orienta a composição dos módulos; ela não autoriza dependências arbitrárias entre recursos.
+Na API, as capacidades da base ficam em `modules/core`, agrupadas em domínios como `identity`,
+`access-control`, `authorization`, `locations`, `media`, `observability`, `scheduling`,
+`system-admin` e `public-portal`. `CoreModule` as compõe para a aplicação. Um domínio de uma
+aplicação derivada fica como irmão de `core`, sem misturar sua implementação com a base. Essa
+divisão orienta a composição dos módulos; ela não autoriza dependências arbitrárias entre recursos.
 
-No Web, as superfícies principais estão em `features/admin`, `features/auth`, `features/public` e
-`features/system-admin`. Uma tela administrativa não transfere para o navegador a decisão de acesso
-ou o isolamento dos dados.
+No Web, as superfícies do Core estão em `features/core/admin`, `features/core/auth`,
+`features/core/public` e `features/core/system-admin`. Recursos reutilizáveis entre domínios ficam
+fora dessa árvore, em `features/shared`; uma aplicação derivada deve adicionar suas features como
+irmãs de `core`. Uma tela administrativa não transfere para o navegador a decisão de acesso ou o
+isolamento dos dados.

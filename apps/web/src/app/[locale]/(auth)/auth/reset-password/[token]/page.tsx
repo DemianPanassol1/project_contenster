@@ -1,4 +1,4 @@
-import { ResetPasswordView } from '@/features/auth';
+import { ResetPasswordView } from '@/features/core/auth';
 
 interface ResetPasswordPageProps {
   params: Promise<{ token: string }>;

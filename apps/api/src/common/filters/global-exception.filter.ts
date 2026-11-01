@@ -13,7 +13,7 @@ import type { ApiHttpRequest, ApiHttpResponse } from '@/common/types/http-contex
 import type { HttpExceptionResponse } from '@/common/types/http-exception-response.type';
 import type { I18nTranslations } from '@/i18n/translations';
 import { settings } from '@/infrastructure/config/app.config';
-import { RequestLogService } from '@/modules/observability/request-logs/request-log.service';
+import { RequestLogService } from '@/modules/core/observability/request-logs/request-log.service';
 import { createApiResponse } from '@/shared/responses/api-response.helper';
 import type { ApiError } from '@/shared/responses/api-response.types';
 

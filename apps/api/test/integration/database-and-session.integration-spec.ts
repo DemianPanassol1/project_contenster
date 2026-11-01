@@ -6,8 +6,8 @@ import {
   RequestLogAccessType,
   SessionContextType,
 } from '@contenster/shared';
-import { Profile } from '@/modules/access-control/profiles/entities/profiles.entity';
-import { SessionAuthenticationService } from '@/modules/identity/authentication/session/session-authentication.service';
+import { Profile } from '@/modules/core/access-control/profiles/entities/profiles.entity';
+import { SessionAuthenticationService } from '@/modules/core/identity/authentication/session/session-authentication.service';
 
 import { createTestApplication } from '../runner/app.factory';
 

@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 
-import { SystemAdminPortalSaveView } from '@/features/system-admin/portals';
+import { SystemAdminPortalSaveView } from '@/features/core/system-admin/portals';
 
 interface SystemAdminPortalUpdatePageProps {
   params: Promise<{ id: string }>;

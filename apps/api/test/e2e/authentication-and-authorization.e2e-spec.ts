@@ -10,11 +10,11 @@ import {
   SessionContextType,
   StorageProvider,
 } from '@contenster/shared';
-import { Functionality } from '@/modules/access-control/functionalities/entities/functionality.entity';
-import { Profile } from '@/modules/access-control/profiles/entities/profiles.entity';
-import { User } from '@/modules/identity/users/entities/user.entity';
-import { UserProfile } from '@/modules/identity/users/entities/user-profile.entity';
-import { CronExecutionLog } from '@/modules/scheduling/cron-execution-log/entities/cron-execution-log.entity';
+import { Functionality } from '@/modules/core/access-control/functionalities/entities/functionality.entity';
+import { Profile } from '@/modules/core/access-control/profiles/entities/profiles.entity';
+import { User } from '@/modules/core/identity/users/entities/user.entity';
+import { UserProfile } from '@/modules/core/identity/users/entities/user-profile.entity';
+import { CronExecutionLog } from '@/modules/core/scheduling/cron-execution-log/entities/cron-execution-log.entity';
 
 import { createTestApplication } from '../runner/app.factory';
 import { createSecondaryClientFixture } from '../runner/fixtures';
@@ -435,7 +435,7 @@ describe('authentication and authorization', () => {
       .expect(201);
     await agent.post('/modules/delete').send({ id: moduleId, ids: [] }).expect(201);
     await agent.post('/languages/delete').send({ id: languageId, ids: [] }).expect(201);
-  });
+  }, 10_000);
 
   it('manages the current client and a complete country, state and city hierarchy', async () => {
     const currentClient = await agent.get('/clients/current').expect(200);

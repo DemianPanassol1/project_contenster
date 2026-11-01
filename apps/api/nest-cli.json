@@ -10,7 +10,7 @@
         "watchAssets": true
       },
       {
-        "include": "modules/identity/authentication/templates/**/*.html",
+        "include": "modules/core/identity/authentication/templates/**/*.html",
         "watchAssets": true
       }
     ]

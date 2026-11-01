@@ -8,7 +8,8 @@ limites do pacote compartilhado possuem fontes próprias em [Módulos da API](./
 
 ## Organização da API
 
-Módulos ficam em `apps/api/src/modules` e devem preservar responsabilidade clara:
+Módulos core da aplicação ficam em `apps/api/src/modules/core`; módulos especializados de uma aplicação
+derivada ficam em diretórios irmãos de `core`. Todos devem preservar responsabilidade clara:
 
 - controller adapta HTTP;
 - service coordena regras de negócio e transações;

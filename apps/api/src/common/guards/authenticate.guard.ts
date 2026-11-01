@@ -8,8 +8,8 @@ import { I18nService } from 'nestjs-i18n';
 
 import type { ApiHttpRequest } from '@/common/types/http-context.type';
 import type { I18nTranslations } from '@/i18n/translations';
-import { readCookieValue } from '@/modules/identity/authentication/session/helpers/session-cookie.util';
-import { SessionAuthenticationService } from '@/modules/identity/authentication/session/session-authentication.service';
+import { readCookieValue } from '@/modules/core/identity/authentication/session/helpers/session-cookie.util';
+import { SessionAuthenticationService } from '@/modules/core/identity/authentication/session/session-authentication.service';
 
 @Injectable()
 export class AuthenticateGuard implements CanActivate {

@@ -1,16 +1,19 @@
 import { ActionType, CORE_FUNCTIONALITY_IDENTITIES } from '@contenster/shared';
-import { ActionSaveView, ActionsListView } from '@/features/admin/actions';
-import { CitiesListView, CitySaveView } from '@/features/admin/cities';
-import { ClientLogsListView } from '@/features/admin/client-logs';
-import { ClientStorageListView } from '@/features/admin/client-storage';
-import { ClientView } from '@/features/admin/clients';
-import { CountriesListView, CountrySaveView } from '@/features/admin/countries';
-import { FunctionalitiesListView, FunctionalitySaveView } from '@/features/admin/functionalities';
-import { LanguageSaveView, LanguagesListView } from '@/features/admin/languages';
-import { SystemModuleSaveView, SystemModulesListView } from '@/features/admin/modules';
-import { ProfileSaveView, ProfilesListView } from '@/features/admin/profiles';
-import { StateSaveView, StatesListView } from '@/features/admin/states';
-import { UserSaveView, UsersListView } from '@/features/admin/users';
+import { ActionSaveView, ActionsListView } from '@/features/core/admin/actions';
+import { CitiesListView, CitySaveView } from '@/features/core/admin/cities';
+import { ClientLogsListView } from '@/features/core/admin/client-logs';
+import { ClientStorageListView } from '@/features/core/admin/client-storage';
+import { ClientView } from '@/features/core/admin/clients';
+import { CountriesListView, CountrySaveView } from '@/features/core/admin/countries';
+import {
+  FunctionalitiesListView,
+  FunctionalitySaveView,
+} from '@/features/core/admin/functionalities';
+import { LanguageSaveView, LanguagesListView } from '@/features/core/admin/languages';
+import { SystemModuleSaveView, SystemModulesListView } from '@/features/core/admin/modules';
+import { ProfileSaveView, ProfilesListView } from '@/features/core/admin/profiles';
+import { StateSaveView, StatesListView } from '@/features/core/admin/states';
+import { UserSaveView, UsersListView } from '@/features/core/admin/users';
 
 import type { AdminFeatureBinding } from '../admin.registry.type';
 

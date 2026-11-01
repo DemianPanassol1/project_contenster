@@ -1,0 +1,15 @@
+import { Global, Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+
+import { ProfilePermission } from '@/modules/core/access-control/profiles/entities/profile-permission.entity';
+
+import { AuthorizationRepository } from './authorization.repository';
+import { AuthorizationResolverService } from './authorization-resolver.service';
+
+@Global()
+@Module({
+  imports: [TypeOrmModule.forFeature([ProfilePermission])],
+  providers: [AuthorizationRepository, AuthorizationResolverService],
+  exports: [AuthorizationResolverService],
+})
+export class AuthorizationModule {}

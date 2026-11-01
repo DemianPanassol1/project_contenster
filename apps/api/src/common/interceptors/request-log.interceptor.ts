@@ -10,7 +10,7 @@ import { type Observable, tap } from 'rxjs';
 
 import { SKIP_REQUEST_LOG_METADATA_KEY } from '@/common/decorators/skip-request-log.decorator';
 import type { ApiHttpRequest, ApiHttpResponse } from '@/common/types/http-context.type';
-import { RequestLogService } from '@/modules/observability/request-logs/request-log.service';
+import { RequestLogService } from '@/modules/core/observability/request-logs/request-log.service';
 
 @Injectable()
 export class RequestLogInterceptor implements NestInterceptor {

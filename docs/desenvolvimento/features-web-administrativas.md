@@ -1,7 +1,7 @@
 # Features Web administrativas
 
 Este documento define o padrão para implementar uma funcionalidade administrativa protegida no
-Web. A referência inicial é `apps/web/src/features/admin/modules`.
+Web. A referência inicial é `apps/web/src/features/core/admin/modules`.
 
 O padrão se aplica às funcionalidades registradas em `/admin/<functionality>`. Ele não se aplica
 às rotas públicas, autenticação ou painel global, que possuem providers, layouts e regras de
@@ -23,10 +23,10 @@ verdade para autorização, contexto de cliente e regras de negócio.
 ## Estrutura da feature
 
 **Convenção recomendada:** uma feature administrativa pode ficar em
-`apps/web/src/features/admin/<recurso>` com a seguinte estrutura representativa:
+`apps/web/src/features/core/admin/<recurso>` com a seguinte estrutura representativa:
 
 ```text
-features/admin/<recurso>/
+features/core/admin/<recurso>/
 ├── components/
 │   └── <Resource>Form.tsx
 ├── hooks/

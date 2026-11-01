@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 
 import { isFunctionalitySlug } from '@contenster/shared';
-import { AccessDeniedView } from '@/features/admin/access/AccessDeniedView';
+import { AccessDeniedView } from '@/features/core/admin/access/AccessDeniedView';
 import { hasPermissionAction } from '@/features/shared/navigation';
 import { getAdminFeatureBinding } from '@/registry/admin';
 import { getSession } from '@/services/actions';

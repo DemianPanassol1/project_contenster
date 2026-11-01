@@ -1,4 +1,4 @@
-import { ForgotPasswordView } from '@/features/auth';
+import { ForgotPasswordView } from '@/features/core/auth';
 
 export default function ForgotPasswordPage() {
   return <ForgotPasswordView />;

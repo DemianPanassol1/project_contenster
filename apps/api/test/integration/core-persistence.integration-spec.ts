@@ -1,12 +1,12 @@
 import type { INestApplication } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 
-import { Functionality } from '@/modules/access-control/functionalities/entities/functionality.entity';
-import { ProfilePermission } from '@/modules/access-control/profiles/entities/profile-permission.entity';
-import { Profile } from '@/modules/access-control/profiles/entities/profiles.entity';
-import { Action } from '@/modules/authorization/actions/entities/action.entity';
-import { User } from '@/modules/identity/users/entities/user.entity';
-import { UserProfile } from '@/modules/identity/users/entities/user-profile.entity';
+import { Functionality } from '@/modules/core/access-control/functionalities/entities/functionality.entity';
+import { ProfilePermission } from '@/modules/core/access-control/profiles/entities/profile-permission.entity';
+import { Profile } from '@/modules/core/access-control/profiles/entities/profiles.entity';
+import { Action } from '@/modules/core/authorization/actions/entities/action.entity';
+import { User } from '@/modules/core/identity/users/entities/user.entity';
+import { UserProfile } from '@/modules/core/identity/users/entities/user-profile.entity';
 
 import { createTestApplication } from '../runner/app.factory';
 import { createSecondaryClientFixture } from '../runner/fixtures';

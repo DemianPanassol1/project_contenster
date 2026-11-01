@@ -14,17 +14,7 @@ import { settings, WORKSPACE_ROOT_PATH } from '@/infrastructure/config/app.confi
 import { DatabaseModule } from '@/infrastructure/database/database.module';
 import { HealthController } from '@/infrastructure/health/health.controller';
 import { RedisModule } from '@/infrastructure/redis';
-import { AccessControlModule } from '@/modules/access-control/access-control.module';
-import { ActionsModule } from '@/modules/authorization/actions/actions.module';
-import { AuthorizationModule } from '@/modules/authorization/authorization.module';
-import { CommunicationModule } from '@/modules/communication/communication.module';
-import { IdentityModule } from '@/modules/identity/identity.module';
-import { LocationsModule } from '@/modules/locations/locations.module';
-import { MediaModule } from '@/modules/media/media.module';
-import { ObservabilityModule } from '@/modules/observability/observability.module';
-import { PublicPortalModule } from '@/modules/public-portal';
-import { SchedulingModule } from '@/modules/scheduling/scheduling.module';
-import { SystemAdminModule } from '@/modules/system-admin/system-admin.module';
+import { CoreModule } from '@/modules/core/core.module';
 
 const createUploadsServeRoot = (): string => {
   const baseUrl = settings.UPLOADS_PUBLIC_BASE_URL;
@@ -62,17 +52,7 @@ const setUploadResponseHeaders = (response: ServerResponse, filePath: string): v
     ScheduleModule.forRoot(),
     DatabaseModule,
     RedisModule,
-    ObservabilityModule,
-    MediaModule,
-    IdentityModule,
-    AccessControlModule,
-    AuthorizationModule,
-    ActionsModule,
-    CommunicationModule,
-    LocationsModule,
-    SchedulingModule,
-    SystemAdminModule,
-    PublicPortalModule,
+    CoreModule,
   ],
   controllers: [HealthController],
   providers: [

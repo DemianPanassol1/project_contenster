@@ -1,4 +1,4 @@
-import { AdminHomeView } from '@/features/admin/home/AdminHomeView';
+import { AdminHomeView } from '@/features/core/admin/home/AdminHomeView';
 
 export default function AdminPage() {
   return <AdminHomeView />;
