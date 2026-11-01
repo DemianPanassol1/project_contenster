@@ -7,6 +7,7 @@ import { CloudflareR2StorageService } from './cloudflare-r2-storage.service';
 import { GoogleCloudStorageService } from './google-cloud-storage.service';
 import { LocalStorageService } from './local-storage.service';
 import { StorageService } from './storage.service';
+import { StorageCredentialsRepository } from './storage-credentials.repository';
 
 @Module({
   imports: [TypeOrmModule.forFeature([StorageProviderCredential])],
@@ -14,6 +15,7 @@ import { StorageService } from './storage.service';
     CloudflareR2StorageService,
     GoogleCloudStorageService,
     LocalStorageService,
+    StorageCredentialsRepository,
     StorageService,
   ],
   exports: [LocalStorageService, StorageService],

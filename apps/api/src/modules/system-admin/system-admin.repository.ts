@@ -1,9 +1,14 @@
 import type { AppOption, PaginateRequest } from '@contenster/shared';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { EntityManager, In, Repository } from 'typeorm';
+import { type DeepPartial, EntityManager, In, Repository } from 'typeorm';
 
+import { Functionality } from '@/modules/access-control/functionalities/entities/functionality.entity';
+import { SystemModule } from '@/modules/access-control/modules/entities/system-module.entity';
+import { ProfilePermission } from '@/modules/access-control/profiles/entities/profile-permission.entity';
 import { Profile } from '@/modules/access-control/profiles/entities/profiles.entity';
+import { Action } from '@/modules/authorization/actions/entities/action.entity';
+import { Language } from '@/modules/communication/languages/entities/language.entity';
 import { Client } from '@/modules/identity/clients/entities/client.entity';
 import { User } from '@/modules/identity/users/entities/user.entity';
 import { UserProfile } from '@/modules/identity/users/entities/user-profile.entity';
@@ -22,10 +27,12 @@ const CLIENT_LIST_FIELDS = {
 @Injectable()
 export class SystemAdminRepository {
   constructor(
+    @InjectRepository(Action) private readonly actions: Repository<Action>,
     @InjectRepository(Client) private readonly clients: Repository<Client>,
     @InjectRepository(File) private readonly files: Repository<File>,
     @InjectRepository(CronExecutionLog) private readonly jobLogs: Repository<CronExecutionLog>,
     @InjectRepository(RequestLog) private readonly requestLogs: Repository<RequestLog>,
+    @InjectRepository(Language) private readonly languages: Repository<Language>,
     @InjectRepository(User) private readonly users: Repository<User>,
     @InjectRepository(UserProfile) private readonly userProfiles: Repository<UserProfile>,
   ) {}
@@ -67,8 +74,50 @@ export class SystemAdminRepository {
     return this.clients.findOne({ where: { id }, relations: { availableLanguageLinks: true } });
   }
 
+  findLanguagesByIds(ids: number[], manager?: EntityManager): Promise<Language[]> {
+    const repository = manager?.getRepository(Language) ?? this.languages;
+
+    return repository.find({ where: { id: In(ids) } });
+  }
+
   saveClient(client: Client) {
     return this.clients.save(client);
+  }
+
+  saveClientInTransaction(client: DeepPartial<Client>, manager: EntityManager): Promise<Client> {
+    return manager.save(Client, client);
+  }
+
+  saveModuleInTransaction(
+    module: DeepPartial<SystemModule>,
+    manager: EntityManager,
+  ): Promise<SystemModule> {
+    return manager.save(SystemModule, module);
+  }
+
+  saveFunctionalityInTransaction(
+    functionality: DeepPartial<Functionality>,
+    manager: EntityManager,
+  ): Promise<Functionality> {
+    return manager.save(Functionality, functionality);
+  }
+
+  saveProfileInTransaction(
+    profile: DeepPartial<Profile>,
+    manager: EntityManager,
+  ): Promise<Profile> {
+    return manager.save(Profile, profile);
+  }
+
+  findActionsInTransaction(manager: EntityManager): Promise<Action[]> {
+    return manager.find(Action);
+  }
+
+  saveProfilePermissionsInTransaction(
+    permissions: DeepPartial<ProfilePermission>[],
+    manager: EntityManager,
+  ): Promise<ProfilePermission[]> {
+    return manager.save(ProfilePermission, permissions);
   }
 
   softDeleteClient(client: Client) {

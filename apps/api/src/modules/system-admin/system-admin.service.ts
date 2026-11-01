@@ -1,7 +1,6 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { I18nService } from 'nestjs-i18n';
-import { DataSource, type DeepPartial, In, Repository } from 'typeorm';
+import { DataSource } from 'typeorm';
 
 import {
   CORE_FUNCTIONALITY_CATALOG,
@@ -16,12 +15,8 @@ import {
 } from '@contenster/shared';
 import type { I18nTranslations } from '@/i18n/translations';
 import { serializeApplicationDateTime } from '@/infrastructure/date-time';
-import { Functionality } from '@/modules/access-control/functionalities/entities/functionality.entity';
-import { SystemModule } from '@/modules/access-control/modules/entities/system-module.entity';
-import { ProfilePermission } from '@/modules/access-control/profiles/entities/profile-permission.entity';
-import { Profile } from '@/modules/access-control/profiles/entities/profiles.entity';
-import { Action } from '@/modules/authorization/actions/entities/action.entity';
-import { Language } from '@/modules/communication/languages/entities/language.entity';
+import type { Functionality } from '@/modules/access-control/functionalities/entities/functionality.entity';
+import type { SystemModule } from '@/modules/access-control/modules/entities/system-module.entity';
 import { SessionAuthenticationService } from '@/modules/identity/authentication/session/session-authentication.service';
 import { SessionSynchronizationService } from '@/modules/identity/authentication/session/session-synchronization.service';
 import type { SaveClientRequestDto } from '@/modules/identity/clients/dto/req/save-client.request.dto';
@@ -48,7 +43,6 @@ import { SystemAdminRepository } from './system-admin.repository';
 @Injectable()
 export class SystemAdminService {
   constructor(
-    @InjectRepository(Language) private readonly languages: Repository<Language>,
     private readonly dataSource: DataSource,
     private readonly repository: SystemAdminRepository,
     private readonly i18n: I18nService<I18nTranslations>,
@@ -82,9 +76,9 @@ export class SystemAdminService {
       throw this.clientNotFound();
     }
 
-    const languages = await this.languages.find({
-      where: { id: In(request.languageLinks.map(({ languageId }) => languageId)) },
-    });
+    const languages = await this.repository.findLanguagesByIds(
+      request.languageLinks.map(({ languageId }) => languageId),
+    );
 
     if (languages.length !== request.languageLinks.length) {
       throw this.clientLanguageNotFound();
@@ -135,7 +129,7 @@ export class SystemAdminService {
         ...new Set(request.client.languageLinks.map(({ languageId }) => languageId)),
       ];
 
-      const languages = await manager.find(Language, { where: { id: In(languageIds) } });
+      const languages = await this.repository.findLanguagesByIds(languageIds, manager);
 
       if (languages.length !== languageIds.length) {
         throw this.clientLanguageNotFound();
@@ -154,27 +148,33 @@ export class SystemAdminService {
         ...clientData
       } = request.client;
 
-      const client = await manager.save(Client, {
-        ...clientData,
-        city: cityId === null ? null : { id: cityId },
-        image: imageId === null ? null : { id: imageId },
-        availableLanguageLinks: request.client.languageLinks.map(({ languageId }) => ({
-          language: languageById.get(languageId)!,
-        })),
-      });
+      const client = await this.repository.saveClientInTransaction(
+        {
+          ...clientData,
+          city: cityId === null ? null : { id: cityId },
+          image: imageId === null ? null : { id: imageId },
+          availableLanguageLinks: request.client.languageLinks.map(({ languageId }) => ({
+            language: languageById.get(languageId)!,
+          })),
+        },
+        manager,
+      );
 
       const moduleByKey = new Map<string, SystemModule>();
 
       for (const item of request.modules) {
-        const module = await manager.save(SystemModule, {
-          client,
-          order: item.order,
-          isActive: true,
-          translations: item.translations.map((translation) => ({
-            ...translation,
-            language: languageByCode.get(translation.locale)!,
-          })),
-        });
+        const module = await this.repository.saveModuleInTransaction(
+          {
+            client,
+            order: item.order,
+            isActive: true,
+            translations: item.translations.map((translation) => ({
+              ...translation,
+              language: languageByCode.get(translation.locale)!,
+            })),
+          },
+          manager,
+        );
 
         moduleByKey.set(item.key, module);
       }
@@ -201,44 +201,50 @@ export class SystemAdminService {
           );
         }
 
-        const functionality = await manager.save(Functionality, {
-          client,
-          module,
-          parent: item.parentSlug === null ? null : functionalityBySlug.get(item.parentSlug)!,
-          slug: item.slug,
-          icon: item.icon,
-          order: item.order,
-          isNavigationGroup: item.isNavigationGroup,
-          isActive: true,
-          translations: item.translations.map((translation) => ({
-            ...translation,
-            language: languageByCode.get(translation.locale)!,
-          })),
-          enabledLanguageLinks: item.languageIds.map((id) => ({
+        const functionality = await this.repository.saveFunctionalityInTransaction(
+          {
             client,
-            language: languageById.get(id)!,
-          })),
-        });
+            module,
+            parent: item.parentSlug === null ? null : functionalityBySlug.get(item.parentSlug)!,
+            slug: item.slug,
+            icon: item.icon,
+            order: item.order,
+            isNavigationGroup: item.isNavigationGroup,
+            isActive: true,
+            translations: item.translations.map((translation) => ({
+              ...translation,
+              language: languageByCode.get(translation.locale)!,
+            })),
+            enabledLanguageLinks: item.languageIds.map((id) => ({
+              client,
+              language: languageById.get(id)!,
+            })),
+          },
+          manager,
+        );
 
         functionalityBySlug.set(item.slug, functionality);
       }
 
-      const profile = await manager.save(Profile, {
-        client,
-        isActive: true,
-        isAdmin: true,
-        translations: request.adminProfile.translations.map((translation) => ({
-          ...translation,
-          language: languageByCode.get(translation.locale)!,
-        })),
-      });
+      const profile = await this.repository.saveProfileInTransaction(
+        {
+          client,
+          isActive: true,
+          isAdmin: true,
+          translations: request.adminProfile.translations.map((translation) => ({
+            ...translation,
+            language: languageByCode.get(translation.locale)!,
+          })),
+        },
+        manager,
+      );
 
-      const actions = await manager.find(Action);
-      const permissions: DeepPartial<ProfilePermission>[] = [
-        ...functionalityBySlug.values(),
-      ].flatMap((functionality) => actions.map((action) => ({ profile, functionality, action })));
+      const actions = await this.repository.findActionsInTransaction(manager);
+      const permissions = [...functionalityBySlug.values()].flatMap((functionality) =>
+        actions.map((action) => ({ profile, functionality, action })),
+      );
 
-      await manager.save(ProfilePermission, permissions);
+      await this.repository.saveProfilePermissionsInTransaction(permissions, manager);
 
       return client;
     });

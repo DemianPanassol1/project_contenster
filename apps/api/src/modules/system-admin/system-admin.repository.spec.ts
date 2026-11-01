@@ -20,6 +20,8 @@ describe('SystemAdminRepository', () => {
       {} as never,
       {} as never,
       {} as never,
+      {} as never,
+      {} as never,
     );
 
     const result = await repository.replaceAccessLinks(

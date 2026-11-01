@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { Profile } from '@/modules/access-control/profiles/entities/profiles.entity';
+import { Action } from '@/modules/authorization/actions/entities/action.entity';
 import { Language } from '@/modules/communication/languages/entities/language.entity';
 import { Client } from '@/modules/identity/clients/entities/client.entity';
 import { User } from '@/modules/identity/users/entities/user.entity';
@@ -20,6 +21,7 @@ import { SystemAdminService } from './system-admin.service';
     PortalsModule,
     TypeOrmModule.forFeature([
       Client,
+      Action,
       File,
       CronExecutionLog,
       Language,

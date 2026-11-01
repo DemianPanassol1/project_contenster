@@ -5,15 +5,12 @@ import {
   S3Client,
 } from '@aws-sdk/client-s3';
 import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { I18nService } from 'nestjs-i18n';
-import { Repository } from 'typeorm';
 
 import { StorageProvider } from '@contenster/shared';
 import type { I18nTranslations } from '@/i18n/translations';
 import { decryptStorageCredential } from '@/infrastructure/security/storage-credential-crypto.util';
 import type { StorageProviderConfiguration } from '@/modules/media/files/entities/storage-provider-configuration.entity';
-import { StorageProviderCredential } from '@/modules/media/files/entities/storage-provider-credential.entity';
 
 import type {
   StorageCredentialOverride,
@@ -32,6 +29,7 @@ import {
   normalizeCloudflareR2Endpoint,
   validateStorageIdentifier,
 } from './utils/storage-path.util';
+import { StorageCredentialsRepository } from './storage-credentials.repository';
 
 interface R2Credentials {
   accessKeyId: string;
@@ -41,8 +39,7 @@ interface R2Credentials {
 @Injectable()
 export class CloudflareR2StorageService {
   constructor(
-    @InjectRepository(StorageProviderCredential)
-    private readonly credentials: Repository<StorageProviderCredential>,
+    private readonly storageCredentialsRepository: StorageCredentialsRepository,
     private readonly i18n: I18nService<I18nTranslations>,
   ) {}
 
@@ -127,9 +124,8 @@ export class CloudflareR2StorageService {
       return { accessKeyId: override.accessKeyId, secretAccessKey: override.secretAccessKey };
     }
 
-    const credential = await this.credentials.findOne({
-      where: { storageConfiguration: { id: configurationId } },
-    });
+    const credential =
+      await this.storageCredentialsRepository.findByConfigurationId(configurationId);
 
     if (!credential?.accessKeyIdEncrypted || !credential.secretAccessKeyEncrypted) {
       throw new BadRequestException(this.i18n.t('errors.storage.credentials_required'));
