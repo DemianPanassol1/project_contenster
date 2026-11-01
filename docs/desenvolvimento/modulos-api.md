@@ -128,6 +128,205 @@ convertidos por DTOs; criação e edição podem compartilhar uma rota de salvam
 autorização diferencia a ação pelo identificador. Esse padrão não substitui a investigação do módulo
 equivalente mais próximo.
 
+## Services: fluxo, reuso e legibilidade
+
+**Regra obrigatória:** o service coordena o caso de uso. Ele obtém o contexto confiável recebido do
+controller, carrega relações, verifica invariantes, monta o agregado para persistência, converte a
+resposta e dispara efeitos técnicos necessários. Query SQL, paginação e detalhes de `QueryBuilder`
+permanecem no repository.
+
+Antes de criar lógica nova, procure primeiro helpers em `apps/api/src/shared` e `apps/shared`. O
+checkout já possui `getCurrentLocale`, `resolveTranslation`, `resolveTranslationLanguages`,
+`toResponseDto`, `buildPaginationMeta`, `normalizeDeleteRecordIds` e contratos compartilhados.
+Reimplementar esses comportamentos em um módulo cria divergência de validação, fallback, paginação
+ou serialização.
+
+**Convenção recomendada de espaçamento:** separe constantes de módulo, blocos de dependências,
+métodos e etapas de um método por linhas em branco. Dentro de um fluxo, consulta, verificação,
+transformação, persistência e retorno devem formar blocos visuais distintos. `if`, `else`, `for`,
+`while` e retornos de guarda não devem ficar amontoados com a instrução anterior ou seguinte quando
+isso esconder uma mudança de etapa.
+
+```typescript
+async getById(clientId: number, id: number): Promise<GetExampleByIdResponseDto> {
+  const entity = await this.repository.findById(clientId, id);
+
+  if (!entity) {
+    throw new NotFoundException(this.i18n.t('errors.common.record_not_found'));
+  }
+
+  const locale = getCurrentLocale();
+
+  return toResponseDto(GetExampleByIdResponseDto, this.toListItem(entity, locale));
+}
+```
+
+O exemplo é ilustrativo, mas reflete o fluxo usado pelos services administrativos. A linha em branco
+deve separar responsabilidades reais, sem fragmentar uma operação coesa em métodos artificiais.
+
+### Abstrações proporcionais
+
+**Regra obrigatória:** não crie helpers, classes, serviços auxiliares ou wrappers genéricos apenas
+para reduzir linhas ou extrair um trecho usado uma vez. Prefira um fluxo local e legível quando a
+etapa não possui responsabilidade independente.
+
+Uma função privada é adequada quando expressa uma responsabilidade reconhecível ou evita repetição
+real — por exemplo, `getEntityByIdOrFail` e `toListItem` nos módulos administrativos. Ela não é
+justificada para encapsular uma única atribuição, uma única chamada de repository ou um `if` que
+permanece mais claro no fluxo do caso de uso. Antes de extrair, procure equivalente no módulo,
+`apps/api/src/shared` e `apps/shared`.
+
+## Listagem, salvamento e traduções
+
+### Listagem paginada no service
+
+O service solicita o locale uma vez, delega a consulta ao repository e retorna itens serializados
+com metadados. **Regra obrigatória:** não calcule `page`, `perPage` ou `totalPages` manualmente;
+use `buildPaginationMeta`.
+
+```typescript
+async list(
+  clientId: number,
+  request: PaginateRequestDto,
+): Promise<PaginatedBody<ExampleListItemResponseDto>> {
+  const locale = getCurrentLocale();
+  const [items, total] = await this.repository.list(clientId, request, locale);
+
+  return {
+    items: toResponseDto(
+      ExampleListItemResponseDto,
+      items.map((item) => this.toListItem(item, locale)),
+    ),
+    meta: buildPaginationMeta(request, total),
+  };
+}
+```
+
+O `toListItem` é apropriado quando a mesma projeção é reutilizada por listagem e detalhe. Se a
+projeção for consumida uma única vez e não melhorar a leitura, mantenha-a no método.
+
+### Salvamento e traduções
+
+Em um `save`, valide primeiro o recurso existente quando houver `id`, depois resolva relações e
+idiomas, monte o agregado, persista e retorne a leitura normalizada. Para traduções, o request leva
+`id: number | null`: identificador existente atualiza o filho; `null` cria um novo. Não reconstrua
+IDs por locale no repository nem substitua a coleção por `DELETE` global seguido de inserções.
+
+```typescript
+const languages = await this.repository.findLanguagesByCodes(
+  request.translations.map((translation) => translation.locale),
+);
+
+const languageByCode = resolveTranslationLanguages(
+  request.translations.map((translation) => translation.locale),
+  languages,
+);
+
+const entity = await this.repository.save({
+  ...(request.id === null ? {} : { id: request.id }),
+  client: { id: clientId },
+  translations: request.translations.map((translation) => ({
+    ...(translation.id === null ? {} : { id: translation.id }),
+    language: languageByCode.get(translation.locale)!,
+    name: translation.name,
+  })),
+});
+
+return this.getById(clientId, entity.id);
+```
+
+O trecho é reduzido a partir do salvamento de módulos. Relações, campos e efeitos posteriores
+variam por recurso; por exemplo, mudanças que alteram autorização ou apresentação de sessão podem
+exigir a sincronização central de sessões já existente.
+
+### Resolução de traduções no service
+
+Use `getCurrentLocale()` para obter o idioma da requisição e `resolveTranslation()` para apresentar
+um campo localizado, preservando o fallback centralizado. Não repita a busca de tradução nem escolha
+manualmente o primeiro item da coleção.
+
+```typescript
+private toListItem(entity: Example, locale: string) {
+  return {
+    id: entity.id,
+    name: resolveTranslation(entity.translations, locale, 'name'),
+    description: resolveTranslation(entity.translations, locale, 'description'),
+  };
+}
+```
+
+Para relacionamentos localizados, carregue no repository as traduções necessárias e aplique o mesmo
+helper no service. A listagem de cidades é a referência para cidade, estado e país traduzidos.
+
+## Repositories: consultas e persistência
+
+**Regra obrigatória:** repositories concentram `QueryBuilder`, relações necessárias para a consulta,
+whitelist de campos, paginação, filtros, ordenação e comandos de persistência. Eles não decidem
+exceção de negócio, autorização HTTP ou mensagem localizada; essas responsabilidades pertencem ao
+service e ao contexto autenticado.
+
+### Paginação, filtros e ordenação
+
+Para uma listagem paginada, declare um `QueryFieldMap` local, crie a query com seus joins e delegue
+as operações do contrato a `applyPaginatedQueryBuilder`. Os nomes expostos ao consumidor são as
+chaves da whitelist, não expressões SQL recebidas pelo request.
+
+```typescript
+const LIST_FIELDS: QueryFieldMap = {
+  id: 'example.id',
+  isActive: 'example.eh_ativo',
+  name: nameExpression,
+};
+
+return applyPaginatedQueryBuilder<Example>(query, request, {
+  defaultSort: [{ field: 'name', direction: 'asc' }],
+  fields: LIST_FIELDS,
+  tieBreaker: 'example.id',
+});
+```
+
+O helper aceita somente campos declarados, ignora filtros e ordenações não permitidos, aplica
+parâmetros vinculados, usa paginação baseada em página um e acrescenta o critério estável indicado
+em `tieBreaker`. Não replique essa lógica com `skip`, `take`, `andWhere` e `orderBy` ad hoc em cada
+repository.
+
+### Campos traduzidos em filtros e ordenação
+
+Quando um campo de lista é localizado, a expressão usada em `LIST_FIELDS` deve ser produzida por
+`buildTranslatedLabelExpression`, e a query deve receber
+`buildTranslationQueryParameters(locale)`. Assim, o mesmo valor localizado pode ser exibido,
+filtrado e ordenado sem SQL copiado entre módulos.
+
+```typescript
+const nameExpression = buildTranslatedLabelExpression({
+  fieldColumn: 'nome',
+  ownerColumn: 'modulo_id',
+  ownerExpression: 'module.id',
+  table: 'modulos_traducoes',
+  uniqueAlias: 'module_name',
+});
+
+const query = this.modules
+  .createQueryBuilder('module')
+  .leftJoinAndSelect('module.translations', 'translations')
+  .leftJoinAndSelect('translations.language', 'translationLanguage')
+  .where('module.cliente_id = :clientId', { clientId })
+  .setParameters(buildTranslationQueryParameters(locale));
+```
+
+Os identificadores de tabela, coluna e alias devem corresponder à entidade e migration reais. Para
+relações traduzidas adicionais, como estado e país na listagem de cidades, carregue cada coleção e
+linguagem necessária antes de resolver seus campos; não suponha que o join da tradução principal
+cubra suas relações.
+
+### Persistência do agregado
+
+O repository recebe o agregado já validado pelo service e o persiste com o mecanismo existente,
+como `Repository.save`. Ele não consulta novamente a coleção filha para deduzir identidade, não
+aplica regra de domínio em silêncio e não substitui filhos por exclusão global. Quando uma operação
+envolver múltiplos agregados ou uma invariante multi-registro, o service deve coordenar a transação
+e compartilhar o `EntityManager` apropriado.
+
 ## Persistência e testes
 
 Migrations são append-only após aplicação e `synchronize` permanece desativado. Use transação quando
