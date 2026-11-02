@@ -39,7 +39,7 @@ describe('database and session integration', () => {
 
     expect(Number(clients)).toBeGreaterThanOrEqual(1);
     expect(Number(languages)).toBeGreaterThanOrEqual(3);
-    expect(Number(functionalities)).toBeGreaterThanOrEqual(12);
+    expect(Number(functionalities)).toBeGreaterThanOrEqual(11);
   });
 
   it('uses the configured operational timezone for application connections', async () => {

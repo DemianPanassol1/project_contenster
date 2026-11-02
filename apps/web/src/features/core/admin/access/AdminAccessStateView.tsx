@@ -41,7 +41,7 @@ export function AdminAccessStateView({
           borderRadius: 2,
           color: 'text.primary',
           display: 'grid',
-          gap: 2,
+          gap: '1.5rem 2rem',
           maxWidth: 560,
           p: 3,
         }}

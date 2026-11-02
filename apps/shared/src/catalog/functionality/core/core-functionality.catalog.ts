@@ -1,6 +1,7 @@
 import type { CoreFunctionalityDefinition } from '../functionality-catalog.type.js';
 
 export const CORE_FUNCTIONALITY_IDENTITIES = {
+  accessModels: 'access-models',
   cities: 'cities',
   clientLogs: 'client-logs',
   clientStorage: 'client-storage',
@@ -14,6 +15,7 @@ export const CORE_FUNCTIONALITY_IDENTITIES = {
 } as const;
 
 export const CORE_FUNCTIONALITY_CATALOG = [
+  { slug: CORE_FUNCTIONALITY_IDENTITIES.accessModels },
   { slug: CORE_FUNCTIONALITY_IDENTITIES.clients },
   { slug: CORE_FUNCTIONALITY_IDENTITIES.clientStorage },
   { slug: CORE_FUNCTIONALITY_IDENTITIES.clientLogs },

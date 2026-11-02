@@ -114,7 +114,13 @@ export class FunctionalityService {
     request: SaveFunctionalityRequestDto,
   ): Promise<GetFunctionalityByIdResponseDto> {
     if (request.id !== null) {
-      await this.getEntityByIdOrFail(clientId, request.id);
+      const current = await this.getEntityByIdOrFail(clientId, request.id);
+
+      if (current.slug !== request.slug) {
+        throw new ConflictException(
+          this.i18n.t('errors.access_control.functionality_slug_immutable'),
+        );
+      }
     }
 
     const module = await this.repository.findModule(clientId, request.moduleId);

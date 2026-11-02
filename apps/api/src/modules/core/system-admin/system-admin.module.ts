@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 
 import { AccessLinksModule } from './access-links/access-links.module';
+import { SystemAdminAccessModelsModule } from './access-models/access-models.module';
 import { SystemAdminActionsModule } from './actions/actions.module';
 import { ClientsModule } from './clients/clients.module';
 import { FilesModule } from './files/files.module';
@@ -14,6 +15,7 @@ import { SystemAdminController } from './system-admin.controller';
 @Module({
   imports: [
     AccessLinksModule,
+    SystemAdminAccessModelsModule,
     SystemAdminActionsModule,
     ClientsModule,
     FilesModule,

@@ -1,4 +1,21 @@
 {
+  "access_models": {
+    "not_found": "Access model not found.",
+    "inactive": "Access model is inactive.",
+    "admin_profile_invalid": "The client must have exactly one active administrative profile.",
+    "stale_preview": "Access model preview is stale.",
+    "invalid_selection": "Invalid access model change selection.",
+    "module_translation_missing": "A module has no translation enabled for the client.",
+    "module_not_selected": "The functionality module was not selected for synchronization.",
+    "functionality_translation_missing": "A functionality has no translation enabled for the client.",
+    "parent_unavailable": "The selected functionality parent is unavailable.",
+    "invalid_structure": "Invalid access model structure.",
+    "invalid_module": "Invalid module structure.",
+    "invalid_functionality": "Unknown or duplicate functionality.",
+    "invalid_hierarchy": "Invalid functionality hierarchy.",
+    "duplicate_module_key": "Duplicate access model module key.",
+    "invalid_delete": "Invalid delete request."
+  },
   "common": {
     "internal_server_error": "An internal server error occurred.",
     "record_not_found": "Record not found."
@@ -32,6 +49,7 @@
     "superuser_access_denied": "Superuser access is not available for this session."
   },
   "access_control": {
+    "functionality_slug_immutable": "The functionality slug cannot be changed.",
     "module_has_functionalities": "The module cannot be deleted because it has related functionalities.",
     "admin_profile_immutable": "The administrative profile must remain active and does not allow permission changes.",
     "admin_profile_cannot_be_deleted": "The administrative profile cannot be deleted.",

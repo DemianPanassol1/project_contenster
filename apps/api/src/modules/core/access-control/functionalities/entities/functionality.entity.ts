@@ -73,10 +73,14 @@ export class Functionality {
 
   @OneToMany(() => FunctionalityTranslation, (translation) => translation.functionality, {
     cascade: true,
+    orphanedRowAction: 'delete',
   })
   declare translations: FunctionalityTranslation[];
 
-  @OneToMany(() => FunctionalityClientLanguage, (link) => link.functionality, { cascade: true })
+  @OneToMany(() => FunctionalityClientLanguage, (link) => link.functionality, {
+    cascade: true,
+    orphanedRowAction: 'delete',
+  })
   declare enabledLanguageLinks: FunctionalityClientLanguage[];
 
   @OneToMany(() => ProfilePermission, (permission) => permission.functionality)

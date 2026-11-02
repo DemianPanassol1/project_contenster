@@ -17,7 +17,7 @@ export function SystemAdminRequestLogDetailsContent({ log }: { log: SystemAdminR
   const emptyLabel = t('not_available');
 
   return (
-    <Box sx={{ display: 'grid', gap: 2, maxHeight: '70vh', overflow: 'auto', pr: 0.5 }}>
+    <Box sx={{ display: 'grid', gap: '1.5rem 2rem', maxHeight: '70vh', overflow: 'auto', pr: 0.5 }}>
       <LogSection title={t('sections.identification')}>
         <LogField emptyLabel={emptyLabel} label={t('fields.internal_id')} value={log.id} />
         <LogField emptyLabel={emptyLabel} label={t('fields.request_id')} value={log.requestId} />

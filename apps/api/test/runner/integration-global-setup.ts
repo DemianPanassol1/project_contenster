@@ -12,6 +12,8 @@ import { BootstrapRemainingCoreFunctionalities1792136000000 } from '@/database/m
 import { AddSystemAdministration1792137000000 } from '@/database/migrations/1792137000000-add-system-administration';
 import { AddPortals1792138000000 } from '@/database/migrations/1792138000000-add-portals';
 import { AddPortalTextPalette1792139000000 } from '@/database/migrations/1792139000000-add-portal-text-palette';
+import { AddAccessModels1792140000000 } from '@/database/migrations/1792140000000-add-access-models';
+import { AddAccessModelFunctionalityState1792141000000 } from '@/database/migrations/1792141000000-add-access-model-functionality-state';
 
 const testRootPath = resolve(fileURLToPath(new URL('.', import.meta.url)), '..', '..');
 const expectedDatabaseName = 'contenster_slim_core_test';
@@ -54,6 +56,8 @@ const createDataSource = (): DataSource => {
       AddSystemAdministration1792137000000,
       AddPortals1792138000000,
       AddPortalTextPalette1792139000000,
+      AddAccessModels1792140000000,
+      AddAccessModelFunctionalityState1792141000000,
     ],
     migrationsRun: false,
     password: process.env.DATABASE_PASSWORD,
@@ -97,7 +101,7 @@ const assertBootstrapBaseline = async (): Promise<void> => {
       'SELECT (SELECT COUNT(*) FROM clientes)::text AS clients, (SELECT COUNT(*) FROM idiomas)::text AS languages, (SELECT COUNT(*) FROM funcionalidades)::text AS functionalities',
     );
 
-    if (clients !== '1' || languages !== '3' || functionalities !== '10') {
+    if (clients !== '1' || languages !== '3' || functionalities !== '11') {
       throw new Error('Bootstrap migrations did not create the expected Slim Core baseline.');
     }
   } finally {

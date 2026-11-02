@@ -1,4 +1,10 @@
 export const SYSTEM_ADMIN_ROUTES = {
+  DELETE_ACCESS_MODELS: 'system-admin/access-models/delete',
+  GET_ACCESS_MODEL: (id: number) => `system-admin/access-models/${id}`,
+  POST_ACCESS_MODEL: 'system-admin/access-models',
+  POST_ACCESS_MODEL_APPLY: 'system-admin/access-models/apply',
+  POST_ACCESS_MODEL_LIST: 'system-admin/access-models/list',
+  POST_ACCESS_MODEL_PREVIEW: 'system-admin/access-models/preview',
   DELETE_ACTIONS: 'system-admin/actions/delete',
   DELETE_CITIES: 'system-admin/cities/delete',
   DELETE_COUNTRIES: 'system-admin/countries/delete',

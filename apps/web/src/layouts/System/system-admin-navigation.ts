@@ -12,7 +12,8 @@ export interface SystemAdminNavigationItem {
     | '/system-admin/actions'
     | '/system-admin/countries'
     | '/system-admin/states'
-    | '/system-admin/cities';
+    | '/system-admin/cities'
+    | '/system-admin/access-models';
   icon: IconName;
   translationKey:
     | 'clients'
@@ -25,14 +26,15 @@ export interface SystemAdminNavigationItem {
     | 'actions'
     | 'countries'
     | 'states'
-    | 'cities';
+    | 'cities'
+    | 'access_models';
 }
 
 export const systemAdminNavigation = {
   generalRecords: [
     { href: '/system-admin/languages', icon: 'globe', translationKey: 'languages' },
     { href: '/system-admin/actions', icon: 'logs', translationKey: 'actions' },
-    { href: '/system-admin/countries', icon: 'globe', translationKey: 'countries' },
+    { href: '/system-admin/countries', icon: 'heart', translationKey: 'countries' },
     { href: '/system-admin/states', icon: 'folder', translationKey: 'states' },
     { href: '/system-admin/cities', icon: 'building-2', translationKey: 'cities' },
   ],
@@ -42,6 +44,7 @@ export const systemAdminNavigation = {
     { href: '/system-admin/request-logs', icon: 'logs', translationKey: 'request_logs' },
     { href: '/system-admin/job-logs', icon: 'scroll-text', translationKey: 'job_logs' },
     { href: '/system-admin/files', icon: 'folder', translationKey: 'files' },
-    { href: '/system-admin/portals', icon: 'globe', translationKey: 'portals' },
+    { href: '/system-admin/portals', icon: 'folder', translationKey: 'portals' },
+    { href: '/system-admin/access-models', icon: 'code', translationKey: 'access_models' },
   ],
 } satisfies Record<string, SystemAdminNavigationItem[]>;

@@ -1,4 +1,7 @@
 export const ADMIN_ROUTES = {
+  POST_ACCESS_MODEL_APPLY: 'access-models/apply',
+  POST_ACCESS_MODEL_LIST: 'access-models/list',
+  POST_ACCESS_MODEL_PREVIEW: 'access-models/preview',
   DELETE_COUNTRIES: 'countries/delete',
   DELETE_STATES: 'states/delete',
   DELETE_CITIES: 'cities/delete',

@@ -1,4 +1,21 @@
 {
+  "access_models": {
+    "not_found": "Modelo de acesso não encontrado.",
+    "inactive": "O modelo de acesso está inativo.",
+    "admin_profile_invalid": "O cliente deve possuir exatamente um perfil administrativo ativo.",
+    "stale_preview": "A prévia está desatualizada. Gere uma nova prévia.",
+    "invalid_selection": "A seleção de alterações do modelo de acesso é inválida.",
+    "module_translation_missing": "Um módulo não possui tradução em um idioma habilitado para o cliente.",
+    "module_not_selected": "O módulo da funcionalidade não foi selecionado para sincronização.",
+    "functionality_translation_missing": "Uma funcionalidade não possui tradução em um idioma habilitado para o cliente.",
+    "parent_unavailable": "A funcionalidade pai selecionada não está disponível.",
+    "invalid_structure": "A estrutura do modelo de acesso é inválida.",
+    "invalid_module": "A estrutura do módulo é inválida.",
+    "invalid_functionality": "A funcionalidade não pertence ao catálogo ou está duplicada.",
+    "invalid_hierarchy": "A hierarquia de funcionalidades é inválida.",
+    "duplicate_module_key": "A chave do módulo está duplicada no modelo de acesso.",
+    "invalid_delete": "A solicitação de exclusão é inválida."
+  },
   "common": {
     "internal_server_error": "Ocorreu um erro interno no servidor.",
     "record_not_found": "Registro não encontrado."
@@ -32,6 +49,7 @@
     "superuser_access_denied": "O acesso de superusuário não está disponível para esta sessão."
   },
   "access_control": {
+    "functionality_slug_immutable": "O slug da funcionalidade não pode ser alterado.",
     "module_has_functionalities": "O módulo não pode ser excluído porque possui funcionalidades vinculadas.",
     "admin_profile_immutable": "O perfil administrativo deve permanecer ativo e não permite alterações nas permissões.",
     "admin_profile_cannot_be_deleted": "O perfil administrativo não pode ser excluído.",

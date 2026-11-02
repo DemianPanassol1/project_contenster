@@ -119,7 +119,7 @@ export function PortalMediaFields() {
       <Box
         sx={{
           display: 'grid',
-          gap: 2,
+          gap: '1.5rem 2rem',
           gridTemplateColumns: { lg: 'repeat(2, minmax(0, 1fr))', xs: '1fr' },
         }}
       >

@@ -1,4 +1,5 @@
 import { ActionType, CORE_FUNCTIONALITY_IDENTITIES } from '@contenster/shared';
+import { AccessModelApplyView, AccessModelsListView } from '@/features/core/admin/access-models';
 import { CitiesListView, CitySaveView } from '@/features/core/admin/cities';
 import { ClientLogsListView } from '@/features/core/admin/client-logs';
 import { ClientStorageListView } from '@/features/core/admin/client-storage';
@@ -16,6 +17,13 @@ import { UserSaveView, UsersListView } from '@/features/core/admin/users';
 import type { AdminFeatureBinding } from '../admin.registry.type';
 
 export const CORE_ADMIN_FEATURE_BINDINGS: readonly AdminFeatureBinding[] = [
+  {
+    modes: {
+      list: { action: ActionType.view, View: AccessModelsListView },
+      update: { action: ActionType.edit, View: AccessModelApplyView },
+    },
+    slug: CORE_FUNCTIONALITY_IDENTITIES.accessModels,
+  },
   {
     modes: {
       list: { action: ActionType.view, View: ClientStorageListView },

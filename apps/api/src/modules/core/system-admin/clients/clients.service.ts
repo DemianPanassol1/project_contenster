@@ -1,3 +1,4 @@
+import { randomBytes } from 'node:crypto';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
 import { DataSource } from 'typeorm';
@@ -140,6 +141,7 @@ export class ClientsService {
           await this.repository.saveModule(
             {
               client,
+              key: `MOD_${randomBytes(4).toString('hex').toUpperCase()}`,
               order: item.order,
               isActive: true,
               translations: item.translations.map((translation) => ({

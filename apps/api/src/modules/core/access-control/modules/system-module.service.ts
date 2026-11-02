@@ -1,3 +1,4 @@
+import { randomBytes } from 'node:crypto';
 import type { PaginatedBody } from '@contenster/shared';
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
@@ -79,6 +80,7 @@ export class SystemModulesService {
     const module = await this.repository.save({
       ...(request.id === null ? {} : { id: request.id }),
       client: { id: clientId },
+      ...(request.id === null ? { key: this.createKey() } : {}),
       order: request.order,
       isActive: request.isActive,
       translations: request.translations.map((translation) => ({
@@ -133,5 +135,9 @@ export class SystemModulesService {
       name: resolveTranslation(module.translations, locale, 'name'),
       description: resolveTranslation(module.translations, locale, 'description'),
     };
+  }
+
+  private createKey(): string {
+    return `MOD_${randomBytes(5).toString('hex').toUpperCase().slice(0, 8)}`;
   }
 }

@@ -23,6 +23,9 @@ export class SystemModule {
   @JoinColumn({ foreignKeyConstraintName: 'fk_modulos_cliente', name: 'cliente_id' })
   declare client: Client;
 
+  @Column({ length: 12, name: 'chave', type: 'varchar' })
+  declare key: string;
+
   @Column({ default: 0, name: 'ordem', type: 'integer' })
   declare order: number;
 
@@ -35,7 +38,10 @@ export class SystemModule {
   @UpdateDateColumn({ name: 'atualizado_em', type: 'timestamp' })
   declare updatedAt: Date;
 
-  @OneToMany(() => SystemModuleTranslation, (translation) => translation.module, { cascade: true })
+  @OneToMany(() => SystemModuleTranslation, (translation) => translation.module, {
+    cascade: true,
+    orphanedRowAction: 'delete',
+  })
   declare translations: SystemModuleTranslation[];
 
   @OneToMany(() => Functionality, (functionality) => functionality.module)

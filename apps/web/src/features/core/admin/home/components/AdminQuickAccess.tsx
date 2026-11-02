@@ -60,7 +60,7 @@ export function AdminQuickAccess({ modules }: AdminQuickAccessProps) {
                 sx={{
                   alignItems: 'stretch',
                   display: 'grid',
-                  gap: 2,
+                  gap: '1.5rem 2rem',
                   gridAutoRows: '1fr',
                   gridTemplateColumns: {
                     md: 'repeat(3, minmax(0, 1fr))',

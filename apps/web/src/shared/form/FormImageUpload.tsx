@@ -217,7 +217,7 @@ export const FormImageUpload = <T extends FieldValues>({
                 width: '100%',
                 minWidth: 0,
                 display: 'grid',
-                gap: 2,
+                gap: '1.5rem 2rem',
                 gridTemplateColumns: '1fr',
               }}
             >
@@ -315,7 +315,7 @@ export const FormImageUpload = <T extends FieldValues>({
                 <Box
                   sx={(theme) => ({
                     p: 2,
-                    gap: 2,
+                    gap: '1.5rem 2rem',
                     minWidth: 0,
                     display: 'flex',
                     borderRadius: 2,

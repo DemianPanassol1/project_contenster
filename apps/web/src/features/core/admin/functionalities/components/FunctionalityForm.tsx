@@ -2,7 +2,7 @@
 
 import { Box, FormHelperText } from '@mui/material';
 import { useTranslations } from 'next-intl';
-import { useWatch } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 
 import { FUNCTIONALITY_CATALOG, type SessionLanguage } from '@contenster/shared';
 import { portalFontSize } from '@/core/theme';
@@ -24,6 +24,8 @@ interface FunctionalityFormProps {
 export function FunctionalityForm({ languages }: FunctionalityFormProps) {
   const t = useTranslations('protected.functionalities');
   const { createValidationRules } = useValidationRules<FunctionalityFormValues>();
+  const { getValues } = useFormContext<FunctionalityFormValues>();
+  const isEditing = getValues('id') !== null;
   const languageIds = (useWatch<FunctionalityFormValues>({ name: 'languageIds' }) ??
     []) as number[];
   const enabledLanguages = languages.filter((language) => languageIds.includes(language.id));
@@ -52,6 +54,7 @@ export function FunctionalityForm({ languages }: FunctionalityFormProps) {
           label: functionality.slug,
           value: functionality.slug,
         }))}
+        disabled={isEditing}
         rules={createValidationRules('required')}
       />
       <TranslationsFields<FunctionalityFormValues>

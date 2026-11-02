@@ -58,7 +58,7 @@ export function StorageConfigurationForm() {
     <Box
       sx={{
         display: 'grid',
-        gap: 2,
+        gap: '1.5rem 2rem',
         gridTemplateColumns: { md: 'repeat(2, minmax(0, 1fr))', xs: '1fr' },
       }}
     >

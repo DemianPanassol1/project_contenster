@@ -1,4 +1,21 @@
 {
+  "access_models": {
+    "not_found": "Modelo de acceso no encontrado.",
+    "inactive": "El modelo de acceso está inactivo.",
+    "admin_profile_invalid": "El cliente debe tener exactamente un perfil administrativo activo.",
+    "stale_preview": "La vista previa está desactualizada. Genere una nueva.",
+    "invalid_selection": "La selección de cambios del modelo de acceso no es válida.",
+    "module_translation_missing": "Un módulo no tiene traducción en un idioma habilitado para el cliente.",
+    "module_not_selected": "El módulo de la funcionalidad no fue seleccionado para sincronización.",
+    "functionality_translation_missing": "Una funcionalidad no tiene traducción en un idioma habilitado para el cliente.",
+    "parent_unavailable": "La funcionalidad padre seleccionada no está disponible.",
+    "invalid_structure": "La estructura del modelo de acceso no es válida.",
+    "invalid_module": "La estructura del módulo no es válida.",
+    "invalid_functionality": "La funcionalidad no pertenece al catálogo o está duplicada.",
+    "invalid_hierarchy": "La jerarquía de funcionalidades no es válida.",
+    "duplicate_module_key": "La clave del módulo está duplicada en el modelo de acceso.",
+    "invalid_delete": "La solicitud de eliminación no es válida."
+  },
   "common": {
     "internal_server_error": "Se produjo un error interno en el servidor.",
     "record_not_found": "Registro no encontrado."
@@ -32,6 +49,7 @@
     "superuser_access_denied": "El acceso de superusuario no está disponible para esta sesión."
   },
   "access_control": {
+    "functionality_slug_immutable": "El slug de la funcionalidad no se puede modificar.",
     "module_has_functionalities": "El módulo no se puede eliminar porque tiene funcionalidades vinculadas.",
     "admin_profile_immutable": "El perfil administrativo debe permanecer activo y no permite cambios en los permisos.",
     "admin_profile_cannot_be_deleted": "El perfil administrativo no se puede eliminar.",

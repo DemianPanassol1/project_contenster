@@ -30,12 +30,12 @@ export function SystemAdminClientCard({
           alignItems: { md: 'center', xs: 'flex-start' },
           display: 'flex',
           flexDirection: { md: 'row', xs: 'column' },
-          gap: 2,
+          gap: '1.5rem 2rem',
           justifyContent: 'space-between',
           p: { md: 3, xs: 2 },
         }}
       >
-        <Box sx={{ alignItems: 'center', display: 'flex', gap: 2, minWidth: 0 }}>
+        <Box sx={{ alignItems: 'center', display: 'flex', gap: '1.5rem 2rem', minWidth: 0 }}>
           <Avatar
             src={client.imageUrl ?? undefined}
             sx={(theme) => ({

@@ -213,7 +213,7 @@ export function PortalIdentityFields() {
         <Box
           sx={{
             display: 'grid',
-            gap: 2,
+            gap: '1.5rem 2rem',
             gridTemplateColumns: { lg: 'repeat(2, minmax(0, 1fr))', xs: '1fr' },
           }}
         >
@@ -248,7 +248,7 @@ export function PortalIdentityFields() {
         <Box
           sx={{
             display: 'grid',
-            gap: 2,
+            gap: '1.5rem 2rem',
             gridTemplateColumns: { lg: 'repeat(3, minmax(0, 1fr))', xs: '1fr' },
           }}
         >
