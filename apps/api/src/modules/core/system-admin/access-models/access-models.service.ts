@@ -76,7 +76,7 @@ export class AccessModelsService {
         request.translations.map(({ locale }) => locale),
         languages,
       );
-      const structure = this.normalizeStructure(request.structure, current?.structure);
+      const structure = this.normalizeStructure(request.structure);
 
       const structureLocales = [
         ...new Set(
@@ -519,10 +519,7 @@ export class AccessModelsService {
     return model;
   }
 
-  private normalizeStructure(
-    structure: SaveAccessModelRequest['structure'],
-    current: SaveAccessModelRequest['structure'] | undefined,
-  ) {
+  private normalizeStructure(structure: SaveAccessModelRequest['structure']) {
     try {
       structure = parseAccessModelStructure(structure);
     } catch {
@@ -564,17 +561,12 @@ export class AccessModelsService {
       }
     }
 
-    const currentKeys = new Set(current?.modules.map((module) => module.key).filter(Boolean) ?? []);
     const keys = new Set<string>();
 
     return {
       modules: structure.modules.map((module) => {
-        if (module.key !== null && !currentKeys.has(module.key)) {
-          throw new BadRequestException(this.i18n.t('errors.access_models.invalid_structure'));
-        }
+        const key = module.key ?? this.createModuleKey(keys);
 
-        const key =
-          module.key && currentKeys.has(module.key) ? module.key : this.createModuleKey(keys);
         if (keys.has(key)) {
           throw new BadRequestException(this.i18n.t('errors.access_models.duplicate_module_key'));
         }

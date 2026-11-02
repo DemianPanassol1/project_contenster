@@ -31,7 +31,7 @@ describe('access model persistence', () => {
       structure: {
         modules: [
           {
-            key: null,
+            key: 'MOD_12345678',
             order: 0,
             isActive: true,
             translations: [{ locale: 'pt', name: 'Module', description: null }],
@@ -71,7 +71,7 @@ describe('access model persistence', () => {
     await service.delete({ id: model.id, ids: [] });
   });
 
-  it('rejects translation IDs owned by another model and changed module identities', async () => {
+  it('rejects translation IDs owned by another model and duplicate module identities', async () => {
     const input = {
       id: null,
       isActive: true,
@@ -100,7 +100,8 @@ describe('access model persistence', () => {
         }),
       ).rejects.toThrow();
       const structure = structuredClone(second.structure);
-      structure.modules[0].key = 'MOD_00000000';
+      structure.modules.push({ ...structure.modules[0] });
+
       await expect(
         service.save({
           id: second.id,

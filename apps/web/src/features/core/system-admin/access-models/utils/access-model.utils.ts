@@ -30,7 +30,7 @@ export function createAccessModelFunctionality(
     order,
     isActive: true,
     isNavigationGroup: false,
-    enabledLanguageCodes: languages.slice(0, 1).map((language) => language.locale),
+    enabledLanguageCodes: languages.map((language) => language.locale),
     translations: languages.map((language) => ({
       locale: language.locale,
       name: '',
@@ -39,12 +39,27 @@ export function createAccessModelFunctionality(
   };
 }
 
+export function createAccessModelModuleKey(keys: Set<string>): string {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let key = '';
+
+  do {
+    const bytes = crypto.getRandomValues(new Uint8Array(8));
+    const suffix = Array.from(bytes, (byte) => characters[byte % characters.length]).join('');
+
+    key = `MOD_${suffix}`;
+  } while (keys.has(key));
+
+  return key;
+}
+
 export function createAccessModelModule(
   languages: SessionLanguage[],
   order: number,
+  key: string | null = null,
 ): AccessModelModuleDefinition {
   return {
-    key: null,
+    key,
     order,
     isActive: true,
     translations: languages.map((language) => ({
@@ -120,7 +135,11 @@ export function mapAccessModelPayload(values: SaveAccessModelRequest): SaveAcces
         translations: module.translations.map(normalizeDescription),
         functionalities: module.functionalities.map((functionality) => ({
           ...functionality,
-          translations: functionality.translations.map(normalizeDescription),
+          translations: functionality.translations
+            .filter((translation) =>
+              functionality.enabledLanguageCodes.includes(translation.locale),
+            )
+            .map(normalizeDescription),
         })),
       })),
     },

@@ -1,7 +1,7 @@
 {
   "access_models": {
     "drag": "Arrastre para reordenar o use las flechas del teclado",
-    "slug": "Funcionalidad del catálogo",
+    "slug": "Funcionalidad",
     "no_parent": "Sin funcionalidad padre",
     "unnamed_module": "Nuevo módulo",
     "functionalities": "Funcionalidades",
@@ -26,7 +26,7 @@
     "name": "Nombre",
     "description": "Descripción",
     "active": "Activo",
-    "structure": "Estructura JSON",
+    "structure": "Módulos y funcionalidades",
     "create": "Crear modelo",
     "edit_title": "Editar modelo de acceso",
     "create_title": "Nuevo modelo de acceso",

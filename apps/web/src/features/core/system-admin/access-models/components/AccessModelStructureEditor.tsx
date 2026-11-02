@@ -26,7 +26,7 @@ import { useFieldArray, useFormContext } from 'react-hook-form';
 
 import { Button } from '@/shared';
 
-import { createAccessModelModule } from '../utils/access-model.utils';
+import { createAccessModelModule, createAccessModelModuleKey } from '../utils/access-model.utils';
 
 import { AccessModelModuleEditor } from './AccessModelModuleEditor';
 import { AccessModelSortableItem } from './AccessModelSortableItem';
@@ -72,10 +72,30 @@ export const AccessModelStructureEditor = ({
     shouldExpandAppendedModule.current = false;
   }, [fields]);
 
+  useEffect(() => {
+    const modules = getValues('structure.modules');
+    const keys = new Set(modules.flatMap((module) => (module.key === null ? [] : [module.key])));
+
+    modules.forEach((module, index) => {
+      if (module.key !== null) {
+        return;
+      }
+
+      const key = createAccessModelModuleKey(keys);
+
+      keys.add(key);
+      setValue(`structure.modules.${index}.key`, key, { shouldDirty: false });
+    });
+  }, [fields, getValues, setValue]);
+
   const addModule = () => {
+    const keys = new Set(
+      getValues('structure.modules').flatMap((module) => (module.key === null ? [] : [module.key])),
+    );
+
     setIsInitialModuleExpanded(false);
     shouldExpandAppendedModule.current = true;
-    append(createAccessModelModule(languages, fields.length));
+    append(createAccessModelModule(languages, fields.length, createAccessModelModuleKey(keys)));
   };
 
   const reorderModules = useCallback(

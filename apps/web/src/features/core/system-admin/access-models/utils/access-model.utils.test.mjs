@@ -4,6 +4,7 @@ import { test } from 'node:test';
 import {
   createAccessModelFunctionality,
   createAccessModelModule,
+  createAccessModelModuleKey,
   getAccessModelDefaultValues,
   getAccessModelLocalizedName,
   mapAccessModelContent,
@@ -23,6 +24,7 @@ test('clearing optional description fields produces null at every level without 
   values.translations[0].description = '';
   module.translations[0].description = '   ';
   functionality.translations[0].description = '';
+  functionality.translations[1].name = 'Users';
   functionality.translations[1].description = 'Description';
   module.functionalities.push(functionality);
 
@@ -30,16 +32,16 @@ test('clearing optional description fields produces null at every level without 
 
   assert.equal(payload.translations[0].description, null);
   assert.equal(payload.structure.modules[0].translations[0].description, null);
-  assert.equal(payload.structure.modules[0].functionalities[0].translations[0].description, null);
-  assert.equal(
-    payload.structure.modules[0].functionalities[0].translations[1].description,
-    'Description',
-  );
+  assert.deepEqual(payload.structure.modules[0].functionalities[0].translations, [
+    { locale: 'pt', name: '', description: null },
+    { locale: 'en', name: 'Users', description: 'Description' },
+  ]);
   assert.equal(module.translations[0].description, '   ');
   assert.equal(functionality.translations[0].description, '');
+  assert.equal(functionality.translations[1].description, 'Description');
 });
 
-test('creates independent editor rows without assigning a technical module identity', () => {
+test('creates independent editor rows without sharing a technical module identity', () => {
   const first = getAccessModelDefaultValues(languages);
   const second = getAccessModelDefaultValues(languages);
 
@@ -54,18 +56,19 @@ test('creates independent editor rows without assigning a technical module ident
 });
 
 test('creates functionality and module rows with the requested position and enabled languages', () => {
-  const functionality = createAccessModelFunctionality(languages, 3);
-  const module = createAccessModelModule(languages, 2);
+  const functionality = createAccessModelFunctionality([...languages].reverse(), 3);
+  const key = createAccessModelModuleKey(new Set());
+  const module = createAccessModelModule(languages, 2, key);
 
   assert.equal(functionality.order, 3);
   assert.equal(functionality.parentSlug, null);
-  assert.deepEqual(functionality.enabledLanguageCodes, ['pt']);
+  assert.deepEqual(functionality.enabledLanguageCodes, ['en', 'pt']);
   assert.deepEqual(
     functionality.translations.map(({ locale }) => locale),
-    ['pt', 'en'],
+    ['en', 'pt'],
   );
   assert.equal(module.order, 2);
-  assert.equal(module.key, null);
+  assert.match(module.key, /^MOD_[A-Z0-9]{8}$/);
   assert.deepEqual(module.functionalities, []);
 });
 

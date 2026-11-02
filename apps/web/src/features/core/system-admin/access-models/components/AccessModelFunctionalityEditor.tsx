@@ -10,6 +10,7 @@ import {
   AccordionDetails,
   AccordionSummary,
   Box,
+  FormHelperText,
   IconButton,
   Typography,
 } from '@mui/material';
@@ -83,6 +84,11 @@ export const AccessModelFunctionalityEditor = ({
   const slug = functionalities[functionalityIndex]?.slug ?? '';
   const { control, setValue } = useFormContext<AccessModelFormValues>();
   const modules = useWatch({ control, name: 'structure.modules' });
+  const enabledLanguageCodes =
+    useWatch({ control, name: `${fieldBase}.enabledLanguageCodes` }) ?? [];
+  const enabledLanguages = languages.filter((language) =>
+    enabledLanguageCodes.includes(language.locale),
+  );
 
   const { languageOptions, parentOptions, slugOptions } = useAccessModelFunctionalityOptions({
     functionalities,
@@ -152,47 +158,49 @@ export const AccessModelFunctionalityEditor = ({
         }}
       >
         <TranslationsFields<AccessModelFormValues>
-          languages={languages}
+          languages={enabledLanguages}
           name={`${fieldBase}.translations`}
           textProperty="name"
           label={t('name')}
           rules={createValidationRules('required|max_length[75]')}
         />
-        <FormSelect<AccessModelFormValues>
-          name={`${fieldBase}.slug`}
-          label={t('slug')}
-          options={slugOptions}
-          rules={createValidationRules('required')}
-          onValueChange={(value) => {
-            if (typeof value !== 'string') {
-              return;
-            }
-            functionalities.forEach((item, index) => {
-              if (item.parentSlug === slug && slug) {
-                setValue(
-                  `structure.modules.${moduleIndex}.functionalities.${index}.parentSlug`,
-                  value,
-                  { shouldDirty: true },
-                );
+        <Box sx={{ display: 'grid', gap: '1.5rem 1rem', gridTemplateColumns: '1fr 1fr' }}>
+          <FormSelect<AccessModelFormValues>
+            name={`${fieldBase}.slug`}
+            label={t('functionality')}
+            options={slugOptions}
+            rules={createValidationRules('required')}
+            onValueChange={(value) => {
+              if (typeof value !== 'string') {
+                return;
               }
-            });
-          }}
-        />
-        <TranslationsFields<AccessModelFormValues>
-          type="textarea"
-          languages={languages}
-          name={`${fieldBase}.translations`}
-          textProperty="description"
-          label={t('description')}
-          rules={createValidationRules('max_length[255]')}
-        />
-        <Box sx={{ display: 'grid', gap: '1.5rem 1rem' }}>
+              functionalities.forEach((item, index) => {
+                if (item.parentSlug === slug && slug) {
+                  setValue(
+                    `structure.modules.${moduleIndex}.functionalities.${index}.parentSlug`,
+                    value,
+                    { shouldDirty: true },
+                  );
+                }
+              });
+            }}
+          />
           <FormSelect<AccessModelFormValues>
             name={`${fieldBase}.parentSlug`}
             label={t('parent')}
             options={parentOptions}
             textFieldProps={{ placeholder: t('no_parent') }}
           />
+        </Box>
+        <TranslationsFields<AccessModelFormValues>
+          type="textarea"
+          languages={enabledLanguages}
+          name={`${fieldBase}.translations`}
+          textProperty="description"
+          label={t('description')}
+          rules={createValidationRules('max_length[255]')}
+        />
+        <Box sx={{ display: 'grid', gap: '1.5rem 1rem' }}>
           <FormIconSelect<AccessModelFormValues>
             name={`${fieldBase}.icon`}
             label={t('icon')}
@@ -206,13 +214,17 @@ export const AccessModelFunctionalityEditor = ({
             rules={createValidationRules('required')}
           />
         </Box>
-        <FormCheckbox<AccessModelFormValues> name={`${fieldBase}.isActive`} label={t('active')} />
         <Box sx={{ gridColumn: { xs: 'auto', md: '1 / -1' } }}>
+          <FormCheckbox<AccessModelFormValues> name={`${fieldBase}.isActive`} label={t('active')} />
           <FormCheckbox<AccessModelFormValues>
             name={`${fieldBase}.isNavigationGroup`}
             label={t('navigation_group')}
-            helperText={t('navigation_group_helper')}
           />
+          <FormHelperText
+            sx={{ color: 'text.secondary', fontSize: portalFontSize(12), m: '3px 0 4px' }}
+          >
+            {t('navigation_group_helper')}
+          </FormHelperText>
         </Box>
       </AccordionDetails>
     </Accordion>

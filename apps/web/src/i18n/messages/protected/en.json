@@ -1,7 +1,7 @@
 {
   "access_models": {
     "drag": "Drag to reorder or use the keyboard arrow keys",
-    "slug": "Catalog functionality",
+    "slug": "Functionality",
     "no_parent": "No parent functionality",
     "unnamed_module": "New module",
     "functionalities": "Functionalities",
@@ -26,7 +26,7 @@
     "name": "Name",
     "description": "Description",
     "active": "Active",
-    "structure": "JSON structure",
+    "structure": "Modules and functionalities",
     "create": "Create model",
     "edit_title": "Edit access model",
     "create_title": "New access model",
