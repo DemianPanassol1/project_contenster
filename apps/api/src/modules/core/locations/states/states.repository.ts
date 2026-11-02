@@ -3,9 +3,9 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { type DeepPartial, In, Repository } from 'typeorm';
 
-import { Language } from '@/modules/core/communication/languages/entities/language.entity';
 import { City } from '@/modules/core/locations/cities/entities/city.entity';
 import { Country } from '@/modules/core/locations/countries/entities/country.entity';
+import { Language } from '@/modules/core/system-admin/languages/entities/language.entity';
 import { applyPaginatedQueryBuilder, type QueryFieldMap } from '@/shared/pagination';
 import {
   buildTranslatedLabelExpression,

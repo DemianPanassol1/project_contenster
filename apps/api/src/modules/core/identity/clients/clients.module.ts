@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { Language } from '@/modules/core/communication/languages/entities/language.entity';
-import { LanguagesModule } from '@/modules/core/communication/languages/languages.module';
 import { AuthenticationModule } from '@/modules/core/identity/authentication/authentication.module';
 import { CitiesModule } from '@/modules/core/locations/cities/cities.module';
 import { City } from '@/modules/core/locations/cities/entities/city.entity';
+import { Language } from '@/modules/core/system-admin/languages/entities/language.entity';
+import { SystemAdminLanguagesModule } from '@/modules/core/system-admin/languages/languages.module';
 
 import { Client } from './entities/client.entity';
 import { ClientLanguage } from './entities/client-language.entity';
@@ -17,7 +17,7 @@ import { ClientsService } from './clients.service';
     TypeOrmModule.forFeature([Client, ClientLanguage, Language, City]),
     AuthenticationModule,
     CitiesModule,
-    LanguagesModule,
+    SystemAdminLanguagesModule,
   ],
   controllers: [ClientsController],
   providers: [ClientsRepository, ClientsService],

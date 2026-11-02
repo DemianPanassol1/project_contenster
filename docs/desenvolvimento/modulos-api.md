@@ -29,9 +29,16 @@ transformar esse formato em regra para todos os módulos:
 ```text
 system-admin/
 ├── access-links/  # controller, service, repository e DTOs da gestão de vínculos
+├── actions/       # registros globais de ações e suas traduções
 ├── clients/       # administração e provisionamento inicial de clientes
 ├── files/         # consultas globais de arquivos
 ├── job-logs/      # consultas globais de execução de tarefas
+├── languages/     # registros globais de idiomas
+├── locations/
+│   ├── cities/    # endpoints globais que delegam ao domínio de locations
+│   ├── countries/
+│   ├── states/
+│   └── locations.module.ts
 ├── portals/       # capacidade independente já existente
 ├── request-logs/  # consultas globais de logs HTTP
 ├── system-admin.controller.ts  # vazio, protegido e reservado para futuras capacidades
@@ -42,7 +49,9 @@ Cada submódulo declara seus providers e `TypeOrmModule.forFeature(...)` reais. 
 regras, respostas e transações; o repository mantém toda operação TypeORM, inclusive quando recebe
 o `EntityManager` de uma transação iniciada pelo service. Controllers internos podem manter
 `@Controller('system-admin/...')` para preservar os endpoints e devem declarar sua autorização,
-pois decorators do controller agregador não são herdados.
+pois decorators do controller agregador não são herdados. Quando uma capacidade global reutiliza a
+regra de negócio de outro domínio, como `system-admin/locations`, seu controller e módulo globais
+podem importar o service proprietário; não duplique service, repository ou persistência.
 
 ## Estrutura representativa
 

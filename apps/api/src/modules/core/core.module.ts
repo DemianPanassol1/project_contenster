@@ -1,9 +1,7 @@
 import { Module } from '@nestjs/common';
 
 import { AccessControlModule } from './access-control/access-control.module';
-import { ActionsModule } from './authorization/actions/actions.module';
 import { AuthorizationModule } from './authorization/authorization.module';
-import { CommunicationModule } from './communication/communication.module';
 import { IdentityModule } from './identity/identity.module';
 import { LocationsModule } from './locations/locations.module';
 import { MediaModule } from './media/media.module';
@@ -15,9 +13,7 @@ import { PublicPortalModule } from './public-portal';
 @Module({
   imports: [
     AccessControlModule,
-    ActionsModule,
     AuthorizationModule,
-    CommunicationModule,
     IdentityModule,
     LocationsModule,
     MediaModule,

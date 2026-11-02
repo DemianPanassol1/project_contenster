@@ -8,9 +8,9 @@ import {
 import { I18nService } from 'nestjs-i18n';
 
 import type { I18nTranslations } from '@/i18n/translations';
-import { LanguagesRepository } from '@/modules/core/communication/languages/languages.repository';
 import { SessionSynchronizationService } from '@/modules/core/identity/authentication/session/session-synchronization.service';
 import { CitiesRepository } from '@/modules/core/locations/cities/cities.repository';
+import { LanguagesRepository } from '@/modules/core/system-admin/languages/languages.repository';
 import type { PaginateRequestDto } from '@/shared/dtos';
 import { getCurrentLocale } from '@/shared/i18n';
 import { toResponseDto } from '@/shared/responses';

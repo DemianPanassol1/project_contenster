@@ -32,7 +32,10 @@ Essa decisão é de autorização HTTP e não deve ser reimplementada nos contro
 
 ## Bootstrap e evolução
 
-O seed inicial materializa módulos, funcionalidades, idiomas e ações. As funcionalidades iniciais cobrem clientes, usuários, perfis, funcionalidades, módulos, cidades, estados, países, armazenamento do cliente e logs do cliente.
+O seed inicial materializa módulos, funcionalidades, idiomas e ações. As funcionalidades iniciais
+cobrem clientes, usuários, perfis, funcionalidades, módulos, cidades, estados, países,
+armazenamento do cliente e logs do cliente. Idiomas e ações são registros globais necessários para
+traduções e RBAC, mas não são funcionalidades catalogadas nem recebem binding ou permissão de cliente.
 
 `client-storage` reúne configurações de provedor, regras por tipo de arquivo e consulta dos arquivos
 do cliente. `client-logs` reúne a consulta dos logs de requisição acessíveis ao cliente ativo — logs

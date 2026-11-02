@@ -10,7 +10,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-import { Language } from '@/modules/core/communication/languages/entities/language.entity';
+import { Language } from '@/modules/core/system-admin/languages/entities/language.entity';
 
 import { Functionality } from './functionality.entity';
 @Index('idx_funcionalidades_traducoes_idioma', ['language'])

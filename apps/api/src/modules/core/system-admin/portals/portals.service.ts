@@ -22,11 +22,11 @@ import {
 } from '@contenster/shared';
 import type { I18nTranslations } from '@/i18n/translations';
 import { serializeApplicationDateTime } from '@/infrastructure/date-time';
-import { Language } from '@/modules/core/communication/languages/entities/language.entity';
 import { File } from '@/modules/core/media/files/entities/file.entity';
 import { FileService } from '@/modules/core/media/files/file.service';
 import { resolveFilePublicUrl } from '@/modules/core/media/files/helpers/file-public-url.helper';
 import type { UploadedMultipartFile } from '@/modules/core/media/files/types/uploaded-multipart-file.type';
+import { Language } from '@/modules/core/system-admin/languages/entities/language.entity';
 import {
   type DeleteRecordsRequestDto,
   normalizeDeleteRecordIds,

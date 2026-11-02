@@ -3,7 +3,7 @@ import { ConflictException, Injectable, NotFoundException } from '@nestjs/common
 import { I18nService } from 'nestjs-i18n';
 
 import type { I18nTranslations } from '@/i18n/translations';
-import type { Language } from '@/modules/core/communication/languages/entities/language.entity';
+import type { Language } from '@/modules/core/system-admin/languages/entities/language.entity';
 import {
   type DeleteRecordsRequestDto,
   DeleteRecordsResponseDto,

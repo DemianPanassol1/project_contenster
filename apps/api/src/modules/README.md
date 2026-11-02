@@ -27,8 +27,9 @@ identidade, autorização ou outro recurso da base.
 
 `core/system-admin` é um módulo agregador para capacidades administrativas globais. Ele mantém o
 controller raiz vazio e protegido, e compõe `access-links`, `clients`, `files`, `job-logs`,
-`request-logs` e `portals`. Cada capacidade registra suas próprias dependências, controller,
-service, repository e DTOs; o agregador não concentra regras, persistência ou contratos específicos.
+`request-logs`, `portals`, `actions`, `languages` e `locations`. `locations` agrega `countries`,
+`states` e `cities`. Cada capacidade registra suas próprias dependências, controller, service,
+repository e DTOs; o agregador não concentra regras, persistência ou contratos específicos.
 
 Os controllers das capacidades preservam o prefixo HTTP `system-admin` e declaram
 `@RequireSuperuser()` individualmente. Assim, a organização interna não altera os contratos

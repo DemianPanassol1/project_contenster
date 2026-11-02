@@ -1,14 +1,13 @@
 import type { MigrationInterface, QueryRunner } from 'typeorm';
 
 const functionalities = [
-  ['actions', 4, 'Ações', 'Actions', 'Acciones'],
-  ['modules', 5, 'Módulos', 'Modules', 'Módulos'],
-  ['functionalities', 6, 'Funcionalidades', 'Functionalities', 'Funcionalidades'],
-  ['countries', 7, 'Países', 'Countries', 'Países'],
-  ['states', 8, 'Estados', 'States', 'Estados'],
-  ['cities', 9, 'Cidades', 'Cities', 'Ciudades'],
-  ['client-storage', 10, 'Armazenamento', 'Storage', 'Almacenamiento'],
-  ['client-logs', 11, 'Logs', 'Logs', 'Registros'],
+  ['modules', 4, 'Módulos', 'Modules', 'Módulos'],
+  ['functionalities', 5, 'Funcionalidades', 'Functionalities', 'Funcionalidades'],
+  ['countries', 6, 'Países', 'Countries', 'Países'],
+  ['states', 7, 'Estados', 'States', 'Estados'],
+  ['cities', 8, 'Cidades', 'Cities', 'Ciudades'],
+  ['client-storage', 9, 'Armazenamento', 'Storage', 'Almacenamiento'],
+  ['client-logs', 10, 'Logs', 'Logs', 'Registros'],
 ] as const;
 
 export class BootstrapRemainingCoreFunctionalities1792136000000 implements MigrationInterface {

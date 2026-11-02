@@ -7,10 +7,10 @@ import { Functionality } from '@/modules/core/access-control/functionalities/ent
 import { SystemModule } from '@/modules/core/access-control/modules/entities/system-module.entity';
 import { ProfilePermission } from '@/modules/core/access-control/profiles/entities/profile-permission.entity';
 import { Profile } from '@/modules/core/access-control/profiles/entities/profiles.entity';
-import { Action } from '@/modules/core/authorization/actions/entities/action.entity';
-import { Language } from '@/modules/core/communication/languages/entities/language.entity';
 import { Client } from '@/modules/core/identity/clients/entities/client.entity';
 import { UserProfile } from '@/modules/core/identity/users/entities/user-profile.entity';
+import { Action } from '@/modules/core/system-admin/actions/entities/action.entity';
+import { Language } from '@/modules/core/system-admin/languages/entities/language.entity';
 import { applyPaginatedQueryBuilder } from '@/shared/pagination';
 
 const CLIENT_LIST_FIELDS = {

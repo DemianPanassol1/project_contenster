@@ -52,6 +52,7 @@
     "save": "Salvar"
   },
   "actions": {
+    "title": "Ações",
     "cancel": "Cancelar",
     "create_register": "Criar registro",
     "create_title": "{functionality} - Criar",
@@ -89,6 +90,7 @@
     }
   },
   "languages": {
+    "title": "Idiomas",
     "cancel": "Cancelar",
     "create_register": "Criar registro",
     "create_title": "{functionality} - Criar",
@@ -105,6 +107,7 @@
     "save": "Salvar"
   },
   "countries": {
+    "title": "Países",
     "cancel": "Cancelar",
     "create_register": "Criar registro",
     "create_title": "{functionality} - Criar",
@@ -125,6 +128,7 @@
     "save": "Salvar"
   },
   "cities": {
+    "title": "Cidades",
     "cancel": "Cancelar",
     "country": "País",
     "create_register": "Criar registro",
@@ -168,6 +172,7 @@
     "slug": "Slug"
   },
   "states": {
+    "title": "Estados",
     "cancel": "Cancelar",
     "code": "Código",
     "country": "País",
@@ -382,12 +387,18 @@
     "not_found": "Página global não encontrada.",
     "navigation": {
       "navigation_title": "Sistema",
+      "general_records": "Cadastros gerais",
       "clients": "Clientes",
       "access_links": "Vínculos de acesso",
       "request_logs": "Logs de requisição",
       "job_logs": "Logs de jobs",
       "files": "Arquivos",
-      "portals": "Portais"
+      "portals": "Portais",
+      "languages": "Idiomas",
+      "actions": "Ações",
+      "countries": "Países",
+      "states": "Estados",
+      "cities": "Cidades"
     },
     "clients": {
       "title": "Clientes",

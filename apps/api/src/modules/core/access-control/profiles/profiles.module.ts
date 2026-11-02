@@ -3,11 +3,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { Functionality } from '@/modules/core/access-control/functionalities/entities/functionality.entity';
 import { FunctionalityModule } from '@/modules/core/access-control/functionalities/functionality.module';
-import { ActionsModule } from '@/modules/core/authorization/actions/actions.module';
-import { Action } from '@/modules/core/authorization/actions/entities/action.entity';
-import { Language } from '@/modules/core/communication/languages/entities/language.entity';
 import { AuthenticationModule } from '@/modules/core/identity/authentication/authentication.module';
 import { UserProfile } from '@/modules/core/identity/users/entities/user-profile.entity';
+import { SystemAdminActionsModule } from '@/modules/core/system-admin/actions/actions.module';
+import { Action } from '@/modules/core/system-admin/actions/entities/action.entity';
+import { Language } from '@/modules/core/system-admin/languages/entities/language.entity';
 
 import { ProfilePermission } from './entities/profile-permission.entity';
 import { Profile } from './entities/profiles.entity';
@@ -28,7 +28,7 @@ import { ProfilesService } from './profiles.service';
     ]),
     AuthenticationModule,
     FunctionalityModule,
-    ActionsModule,
+    SystemAdminActionsModule,
   ],
   controllers: [ProfilesController],
   providers: [ProfilesRepository, ProfilesService],

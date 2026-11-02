@@ -52,6 +52,7 @@
     "save": "Save"
   },
   "actions": {
+    "title": "Actions",
     "cancel": "Cancel",
     "create_register": "Create record",
     "create_title": "{functionality} - Create",
@@ -89,6 +90,7 @@
     }
   },
   "languages": {
+    "title": "Languages",
     "cancel": "Cancel",
     "create_register": "Create record",
     "create_title": "{functionality} - Create",
@@ -105,6 +107,7 @@
     "save": "Save"
   },
   "countries": {
+    "title": "Countries",
     "cancel": "Cancel",
     "create_register": "Create record",
     "create_title": "{functionality} - Create",
@@ -125,6 +128,7 @@
     "save": "Save"
   },
   "cities": {
+    "title": "Cities",
     "cancel": "Cancel",
     "country": "Country",
     "create_register": "Create record",
@@ -168,6 +172,7 @@
     "slug": "Slug"
   },
   "states": {
+    "title": "States",
     "cancel": "Cancel",
     "code": "Code",
     "country": "Country",
@@ -382,12 +387,18 @@
     "not_found": "Global page not found.",
     "navigation": {
       "navigation_title": "System",
+      "general_records": "General records",
       "clients": "Clients",
       "access_links": "Access links",
       "request_logs": "Request logs",
       "job_logs": "Job logs",
       "files": "Files",
-      "portals": "Portals"
+      "portals": "Portals",
+      "languages": "Languages",
+      "actions": "Actions",
+      "countries": "Countries",
+      "states": "States",
+      "cities": "Cities"
     },
     "clients": {
       "title": "Clients",

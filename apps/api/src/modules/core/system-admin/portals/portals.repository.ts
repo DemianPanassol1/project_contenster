@@ -3,8 +3,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, In, IsNull, Not, Repository } from 'typeorm';
 
-import { Language } from '@/modules/core/communication/languages/entities/language.entity';
 import { File } from '@/modules/core/media/files/entities/file.entity';
+import { Language } from '@/modules/core/system-admin/languages/entities/language.entity';
 import { applyPaginatedQueryBuilder } from '@/shared/pagination';
 
 import { Portal, PortalDomain } from './entities';

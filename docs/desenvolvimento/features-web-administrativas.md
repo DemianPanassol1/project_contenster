@@ -7,6 +7,12 @@ O padrão se aplica às funcionalidades registradas em `/admin/<functionality>`.
 às rotas públicas, autenticação ou painel global, que possuem providers, layouts e regras de
 acesso próprios.
 
+No painel global, as features ficam em `features/core/system-admin`, usam rotas explícitas sob
+`/system-admin` e `API_ROUTES.SYSTEM_ADMIN`. Elas não usam o registry administrativo, o catálogo
+Shared, `AdminFeatureViewProps` ou permissões apresentacionais do cliente: sua autorização é a de
+superusuário declarada e aplicada pela API. Idiomas, ações e localidades aparecem no agrupamento
+visual `Cadastros gerais`; isso não cria um módulo de RBAC nem altera os endpoints.
+
 ## Pré-requisitos
 
 Antes de criar a interface, confirme que a capacidade já possui:

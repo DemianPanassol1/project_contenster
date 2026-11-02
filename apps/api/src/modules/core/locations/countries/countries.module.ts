@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { Language } from '@/modules/core/communication/languages/entities/language.entity';
 import { State } from '@/modules/core/locations/states/entities/state.entity';
+import { Language } from '@/modules/core/system-admin/languages/entities/language.entity';
 
 import { Country } from './entities/country.entity';
 import { CountryTranslation } from './entities/country-translation.entity';
@@ -14,6 +14,6 @@ import { CountriesService } from './countries.service';
   imports: [TypeOrmModule.forFeature([Country, CountryTranslation, Language, State])],
   controllers: [CountriesController],
   providers: [CountriesRepository, CountriesService],
-  exports: [CountriesRepository],
+  exports: [CountriesRepository, CountriesService],
 })
 export class CountriesModule {}

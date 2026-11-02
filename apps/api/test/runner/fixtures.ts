@@ -3,11 +3,11 @@ import type { DataSource } from 'typeorm';
 import { DocumentType } from '@contenster/shared';
 import { Profile } from '@/modules/core/access-control/profiles/entities/profiles.entity';
 import { ProfileTranslation } from '@/modules/core/access-control/profiles/entities/profiles-translation.entity';
-import { Language } from '@/modules/core/communication/languages/entities/language.entity';
 import { Client } from '@/modules/core/identity/clients/entities/client.entity';
 import { ClientLanguage } from '@/modules/core/identity/clients/entities/client-language.entity';
 import { User } from '@/modules/core/identity/users/entities/user.entity';
 import { UserProfile } from '@/modules/core/identity/users/entities/user-profile.entity';
+import { Language } from '@/modules/core/system-admin/languages/entities/language.entity';
 
 export interface SecondaryClientFixture {
   clientId: number;

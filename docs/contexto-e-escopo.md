@@ -39,6 +39,8 @@ distribuição por pacote, plugin, submódulo ou sincronização automática com
 
 ## Bootstrap inicial
 
-O bootstrap técnico cria idiomas, ações, localização, módulos, funcionalidades, um cliente inicial, um perfil inicial, o vínculo administrativo e o usuário `admin` com senha `123456`.
+O bootstrap técnico cria idiomas e ações globais, localização, módulos, funcionalidades de cliente,
+um cliente inicial, um perfil inicial, o vínculo administrativo e o usuário `admin` com senha
+`123456`. Idiomas e ações não são funcionalidades atribuídas ao cliente inicial.
 
 Essas credenciais são genéricas para instalação inicial. Devem ser alteradas antes de qualquer uso externo e nunca devem ser tratadas como segredo permanente.

@@ -3,9 +3,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { SystemModule } from '@/modules/core/access-control/modules/entities/system-module.entity';
 import { SystemModulesModule } from '@/modules/core/access-control/modules/system-module.module';
-import { Language } from '@/modules/core/communication/languages/entities/language.entity';
 import { AuthenticationModule } from '@/modules/core/identity/authentication/authentication.module';
 import { ClientsModule } from '@/modules/core/identity/clients/clients.module';
+import { Language } from '@/modules/core/system-admin/languages/entities/language.entity';
 
 import { Functionality } from './entities/functionality.entity';
 import { FunctionalityClientLanguage } from './entities/functionality-client-language.entity';

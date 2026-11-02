@@ -1,5 +1,4 @@
 import { ActionType, CORE_FUNCTIONALITY_IDENTITIES } from '@contenster/shared';
-import { ActionSaveView, ActionsListView } from '@/features/core/admin/actions';
 import { CitiesListView, CitySaveView } from '@/features/core/admin/cities';
 import { ClientLogsListView } from '@/features/core/admin/client-logs';
 import { ClientStorageListView } from '@/features/core/admin/client-storage';
@@ -9,7 +8,6 @@ import {
   FunctionalitiesListView,
   FunctionalitySaveView,
 } from '@/features/core/admin/functionalities';
-import { LanguageSaveView, LanguagesListView } from '@/features/core/admin/languages';
 import { SystemModuleSaveView, SystemModulesListView } from '@/features/core/admin/modules';
 import { ProfileSaveView, ProfilesListView } from '@/features/core/admin/profiles';
 import { StateSaveView, StatesListView } from '@/features/core/admin/states';
@@ -75,22 +73,6 @@ export const CORE_ADMIN_FEATURE_BINDINGS: readonly AdminFeatureBinding[] = [
       update: { action: ActionType.edit, View: StateSaveView },
     },
     slug: CORE_FUNCTIONALITY_IDENTITIES.states,
-  },
-  {
-    modes: {
-      create: { action: ActionType.create, View: ActionSaveView },
-      list: { action: ActionType.view, View: ActionsListView },
-      update: { action: ActionType.edit, View: ActionSaveView },
-    },
-    slug: CORE_FUNCTIONALITY_IDENTITIES.actions,
-  },
-  {
-    modes: {
-      create: { action: ActionType.create, View: LanguageSaveView },
-      list: { action: ActionType.view, View: LanguagesListView },
-      update: { action: ActionType.edit, View: LanguageSaveView },
-    },
-    slug: CORE_FUNCTIONALITY_IDENTITIES.languages,
   },
   {
     modes: {

@@ -97,7 +97,7 @@ const assertBootstrapBaseline = async (): Promise<void> => {
       'SELECT (SELECT COUNT(*) FROM clientes)::text AS clients, (SELECT COUNT(*) FROM idiomas)::text AS languages, (SELECT COUNT(*) FROM funcionalidades)::text AS functionalities',
     );
 
-    if (clients !== '1' || languages !== '3' || functionalities !== '12') {
+    if (clients !== '1' || languages !== '3' || functionalities !== '10') {
       throw new Error('Bootstrap migrations did not create the expected Slim Core baseline.');
     }
   } finally {

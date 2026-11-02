@@ -21,7 +21,10 @@ Uma alteração que preserve invariantes entre vários registros deve usar uma t
 
 ## Seeds e exclusão lógica
 
-O bootstrap técnico materializa referências necessárias para operar: idiomas, ações, localização, módulos, funcionalidades e a identidade administrativa inicial com contexto de cliente e perfil.
+O bootstrap técnico materializa referências necessárias para operar: idiomas e ações globais,
+localização, módulos, funcionalidades de cliente e a identidade administrativa inicial com contexto
+de cliente e perfil. Os registros globais não são materializados como funcionalidades nem recebem
+vínculos próprios de funcionalidades de cliente.
 
 Somente `User` e `Client` usam exclusão lógica. Para as demais entidades, não introduza `deletedAt` ou comportamento equivalente sem requisito explícito.
 

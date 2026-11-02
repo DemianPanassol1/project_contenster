@@ -65,12 +65,12 @@ Os testes devem crescer por comportamento e risco, não pela existência de um a
 camada. Controllers são exercitados preferencialmente por e2e; repositories, relações TypeORM e
 constraints pertencem à integração; regras isoladas pertencem às specs unitárias.
 
-| Tipo       | Cobertura atual                                                                                                                                                                                                                                            |
-| ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Unitário   | Guard de permissões, tokens e sincronização de sessão, resolução de locale e traduções, criptografia de credenciais, sanitização SVG e rotinas de limpeza.                                                                                                 |
-| Integração | Bootstrap das migrations, enum de tipo de acesso de log, perfil administrativo inicial, constraints nomeadas, sessão opaca no Redis, remoção de permissões órfãs e impedimento de vínculo `UserProfile` com perfil de outro cliente.                       |
-| E2E        | Autenticação normal e global, cookie opaco, troca e sincronização de sessão, RBAC, cadastros de idiomas, ações, módulos, funcionalidades, perfis, usuários, cliente, locations, storage, logs de requisição por cliente e logs de jobs no contexto global. |
-| Smoke      | Inicialização da aplicação e healthcheck.                                                                                                                                                                                                                  |
+| Tipo       | Cobertura atual                                                                                                                                                                                                                                                     |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Unitário   | Guard de permissões, tokens e sincronização de sessão, resolução de locale e traduções, criptografia de credenciais, sanitização SVG e rotinas de limpeza.                                                                                                          |
+| Integração | Bootstrap das migrations, enum de tipo de acesso de log, perfil administrativo inicial, constraints nomeadas, sessão opaca no Redis, remoção de permissões órfãs e impedimento de vínculo `UserProfile` com perfil de outro cliente.                                |
+| E2E        | Autenticação normal e global, cookie opaco, troca e sincronização de sessão, RBAC, cadastros globais de idiomas e ações, módulos, funcionalidades, perfis, usuários, cliente, locations, storage, logs de requisição por cliente e logs de jobs no contexto global. |
+| Smoke      | Inicialização da aplicação e healthcheck.                                                                                                                                                                                                                           |
 
 Essa matriz não substitui casos futuros para regras novas. Toda alteração que mudar autorização,
 isolamento por cliente, persistência em cascata, sessão ou interface HTTP deve estender a camada de

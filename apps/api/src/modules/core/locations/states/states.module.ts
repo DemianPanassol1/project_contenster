@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { Language } from '@/modules/core/communication/languages/entities/language.entity';
 import { City } from '@/modules/core/locations/cities/entities/city.entity';
 import { CountriesModule } from '@/modules/core/locations/countries/countries.module';
 import { Country } from '@/modules/core/locations/countries/entities/country.entity';
+import { Language } from '@/modules/core/system-admin/languages/entities/language.entity';
 
 import { State } from './entities/state.entity';
 import { StateTranslation } from './entities/state-translation.entity';
@@ -19,6 +19,6 @@ import { StatesService } from './states.service';
   ],
   controllers: [StatesController],
   providers: [StatesRepository, StatesService],
-  exports: [StatesRepository],
+  exports: [StatesRepository, StatesService],
 })
 export class StatesModule {}

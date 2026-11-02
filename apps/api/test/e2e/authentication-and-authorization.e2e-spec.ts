@@ -318,15 +318,24 @@ describe('authentication and authorization', () => {
     await secondaryAgent.get(`/media/files/${uploaded.id}`).expect(404);
   });
 
-  it('executes the administrative CRUDs for languages, modules, functionalities, profiles and users', async () => {
-    const language = await agent
-      .post('/languages')
+  it('executes global CRUDs for languages and actions and client administrative CRUDs', async () => {
+    await dataSource.getRepository(User).update({ id: 1 }, { isSuperuser: true });
+
+    const globalAgent = request.agent(httpServer);
+
+    await globalAgent
+      .post('/auth/sign-in-global')
+      .send({ password: '123456', staySignedIn: false, username: 'admin' })
+      .expect(201);
+
+    const language = await globalAgent
+      .post('/system-admin/languages')
       .send({ iconId: null, id: null, languageCode: 'tz', name: 'Teste E2E', regionCode: 'TZ' })
       .expect(201);
     const languageId = (language.body as ApiResponse<{ id: number }>).body.id;
 
-    await agent
-      .post('/languages')
+    await globalAgent
+      .post('/system-admin/languages')
       .send({
         iconId: null,
         id: languageId,
@@ -336,13 +345,13 @@ describe('authentication and authorization', () => {
       })
       .expect(201);
 
-    const actions = await agent.post('/actions/list').send({}).expect(201);
+    const actions = await globalAgent.post('/system-admin/actions/list').send({}).expect(201);
     const actionId = (actions.body as ApiResponse<{ items: Array<{ id: number; type: string }> }>)
       .body.items[0].id;
-    const action = await agent.get(`/actions/${actionId}`).expect(200);
+    const action = await globalAgent.get(`/system-admin/actions/${actionId}`).expect(200);
     const actionBody = (action.body as ApiResponse<Record<string, unknown>>).body;
 
-    await agent.post('/actions').send(actionBody).expect(201);
+    await globalAgent.post('/system-admin/actions').send(actionBody).expect(201);
 
     const module = await agent
       .post('/modules')
@@ -428,13 +437,19 @@ describe('authentication and authorization', () => {
     await agent.get(`/users/${userId}`).expect(200);
     await agent.post('/users/delete').send({ id: userId, ids: [] }).expect(201);
     await agent.post('/profiles/delete').send({ id: profileId, ids: [] }).expect(409);
-    await agent.post('/actions/delete').send({ id: actionId, ids: [] }).expect(201);
+    await globalAgent
+      .post('/system-admin/actions/delete')
+      .send({ id: actionId, ids: [] })
+      .expect(201);
     await agent
       .post('/functionalities')
       .send({ ...functionalityPayload, moduleId: existingFunctionality.module.id })
       .expect(201);
     await agent.post('/modules/delete').send({ id: moduleId, ids: [] }).expect(201);
-    await agent.post('/languages/delete').send({ id: languageId, ids: [] }).expect(201);
+    await globalAgent
+      .post('/system-admin/languages/delete')
+      .send({ id: languageId, ids: [] })
+      .expect(201);
   }, 10_000);
 
   it('manages the current client and a complete country, state and city hierarchy', async () => {

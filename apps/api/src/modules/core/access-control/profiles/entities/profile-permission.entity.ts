@@ -10,7 +10,7 @@ import {
 } from 'typeorm';
 
 import { Functionality } from '@/modules/core/access-control/functionalities/entities/functionality.entity';
-import { Action } from '@/modules/core/authorization/actions/entities/action.entity';
+import { Action } from '@/modules/core/system-admin/actions/entities/action.entity';
 
 import { Profile } from './profiles.entity';
 

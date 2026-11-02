@@ -9,8 +9,8 @@ import { I18nService } from 'nestjs-i18n';
 
 import type { I18nTranslations } from '@/i18n/translations';
 import { FunctionalityRepository } from '@/modules/core/access-control/functionalities/functionality.repository';
-import { ActionsRepository } from '@/modules/core/authorization/actions/actions.repository';
 import { SessionSynchronizationService } from '@/modules/core/identity/authentication/session/session-synchronization.service';
+import { ActionsRepository } from '@/modules/core/system-admin/actions/actions.repository';
 import {
   type DeleteRecordsRequestDto,
   DeleteRecordsResponseDto,

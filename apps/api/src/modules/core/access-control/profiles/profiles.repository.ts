@@ -4,9 +4,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { type DeepPartial, In, Repository } from 'typeorm';
 
 import { Functionality } from '@/modules/core/access-control/functionalities/entities/functionality.entity';
-import { Action } from '@/modules/core/authorization/actions/entities/action.entity';
-import { Language } from '@/modules/core/communication/languages/entities/language.entity';
 import { UserProfile } from '@/modules/core/identity/users/entities/user-profile.entity';
+import { Action } from '@/modules/core/system-admin/actions/entities/action.entity';
+import { Language } from '@/modules/core/system-admin/languages/entities/language.entity';
 import { applyPaginatedQueryBuilder, type QueryFieldMap } from '@/shared/pagination';
 import {
   buildTranslatedLabelExpression,

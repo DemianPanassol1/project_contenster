@@ -11,9 +11,9 @@ import {
 } from 'typeorm';
 
 import { FileType, StorageProvider } from '@contenster/shared';
-import { Language } from '@/modules/core/communication/languages/entities/language.entity';
 import { Client } from '@/modules/core/identity/clients/entities/client.entity';
 import { User } from '@/modules/core/identity/users/entities/user.entity';
+import { Language } from '@/modules/core/system-admin/languages/entities/language.entity';
 
 import { StorageProviderConfiguration } from './storage-provider-configuration.entity';
 

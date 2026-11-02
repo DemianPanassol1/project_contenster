@@ -32,7 +32,6 @@ const functionalities = [
   { id: 1, slug: 'clients', order: 0, names: ['Clientes', 'Clients', 'Clientes'] },
   { id: 2, slug: 'users', order: 1, names: ['Usuários', 'Users', 'Usuarios'] },
   { id: 3, slug: 'profiles', order: 2, names: ['Perfis', 'Profiles', 'Perfiles'] },
-  { id: 4, slug: 'languages', order: 3, names: ['Idiomas', 'Languages', 'Idiomas'] },
 ] as const;
 
 const adminPasswordHash =

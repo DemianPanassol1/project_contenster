@@ -7,16 +7,41 @@ export interface SystemAdminNavigationItem {
     | '/system-admin/request-logs'
     | '/system-admin/job-logs'
     | '/system-admin/files'
-    | '/system-admin/portals';
+    | '/system-admin/portals'
+    | '/system-admin/languages'
+    | '/system-admin/actions'
+    | '/system-admin/countries'
+    | '/system-admin/states'
+    | '/system-admin/cities';
   icon: IconName;
-  translationKey: 'clients' | 'access_links' | 'request_logs' | 'job_logs' | 'files' | 'portals';
+  translationKey:
+    | 'clients'
+    | 'access_links'
+    | 'request_logs'
+    | 'job_logs'
+    | 'files'
+    | 'portals'
+    | 'languages'
+    | 'actions'
+    | 'countries'
+    | 'states'
+    | 'cities';
 }
 
-export const systemAdminNavigation: SystemAdminNavigationItem[] = [
-  { href: '/system-admin/clients', icon: 'building-2', translationKey: 'clients' },
-  { href: '/system-admin/access-links', icon: 'user-check', translationKey: 'access_links' },
-  { href: '/system-admin/request-logs', icon: 'logs', translationKey: 'request_logs' },
-  { href: '/system-admin/job-logs', icon: 'scroll-text', translationKey: 'job_logs' },
-  { href: '/system-admin/files', icon: 'folder', translationKey: 'files' },
-  { href: '/system-admin/portals', icon: 'globe', translationKey: 'portals' },
-];
+export const systemAdminNavigation = {
+  generalRecords: [
+    { href: '/system-admin/languages', icon: 'globe', translationKey: 'languages' },
+    { href: '/system-admin/actions', icon: 'logs', translationKey: 'actions' },
+    { href: '/system-admin/countries', icon: 'globe', translationKey: 'countries' },
+    { href: '/system-admin/states', icon: 'folder', translationKey: 'states' },
+    { href: '/system-admin/cities', icon: 'building-2', translationKey: 'cities' },
+  ],
+  system: [
+    { href: '/system-admin/clients', icon: 'building-2', translationKey: 'clients' },
+    { href: '/system-admin/access-links', icon: 'user-check', translationKey: 'access_links' },
+    { href: '/system-admin/request-logs', icon: 'logs', translationKey: 'request_logs' },
+    { href: '/system-admin/job-logs', icon: 'scroll-text', translationKey: 'job_logs' },
+    { href: '/system-admin/files', icon: 'folder', translationKey: 'files' },
+    { href: '/system-admin/portals', icon: 'globe', translationKey: 'portals' },
+  ],
+} satisfies Record<string, SystemAdminNavigationItem[]>;
