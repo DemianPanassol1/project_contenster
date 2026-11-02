@@ -8,8 +8,10 @@ import { useFormContext, useWatch } from 'react-hook-form';
 
 import {
   PortalLoginHeaderMode,
+  portalLoginHeaderModeDictionary,
   PortalLoginLayout,
-  PortalSplitMediaPosition,
+  portalLoginLayoutDictionary,
+  portalSplitMediaPositionDictionary,
   type SessionLanguage,
 } from '@contenster/shared';
 import { portalFontSize } from '@/core/theme';
@@ -52,6 +54,7 @@ function PortalTabPanel({
 
 export function PortalForm({ languages }: { languages: SessionLanguage[] }) {
   const t = useTranslations('protected.system_admin.portals');
+  const tEnum = useTranslations();
   const { createValidationRules } = useValidationRules<PortalFormValues>();
   const { control } = useFormContext<PortalFormValues>();
   const [activeTab, setActiveTab] = useState<PortalFormTab>('general');
@@ -211,10 +214,12 @@ export function PortalForm({ languages }: { languages: SessionLanguage[] }) {
                 helperText={t('helpers.login_layout')}
                 label={t('fields.login_layout')}
                 name="loginLayout"
-                options={Object.values(PortalLoginLayout).map((value) => ({
-                  label: t(`values.login_layout.${value}`),
-                  value,
-                }))}
+                options={Object.entries(portalLoginLayoutDictionary).map(
+                  ([value, translationKey]) => ({
+                    label: tEnum(translationKey),
+                    value,
+                  }),
+                )}
                 rules={{ required: t('validation.login_layout_required') }}
                 textFieldProps={{ required: true }}
               />
@@ -223,10 +228,12 @@ export function PortalForm({ languages }: { languages: SessionLanguage[] }) {
                   helperText={t('helpers.split_media_position')}
                   label={t('fields.split_media_position')}
                   name="splitMediaPosition"
-                  options={Object.values(PortalSplitMediaPosition).map((value) => ({
-                    label: t(`values.split_position.${value}`),
-                    value,
-                  }))}
+                  options={Object.entries(portalSplitMediaPositionDictionary).map(
+                    ([value, translationKey]) => ({
+                      label: tEnum(translationKey),
+                      value,
+                    }),
+                  )}
                   rules={{ required: t('validation.split_position_required') }}
                   textFieldProps={{ required: true }}
                 />
@@ -235,10 +242,12 @@ export function PortalForm({ languages }: { languages: SessionLanguage[] }) {
                 helperText={t('helpers.login_header_mode')}
                 label={t('fields.login_header_mode')}
                 name="loginHeaderMode"
-                options={Object.values(PortalLoginHeaderMode).map((value) => ({
-                  label: t(`values.header_mode.${value}`),
-                  value,
-                }))}
+                options={Object.entries(portalLoginHeaderModeDictionary).map(
+                  ([value, translationKey]) => ({
+                    label: tEnum(translationKey),
+                    value,
+                  }),
+                )}
                 rules={{ required: t('validation.login_header_mode_required') }}
                 textFieldProps={{ required: true }}
               />

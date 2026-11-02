@@ -135,6 +135,56 @@
     "spanish": "Español (España)",
     "label": "Idiomas"
   },
+  "enums": {
+    "action_type": {
+      "create": "Crear",
+      "edit": "Editar",
+      "delete": "Eliminar",
+      "view": "Visualizar",
+      "export": "Exportar",
+      "import": "Importar",
+      "publish": "Publicar",
+      "unpublish": "Anular publicación",
+      "activate": "Activar",
+      "deactivate": "Desactivar",
+      "approve": "Aprobar",
+      "reject": "Rechazar",
+      "send": "Enviar",
+      "receive": "Recibir",
+      "grant": "Conceder",
+      "revoke": "Revocar",
+      "start": "Iniciar",
+      "finish": "Finalizar",
+      "change_status": "Cambiar estado"
+    },
+    "cron_execution_status": { "success": "Éxito", "partial": "Parcial", "error": "Error" },
+    "document_type": { "cpf": "CPF", "cnpj": "CNPJ", "rg": "RG", "caepf": "CAEPF" },
+    "file_type": { "image": "Imagen", "video": "Vídeo", "icon": "Icono", "file": "Archivo" },
+    "portal_font_scale": { "small": "Pequeña", "standard": "Estándar", "large": "Grande" },
+    "portal_login_header_mode": { "text": "Texto", "brand_asset": "Identidad visual" },
+    "portal_login_layout": { "centered": "Centrado", "split": "Dividido" },
+    "portal_login_media_slot": {
+      "centered_background_desktop": "Fondo centrado — escritorio",
+      "centered_background_mobile": "Fondo centrado — móvil",
+      "split_panel_desktop": "Panel dividido — escritorio",
+      "split_panel_mobile": "Panel dividido — móvil"
+    },
+    "portal_login_media_type": { "image": "Imagen", "video": "Vídeo" },
+    "portal_split_media_position": { "left": "Izquierda", "right": "Derecha" },
+    "request_log_access_type": { "client": "Cliente", "superuser": "Superusuario" },
+    "request_log_level": {
+      "info": "Información",
+      "warning": "Advertencia",
+      "error": "Error",
+      "fatal": "Fatal"
+    },
+    "session_context_type": { "client": "Cliente", "global": "Global" },
+    "storage_provider": {
+      "local": "Local",
+      "cloudflare_r2": "Cloudflare R2",
+      "google_cloud_storage": "Google Cloud Storage"
+    }
+  },
   "validations": {
     "required": "Campo obligatorio.",
     "email": "Ingresa un correo electrónico válido.",

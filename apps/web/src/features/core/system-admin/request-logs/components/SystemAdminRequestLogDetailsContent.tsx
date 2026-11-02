@@ -1,15 +1,19 @@
 'use client';
 
-import type { SystemAdminRequestLogDetail } from '@contenster/shared';
 import { Box, Divider } from '@mui/material';
 import { useLocale, useTranslations } from 'next-intl';
 
+import {
+  requestLogAccessTypeDictionary,
+  type SystemAdminRequestLogDetail,
+} from '@contenster/shared';
 import { HttpMethodChip, LogField, LogJsonSection, LogSection } from '@/shared/observability';
 import { formatDateTime } from '@/utils';
 
 export function SystemAdminRequestLogDetailsContent({ log }: { log: SystemAdminRequestLogDetail }) {
   const locale = useLocale();
   const t = useTranslations('protected.system_admin.request_logs');
+  const tEnum = useTranslations();
   const emptyLabel = t('not_available');
 
   return (
@@ -21,7 +25,7 @@ export function SystemAdminRequestLogDetailsContent({ log }: { log: SystemAdminR
         <LogField
           emptyLabel={emptyLabel}
           label={t('fields.access_type')}
-          value={t(`access_types.${log.accessType}`)}
+          value={tEnum(requestLogAccessTypeDictionary[log.accessType])}
         />
         <LogField
           emptyLabel={emptyLabel}

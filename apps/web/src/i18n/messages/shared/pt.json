@@ -135,6 +135,56 @@
     "spanish": "Espanhol (Espanha)",
     "label": "Idiomas"
   },
+  "enums": {
+    "action_type": {
+      "create": "Criar",
+      "edit": "Editar",
+      "delete": "Excluir",
+      "view": "Visualizar",
+      "export": "Exportar",
+      "import": "Importar",
+      "publish": "Publicar",
+      "unpublish": "Despublicar",
+      "activate": "Ativar",
+      "deactivate": "Desativar",
+      "approve": "Aprovar",
+      "reject": "Reprovar",
+      "send": "Enviar",
+      "receive": "Receber",
+      "grant": "Conceder",
+      "revoke": "Revogar",
+      "start": "Iniciar",
+      "finish": "Finalizar",
+      "change_status": "Alterar status"
+    },
+    "cron_execution_status": { "success": "Sucesso", "partial": "Parcial", "error": "Erro" },
+    "document_type": { "cpf": "CPF", "cnpj": "CNPJ", "rg": "RG", "caepf": "CAEPF" },
+    "file_type": { "image": "Imagem", "video": "Vídeo", "icon": "Ícone", "file": "Arquivo" },
+    "portal_font_scale": { "small": "Pequena", "standard": "Padrão", "large": "Grande" },
+    "portal_login_header_mode": { "text": "Texto", "brand_asset": "Identidade visual" },
+    "portal_login_layout": { "centered": "Centralizado", "split": "Dividido" },
+    "portal_login_media_slot": {
+      "centered_background_desktop": "Fundo centralizado — desktop",
+      "centered_background_mobile": "Fundo centralizado — celular",
+      "split_panel_desktop": "Painel dividido — desktop",
+      "split_panel_mobile": "Painel dividido — celular"
+    },
+    "portal_login_media_type": { "image": "Imagem", "video": "Vídeo" },
+    "portal_split_media_position": { "left": "Esquerda", "right": "Direita" },
+    "request_log_access_type": { "client": "Cliente", "superuser": "Superusuário" },
+    "request_log_level": {
+      "info": "Informação",
+      "warning": "Aviso",
+      "error": "Erro",
+      "fatal": "Fatal"
+    },
+    "session_context_type": { "client": "Cliente", "global": "Global" },
+    "storage_provider": {
+      "local": "Local",
+      "cloudflare_r2": "Cloudflare R2",
+      "google_cloud_storage": "Google Cloud Storage"
+    }
+  },
   "validations": {
     "required": "Campo obrigatório.",
     "email": "Informe um e-mail válido.",

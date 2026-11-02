@@ -4,7 +4,12 @@ import { Box, Stack, Typography } from '@mui/material';
 import { useTranslations } from 'next-intl';
 import { useFormContext, useWatch } from 'react-hook-form';
 
-import { PortalLoginLayout, PortalLoginMediaSlot, PortalLoginMediaType } from '@contenster/shared';
+import {
+  PortalLoginLayout,
+  PortalLoginMediaSlot,
+  PortalLoginMediaType,
+  portalLoginMediaTypeDictionary,
+} from '@contenster/shared';
 import { portalFontSize } from '@/core/theme';
 import { API_ROUTES } from '@/routes';
 import { FormFileUpload, FormImageUpload, FormSelect } from '@/shared';
@@ -27,6 +32,7 @@ const mediaGroups = [
 
 function PortalMediaSlot({ slot }: { slot: PortalLoginMediaSlot }) {
   const t = useTranslations('protected.system_admin.portals');
+  const tEnum = useTranslations();
   const { control, setValue } = useFormContext<PortalFormValues>();
   const loginMedia = useWatch({ control, name: 'loginMedia' });
   const mediaType = useWatch({ control, name: `loginMedia.${slot}.mediaType` });
@@ -41,10 +47,12 @@ function PortalMediaSlot({ slot }: { slot: PortalLoginMediaSlot }) {
           helperText={t('helpers.media_type')}
           label={t('fields.media_type')}
           name={`loginMedia.${slot}.mediaType`}
-          options={Object.values(PortalLoginMediaType).map((value) => ({
-            label: t(`values.media_type.${value}`),
-            value,
-          }))}
+          options={Object.entries(portalLoginMediaTypeDictionary).map(
+            ([value, translationKey]) => ({
+              label: tEnum(translationKey),
+              value,
+            }),
+          )}
           onValueChange={(value) => {
             if (value !== PortalLoginMediaType.image && value !== PortalLoginMediaType.video)
               return;

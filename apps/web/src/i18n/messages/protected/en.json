@@ -66,28 +66,7 @@
     "go_back": "Back",
     "name": "Name",
     "save": "Save",
-    "type": "Type",
-    "types": {
-      "criar": "Create",
-      "editar": "Edit",
-      "excluir": "Delete",
-      "visualizar": "View",
-      "exportar": "Export",
-      "importar": "Import",
-      "publicar": "Publish",
-      "despublicar": "Unpublish",
-      "ativar": "Activate",
-      "desativar": "Deactivate",
-      "aprovar": "Approve",
-      "reprovar": "Reject",
-      "enviar": "Send",
-      "receber": "Receive",
-      "conceder": "Grant",
-      "revogar": "Revoke",
-      "iniciar": "Start",
-      "finalizar": "Finish",
-      "alterar_status": "Change status"
-    }
+    "type": "Type"
   },
   "languages": {
     "title": "Languages",
@@ -346,12 +325,6 @@
     "rules_title": "Rules by file type",
     "save": "Save",
     "test_connection": "Test connection",
-    "file_types": {
-      "file": "File",
-      "icon": "Icon",
-      "image": "Image",
-      "video": "Video"
-    },
     "fields": {
       "access_key_id": "Access Key ID",
       "account_id": "Account ID",
@@ -457,7 +430,6 @@
         "access_type": "Access type",
         "ip": "IP"
       },
-      "access_types": { "client": "Client", "superuser": "Superuser" },
       "sections": {
         "identification": "Identification",
         "request": "Request",
@@ -503,7 +475,6 @@
         "status": "Status",
         "duration": "Duration"
       },
-      "statuses": { "sucesso": "Success", "parcial": "Partial", "erro": "Error" },
       "sections": {
         "identification": "Identification",
         "execution": "Execution",
@@ -696,12 +667,7 @@
         "poster": "Image shown before the video starts and while it loads."
       },
       "values": {
-        "no_hosts": "No hosts",
-        "font_scale": { "small": "Small", "standard": "Standard", "large": "Large" },
-        "login_layout": { "centered": "Centered", "split": "Split" },
-        "split_position": { "left": "Left", "right": "Right" },
-        "header_mode": { "text": "Text", "brand_asset": "Brand" },
-        "media_type": { "image": "Image", "video": "Video" }
+        "no_hosts": "No hosts"
       },
       "validation": {
         "host_required": "Enter the host.",

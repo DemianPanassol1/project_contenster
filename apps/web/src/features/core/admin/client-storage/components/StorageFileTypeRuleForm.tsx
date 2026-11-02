@@ -3,7 +3,7 @@
 import { Box } from '@mui/material';
 import { useTranslations } from 'next-intl';
 
-import { FileType } from '@contenster/shared';
+import { fileTypeDictionary } from '@contenster/shared';
 import { useValidationRules } from '@/hooks';
 import type { SelectOption } from '@/services/hooks';
 import { FormSelect, FormSwitch } from '@/shared';
@@ -16,13 +16,11 @@ interface StorageFileTypeRuleFormProps {
 
 export function StorageFileTypeRuleForm({ configurationOptions }: StorageFileTypeRuleFormProps) {
   const t = useTranslations('protected.client_storage');
+  const tEnum = useTranslations();
   const { createValidationRules } = useValidationRules<StorageFileTypeRuleFormValues>();
-  const fileTypeOptions: SelectOption[] = [
-    { label: t('file_types.image'), value: FileType.image },
-    { label: t('file_types.video'), value: FileType.video },
-    { label: t('file_types.icon'), value: FileType.icon },
-    { label: t('file_types.file'), value: FileType.file },
-  ];
+  const fileTypeOptions: SelectOption[] = Object.entries(fileTypeDictionary).map(
+    ([value, translationKey]) => ({ label: tEnum(translationKey), value }),
+  );
 
   return (
     <Box sx={{ display: 'grid', gap: 2 }}>

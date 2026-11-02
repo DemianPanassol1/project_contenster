@@ -7,7 +7,7 @@ import { Controller, type FieldPath, useFormContext, useWatch } from 'react-hook
 
 import {
   ICO_MIME_TYPES,
-  PortalFontScale,
+  portalFontScaleDictionary,
   PortalLoginHeaderMode,
   SVG_MIME_TYPE,
 } from '@contenster/shared';
@@ -200,6 +200,7 @@ function PortalPalette({ mode }: { mode: 'light' | 'dark' }) {
 
 export function PortalIdentityFields() {
   const t = useTranslations('protected.system_admin.portals');
+  const tEnum = useTranslations();
   const { control } = useFormContext<PortalFormValues>();
   const loginHeaderMode = useWatch({ control, name: 'loginHeaderMode' });
 
@@ -230,8 +231,8 @@ export function PortalIdentityFields() {
             helperText={t('helpers.font_scale')}
             label={t('fields.font_scale')}
             name="fontScale"
-            options={Object.values(PortalFontScale).map((value) => ({
-              label: t(`values.font_scale.${value}`),
+            options={Object.entries(portalFontScaleDictionary).map(([value, translationKey]) => ({
+              label: tEnum(translationKey),
               value,
             }))}
             rules={{ required: t('validation.font_scale_required') }}

@@ -3,7 +3,11 @@
 import { Box } from '@mui/material';
 import { useTranslations } from 'next-intl';
 
-import { ActionType, type SaveActionRequest, type SessionLanguage } from '@contenster/shared';
+import {
+  actionTypeDictionary,
+  type SaveActionRequest,
+  type SessionLanguage,
+} from '@contenster/shared';
 import { useValidationRules } from '@/hooks';
 import { FormSelect, TranslationsFields } from '@/shared';
 
@@ -13,6 +17,7 @@ interface ActionFormProps {
 
 export function ActionForm({ languages }: ActionFormProps) {
   const t = useTranslations('protected.actions');
+  const tEnum = useTranslations();
   const { createValidationRules } = useValidationRules<SaveActionRequest>();
 
   return (
@@ -34,9 +39,9 @@ export function ActionForm({ languages }: ActionFormProps) {
       <FormSelect<SaveActionRequest>
         label={t('type')}
         name="type"
-        options={Object.values(ActionType).map((type) => ({
-          label: t(`types.${type}`),
-          value: type,
+        options={Object.entries(actionTypeDictionary).map(([value, translationKey]) => ({
+          label: tEnum(translationKey),
+          value,
         }))}
         rules={createValidationRules('required')}
       />

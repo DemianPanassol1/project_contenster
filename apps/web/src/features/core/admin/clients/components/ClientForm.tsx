@@ -3,7 +3,7 @@
 import { Box } from '@mui/material';
 import { useTranslations } from 'next-intl';
 
-import { DocumentType } from '@contenster/shared';
+import { type DocumentType, documentTypeDictionary } from '@contenster/shared';
 import { useValidationRules } from '@/hooks';
 import { API_ROUTES } from '@/routes';
 import { FormImageUpload, FormInput, FormMaskedInput, FormSelect } from '@/shared';
@@ -22,6 +22,7 @@ interface ClientFormProps {
 
 export function ClientForm({ documentType }: ClientFormProps) {
   const t = useTranslations('protected.clients');
+  const tEnum = useTranslations();
   const { createValidationRules } = useValidationRules<ClientFormValues>();
 
   return (
@@ -46,8 +47,8 @@ export function ClientForm({ documentType }: ClientFormProps) {
         <FormSelect<ClientFormValues>
           label={t('document_type')}
           name="documentType"
-          options={Object.values(DocumentType).map((value) => ({
-            label: value.toUpperCase(),
+          options={Object.entries(documentTypeDictionary).map(([value, translationKey]) => ({
+            label: tEnum(translationKey),
             value,
           }))}
           rules={createValidationRules('required')}

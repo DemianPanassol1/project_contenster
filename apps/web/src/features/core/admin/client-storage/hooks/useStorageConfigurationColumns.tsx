@@ -1,15 +1,27 @@
 'use client';
 
-import type { StorageConfigurationListItem } from '@contenster/shared';
 import { useTranslations } from 'next-intl';
 import { useMemo } from 'react';
 
+import {
+  type StorageConfigurationListItem,
+  type StorageProvider,
+  storageProviderDictionary,
+} from '@contenster/shared';
 import type { DataTableColumn } from '@/shared';
 
 import { getStorageProviderLabel } from '../utils/client-storage.utils';
 
 export function useStorageConfigurationColumns(): DataTableColumn<StorageConfigurationListItem>[] {
   const t = useTranslations('protected.client_storage');
+  const tEnum = useTranslations();
+  const storageProviderLabels = useMemo<Record<StorageProvider, string>>(
+    () =>
+      Object.fromEntries(
+        Object.entries(storageProviderDictionary).map(([value, key]) => [value, tEnum(key)]),
+      ) as Record<StorageProvider, string>,
+    [tEnum],
+  );
 
   return useMemo(
     () => [
@@ -28,7 +40,7 @@ export function useStorageConfigurationColumns(): DataTableColumn<StorageConfigu
         name: t('fields.provider'),
         filterable: true,
         renderCell: ({ row }: { row: StorageConfigurationListItem }) =>
-          getStorageProviderLabel(row.provider),
+          getStorageProviderLabel(row.provider, storageProviderLabels),
         sortable: true,
         type: 'text' as const,
       },
@@ -56,6 +68,6 @@ export function useStorageConfigurationColumns(): DataTableColumn<StorageConfigu
         width: 112,
       },
     ],
-    [t],
+    [storageProviderLabels, t],
   );
 }

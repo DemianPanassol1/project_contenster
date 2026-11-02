@@ -1,9 +1,15 @@
 'use client';
 
-import type { ClientStorageFileListItem, FileType } from '@contenster/shared';
 import { useLocale, useTranslations } from 'next-intl';
 import { useMemo } from 'react';
 
+import {
+  type ClientStorageFileListItem,
+  type FileType,
+  fileTypeDictionary,
+  type StorageProvider,
+  storageProviderDictionary,
+} from '@contenster/shared';
 import type { DataTableColumn } from '@/shared';
 import { formatDateTime, FormatUtils } from '@/utils';
 
@@ -13,14 +19,20 @@ import { getStorageFileTypeLabel, getStorageProviderLabel } from '../utils/clien
 export function useClientStorageFileColumns(): DataTableColumn<ClientStorageFileListItem>[] {
   const locale = useLocale();
   const t = useTranslations('protected.client_storage');
+  const tEnum = useTranslations();
   const fileTypeLabels = useMemo<Record<FileType, string>>(
-    () => ({
-      arquivo: t('file_types.file'),
-      icone: t('file_types.icon'),
-      imagem: t('file_types.image'),
-      video: t('file_types.video'),
-    }),
-    [t],
+    () =>
+      Object.fromEntries(
+        Object.entries(fileTypeDictionary).map(([value, key]) => [value, tEnum(key)]),
+      ) as Record<FileType, string>,
+    [tEnum],
+  );
+  const storageProviderLabels = useMemo<Record<StorageProvider, string>>(
+    () =>
+      Object.fromEntries(
+        Object.entries(storageProviderDictionary).map(([value, key]) => [value, tEnum(key)]),
+      ) as Record<StorageProvider, string>,
+    [tEnum],
   );
 
   return useMemo(
@@ -67,7 +79,7 @@ export function useClientStorageFileColumns(): DataTableColumn<ClientStorageFile
         name: t('fields.provider'),
         filterable: true,
         renderCell: ({ row }: { row: ClientStorageFileListItem }) =>
-          getStorageProviderLabel(row.provider),
+          getStorageProviderLabel(row.provider, storageProviderLabels),
         sortable: true,
         type: 'text' as const,
       },
@@ -106,6 +118,6 @@ export function useClientStorageFileColumns(): DataTableColumn<ClientStorageFile
         type: 'text' as const,
       },
     ],
-    [fileTypeLabels, locale, t],
+    [fileTypeLabels, locale, storageProviderLabels, t],
   );
 }

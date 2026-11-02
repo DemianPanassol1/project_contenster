@@ -6,7 +6,8 @@ import {
   PortalFontScale,
   PortalLoginHeaderMode,
   PortalLoginLayout,
-  PortalLoginMediaSlot,
+  type PortalLoginMediaSlot,
+  portalLoginMediaSlotDictionary,
   PortalLoginMediaType,
   type PortalPalette,
   PortalSplitMediaPosition,
@@ -20,7 +21,7 @@ export const defaultPortalLightPalette: PortalPalette = sharedDefaultPortalLight
 
 export const defaultPortalDarkPalette: PortalPalette = sharedDefaultPortalDarkPalette;
 
-const portalMediaSlots = Object.values(PortalLoginMediaSlot);
+const portalMediaSlots = Object.keys(portalLoginMediaSlotDictionary) as PortalLoginMediaSlot[];
 
 const createPortalMedia = (detail: PortalDetail | null): PortalFormValues['loginMedia'] =>
   Object.fromEntries(

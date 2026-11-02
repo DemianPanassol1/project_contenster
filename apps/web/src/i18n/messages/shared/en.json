@@ -135,6 +135,56 @@
     "spanish": "Spanish (Spain)",
     "label": "Languages"
   },
+  "enums": {
+    "action_type": {
+      "create": "Create",
+      "edit": "Edit",
+      "delete": "Delete",
+      "view": "View",
+      "export": "Export",
+      "import": "Import",
+      "publish": "Publish",
+      "unpublish": "Unpublish",
+      "activate": "Activate",
+      "deactivate": "Deactivate",
+      "approve": "Approve",
+      "reject": "Reject",
+      "send": "Send",
+      "receive": "Receive",
+      "grant": "Grant",
+      "revoke": "Revoke",
+      "start": "Start",
+      "finish": "Finish",
+      "change_status": "Change status"
+    },
+    "cron_execution_status": { "success": "Success", "partial": "Partial", "error": "Error" },
+    "document_type": { "cpf": "CPF", "cnpj": "CNPJ", "rg": "RG", "caepf": "CAEPF" },
+    "file_type": { "image": "Image", "video": "Video", "icon": "Icon", "file": "File" },
+    "portal_font_scale": { "small": "Small", "standard": "Standard", "large": "Large" },
+    "portal_login_header_mode": { "text": "Text", "brand_asset": "Brand asset" },
+    "portal_login_layout": { "centered": "Centered", "split": "Split" },
+    "portal_login_media_slot": {
+      "centered_background_desktop": "Centered background — desktop",
+      "centered_background_mobile": "Centered background — mobile",
+      "split_panel_desktop": "Split panel — desktop",
+      "split_panel_mobile": "Split panel — mobile"
+    },
+    "portal_login_media_type": { "image": "Image", "video": "Video" },
+    "portal_split_media_position": { "left": "Left", "right": "Right" },
+    "request_log_access_type": { "client": "Client", "superuser": "Superuser" },
+    "request_log_level": {
+      "info": "Information",
+      "warning": "Warning",
+      "error": "Error",
+      "fatal": "Fatal"
+    },
+    "session_context_type": { "client": "Client", "global": "Global" },
+    "storage_provider": {
+      "local": "Local",
+      "cloudflare_r2": "Cloudflare R2",
+      "google_cloud_storage": "Google Cloud Storage"
+    }
+  },
   "validations": {
     "required": "Required field.",
     "email": "Enter a valid email address.",

@@ -2,11 +2,12 @@
 
 import { useTranslations } from 'next-intl';
 
-import { type ActionListItem, type ActionType } from '@contenster/shared';
+import { type ActionListItem, type ActionType, actionTypeDictionary } from '@contenster/shared';
 import { type DataTableColumn } from '@/shared';
 
 export function useActionColumns(): DataTableColumn<ActionListItem>[] {
   const t = useTranslations('protected.actions');
+  const tEnum = useTranslations();
 
   return [
     {
@@ -21,7 +22,7 @@ export function useActionColumns(): DataTableColumn<ActionListItem>[] {
       field: 'type',
       selector: 'type',
       name: t('type'),
-      renderCell: ({ value }) => t(`types.${value as ActionType}`),
+      renderCell: ({ value }) => tEnum(actionTypeDictionary[value as ActionType]),
       searchable: true,
       filterable: true,
       sortable: true,

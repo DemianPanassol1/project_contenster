@@ -57,14 +57,10 @@ export const getStorageFileTypeRuleDefaultValues = (): StorageFileTypeRuleFormVa
   storageConfigurationId: 0,
 });
 
-export const storageProviderOptions = [
-  { label: 'Local', value: StorageProvider.local },
-  { label: 'Cloudflare R2', value: StorageProvider.cloudflareR2 },
-  { label: 'Google Cloud Storage', value: StorageProvider.googleCloudStorage },
-] as const;
-
-export const getStorageProviderLabel = (provider: StorageProviderType): string =>
-  storageProviderOptions.find((option) => option.value === provider)?.label ?? provider;
+export const getStorageProviderLabel = (
+  provider: StorageProviderType,
+  labels: Record<StorageProviderType, string>,
+): string => labels[provider];
 
 export const getStorageFileTypeLabel = (
   fileType: FileType,

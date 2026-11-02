@@ -5,7 +5,11 @@ import { useTranslations } from 'next-intl';
 import { useCallback } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
-import { StorageProvider, type TestStorageConnectionResponse } from '@contenster/shared';
+import {
+  StorageProvider,
+  storageProviderDictionary,
+  type TestStorageConnectionResponse,
+} from '@contenster/shared';
 import { useGlobalContext } from '@/core/providers';
 import { useValidationRules } from '@/hooks';
 import { API_ROUTES } from '@/routes';
@@ -19,13 +23,11 @@ import {
 } from '@/shared';
 
 import type { StorageConfigurationFormValues } from '../types/client-storage.types';
-import {
-  mapStorageConfigurationPayload,
-  storageProviderOptions,
-} from '../utils/client-storage.utils';
+import { mapStorageConfigurationPayload } from '../utils/client-storage.utils';
 
 export function StorageConfigurationForm() {
   const t = useTranslations('protected.client_storage');
+  const tEnum = useTranslations();
   const { apiRequest } = useGlobalContext();
   const { createValidationRules } = useValidationRules<StorageConfigurationFormValues>();
   const { control, getValues } = useFormContext<StorageConfigurationFormValues>();
@@ -68,7 +70,10 @@ export function StorageConfigurationForm() {
       <FormSelect<StorageConfigurationFormValues>
         label={t('fields.provider')}
         name="provider"
-        options={[...storageProviderOptions]}
+        options={Object.entries(storageProviderDictionary).map(([value, translationKey]) => ({
+          label: tEnum(translationKey),
+          value,
+        }))}
         rules={createValidationRules('required')}
       />
 

@@ -1,23 +1,26 @@
 'use client';
 
-import type { FileType, StorageFileTypeRuleListItem } from '@contenster/shared';
 import { useTranslations } from 'next-intl';
 import { useMemo } from 'react';
 
+import {
+  type FileType,
+  fileTypeDictionary,
+  type StorageFileTypeRuleListItem,
+} from '@contenster/shared';
 import type { DataTableColumn } from '@/shared';
 
 import { getStorageFileTypeLabel } from '../utils/client-storage.utils';
 
 export function useStorageFileTypeRuleColumns(): DataTableColumn<StorageFileTypeRuleListItem>[] {
   const t = useTranslations('protected.client_storage');
+  const tEnum = useTranslations();
   const fileTypeLabels = useMemo<Record<FileType, string>>(
-    () => ({
-      arquivo: t('file_types.file'),
-      icone: t('file_types.icon'),
-      imagem: t('file_types.image'),
-      video: t('file_types.video'),
-    }),
-    [t],
+    () =>
+      Object.fromEntries(
+        Object.entries(fileTypeDictionary).map(([value, key]) => [value, tEnum(key)]),
+      ) as Record<FileType, string>,
+    [tEnum],
   );
 
   return useMemo(

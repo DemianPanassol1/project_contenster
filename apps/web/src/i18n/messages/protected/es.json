@@ -66,28 +66,7 @@
     "go_back": "Volver",
     "name": "Nombre",
     "save": "Guardar",
-    "type": "Tipo",
-    "types": {
-      "criar": "Crear",
-      "editar": "Editar",
-      "excluir": "Eliminar",
-      "visualizar": "Ver",
-      "exportar": "Exportar",
-      "importar": "Importar",
-      "publicar": "Publicar",
-      "despublicar": "Anular publicación",
-      "ativar": "Activar",
-      "desativar": "Desactivar",
-      "aprovar": "Aprobar",
-      "reprovar": "Rechazar",
-      "enviar": "Enviar",
-      "receber": "Recibir",
-      "conceder": "Conceder",
-      "revogar": "Revocar",
-      "iniciar": "Iniciar",
-      "finalizar": "Finalizar",
-      "alterar_status": "Cambiar estado"
-    }
+    "type": "Tipo"
   },
   "languages": {
     "title": "Idiomas",
@@ -346,12 +325,6 @@
     "rules_title": "Reglas por tipo de archivo",
     "save": "Guardar",
     "test_connection": "Probar conexión",
-    "file_types": {
-      "file": "Archivo",
-      "icon": "Icono",
-      "image": "Imagen",
-      "video": "Video"
-    },
     "fields": {
       "access_key_id": "Access Key ID",
       "account_id": "Account ID",
@@ -457,7 +430,6 @@
         "access_type": "Tipo de acceso",
         "ip": "IP"
       },
-      "access_types": { "client": "Cliente", "superuser": "Superusuario" },
       "sections": {
         "identification": "Identificación",
         "request": "Solicitud",
@@ -503,7 +475,6 @@
         "status": "Estado",
         "duration": "Duración"
       },
-      "statuses": { "sucesso": "Éxito", "parcial": "Parcial", "erro": "Error" },
       "sections": {
         "identification": "Identificación",
         "execution": "Ejecución",
@@ -703,12 +674,7 @@
         "poster": "Imagen mostrada antes de iniciar el video y durante su carga."
       },
       "values": {
-        "no_hosts": "Sin hosts",
-        "font_scale": { "small": "Pequeña", "standard": "Estándar", "large": "Grande" },
-        "login_layout": { "centered": "Centrado", "split": "Dividido" },
-        "split_position": { "left": "Izquierda", "right": "Derecha" },
-        "header_mode": { "text": "Texto", "brand_asset": "Marca" },
-        "media_type": { "image": "Imagen", "video": "Vídeo" }
+        "no_hosts": "Sin hosts"
       },
       "validation": {
         "host_required": "Informe el host.",

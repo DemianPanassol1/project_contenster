@@ -4,7 +4,11 @@ import { Chip } from '@mui/material';
 import { useLocale, useTranslations } from 'next-intl';
 import { useMemo } from 'react';
 
-import { RequestLogAccessType, type SystemAdminRequestLogListItem } from '@contenster/shared';
+import {
+  RequestLogAccessType,
+  requestLogAccessTypeDictionary,
+  type SystemAdminRequestLogListItem,
+} from '@contenster/shared';
 import { portalFontSize } from '@/core/theme';
 import { API_ROUTES } from '@/routes';
 import { type DataTableColumn, FieldType, Operation } from '@/shared';
@@ -14,6 +18,7 @@ import { formatDateTime } from '@/utils';
 export function useSystemAdminRequestLogColumns(): DataTableColumn<SystemAdminRequestLogListItem>[] {
   const locale = useLocale();
   const t = useTranslations('protected.system_admin.request_logs');
+  const tEnum = useTranslations();
 
   return useMemo(
     () => [
@@ -109,7 +114,7 @@ export function useSystemAdminRequestLogColumns(): DataTableColumn<SystemAdminRe
         renderCell: ({ row }) => (
           <Chip
             color={row.accessType === RequestLogAccessType.superuser ? 'secondary' : 'primary'}
-            label={t(`access_types.${row.accessType}`)}
+            label={tEnum(requestLogAccessTypeDictionary[row.accessType])}
             size="small"
             sx={{ fontSize: portalFontSize(11) }}
           />
@@ -119,10 +124,12 @@ export function useSystemAdminRequestLogColumns(): DataTableColumn<SystemAdminRe
         type: 'status' as const,
         filter: {
           type: FieldType.STRING,
-          options: [
-            { label: t('access_types.client'), value: RequestLogAccessType.client },
-            { label: t('access_types.superuser'), value: RequestLogAccessType.superuser },
-          ],
+          options: Object.entries(requestLogAccessTypeDictionary).map(
+            ([value, translationKey]) => ({
+              label: tEnum(translationKey),
+              value,
+            }),
+          ),
         },
       },
       {
@@ -135,6 +142,6 @@ export function useSystemAdminRequestLogColumns(): DataTableColumn<SystemAdminRe
         type: 'text' as const,
       },
     ],
-    [locale, t],
+    [locale, t, tEnum],
   );
 }

@@ -4,7 +4,11 @@ import { Chip } from '@mui/material';
 import { useLocale, useTranslations } from 'next-intl';
 import { useMemo } from 'react';
 
-import { type CronExecutionLogListItem, CronExecutionStatus } from '@contenster/shared';
+import {
+  type CronExecutionLogListItem,
+  CronExecutionStatus,
+  cronExecutionStatusDictionary,
+} from '@contenster/shared';
 import { portalFontSize } from '@/core/theme';
 import { type DataTableColumn, FieldType } from '@/shared';
 import { formatDateTime } from '@/utils';
@@ -18,6 +22,7 @@ const statusColor: Record<CronExecutionStatus, 'error' | 'success' | 'warning'> 
 export function useSystemAdminJobLogColumns(): DataTableColumn<CronExecutionLogListItem>[] {
   const locale = useLocale();
   const t = useTranslations('protected.system_admin.job_logs');
+  const tEnum = useTranslations();
 
   return useMemo(
     () => [
@@ -46,7 +51,7 @@ export function useSystemAdminJobLogColumns(): DataTableColumn<CronExecutionLogL
         renderCell: ({ row }) => (
           <Chip
             color={statusColor[row.status]}
-            label={t(`statuses.${row.status}`)}
+            label={tEnum(cronExecutionStatusDictionary[row.status])}
             size="small"
             sx={{ fontSize: portalFontSize(11) }}
           />
@@ -56,9 +61,9 @@ export function useSystemAdminJobLogColumns(): DataTableColumn<CronExecutionLogL
         type: 'status' as const,
         filter: {
           type: FieldType.STRING,
-          options: Object.values(CronExecutionStatus).map((status) => ({
-            label: t(`statuses.${status}`),
-            value: status,
+          options: Object.entries(cronExecutionStatusDictionary).map(([value, translationKey]) => ({
+            label: tEnum(translationKey),
+            value,
           })),
         },
       },
@@ -70,6 +75,6 @@ export function useSystemAdminJobLogColumns(): DataTableColumn<CronExecutionLogL
         type: 'number' as const,
       },
     ],
-    [locale, t],
+    [locale, t, tEnum],
   );
 }

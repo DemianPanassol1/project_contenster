@@ -1,15 +1,16 @@
 'use client';
 
-import type { CronExecutionLogDetail } from '@contenster/shared';
 import { Box, Divider } from '@mui/material';
 import { useLocale, useTranslations } from 'next-intl';
 
+import { type CronExecutionLogDetail, cronExecutionStatusDictionary } from '@contenster/shared';
 import { LogField, LogJsonSection, LogSection } from '@/shared/observability';
 import { formatDateTime } from '@/utils';
 
 export function SystemAdminJobLogDetailsContent({ log }: { log: CronExecutionLogDetail }) {
   const locale = useLocale();
   const t = useTranslations('protected.system_admin.job_logs');
+  const tEnum = useTranslations();
   const emptyLabel = t('not_available');
   const duration = log.durationMs === null ? null : `${log.durationMs}ms`;
 
@@ -21,7 +22,7 @@ export function SystemAdminJobLogDetailsContent({ log }: { log: CronExecutionLog
         <LogField
           emptyLabel={emptyLabel}
           label={t('fields.status')}
-          value={t(`statuses.${log.status}`)}
+          value={tEnum(cronExecutionStatusDictionary[log.status])}
         />
         <LogField
           emptyLabel={emptyLabel}
