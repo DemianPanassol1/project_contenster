@@ -32,19 +32,23 @@ export interface SystemAdminNavigationItem {
 
 export const systemAdminNavigation = {
   generalRecords: [
-    { href: '/system-admin/languages', icon: 'globe', translationKey: 'languages' },
-    { href: '/system-admin/actions', icon: 'logs', translationKey: 'actions' },
-    { href: '/system-admin/countries', icon: 'heart', translationKey: 'countries' },
-    { href: '/system-admin/states', icon: 'folder', translationKey: 'states' },
-    { href: '/system-admin/cities', icon: 'building-2', translationKey: 'cities' },
+    { href: '/system-admin/languages', icon: 'languages', translationKey: 'languages' },
+    { href: '/system-admin/actions', icon: 'zap', translationKey: 'actions' },
+    { href: '/system-admin/countries', icon: 'globe-2', translationKey: 'countries' },
+    { href: '/system-admin/states', icon: 'map', translationKey: 'states' },
+    { href: '/system-admin/cities', icon: 'map-pin', translationKey: 'cities' },
   ],
   system: [
     { href: '/system-admin/clients', icon: 'building-2', translationKey: 'clients' },
-    { href: '/system-admin/access-links', icon: 'user-check', translationKey: 'access_links' },
-    { href: '/system-admin/request-logs', icon: 'logs', translationKey: 'request_logs' },
-    { href: '/system-admin/job-logs', icon: 'scroll-text', translationKey: 'job_logs' },
-    { href: '/system-admin/files', icon: 'folder', translationKey: 'files' },
-    { href: '/system-admin/portals', icon: 'folder', translationKey: 'portals' },
-    { href: '/system-admin/access-models', icon: 'code', translationKey: 'access_models' },
+    {
+      href: '/system-admin/access-links',
+      icon: 'user-round-check',
+      translationKey: 'access_links',
+    },
+    { href: '/system-admin/request-logs', icon: 'file-clock', translationKey: 'request_logs' },
+    { href: '/system-admin/job-logs', icon: 'list-checks', translationKey: 'job_logs' },
+    { href: '/system-admin/files', icon: 'files', translationKey: 'files' },
+    { href: '/system-admin/portals', icon: 'panels-top-left', translationKey: 'portals' },
+    { href: '/system-admin/access-models', icon: 'shield-check', translationKey: 'access_models' },
   ],
 } satisfies Record<string, SystemAdminNavigationItem[]>;

@@ -16,6 +16,12 @@ O smoke atual verifica a inicialização da API e `GET /health`. Ele não substi
 - E2E e smoke ficam em `apps/api/test/e2e`.
 - Fábricas, fixtures e infraestrutura compartilhada ficam em `apps/api/test/runner`.
 
+## Web
+
+Não implemente nem execute testes automatizados dentro de `apps/web`. Para a aplicação Next.js,
+as únicas validações permitidas são lint, typecheck e build. Testes unitários, de integração, e2e
+ou validação em navegador não devem ser adicionados ou executados nesse pacote.
+
 O bootstrap de teste deve usar a mesma configuração de aplicação empregada no runtime. E2E não deve substituir banco, repositórios, guards ou sessão por mocks.
 
 ## Ambiente descartável de integração e e2e

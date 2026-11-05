@@ -71,6 +71,121 @@ describe('access model persistence', () => {
     await service.delete({ id: model.id, ids: [] });
   });
 
+  it('preserves module keys in preview values and exposes localized module names separately', async () => {
+    const model = await service.save({
+      id: null,
+      isActive: true,
+      translations: [{ id: null, locale: 'pt', name: 'Preview labels', description: null }],
+      structure: {
+        modules: [
+          {
+            key: 'MOD_87654321',
+            order: 0,
+            isActive: true,
+            translations: [{ locale: 'pt', name: 'Preview module', description: null }],
+            functionalities: [
+              {
+                slug: 'access-models',
+                parentSlug: null,
+                icon: null,
+                order: 0,
+                isActive: true,
+                isNavigationGroup: false,
+                enabledLanguageCodes: ['pt'],
+                translations: [{ locale: 'pt', name: 'Preview functionality', description: null }],
+              },
+            ],
+          },
+        ],
+      },
+    });
+
+    try {
+      const preview = await service.preview(model.id, 1);
+      const functionalityChange = preview.changes.find(
+        (change) => change.id === 'functionality:access-models',
+      );
+
+      expect(functionalityChange).toBeDefined();
+      expect(JSON.parse(functionalityChange!.proposedValue!)).toMatchObject({
+        moduleKey: 'MOD_87654321',
+      });
+      expect(preview.moduleNames).toMatchObject({ MOD_87654321: 'Preview module' });
+    } finally {
+      await service.delete({ id: model.id, ids: [] });
+    }
+  });
+
+  it('exposes structure metrics needed by the access model cards', async () => {
+    const model = await service.save({
+      id: null,
+      isActive: true,
+      translations: [{ id: null, locale: 'pt', name: 'Card metrics', description: null }],
+      structure: {
+        modules: [
+          {
+            key: null,
+            order: 0,
+            isActive: true,
+            translations: [{ locale: 'pt', name: 'First module', description: null }],
+            functionalities: [
+              {
+                slug: 'access-models',
+                parentSlug: null,
+                icon: null,
+                order: 0,
+                isActive: true,
+                isNavigationGroup: false,
+                enabledLanguageCodes: ['en', 'pt'],
+                translations: [
+                  { locale: 'pt', name: 'Access models', description: null },
+                  { locale: 'en', name: 'Access models', description: null },
+                ],
+              },
+            ],
+          },
+          {
+            key: null,
+            order: 1,
+            isActive: true,
+            translations: [{ locale: 'pt', name: 'Second module', description: null }],
+            functionalities: [
+              {
+                slug: 'client-storage',
+                parentSlug: null,
+                icon: null,
+                order: 0,
+                isActive: true,
+                isNavigationGroup: false,
+                enabledLanguageCodes: ['es', 'pt'],
+                translations: [
+                  { locale: 'pt', name: 'Storage', description: null },
+                  { locale: 'es', name: 'Almacenamiento', description: null },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    });
+
+    try {
+      const response = await service.list({
+        isOptional: false,
+        pagination: { filters: [], page: 1, perPage: 1000, sort: [] },
+      });
+      const item = response.items.find((candidate) => candidate.id === model.id);
+
+      expect(item).toMatchObject({
+        moduleCount: 2,
+        functionalityCount: 2,
+        enabledLanguageCodes: ['en', 'es', 'pt'],
+      });
+    } finally {
+      await service.delete({ id: model.id, ids: [] });
+    }
+  });
+
   it('rejects translation IDs owned by another model and duplicate module identities', async () => {
     const input = {
       id: null,
@@ -199,7 +314,15 @@ describe('access model persistence', () => {
     expect(await db.getRepository(ProfilePermission).countBy({ profile: { id: profile.id } })).toBe(
       permissions,
     );
-    expect((await service.preview(updated.id, client.id)).changes).toEqual([]);
+    const alignedPreview = await service.preview(updated.id, client.id);
+
+    expect(alignedPreview.changes).toEqual([]);
+    expect(alignedPreview.alignedResources).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ type: 'module' }),
+        expect.objectContaining({ id: 'functionality:users', type: 'functionality' }),
+      ]),
+    );
     const withChild = await service.save({
       id: model.id,
       isActive: true,

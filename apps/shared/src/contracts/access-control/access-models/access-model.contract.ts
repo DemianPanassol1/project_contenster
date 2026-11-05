@@ -52,6 +52,9 @@ export interface AccessModelListItem {
   isActive: boolean;
   name: string;
   description: string | null;
+  moduleCount: number;
+  functionalityCount: number;
+  enabledLanguageCodes: string[];
   updatedAt: string;
 }
 
@@ -89,7 +92,16 @@ export interface AccessModelPreviewConflict {
   message: string;
 }
 
+export interface AccessModelPreviewAlignedResource {
+  id: string;
+  label: string;
+  moduleKey: string;
+  type: 'module' | 'functionality';
+}
+
 export interface AccessModelPreviewResponse {
+  alignedResources: AccessModelPreviewAlignedResource[];
+  moduleNames: Record<string, string>;
   fingerprint: string;
   changes: AccessModelPreviewChange[];
   conflicts: AccessModelPreviewConflict[];

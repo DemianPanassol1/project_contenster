@@ -10,6 +10,7 @@ import { DataSource } from 'typeorm';
 
 import {
   type AccessModelListResponse,
+  type AccessModelPreviewAlignedResource,
   type AccessModelPreviewChange,
   type AccessModelPreviewConflict,
   type AccessModelPreviewResponse,
@@ -146,6 +147,7 @@ export class AccessModelsService {
     const result = await this.dataSource.transaction(async (manager) => {
       const state = await this.repository.loadClientState(manager, clientId);
       const changes = this.plan(model, state);
+      const alignedResources = this.getAlignedResources(model, state, changes);
 
       const conflicts: AccessModelPreviewConflict[] =
         state.profiles.filter((profile) => profile.isAdmin && !profile.isActive).length ||
@@ -180,7 +182,13 @@ export class AccessModelsService {
         }
       }
 
-      return { fingerprint: this.fingerprint(model, state), changes, conflicts };
+      return {
+        alignedResources,
+        fingerprint: this.fingerprint(model, state),
+        changes,
+        conflicts,
+        moduleNames: this.getModuleNames(model, state),
+      };
     });
 
     return result;
@@ -765,40 +773,92 @@ export class AccessModelsService {
       }
     }
 
-    const moduleNames = new Map<string, string>([
-      ...state.modules.map(
-        (module) => [module.key, resolveTranslation(module.translations, locale, 'name')] as const,
-      ),
-      ...model.structure.modules.map(
-        (module) => [module.key!, resolveTranslation(module.translations, locale, 'name')] as const,
-      ),
-    ]);
-    const present = (value: string) =>
-      JSON.stringify(
-        JSON.parse(value) as unknown,
-        (key: string, entry: unknown) =>
-          key === 'moduleKey' && typeof entry === 'string'
-            ? (moduleNames.get(entry) ?? '—')
-            : entry,
-        2,
-      );
-    return changes.map((change) => ({
-      ...change,
-      ...(change.currentValue === undefined ? {} : { currentValue: present(change.currentValue) }),
-      ...(change.proposedValue === undefined
-        ? {}
-        : { proposedValue: present(change.proposedValue) }),
-    }));
+    return changes;
+  }
+
+  private getModuleNames(
+    model: AccessModel,
+    state: Awaited<ReturnType<AccessModelsRepository['loadClientState']>>,
+  ): Record<string, string> {
+    const locale = getCurrentLocale();
+    const names = new Map<string, string>();
+
+    for (const module of state.modules) {
+      names.set(module.key, resolveTranslation(module.translations, locale, 'name'));
+    }
+
+    for (const module of model.structure.modules) {
+      if (module.key) {
+        names.set(module.key, resolveTranslation(module.translations, locale, 'name'));
+      }
+    }
+
+    return Object.fromEntries(names);
+  }
+
+  private getAlignedResources(
+    model: AccessModel,
+    state: Awaited<ReturnType<AccessModelsRepository['loadClientState']>>,
+    changes: AccessModelPreviewChange[],
+  ): AccessModelPreviewAlignedResource[] {
+    const locale = getCurrentLocale();
+    const changedIds = new Set(changes.map((change) => change.id));
+    const resources: AccessModelPreviewAlignedResource[] = [];
+
+    for (const module of model.structure.modules) {
+      if (
+        state.modules.some((item) => item.key === module.key) &&
+        !changedIds.has(`module:${module.key}`)
+      ) {
+        resources.push({
+          id: `module:${module.key}`,
+          label: resolveTranslation(module.translations, locale, 'name'),
+          moduleKey: module.key!,
+          type: 'module',
+        });
+      }
+
+      for (const functionality of module.functionalities) {
+        if (
+          state.functionalities.some((item) => item.slug === functionality.slug) &&
+          !changedIds.has(`functionality:${functionality.slug}`)
+        ) {
+          resources.push({
+            id: `functionality:${functionality.slug}`,
+            label: resolveTranslation(functionality.translations, locale, 'name'),
+            moduleKey: module.key!,
+            type: 'functionality',
+          });
+        }
+      }
+    }
+
+    return resources;
   }
 
   private toListItem(model: AccessModel, locale: string) {
     const translation = resolveTranslation(model.translations, locale, 'name');
+    const enabledLanguageCodes = new Set<string>();
+    let functionalityCount = 0;
+
+    for (const module of model.structure.modules) {
+      functionalityCount += module.functionalities.length;
+
+      for (const functionality of module.functionalities) {
+        for (const languageCode of functionality.enabledLanguageCodes) {
+          enabledLanguageCodes.add(languageCode);
+        }
+      }
+    }
 
     return {
       id: model.id,
       isActive: model.isActive,
       name: translation,
       description: resolveTranslation(model.translations, locale, 'description'),
+      moduleCount: model.structure.modules.length,
+      functionalityCount,
+      enabledLanguageCodes: [...enabledLanguageCodes].sort(),
       updatedAt: model.updatedAt.toISOString(),
     };
   }
