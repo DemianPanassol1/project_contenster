@@ -505,6 +505,7 @@
       "description": "Manage links between users, clients and profiles.",
       "actions": "Actions",
       "add_link": "Add link",
+      "create_user": "Create user",
       "client": "Client",
       "complete_rows_required": "Complete the client and profile for every link.",
       "empty_user": "Select a user to view and manage their access links.",

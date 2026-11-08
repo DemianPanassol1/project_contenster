@@ -505,6 +505,7 @@
       "description": "Administre los vínculos entre usuarios, clientes y perfiles.",
       "actions": "Acciones",
       "add_link": "Agregar vínculo",
+      "create_user": "Crear usuario",
       "client": "Cliente",
       "complete_rows_required": "Complete el cliente y el perfil en todos los vínculos.",
       "empty_user": "Seleccione un usuario para consultar y administrar sus vínculos.",

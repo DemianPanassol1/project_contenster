@@ -641,6 +641,51 @@ describe('authentication and authorization', () => {
       .expect(201);
   });
 
+  it('creates a user from system administration and selects it for access links', async () => {
+    const globalAgent = request.agent(httpServer);
+
+    await globalAgent
+      .post('/auth/sign-in-global')
+      .send({ password: '123456', staySignedIn: false, username: 'admin' })
+      .expect(201);
+
+    const response = await globalAgent
+      .post('/system-admin/access-links/users')
+      .send({
+        email: 'access-links-user@example.test',
+        imageId: null,
+        isActive: true,
+        isBlocked: false,
+        name: 'Access links user',
+        password: '123456',
+        primaryPhone: '+55 11 99999-9999',
+        secondaryPhone: null,
+        username: 'access-links-user',
+      })
+      .expect(201);
+    const created = response.body as ApiResponse<{ id: number; name: string; username: string }>;
+
+    expect(created.body).toMatchObject({
+      name: 'Access links user',
+      username: 'access-links-user',
+    });
+
+    await expect(
+      dataSource.getRepository(User).findOneByOrFail({ id: created.body.id }),
+    ).resolves.toMatchObject({
+      email: 'access-links-user@example.test',
+      isActive: true,
+      isBlocked: false,
+      isSuperuser: false,
+    });
+
+    const details = await globalAgent
+      .get(`/system-admin/access-links/users/${created.body.id}`)
+      .expect(200);
+
+    expect((details.body as ApiResponse<{ links: unknown[] }>).body.links).toEqual([]);
+  });
+
   it('creates and updates the complete client administration aggregate', async () => {
     const globalAgent = request.agent(httpServer);
 

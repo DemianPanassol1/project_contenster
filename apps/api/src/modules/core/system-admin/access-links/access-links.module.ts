@@ -6,13 +6,18 @@ import { AuthenticationModule } from '@/modules/core/identity/authentication/aut
 import { Client } from '@/modules/core/identity/clients/entities/client.entity';
 import { User } from '@/modules/core/identity/users/entities/user.entity';
 import { UserProfile } from '@/modules/core/identity/users/entities/user-profile.entity';
+import { FileModule } from '@/modules/core/media/files/file.module';
 
 import { AccessLinksController } from './access-links.controller';
 import { AccessLinksRepository } from './access-links.repository';
 import { AccessLinksService } from './access-links.service';
 
 @Module({
-  imports: [AuthenticationModule, TypeOrmModule.forFeature([Client, Profile, User, UserProfile])],
+  imports: [
+    AuthenticationModule,
+    FileModule,
+    TypeOrmModule.forFeature([Client, Profile, User, UserProfile]),
+  ],
   controllers: [AccessLinksController],
   providers: [AccessLinksRepository, AccessLinksService],
 })

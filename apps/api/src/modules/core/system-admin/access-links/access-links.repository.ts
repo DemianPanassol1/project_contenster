@@ -31,6 +31,10 @@ export class AccessLinksRepository {
     });
   }
 
+  saveUser(user: User): Promise<User> {
+    return this.users.save(user);
+  }
+
   listClients(): Promise<Client[]> {
     return this.clients.find({
       order: { tradeName: 'ASC' },

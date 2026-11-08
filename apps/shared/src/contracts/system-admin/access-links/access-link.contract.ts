@@ -19,6 +19,18 @@ export interface SystemAdminAccessLinkUser {
   username: string;
 }
 
+export interface CreateSystemAdminAccessLinkUserRequest {
+  name: string;
+  email: string;
+  username: string;
+  primaryPhone: string;
+  secondaryPhone: string | null;
+  password: string;
+  imageId: number | null;
+  isActive: boolean;
+  isBlocked: boolean;
+}
+
 export interface SystemAdminAccessLinkUserDetails {
   clients: SystemAdminAccessLinkClient[];
   links: SystemAdminAccessLinkRequest[];

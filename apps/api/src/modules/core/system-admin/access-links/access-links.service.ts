@@ -4,12 +4,17 @@ import { I18nService } from 'nestjs-i18n';
 import { DataSource } from 'typeorm';
 
 import type { I18nTranslations } from '@/i18n/translations';
+import { generatePasswordHash } from '@/infrastructure/security/password.util';
 import { SessionAuthenticationService } from '@/modules/core/identity/authentication/session/session-authentication.service';
+import { User } from '@/modules/core/identity/users/entities/user.entity';
+import { FileService } from '@/modules/core/media/files/file.service';
+import type { UploadedMultipartFile } from '@/modules/core/media/files/types/uploaded-multipart-file.type';
 import type { PaginateRequestDto } from '@/shared/dtos';
 import { getCurrentLocale } from '@/shared/i18n';
 import { toResponseDto } from '@/shared/responses';
 import { resolveTranslation } from '@/shared/translations';
 
+import { CreateAccessLinkUserRequestDto } from './dto/req/create-access-link-user.request.dto';
 import { ReplaceUserAccessLinksRequestDto } from './dto/req/replace-user-access-links.request.dto';
 import { SystemAdminAccessLinkUserDetailsResponseDto } from './dto/res/system-admin-access-link-user-details.response.dto';
 import { AccessLinksRepository } from './access-links.repository';
@@ -21,6 +26,7 @@ export class AccessLinksService {
     private readonly repository: AccessLinksRepository,
     private readonly i18n: I18nService<I18nTranslations>,
     private readonly sessionAuthentication: SessionAuthenticationService,
+    private readonly fileService: FileService,
   ) {}
 
   async listUserOptions(request: PaginateRequestDto): Promise<AppOption[]> {
@@ -32,6 +38,39 @@ export class AccessLinksService {
       metadata: null,
       value: user.id,
     }));
+  }
+
+  async createUser(
+    request: CreateAccessLinkUserRequestDto,
+  ): Promise<{ id: number; name: string; username: string }> {
+    const user = Object.assign(new User(), {
+      email: request.email,
+      image: request.imageId === null ? null : { id: request.imageId },
+      isActive: request.isActive,
+      isBlocked: request.isBlocked,
+      isSuperuser: false,
+      name: request.name,
+      passwordHash: await generatePasswordHash(request.password),
+      primaryPhone: request.primaryPhone,
+      secondaryPhone: request.secondaryPhone,
+      username: request.username,
+    });
+
+    const saved = await this.repository.saveUser(user);
+
+    return {
+      id: saved.id,
+      name: saved.name,
+      username: saved.username,
+    };
+  }
+
+  getUserImage(id: number) {
+    return this.fileService.findByIdForSystemAdministration(id);
+  }
+
+  uploadUserImage(file: UploadedMultipartFile | undefined, userId: number) {
+    return this.fileService.uploadGlobal(file, userId);
   }
 
   async getUserDetails(id: number): Promise<SystemAdminAccessLinkUserDetailsResponseDto> {

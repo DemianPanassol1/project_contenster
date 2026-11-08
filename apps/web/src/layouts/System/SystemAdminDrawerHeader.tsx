@@ -52,14 +52,22 @@ export function SystemAdminDrawerHeader({ collapsed }: SystemAdminDrawerHeaderPr
       />
 
       {!collapsed && (
-        <Box sx={{ display: 'flex', flexDirection: 'column', lineHeight: 1.1, minWidth: 0 }}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            lineHeight: 1.3,
+            minWidth: 0,
+            py: 0.5,
+          }}
+        >
           <Typography
             sx={{
               color: 'primary.contrastText',
               fontSize: portalFontSize(13.5),
               fontWeight: 600,
               letterSpacing: '-0.02em',
-              lineHeight: 1.1,
+              lineHeight: 1.3,
               overflow: 'hidden',
               textOverflow: 'ellipsis',
               whiteSpace: 'nowrap',
@@ -72,6 +80,7 @@ export function SystemAdminDrawerHeader({ collapsed }: SystemAdminDrawerHeaderPr
             sx={{
               color: 'rgba(255, 255, 255, 0.78)',
               fontSize: portalFontSize(11),
+              lineHeight: 1.3,
               overflow: 'hidden',
               textOverflow: 'ellipsis',
               whiteSpace: 'nowrap',
