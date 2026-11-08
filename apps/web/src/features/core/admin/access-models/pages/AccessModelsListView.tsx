@@ -6,11 +6,11 @@ import { Search, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useMemo, useState } from 'react';
 
-import { AccessModelList } from '@/features/core/access-models/components/AccessModelList';
+import { AccessModelList } from '@/features/shared/features/access-models/components/AccessModelList';
 import {
   accessModelListRequest,
   filterAccessModelsByText,
-} from '@/features/core/access-models/utils/access-model-list.utils';
+} from '@/features/shared/features/access-models/utils/access-model-list.utils';
 import { crudUpdatePath } from '@/features/shared/navigation';
 import { useDebouncedValue } from '@/hooks';
 import { useRouter } from '@/i18n/navigation';
@@ -78,7 +78,6 @@ export function AccessModelsListView({ functionalitySlug, presentation }: AdminF
           </Box>
         ) : (
           <AccessModelList
-            languages={presentation.languages}
             models={filteredModels}
             onApply={(model) => router.push(crudUpdatePath(functionalitySlug, model.id))}
           />

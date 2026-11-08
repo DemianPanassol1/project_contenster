@@ -6,8 +6,8 @@ import { useTranslations } from 'next-intl';
 import { useRef, useState } from 'react';
 
 import { useGlobalContext } from '@/core/providers';
-import { AccessModelApplicationPreview } from '@/features/core/access-models/components/AccessModelApplicationPreview';
-import { getDefaultSelectedAccessModelChangeIds } from '@/features/core/access-models/utils/access-model-preview.utils';
+import { AccessModelApplicationPreview } from '@/features/shared/features/access-models/components/AccessModelApplicationPreview';
+import { getDefaultSelectedAccessModelChangeIds } from '@/features/shared/features/access-models/utils/access-model-preview.utils';
 import { API_ROUTES } from '@/routes';
 import { Button, FormSelect, FormWrapper, Page } from '@/shared';
 

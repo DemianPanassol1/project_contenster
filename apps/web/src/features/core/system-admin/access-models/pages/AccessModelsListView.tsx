@@ -16,18 +16,16 @@ import { useMemo, useState } from 'react';
 
 import { useGlobalContext, useModalContext } from '@/core/providers';
 import { portalFontSize } from '@/core/theme';
-import { AccessModelList } from '@/features/core/access-models/components/AccessModelList';
+import { AccessModelList } from '@/features/shared/features/access-models/components/AccessModelList';
 import {
   accessModelListRequest,
   filterAccessModelsByText,
-} from '@/features/core/access-models/utils/access-model-list.utils';
+} from '@/features/shared/features/access-models/utils/access-model-list.utils';
 import { useDebouncedValue } from '@/hooks';
 import { useRouter } from '@/i18n/navigation';
 import { API_ROUTES } from '@/routes';
 import { usePOST } from '@/services/hooks';
 import { Button, Page } from '@/shared';
-
-import { useSystemAdminLanguages } from '../../shared/hooks/useSystemAdminLanguages';
 
 export function SystemAdminAccessModelsView() {
   const t = useTranslations('protected.access_models');
@@ -35,7 +33,6 @@ export function SystemAdminAccessModelsView() {
   const router = useRouter();
   const { apiRequest } = useGlobalContext();
   const { closeModal, openModal } = useModalContext();
-  const { languages } = useSystemAdminLanguages();
   const [searchDraft, setSearchDraft] = useState('');
   const search = useDebouncedValue(searchDraft, 450);
   const accessModelList = usePOST<PaginatedBody<AccessModelListItem>>(
@@ -131,7 +128,6 @@ export function SystemAdminAccessModelsView() {
           </Box>
         ) : (
           <AccessModelList
-            languages={languages}
             models={filteredModels}
             onApply={(model) => router.push(`/system-admin/access-models/apply/${model.id}`)}
             onDelete={openDeleteConfirmation}

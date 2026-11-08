@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl';
 
 import { useRouter } from '@/i18n/navigation';
 import { API_ROUTES } from '@/routes';
-import { Button, DataTable, Page } from '@/shared';
+import { DataTable, Page } from '@/shared';
 
 import { useLanguageColumns } from '../hooks/useLanguageColumns';
 
@@ -16,18 +16,7 @@ export function SystemAdminLanguagesListView() {
   const columns = useLanguageColumns();
   const tSystem = useTranslations('protected.system_admin');
   return (
-    <Page
-      actions={
-        <Button
-          icon="plus"
-          iconPosition="start"
-          label={t('create_register')}
-          onClick={() => router.push('/system-admin/languages/new')}
-        />
-      }
-      functionality={t('title')}
-      module={tSystem('module')}
-    >
+    <Page functionality={t('title')} module={tSystem('module')}>
       <Paper elevation={1} square={false} sx={{ px: 2, py: 3 }}>
         <DataTable<LanguageListItem>
           bulkDeleteEndpoint={API_ROUTES.SYSTEM_ADMIN.DELETE_LANGUAGES}

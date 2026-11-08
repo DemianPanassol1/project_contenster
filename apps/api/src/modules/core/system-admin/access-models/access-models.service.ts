@@ -838,17 +838,10 @@ export class AccessModelsService {
 
   private toListItem(model: AccessModel, locale: string) {
     const translation = resolveTranslation(model.translations, locale, 'name');
-    const enabledLanguageCodes = new Set<string>();
     let functionalityCount = 0;
 
     for (const module of model.structure.modules) {
       functionalityCount += module.functionalities.length;
-
-      for (const functionality of module.functionalities) {
-        for (const languageCode of functionality.enabledLanguageCodes) {
-          enabledLanguageCodes.add(languageCode);
-        }
-      }
     }
 
     return {
@@ -858,7 +851,6 @@ export class AccessModelsService {
       description: resolveTranslation(model.translations, locale, 'description'),
       moduleCount: model.structure.modules.length,
       functionalityCount,
-      enabledLanguageCodes: [...enabledLanguageCodes].sort(),
       updatedAt: model.updatedAt.toISOString(),
     };
   }

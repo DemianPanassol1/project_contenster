@@ -1,6 +1,6 @@
 'use client';
 
-import type { AccessModelListItem, SessionLanguage } from '@contenster/shared';
+import type { AccessModelListItem } from '@contenster/shared';
 import { Box, Paper, Typography } from '@mui/material';
 import { useTranslations } from 'next-intl';
 
@@ -10,22 +10,14 @@ import { Button } from '@/shared';
 import { AccessModelMetricChip } from './AccessModelMetricChip';
 
 interface AccessModelCardProps {
-  languages: SessionLanguage[];
   model: AccessModelListItem;
   onApply?: (model: AccessModelListItem) => void;
   onDelete?: (model: AccessModelListItem) => void;
   onEdit?: (model: AccessModelListItem) => void;
 }
 
-export function AccessModelCard({
-  languages,
-  model,
-  onApply,
-  onDelete,
-  onEdit,
-}: AccessModelCardProps) {
+export function AccessModelCard({ model, onApply, onDelete, onEdit }: AccessModelCardProps) {
   const t = useTranslations('protected.access_models');
-  const languageNameByCode = new Map(languages.map((language) => [language.locale, language.name]));
 
   return (
     <Paper variant="outlined" elevation={1} square={false} sx={{ overflow: 'hidden' }}>
@@ -83,18 +75,6 @@ export function AccessModelCard({
                 tone="primary"
               />
             </Box>
-
-            {model.enabledLanguageCodes.length > 0 && (
-              <Box sx={{ alignItems: 'center', display: 'flex', flexWrap: 'wrap', gap: 0.75 }}>
-                {model.enabledLanguageCodes.map((languageCode) => (
-                  <AccessModelMetricChip
-                    key={languageCode}
-                    label={languageNameByCode.get(languageCode) ?? languageCode.toUpperCase()}
-                    tone="info"
-                  />
-                ))}
-              </Box>
-            )}
           </Box>
         </Box>
 

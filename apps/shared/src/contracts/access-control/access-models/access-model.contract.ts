@@ -54,7 +54,6 @@ export interface AccessModelListItem {
   description: string | null;
   moduleCount: number;
   functionalityCount: number;
-  enabledLanguageCodes: string[];
   updatedAt: string;
 }
 
