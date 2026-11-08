@@ -57,6 +57,14 @@ export class FileService {
     return this.toResponse(file);
   }
 
+  async findByIdForSystemAdministration(id: number): Promise<FileResponseDto> {
+    const file = await this.fileRepository.findByIdForSystemAdministration(id);
+
+    if (!file) throw new NotFoundException(this.i18n.t('errors.media.file_not_found'));
+
+    return this.toResponse(file);
+  }
+
   async upload(
     file: UploadedMultipartFile | undefined,
     clientId: number,

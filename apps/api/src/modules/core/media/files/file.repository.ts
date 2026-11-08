@@ -30,6 +30,13 @@ export class FileRepository {
     });
   }
 
+  findByIdForSystemAdministration(id: number): Promise<File | null> {
+    return this.files.findOne({
+      relations: { client: true, storageConfiguration: true, uploadedBy: true },
+      where: { id },
+    });
+  }
+
   findCleanupCandidates(createdBefore: Date): Promise<File[]> {
     return this.files.find({
       relations: { storageConfiguration: true },

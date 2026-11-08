@@ -3,6 +3,7 @@ import type { ActionType } from '@contenster/shared';
 import type { ProtectedRouteId, ProtectedRouteSlug } from './protected-routes.type';
 
 const ADMIN_BASE_PATH = '/admin';
+const SYSTEM_ADMIN_BASE_PATH = '/system-admin';
 
 export const parseIdParam = (value: string): number | null => {
   if (!/^[1-9]\d*$/.test(value)) {
@@ -24,6 +25,13 @@ export const crudCreatePath = (slug: ProtectedRouteSlug): string => `${crudListP
 
 export const crudUpdatePath = (slug: ProtectedRouteSlug, id: ProtectedRouteId): string =>
   `${crudListPath(slug)}/update/${encodeURIComponent(String(id))}`;
+
+export const systemAdminClientsPath = (): string => `${SYSTEM_ADMIN_BASE_PATH}/clients`;
+
+export const systemAdminCreateClientPath = (): string => `${systemAdminClientsPath()}/create`;
+
+export const systemAdminUpdateClientPath = (id: ProtectedRouteId): string =>
+  `${systemAdminClientsPath()}/update/${encodeURIComponent(String(id))}`;
 
 export const hasPermissionAction = (actions: readonly ActionType[], action: ActionType): boolean =>
   actions.includes(action);

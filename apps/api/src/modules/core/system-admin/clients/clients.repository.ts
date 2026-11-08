@@ -3,13 +3,9 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { type DeepPartial, EntityManager, In, Repository } from 'typeorm';
 
-import { Functionality } from '@/modules/core/access-control/functionalities/entities/functionality.entity';
-import { SystemModule } from '@/modules/core/access-control/modules/entities/system-module.entity';
-import { ProfilePermission } from '@/modules/core/access-control/profiles/entities/profile-permission.entity';
 import { Profile } from '@/modules/core/access-control/profiles/entities/profiles.entity';
 import { Client } from '@/modules/core/identity/clients/entities/client.entity';
 import { UserProfile } from '@/modules/core/identity/users/entities/user-profile.entity';
-import { Action } from '@/modules/core/system-admin/actions/entities/action.entity';
 import { Language } from '@/modules/core/system-admin/languages/entities/language.entity';
 import { applyPaginatedQueryBuilder } from '@/shared/pagination';
 
@@ -23,7 +19,6 @@ const CLIENT_LIST_FIELDS = {
 @Injectable()
 export class ClientsRepository {
   constructor(
-    @InjectRepository(Action) private readonly actions: Repository<Action>,
     @InjectRepository(Client) private readonly clients: Repository<Client>,
     @InjectRepository(Language) private readonly languages: Repository<Language>,
     @InjectRepository(UserProfile) private readonly userProfiles: Repository<UserProfile>,
@@ -62,8 +57,18 @@ export class ClientsRepository {
     return this.clients.findOneBy({ id });
   }
 
-  findWithLanguages(id: number): Promise<Client | null> {
-    return this.clients.findOne({ where: { id }, relations: { availableLanguageLinks: true } });
+  findAggregate(id: number): Promise<Client | null> {
+    return this.clients.findOne({
+      where: { id },
+      relations: {
+        city: true,
+        image: true,
+        availableLanguageLinks: { language: true },
+        profiles: { translations: { language: true } },
+        storageConfigurations: { credential: true },
+        storageFileTypeRules: { storageConfiguration: true },
+      },
+    });
   }
 
   findLanguagesByIds(ids: number[], manager?: EntityManager): Promise<Language[]> {
@@ -82,29 +87,7 @@ export class ClientsRepository {
     return manager.getRepository(Client).save(data);
   }
 
-  saveModule(data: DeepPartial<SystemModule>, manager: EntityManager): Promise<SystemModule> {
-    return manager.getRepository(SystemModule).save(data);
-  }
-
-  saveFunctionality(
-    data: DeepPartial<Functionality>,
-    manager: EntityManager,
-  ): Promise<Functionality> {
-    return manager.getRepository(Functionality).save(data);
-  }
-
   saveProfile(data: DeepPartial<Profile>, manager: EntityManager): Promise<Profile> {
     return manager.getRepository(Profile).save(data);
-  }
-
-  findActions(manager: EntityManager): Promise<Action[]> {
-    return manager.getRepository(Action).find();
-  }
-
-  saveProfilePermissions(
-    data: DeepPartial<ProfilePermission>[],
-    manager: EntityManager,
-  ): Promise<ProfilePermission[]> {
-    return manager.getRepository(ProfilePermission).save(data);
   }
 }

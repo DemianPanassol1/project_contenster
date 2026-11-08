@@ -6,7 +6,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
-import type { DeepPartial } from 'typeorm';
+import type { DeepPartial, EntityManager } from 'typeorm';
 
 import type { I18nTranslations } from '@/i18n/translations';
 import { serializeApplicationDateTime } from '@/infrastructure/date-time';
@@ -14,6 +14,7 @@ import {
   decryptStorageCredential,
   encryptStorageCredential,
 } from '@/infrastructure/security/storage-credential-crypto.util';
+import { StorageFileTypeRule } from '@/modules/core/media/files/entities/storage-file-type-rule.entity';
 import { StorageProviderCredential } from '@/modules/core/media/files/entities/storage-provider-credential.entity';
 import { StorageService } from '@/modules/core/media/storage/storage.service';
 import { isPostgreSqlForeignKeyViolation } from '@/shared/database/postgres-error.helper';
@@ -140,31 +141,12 @@ export class ClientStorageService {
       throw new NotFoundException(this.i18n.t('errors.common.record_not_found'));
     }
 
-    const configuration = Object.assign(existing ?? new StorageProviderConfiguration(), {
-      accountId: request.accountId,
-      bucketName: request.bucketName,
-      client: { id: clientId },
-      endpoint: request.endpoint,
-      identifier: request.identifier,
-      isActive: request.isActive,
-      name: request.name,
-      projectId: request.projectId,
-      provider: request.provider,
-      publicBaseUrl: request.publicBaseUrl,
-      signedUrlExpiresInSeconds: request.signedUrlExpiresInSeconds,
-      useSignedUrls: request.useSignedUrls,
-    });
+    await this.validateConfiguration(request, existing?.credential ?? null);
 
-    const credentials = this.toCredentialOverride(request, existing?.credential ?? null);
-
-    await this.storageService.testConnection({
-      credentials,
-      storageConfiguration: configuration,
-    });
-
-    const saved = await this.repository.saveConfiguration(
-      configuration,
-      this.toEncryptedCredential(request, existing?.credential ?? null),
+    const saved = await this.saveConfigurationInTransaction(
+      clientId,
+      request,
+      existing?.credential ?? null,
     );
 
     return toResponseDto(StorageConfigurationListItemResponseDto, {
@@ -177,6 +159,74 @@ export class ClientStorageService {
       name: saved.name,
       provider: saved.provider,
     });
+  }
+
+  async validateConfiguration(
+    request: SaveStorageConfigurationRequestDto,
+    existingCredential: StorageProviderCredential | null,
+  ): Promise<void> {
+    const configuration = this.buildConfiguration(request);
+
+    await this.storageService.testConnection({
+      credentials: this.toCredentialOverride(request, existingCredential),
+      storageConfiguration: configuration,
+    });
+  }
+
+  async saveConfigurationInTransaction(
+    clientId: number,
+    request: SaveStorageConfigurationRequestDto,
+    existingCredential: StorageProviderCredential | null,
+    manager?: EntityManager,
+  ): Promise<StorageProviderConfiguration> {
+    const configuration = this.buildConfiguration(request, clientId);
+
+    return this.repository.saveConfiguration(
+      configuration,
+      this.toEncryptedCredential(request, existingCredential),
+      manager,
+    );
+  }
+
+  async saveRuleInTransaction(
+    clientId: number,
+    request: SaveStorageFileTypeRuleRequestDto,
+    storageConfiguration: StorageProviderConfiguration,
+    manager: EntityManager,
+  ): Promise<StorageFileTypeRule> {
+    if (
+      request.isActive &&
+      (await this.repository.hasActiveRule(clientId, request.fileType, request.id, manager))
+    ) {
+      throw new BadRequestException(
+        this.i18n.t('errors.storage.active_file_type_rule_already_exists'),
+      );
+    }
+
+    return this.repository.saveRule(
+      {
+        ...(request.id === null ? {} : { id: request.id }),
+        client: { id: clientId },
+        fileType: request.fileType,
+        isActive: request.isActive,
+        storageConfiguration,
+      },
+      manager,
+    );
+  }
+
+  deleteConfigurationsInTransaction(
+    configurations: StorageProviderConfiguration[],
+    manager: EntityManager,
+  ): Promise<number[]> {
+    return this.repository.deleteConfigurations(configurations, manager);
+  }
+
+  deleteRulesInTransaction(
+    rules: StorageFileTypeRule[],
+    manager: EntityManager,
+  ): Promise<number[]> {
+    return this.repository.deleteRules(rules, manager);
   }
 
   async saveRule(
@@ -259,25 +309,7 @@ export class ClientStorageService {
       throw new NotFoundException(this.i18n.t('errors.common.record_not_found'));
     }
 
-    const configuration = Object.assign(existing ?? new StorageProviderConfiguration(), {
-      accountId: request.accountId,
-      bucketName: request.bucketName,
-      client: { id: clientId },
-      endpoint: request.endpoint,
-      identifier: request.identifier,
-      isActive: request.isActive,
-      name: request.name,
-      projectId: request.projectId,
-      provider: request.provider,
-      publicBaseUrl: request.publicBaseUrl,
-      signedUrlExpiresInSeconds: request.signedUrlExpiresInSeconds,
-      useSignedUrls: request.useSignedUrls,
-    });
-
-    await this.storageService.testConnection({
-      credentials: this.toCredentialOverride(request, existing?.credential ?? null),
-      storageConfiguration: configuration,
-    });
+    await this.validateConfiguration(request, existing?.credential ?? null);
 
     return toResponseDto(TestStorageConnectionResponseDto, { isAvailable: true });
   }
@@ -333,6 +365,27 @@ export class ClientStorageService {
     }
 
     return configuration;
+  }
+
+  private buildConfiguration(
+    request: SaveStorageConfigurationRequestDto,
+    clientId?: number,
+  ): StorageProviderConfiguration {
+    return Object.assign(new StorageProviderConfiguration(), {
+      ...(request.id === null ? {} : { id: request.id }),
+      accountId: request.accountId,
+      bucketName: request.bucketName,
+      ...(clientId === undefined ? {} : { client: { id: clientId } }),
+      endpoint: request.endpoint,
+      identifier: request.identifier,
+      isActive: request.isActive,
+      name: request.name,
+      projectId: request.projectId,
+      provider: request.provider,
+      publicBaseUrl: request.publicBaseUrl,
+      signedUrlExpiresInSeconds: request.signedUrlExpiresInSeconds,
+      useSignedUrls: request.useSignedUrls,
+    });
   }
 
   private toCredentialOverride(

@@ -24,5 +24,6 @@ import { ClientStorageService } from './client-storage.service';
   ],
   controllers: [ClientStorageController],
   providers: [ClientStorageRepository, ClientStorageService],
+  exports: [ClientStorageService],
 })
 export class ClientStorageModule {}

@@ -1,7 +1,7 @@
 import type { FileType, PaginateRequest } from '@contenster/shared';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { type DeepPartial, In, Repository } from 'typeorm';
+import { type DeepPartial, EntityManager, In, Repository } from 'typeorm';
 
 import { applyPaginatedQueryBuilder, type QueryFieldMap } from '@/shared/pagination';
 
@@ -86,15 +86,25 @@ export class ClientStorageRepository {
     });
   }
 
-  findConfiguration(clientId: number, id: number): Promise<StorageProviderConfiguration | null> {
-    return this.configurations.findOne({
+  findConfiguration(
+    clientId: number,
+    id: number,
+    manager?: EntityManager,
+  ): Promise<StorageProviderConfiguration | null> {
+    return (manager?.getRepository(StorageProviderConfiguration) ?? this.configurations).findOne({
       relations: { credential: true },
       where: { client: { id: clientId }, id },
     });
   }
 
-  findRule(clientId: number, id: number): Promise<StorageFileTypeRule | null> {
-    return this.rules.findOne({ where: { client: { id: clientId }, id } });
+  findRule(
+    clientId: number,
+    id: number,
+    manager?: EntityManager,
+  ): Promise<StorageFileTypeRule | null> {
+    return (manager?.getRepository(StorageFileTypeRule) ?? this.rules).findOne({
+      where: { client: { id: clientId }, id },
+    });
   }
 
   findConfigurationsByIds(
@@ -108,40 +118,61 @@ export class ClientStorageRepository {
     return this.rules.find({ where: { client: { id: clientId }, id: In(ids) } });
   }
 
-  saveConfiguration(
+  async saveConfiguration(
     configuration: DeepPartial<StorageProviderConfiguration>,
     credential: DeepPartial<StorageProviderCredential> | null,
+    manager?: EntityManager,
   ): Promise<StorageProviderConfiguration> {
-    return this.configurations.manager.transaction(async (manager) => {
-      const saved = await manager.save(StorageProviderConfiguration, configuration);
+    if (manager) {
+      return this.saveConfigurationWithManager(configuration, credential, manager);
+    }
 
-      if (credential !== null) {
-        await manager.save(StorageProviderCredential, {
-          ...credential,
-          storageConfiguration: saved,
-        });
-      }
-
-      return saved;
-    });
+    return this.configurations.manager.transaction((transactionManager) =>
+      this.saveConfigurationWithManager(configuration, credential, transactionManager),
+    );
   }
 
-  saveRule(rule: DeepPartial<StorageFileTypeRule>): Promise<StorageFileTypeRule> {
-    return this.rules.save(rule);
+  private async saveConfigurationWithManager(
+    configuration: DeepPartial<StorageProviderConfiguration>,
+    credential: DeepPartial<StorageProviderCredential> | null,
+    manager: EntityManager,
+  ): Promise<StorageProviderConfiguration> {
+    const saved = await manager.save(StorageProviderConfiguration, configuration);
+
+    if (credential !== null) {
+      await manager.save(StorageProviderCredential, {
+        ...credential,
+        storageConfiguration: saved,
+      });
+    }
+
+    return saved;
   }
 
-  async deleteConfigurations(configurations: StorageProviderConfiguration[]): Promise<number[]> {
+  saveRule(
+    rule: DeepPartial<StorageFileTypeRule>,
+    manager?: EntityManager,
+  ): Promise<StorageFileTypeRule> {
+    return (manager?.getRepository(StorageFileTypeRule) ?? this.rules).save(rule);
+  }
+
+  async deleteConfigurations(
+    configurations: StorageProviderConfiguration[],
+    manager?: EntityManager,
+  ): Promise<number[]> {
     const ids = configurations.map((configuration) => configuration.id);
 
-    await this.configurations.remove(configurations);
+    await (manager?.getRepository(StorageProviderConfiguration) ?? this.configurations).remove(
+      configurations,
+    );
 
     return ids;
   }
 
-  async deleteRules(rules: StorageFileTypeRule[]): Promise<number[]> {
+  async deleteRules(rules: StorageFileTypeRule[], manager?: EntityManager): Promise<number[]> {
     const ids = rules.map((rule) => rule.id);
 
-    await this.rules.remove(rules);
+    await (manager?.getRepository(StorageFileTypeRule) ?? this.rules).remove(rules);
 
     return ids;
   }
@@ -150,8 +181,9 @@ export class ClientStorageRepository {
     clientId: number,
     fileType: FileType,
     excludingId: number | null,
+    manager?: EntityManager,
   ): Promise<boolean> {
-    const query = this.rules
+    const query = (manager?.getRepository(StorageFileTypeRule) ?? this.rules)
       .createQueryBuilder('rule')
       .where('rule.cliente_id = :clientId', { clientId })
       .andWhere('rule.tipo_arquivo = :fileType', { fileType })

@@ -11,12 +11,14 @@ import { SystemAdminClientCard } from './SystemAdminClientCard';
 interface SystemAdminClientsListProps {
   clients: SystemAdminClientListItem[];
   onDelete: (client: SystemAdminClientListItem) => void;
+  onEdit: (client: SystemAdminClientListItem) => void;
   onToggleActive: (client: SystemAdminClientListItem) => void;
 }
 
 export function SystemAdminClientsList({
   clients,
   onDelete,
+  onEdit,
   onToggleActive,
 }: SystemAdminClientsListProps) {
   const t = useTranslations('protected.system_admin.clients');
@@ -39,6 +41,7 @@ export function SystemAdminClientsList({
           client={client}
           key={client.id}
           onDelete={onDelete}
+          onEdit={onEdit}
           onToggleActive={onToggleActive}
         />
       ))}

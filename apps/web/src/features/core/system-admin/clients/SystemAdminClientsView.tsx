@@ -16,10 +16,15 @@ import { useMemo, useState } from 'react';
 
 import { useGlobalContext, useModalContext } from '@/core/providers';
 import { portalFontSize } from '@/core/theme';
+import {
+  systemAdminCreateClientPath,
+  systemAdminUpdateClientPath,
+} from '@/features/shared/navigation';
 import { useDebouncedValue } from '@/hooks';
+import { useRouter } from '@/i18n/navigation';
 import { API_ROUTES } from '@/routes';
 import { usePOST } from '@/services/hooks';
-import { Page } from '@/shared';
+import { Button, Page } from '@/shared';
 
 import { SystemAdminClientsList } from './components/SystemAdminClientsList';
 
@@ -65,6 +70,7 @@ export function SystemAdminClientsView() {
   const tForm = useTranslations('form');
 
   const { apiRequest } = useGlobalContext();
+  const router = useRouter();
   const { closeModal, openModal } = useModalContext();
   const [searchDraft, setSearchDraft] = useState('');
   const search = useDebouncedValue(searchDraft, 450);
@@ -144,7 +150,19 @@ export function SystemAdminClientsView() {
   };
 
   return (
-    <Page description={t('description')} functionality={t('title')} module={tSystem('module')}>
+    <Page
+      actions={
+        <Button
+          icon="plus"
+          iconPosition="start"
+          label={t('create_client')}
+          onClick={() => router.push(systemAdminCreateClientPath())}
+        />
+      }
+      description={t('description')}
+      functionality={t('title')}
+      module={tSystem('module')}
+    >
       <Paper elevation={1} square={false} sx={{ p: { sm: 3, xs: 2 } }}>
         <Box sx={{ mb: 3 }}>
           <TextField
@@ -185,6 +203,7 @@ export function SystemAdminClientsView() {
           <SystemAdminClientsList
             clients={clients}
             onDelete={openDeleteConfirmation}
+            onEdit={(client) => router.push(systemAdminUpdateClientPath(client.id))}
             onToggleActive={openActiveConfirmation}
           />
         )}

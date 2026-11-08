@@ -12,12 +12,14 @@ import { FormatUtils } from '@/utils';
 interface SystemAdminClientCardProps {
   client: SystemAdminClientListItem;
   onDelete: (client: SystemAdminClientListItem) => void;
+  onEdit: (client: SystemAdminClientListItem) => void;
   onToggleActive: (client: SystemAdminClientListItem) => void;
 }
 
 export function SystemAdminClientCard({
   client,
   onDelete,
+  onEdit,
   onToggleActive,
 }: SystemAdminClientCardProps) {
   const t = useTranslations('protected.system_admin.clients');
@@ -41,10 +43,10 @@ export function SystemAdminClientCard({
             sx={(theme) => ({
               backgroundColor: 'primary.main',
               borderRadius: 999,
+              boxShadow: theme.shadows[4],
               color: 'primary.contrastText',
               height: 48,
               width: 48,
-              boxShadow: theme.shadows[4],
             })}
           >
             <Building2 size={20} />
@@ -109,10 +111,17 @@ export function SystemAdminClientCard({
 
         <Box sx={{ display: 'flex', flexShrink: 0, flexWrap: 'wrap', gap: 1 }}>
           <Button
+            icon="square-pen"
+            iconPosition="start"
+            label={t('edit')}
+            onClick={() => onEdit(client)}
+            variant="outlined"
+          />
+          <Button
             color="warning"
             icon={client.isActive ? 'pause' : 'play'}
             iconPosition="start"
-            label={client.isActive ? t('deactivate_client') : t('activate_client')}
+            label={client.isActive ? t('deactivate') : t('activate')}
             onClick={() => onToggleActive(client)}
             variant="outlined"
           />
@@ -120,7 +129,7 @@ export function SystemAdminClientCard({
             color="error"
             icon="trash"
             iconPosition="start"
-            label={t('delete_client')}
+            label={t('delete')}
             onClick={() => onDelete(client)}
             variant="outlined"
           />

@@ -25,7 +25,13 @@ import {
 import type { StorageConfigurationFormValues } from '../types/client-storage.types';
 import { mapStorageConfigurationPayload } from '../utils/client-storage.utils';
 
-export function StorageConfigurationForm() {
+interface StorageConfigurationFormProps {
+  showTestConnection?: boolean;
+}
+
+export function StorageConfigurationForm({
+  showTestConnection = true,
+}: StorageConfigurationFormProps) {
   const t = useTranslations('protected.client_storage');
   const tEnum = useTranslations();
   const { apiRequest } = useGlobalContext();
@@ -181,13 +187,15 @@ export function StorageConfigurationForm() {
         <FormSwitch<StorageConfigurationFormValues> label={t('fields.is_active')} name="isActive" />
       </Box>
 
-      <Box sx={{ gridColumn: { md: '1 / -1' } }}>
-        <Button
-          label={t('test_connection')}
-          onClick={() => void testConnection()}
-          variant="outlined"
-        />
-      </Box>
+      {showTestConnection && (
+        <Box sx={{ gridColumn: { md: '1 / -1' } }}>
+          <Button
+            label={t('test_connection')}
+            onClick={() => void testConnection()}
+            variant="outlined"
+          />
+        </Box>
+      )}
     </Box>
   );
 }

@@ -6,4 +6,7 @@ export {
   functionalityRouteSegment,
   hasPermissionAction,
   parseIdParam,
+  systemAdminClientsPath,
+  systemAdminCreateClientPath,
+  systemAdminUpdateClientPath,
 } from './protected-routes.util';

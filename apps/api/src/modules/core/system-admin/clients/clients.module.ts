@@ -1,15 +1,15 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { Functionality } from '@/modules/core/access-control/functionalities/entities/functionality.entity';
-import { SystemModule } from '@/modules/core/access-control/modules/entities/system-module.entity';
-import { ProfilePermission } from '@/modules/core/access-control/profiles/entities/profile-permission.entity';
 import { Profile } from '@/modules/core/access-control/profiles/entities/profiles.entity';
 import { AuthenticationModule } from '@/modules/core/identity/authentication/authentication.module';
 import { Client } from '@/modules/core/identity/clients/entities/client.entity';
 import { UserProfile } from '@/modules/core/identity/users/entities/user-profile.entity';
-import { Action } from '@/modules/core/system-admin/actions/entities/action.entity';
+import { CitiesModule } from '@/modules/core/locations/cities/cities.module';
+import { ClientStorageModule } from '@/modules/core/media/client-storage/client-storage.module';
+import { FileModule } from '@/modules/core/media/files/file.module';
 import { Language } from '@/modules/core/system-admin/languages/entities/language.entity';
+import { SystemAdminLanguagesModule } from '@/modules/core/system-admin/languages/languages.module';
 
 import { ClientsController } from './clients.controller';
 import { ClientsRepository } from './clients.repository';
@@ -18,16 +18,11 @@ import { ClientsService } from './clients.service';
 @Module({
   imports: [
     AuthenticationModule,
-    TypeOrmModule.forFeature([
-      Action,
-      Client,
-      Functionality,
-      Language,
-      Profile,
-      ProfilePermission,
-      SystemModule,
-      UserProfile,
-    ]),
+    ClientStorageModule,
+    CitiesModule,
+    FileModule,
+    SystemAdminLanguagesModule,
+    TypeOrmModule.forFeature([Client, Language, Profile, UserProfile]),
   ],
   controllers: [ClientsController],
   providers: [ClientsRepository, ClientsService],

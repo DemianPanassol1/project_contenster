@@ -1,11 +1,25 @@
-import { Body, Controller, Delete, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiBody, ApiConsumes, ApiParam, ApiTags } from '@nestjs/swagger';
 
+import { CurrentUserId } from '@/common/decorators/current-user-id.decorator';
 import { RequireSuperuser } from '@/common/decorators/require-superuser.decorator';
-import { SaveClientRequestDto } from '@/modules/core/identity/clients/dto/req/save-client.request.dto';
+import { settings } from '@/infrastructure/config/app.config';
+import type { UploadedMultipartFile } from '@/modules/core/media/files/types/uploaded-multipart-file.type';
 import { PaginateRequestDto } from '@/shared/dtos';
 
-import { CreateSystemAdminClientRequestDto } from './dto/req/create-system-admin-client.request.dto';
+import { SaveSystemAdminClientRequestDto } from './dto/req/save-system-admin-client.request.dto';
 import { SetSystemAdminClientActiveRequestDto } from './dto/req/set-system-admin-client-active.request.dto';
 import { ClientsService } from './clients.service';
 
@@ -20,14 +34,54 @@ export class ClientsController {
     return this.service.list(request);
   }
 
+  @Post('cities/options')
+  listCityOptions(@Body() request: PaginateRequestDto) {
+    return this.service.listCityOptions(request);
+  }
+
+  @Post('languages/options')
+  listLanguageOptions(@Body() request: PaginateRequestDto) {
+    return this.service.listLanguageOptions(request);
+  }
+
+  @Get('image/:id')
+  @ApiParam({ name: 'id', type: Number })
+  getImageById(@Param('id', ParseIntPipe) id: number) {
+    return this.service.getImageById(id);
+  }
+
+  @Post('image/upload')
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      properties: { file: { format: 'binary', type: 'string' } },
+      required: ['file'],
+      type: 'object',
+    },
+  })
+  @UseInterceptors(
+    FileInterceptor('file', { limits: { fileSize: settings.MAX_UPLOAD_FILE_SIZE_BYTES } }),
+  )
+  uploadImage(
+    @UploadedFile() file: UploadedMultipartFile | undefined,
+    @CurrentUserId() userId: number,
+  ) {
+    return this.service.uploadImage(file, userId);
+  }
+
   @Post()
-  create(@Body() request: CreateSystemAdminClientRequestDto) {
+  create(@Body() request: SaveSystemAdminClientRequestDto) {
     return this.service.create(request);
   }
 
+  @Get(':id')
+  get(@Param('id', ParseIntPipe) id: number) {
+    return this.service.get(id);
+  }
+
   @Patch(':id')
-  update(@Param('id', ParseIntPipe) id: number, @Body() body: SaveClientRequestDto) {
-    return this.service.update(id, body);
+  update(@Param('id', ParseIntPipe) id: number, @Body() request: SaveSystemAdminClientRequestDto) {
+    return this.service.update(id, request);
   }
 
   @Patch(':id/active') setActive(

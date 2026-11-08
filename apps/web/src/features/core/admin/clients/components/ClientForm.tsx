@@ -2,10 +2,12 @@
 
 import { Box } from '@mui/material';
 import { useTranslations } from 'next-intl';
+import type { FieldPath } from 'react-hook-form';
 
 import { type DocumentType, documentTypeDictionary } from '@contenster/shared';
 import { useValidationRules } from '@/hooks';
 import { API_ROUTES } from '@/routes';
+import type { MediaFileEndpointResolver } from '@/services/media';
 import { FormImageUpload, FormInput, FormMaskedInput, FormSelect } from '@/shared';
 
 import type { ClientFormValues } from '../types/client-form.types';
@@ -17,13 +19,26 @@ const OPTIONS_BODY = {
 } as const;
 
 interface ClientFormProps {
+  cityOptionsEndpoint?: string;
   documentType: DocumentType;
+  imageFileEndpoint?: MediaFileEndpointResolver;
+  imageUploadEndpoint?: string;
+  languageOptionsEndpoint?: string;
 }
 
-export function ClientForm({ documentType }: ClientFormProps) {
+const clientField = <_TForm extends ClientFormValues>(name: keyof ClientFormValues) =>
+  name as FieldPath<_TForm>;
+
+export function ClientForm<TForm extends ClientFormValues = ClientFormValues>({
+  cityOptionsEndpoint = API_ROUTES.ADMIN.POST_CLIENT_CITY_OPTIONS,
+  documentType,
+  imageFileEndpoint,
+  imageUploadEndpoint,
+  languageOptionsEndpoint = API_ROUTES.ADMIN.POST_CLIENT_LANGUAGE_OPTIONS,
+}: ClientFormProps) {
   const t = useTranslations('protected.clients');
   const tEnum = useTranslations();
-  const { createValidationRules } = useValidationRules<ClientFormValues>();
+  const { createValidationRules } = useValidationRules<TForm>();
 
   return (
     <Box sx={{ display: 'grid', gap: '1.5rem 2rem' }}>
@@ -34,29 +49,29 @@ export function ClientForm({ documentType }: ClientFormProps) {
           gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' },
         }}
       >
-        <FormInput<ClientFormValues>
+        <FormInput<TForm>
           label={t('trade_name')}
-          name="tradeName"
+          name={clientField<TForm>('tradeName')}
           rules={createValidationRules('required|max_length[150]')}
         />
-        <FormInput<ClientFormValues>
+        <FormInput<TForm>
           label={t('corporate_name')}
-          name="corporateName"
+          name={clientField<TForm>('corporateName')}
           rules={createValidationRules('required|max_length[150]')}
         />
-        <FormSelect<ClientFormValues>
+        <FormSelect<TForm>
           label={t('document_type')}
-          name="documentType"
+          name={clientField<TForm>('documentType')}
           options={Object.entries(documentTypeDictionary).map(([value, translationKey]) => ({
             label: tEnum(translationKey),
             value,
           }))}
           rules={createValidationRules('required')}
         />
-        <FormMaskedInput<ClientFormValues>
+        <FormMaskedInput<TForm>
           label={t('document')}
           maskType={documentType}
-          name="document"
+          name={clientField<TForm>('document')}
           rules={createValidationRules(getDocumentValidationRules(documentType))}
         />
       </Box>
@@ -68,24 +83,24 @@ export function ClientForm({ documentType }: ClientFormProps) {
           gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' },
         }}
       >
-        <FormInput<ClientFormValues>
+        <FormInput<TForm>
           label={t('email')}
-          name="email"
+          name={clientField<TForm>('email')}
           rules={createValidationRules('required|email|max_length[150]')}
           type="email"
         />
-        <FormMaskedInput<ClientFormValues>
+        <FormMaskedInput<TForm>
           label={t('primary_phone')}
           maskType="phone"
-          name="primaryPhone"
+          name={clientField<TForm>('primaryPhone')}
           phoneCountry="BR"
           phonePrefixes={{ BR: '55', ES: '34', US: '1' }}
           rules={createValidationRules('required|phone|max_length[30]')}
         />
-        <FormMaskedInput<ClientFormValues>
+        <FormMaskedInput<TForm>
           label={t('secondary_phone')}
           maskType="phone"
-          name="secondaryPhone"
+          name={clientField<TForm>('secondaryPhone')}
           phoneCountry="BR"
           phonePrefixes={{ BR: '55', ES: '34', US: '1' }}
           rules={createValidationRules('phone|max_length[30]')}
@@ -100,57 +115,63 @@ export function ClientForm({ documentType }: ClientFormProps) {
         }}
       >
         <Box sx={{ gridColumn: { md: 'span 7' } }}>
-          <FormInput<ClientFormValues>
+          <FormInput<TForm>
             label={t('address')}
-            name="address"
+            name={clientField<TForm>('address')}
             rules={createValidationRules('required|max_length[150]')}
           />
         </Box>
         <Box sx={{ gridColumn: { md: 'span 2' } }}>
-          <FormInput<ClientFormValues>
+          <FormInput<TForm>
             label={t('address_number')}
-            name="addressNumber"
+            name={clientField<TForm>('addressNumber')}
             rules={createValidationRules('required|max_length[20]')}
           />
         </Box>
         <Box sx={{ gridColumn: { md: 'span 3' } }}>
-          <FormInput<ClientFormValues>
+          <FormInput<TForm>
             label={t('neighborhood')}
-            name="neighborhood"
+            name={clientField<TForm>('neighborhood')}
             rules={createValidationRules('required|max_length[100]')}
           />
         </Box>
         <Box sx={{ gridColumn: { md: 'span 3' } }}>
-          <FormMaskedInput<ClientFormValues>
+          <FormMaskedInput<TForm>
             label={t('zip_code')}
             maskType="cep"
-            name="zipCode"
+            name={clientField<TForm>('zipCode')}
             rules={createValidationRules('required|cep')}
           />
         </Box>
         <Box sx={{ gridColumn: { md: 'span 9' } }}>
-          <FormSelect<ClientFormValues>
+          <FormSelect<TForm>
             label={t('city')}
-            name="cityId"
+            name={clientField<TForm>('cityId')}
             optionsBody={OPTIONS_BODY}
-            optionsEndpoint={API_ROUTES.ADMIN.POST_CLIENT_CITY_OPTIONS}
+            optionsEndpoint={cityOptionsEndpoint}
             optionsMethod="POST"
             revalidateOptions
           />
         </Box>
       </Box>
 
-      <FormSelect<ClientFormValues>
+      <FormSelect<TForm>
         label={t('languages')}
         multiple
-        name="languageIds"
+        name={clientField<TForm>('languageIds')}
         optionsBody={OPTIONS_BODY}
-        optionsEndpoint={API_ROUTES.ADMIN.POST_CLIENT_LANGUAGE_OPTIONS}
+        optionsEndpoint={languageOptionsEndpoint}
         optionsMethod="POST"
         revalidateOptions
         rules={createValidationRules('required')}
       />
-      <FormImageUpload<ClientFormValues> accept="image/*" label={t('image')} name="imageId" />
+      <FormImageUpload<TForm>
+        accept="image/*"
+        fileEndpoint={imageFileEndpoint}
+        label={t('image')}
+        name={clientField<TForm>('imageId')}
+        uploadEndpoint={imageUploadEndpoint}
+      />
     </Box>
   );
 }

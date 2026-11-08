@@ -641,13 +641,28 @@ describe('authentication and authorization', () => {
       .expect(201);
   });
 
-  it('provisions a client, its administrative profile and all selected functionality permissions', async () => {
+  it('creates and updates the complete client administration aggregate', async () => {
     const globalAgent = request.agent(httpServer);
 
     await globalAgent
       .post('/auth/sign-in-global')
       .send({ password: '123456', staySignedIn: false, username: 'admin' })
       .expect(201);
+
+    const image = Buffer.from(
+      'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIHWP4z8DwHwAFgAI/ScLq7wAAAABJRU5ErkJggg==',
+      'base64',
+    );
+    const imageUploadResponse = await globalAgent
+      .post('/system-admin/clients/image/upload')
+      .attach('file', image, { contentType: 'image/png', filename: 'client-image.png' })
+      .expect(201);
+    const uploadedImage = (
+      imageUploadResponse.body as ApiResponse<{ clientId: number | null; id: number }>
+    ).body;
+
+    expect(uploadedImage.clientId).toBeNull();
+    await globalAgent.get(`/system-admin/clients/image/${uploadedImage.id}`).expect(200);
 
     const response = await globalAgent
       .post('/system-admin/clients')
@@ -664,7 +679,7 @@ describe('authentication and authorization', () => {
           documentType: 'cpf',
           email: 'provisionado@test.local',
           id: null,
-          imageId: null,
+          imageId: uploadedImage.id,
           isActive: true,
           languageLinks: [{ id: null, languageId: 1 }],
           neighborhood: 'Centro',
@@ -674,39 +689,134 @@ describe('authentication and authorization', () => {
           tradeName: 'Cliente Provisionado',
           zipCode: '01000000',
         },
-        functionalities: [
-          {
-            icon: null,
-            isNavigationGroup: false,
-            languageIds: [1],
-            moduleKey: 'administration',
-            order: 1,
-            parentSlug: null,
-            slug: 'users',
-            translations: [{ description: null, locale: 'pt', name: 'Usuários' }],
-          },
-        ],
-        modules: [
-          {
-            key: 'administration',
-            order: 1,
-            translations: [{ description: null, locale: 'pt', name: 'Administração' }],
-          },
-        ],
+        storage: {
+          configurations: [
+            {
+              accessKeyId: null,
+              accountId: null,
+              bucketName: null,
+              clientEmail: null,
+              endpoint: null,
+              id: null,
+              identifier: 'e2e-client-aggregate',
+              isActive: true,
+              key: 'e2e-local-configuration',
+              name: 'Armazenamento local E2E',
+              privateKey: null,
+              projectId: null,
+              provider: StorageProvider.local,
+              publicBaseUrl: null,
+              secretAccessKey: null,
+              signedUrlExpiresInSeconds: null,
+              useSignedUrls: false,
+            },
+          ],
+          deletedConfigurationIds: [],
+          deletedRuleIds: [],
+          rules: [
+            {
+              fileType: FileType.file,
+              id: null,
+              isActive: true,
+              storageConfigurationKey: 'e2e-local-configuration',
+            },
+          ],
+        },
       })
       .expect(201);
     const client = (response.body as ApiResponse<{ id: number }>).body;
+
+    const detailResponse = await globalAgent.get(`/system-admin/clients/${client.id}`).expect(200);
+    const detail = (
+      detailResponse.body as ApiResponse<{
+        adminProfile: { translations: Array<{ locale: string; name: string }> };
+        imageId: number | null;
+        languageLinks: Array<{ id: number; languageId: number }>;
+        storage: {
+          configurations: Array<{ id: number }>;
+          rules: Array<{ id: number }>;
+        };
+      }>
+    ).body;
+
+    expect(detail.adminProfile.translations).toEqual([
+      { description: null, locale: 'pt', name: 'Administrador' },
+    ]);
+    expect(detail.imageId).toBe(uploadedImage.id);
+    expect(detail.storage.configurations).toHaveLength(1);
+    expect(detail.storage.rules).toHaveLength(1);
+
+    await globalAgent
+      .patch(`/system-admin/clients/${client.id}`)
+      .send({
+        adminProfile: {
+          translations: [
+            {
+              description: 'Perfil administrativo do cliente provisionado.',
+              locale: 'pt',
+              name: 'Administrador atualizado',
+            },
+          ],
+        },
+        client: {
+          address: 'Rua de Provisionamento',
+          addressNumber: '1',
+          cityId: null,
+          corporateName: 'Cliente Provisionado Atualizado LTDA',
+          document: '33333333333',
+          documentType: 'cpf',
+          email: 'provisionado@test.local',
+          id: client.id,
+          imageId: null,
+          isActive: true,
+          languageLinks: detail.languageLinks,
+          neighborhood: 'Centro',
+          primaryPhone: '11999999999',
+          secondaryPhone: null,
+          slug: 'cliente-provisionado-e2e',
+          tradeName: 'Cliente Provisionado',
+          zipCode: '01000000',
+        },
+        storage: {
+          configurations: [],
+          deletedConfigurationIds: detail.storage.configurations.map(
+            (configuration) => configuration.id,
+          ),
+          deletedRuleIds: detail.storage.rules.map((rule) => rule.id),
+          rules: [],
+        },
+      })
+      .expect(200);
+
+    const updatedDetailResponse = await globalAgent
+      .get(`/system-admin/clients/${client.id}`)
+      .expect(200);
+    const updatedDetail = (
+      updatedDetailResponse.body as ApiResponse<{
+        adminProfile: { translations: Array<{ description: string | null; name: string }> };
+        corporateName: string;
+        storage: { configurations: unknown[]; rules: unknown[] };
+      }>
+    ).body;
+
+    expect(updatedDetail).toMatchObject({
+      adminProfile: {
+        translations: [
+          {
+            description: 'Perfil administrativo do cliente provisionado.',
+            name: 'Administrador atualizado',
+          },
+        ],
+      },
+      corporateName: 'Cliente Provisionado Atualizado LTDA',
+      storage: { configurations: [], rules: [] },
+    });
 
     const [profile] = await dataSource.query<{ id: number }[]>(
       'SELECT id FROM perfis WHERE cliente_id = $1 AND eh_admin = true',
       [client.id],
     );
-    const [{ permissionCount }] = await dataSource.query<{ permissionCount: string }[]>(
-      'SELECT COUNT(*)::text AS "permissionCount" FROM perfis_permissoes WHERE perfil_id = $1',
-      [profile.id],
-    );
-
-    expect(Number(permissionCount)).toBeGreaterThan(0);
+    expect(profile).toBeDefined();
   });
 
   it('switches the authenticated client and enforces the new profile permissions', async () => {
