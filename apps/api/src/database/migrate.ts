@@ -4,7 +4,7 @@ import { spawnSync } from 'node:child_process';
 import { existsSync, mkdirSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { join } from 'node:path';
-import { DataSource } from 'typeorm';
+import { DataSource, MigrationExecutor } from 'typeorm';
 
 import { API_ROOT_PATH } from '@/infrastructure/config/app.config';
 import { createDataSourceOptions } from '@/infrastructure/database/database.config';
@@ -21,6 +21,11 @@ const dataSourcePath = join(
   'database',
   'typeorm.config.js',
 );
+
+type MigrationInfo = {
+  name: string;
+  timestamp: number;
+};
 
 const usage = (): string =>
   [
@@ -80,6 +85,54 @@ const withDataSource = async (
   }
 };
 
+const formatMigration = (migration: MigrationInfo): string =>
+  `${migration.timestamp} ${migration.name}`;
+
+const getConfiguredMigrationNames = (dataSource: DataSource): Set<string> =>
+  new Set(
+    dataSource.migrations.map((migration) => {
+      const namedMigration = migration as { name?: string };
+
+      return namedMigration.name ?? migration.constructor.name;
+    }),
+  );
+
+const printMigrationStatus = async (dataSource: DataSource): Promise<MigrationInfo[]> => {
+  const executor = new MigrationExecutor(dataSource);
+  const [executed, pending] = await Promise.all([
+    executor.getExecutedMigrations(),
+    executor.getPendingMigrations(),
+  ]);
+  const configuredMigrationNames = getConfiguredMigrationNames(dataSource);
+  const databaseOnly = executed.filter(
+    (migration) => !configuredMigrationNames.has(migration.name),
+  );
+
+  process.stdout.write(`Configured migrations: ${dataSource.migrations.length}.\n`);
+  process.stdout.write(`Executed migrations: ${executed.length}.\n`);
+  for (const migration of executed) {
+    process.stdout.write(`  [executed] ${formatMigration(migration)}\n`);
+  }
+
+  process.stdout.write(`Pending migrations: ${pending.length}.\n`);
+  for (const migration of pending) {
+    process.stdout.write(`  [pending] ${formatMigration(migration)}\n`);
+  }
+
+  if (databaseOnly.length > 0) {
+    process.stdout.write(`Database-only migrations: ${databaseOnly.length}.\n`);
+    for (const migration of databaseOnly) {
+      process.stdout.write(`  [database-only] ${formatMigration(migration)}\n`);
+    }
+  }
+
+  if (pending.length === 0 && databaseOnly.length === 0) {
+    process.stdout.write('Migration state is synchronized.\n');
+  }
+
+  return executed;
+};
+
 const run = async (): Promise<void> => {
   const command = process.argv[2] as MigrationCommand | undefined;
   const args = process.argv.slice(3);
@@ -97,21 +150,36 @@ const run = async (): Promise<void> => {
 
   await withDataSource(async (dataSource) => {
     if (command === 'run') {
+      await printMigrationStatus(dataSource);
+
       const migrations = await dataSource.runMigrations();
+
       process.stdout.write(`Applied ${migrations.length} migration(s).\n`);
+      for (const migration of migrations) {
+        process.stdout.write(`  [applied] ${formatMigration(migration)}\n`);
+      }
+
+      await printMigrationStatus(dataSource);
       return;
     }
 
     if (command === 'show') {
-      const hasPendingMigrations = await dataSource.showMigrations();
-      process.stdout.write(
-        hasPendingMigrations ? 'Pending migrations found.\n' : 'No pending migrations.\n',
-      );
+      await printMigrationStatus(dataSource);
       return;
     }
 
+    const executed = await printMigrationStatus(dataSource);
+    const lastMigration = executed[0];
+
+    if (!lastMigration) {
+      process.stdout.write('No executed migration is available to revert.\n');
+      return;
+    }
+
+    process.stdout.write(`Reverting migration: ${formatMigration(lastMigration)}.\n`);
     await dataSource.undoLastMigration();
-    process.stdout.write('Reverted the last migration.\n');
+    process.stdout.write(`Reverted migration: ${formatMigration(lastMigration)}.\n`);
+    await printMigrationStatus(dataSource);
   });
 };
 

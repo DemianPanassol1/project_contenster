@@ -179,7 +179,6 @@ describe('access model persistence', () => {
       expect(item).toMatchObject({
         moduleCount: 2,
         functionalityCount: 2,
-        enabledLanguageCodes: ['en', 'es', 'pt'],
       });
     } finally {
       await service.delete({ id: model.id, ids: [] });

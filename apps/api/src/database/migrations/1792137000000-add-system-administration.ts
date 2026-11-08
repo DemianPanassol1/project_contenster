@@ -6,7 +6,6 @@ export class AddSystemAdministration1792137000000 implements MigrationInterface 
       `ALTER TABLE "usuarios" ADD COLUMN "eh_super_usuario" boolean NOT NULL DEFAULT false`,
     );
     await queryRunner.query(`ALTER TABLE "perfis" ADD COLUMN "eh_admin" boolean NOT NULL DEFAULT false`);
-    await queryRunner.query(`UPDATE "perfis" SET "eh_admin" = true WHERE "id" = 1 AND "cliente_id" = 1`);
     await queryRunner.query(
       `CREATE UNIQUE INDEX "uq_perfis_cliente_eh_admin" ON "perfis" ("cliente_id") WHERE "eh_admin" = true`,
     );

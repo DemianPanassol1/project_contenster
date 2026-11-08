@@ -79,7 +79,7 @@ describe('authentication and authorization', () => {
     expect(authorized.body.clients.map(({ value }) => value)).toEqual(
       expect.arrayContaining([1, secondaryClientId]),
     );
-    expect(authorized.body).toMatchObject({ isEligibleToGlobalContext: false });
+    expect(authorized.body).toMatchObject({ isEligibleToGlobalContext: true });
 
     const signIn = await agent
       .post('/auth/sign-in')

@@ -16,6 +16,8 @@ entidade. Isso permite traduzir violações de integridade sem acoplamento a nom
 - Migrations estruturais e de seed são append-only após serem aplicadas.
 - Toda migration possui `up` e `down` coerentes.
 - Fixtures de testes não pertencem às migrations de bootstrap.
+- Seeds de bootstrap usam chaves naturais e valores retornados pelos `INSERT`s para encadear relações;
+  não pressupõem IDs numéricos preexistentes.
 
 Uma alteração que preserve invariantes entre vários registros deve usar uma transação única e compartilhar o mesmo `EntityManager` entre os participantes.
 
