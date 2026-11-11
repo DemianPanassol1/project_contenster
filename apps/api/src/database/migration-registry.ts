@@ -7,6 +7,7 @@ import { AddAccessModels1792140000000 } from './migrations/1792140000000-add-acc
 import { CoreSeedReferenceData1792142000000 } from './migrations/1792142000000-core-seed-reference-data';
 import { CoreSeedGeography1792142000001 } from './migrations/1792142000001-core-seed-geography';
 import { CoreSeedSuperuser1792142000002 } from './migrations/1792142000002-core-seed-superuser';
+import { CoreSeedAccessModelCatalog1792142000003 } from './migrations/1792142000003-core-seed-access-model-catalog';
 
 export const coreMigrations = [
   InitialCore1792129518441,
@@ -18,4 +19,5 @@ export const coreMigrations = [
   CoreSeedReferenceData1792142000000,
   CoreSeedGeography1792142000001,
   CoreSeedSuperuser1792142000002,
+  CoreSeedAccessModelCatalog1792142000003,
 ];

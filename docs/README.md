@@ -16,7 +16,8 @@ antecipam soluções sem implementação ou decisão confirmada.
 - [Visão geral](./arquitetura/visao-geral.md): aplicações, fronteiras e dependências.
 - [Identidade, RBAC e contexto](./arquitetura/identidade-rbac-e-contexto.md): sessão, acesso e isolamento por cliente.
 - [Catálogo de funcionalidades](./arquitetura/catalogo-de-funcionalidades.md): identidades técnicas, materialização e relação com permissões.
-- [Persistência](./arquitetura/persistencia.md): modelo de dados, ownership, migrations e bootstrap.
+- [Persistência](./arquitetura/persistencia.md): modelo de dados, ownership, migrations, bootstrap e
+  operação local de PostgreSQL e Redis.
 - [Contratos e integração](./arquitetura/contratos-e-integracao.md): fronteiras entre Shared, API e Web.
 - [Extensibilidade](./arquitetura/extensibilidade.md): **Pendente**.
 
@@ -34,7 +35,6 @@ antecipam soluções sem implementação ou decisão confirmada.
 
 - [Ambientes](./infraestrutura/ambientes.md): variáveis e dependências locais.
 - [Docker](./infraestrutura/docker.md): **Pendente**.
-- [Persistência operacional](./infraestrutura/persistencia.md): PostgreSQL e Redis no ambiente.
 - [Observabilidade](./infraestrutura/observabilidade.md): logs e diagnóstico existentes.
 - [Segurança operacional](./infraestrutura/seguranca-operacional.md): segredos e credenciais.
 

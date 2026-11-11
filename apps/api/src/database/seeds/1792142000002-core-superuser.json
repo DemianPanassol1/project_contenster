@@ -1,0 +1,13 @@
+{
+  "email": "admin@contenster.local",
+  "name": "Contenster Administrator",
+  "passwordHash": "$argon2id$v=19$m=65536,p=4,t=3$6WNyi5uZU3eVDU+MU4a9RQ$979CVRljry3iKh2OphJOrTlYXwiz0+4txEalhc/rYXI",
+  "phone": "00000000000",
+  "username": "admin",
+  "secondaryPhone": null,
+  "isActive": true,
+  "isBlocked": false,
+  "isSuperuser": true,
+  "lastLoginAt": null,
+  "imageId": null
+}

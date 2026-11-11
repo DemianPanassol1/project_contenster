@@ -1,0 +1,2170 @@
+{
+  "country": {
+    "iso2": "BR",
+    "iso3": "BRA",
+    "phoneCode": "55",
+    "currencyCode": "BRL",
+    "locale": "pt-BR",
+    "isActive": true,
+    "translations": [
+      {
+        "locale": "pt",
+        "name": "Brasil"
+      },
+      {
+        "locale": "en",
+        "name": "Brazil"
+      },
+      {
+        "locale": "es",
+        "name": "Brasil"
+      }
+    ],
+    "states": [
+      {
+        "code": "AC",
+        "name": "Acre",
+        "isActive": true,
+        "cities": [
+          {
+            "ibgeCode": "1200401",
+            "name": "Rio Branco",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1200203",
+            "name": "Cruzeiro do Sul",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1200609",
+            "name": "Tarauacá",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1200500",
+            "name": "Sena Madureira",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1200302",
+            "name": "Feijó",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1200104",
+            "name": "Brasiléia",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1200450",
+            "name": "Senador Guiomard",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1200336",
+            "name": "Mâncio Lima",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1200252",
+            "name": "Epitaciolândia",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1200708",
+            "name": "Xapuri",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1200351",
+            "name": "Marechal Thaumaturgo",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1200807",
+            "name": "Porto Acre",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1200385",
+            "name": "Plácido de Castro",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1200427",
+            "name": "Rodrigues Alves",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1200013",
+            "name": "Acrelândia",
+            "isActive": true
+          }
+        ]
+      },
+      {
+        "code": "AL",
+        "name": "Alagoas",
+        "isActive": true,
+        "cities": [
+          {
+            "ibgeCode": "2704302",
+            "name": "Maceió",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2700300",
+            "name": "Arapiraca",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2707701",
+            "name": "Rio Largo",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2706307",
+            "name": "Palmeira dos Índios",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2704708",
+            "name": "Marechal Deodoro",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2709301",
+            "name": "União dos Palmares",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2706703",
+            "name": "Penedo",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2708600",
+            "name": "São Miguel dos Campos",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2702405",
+            "name": "Delmiro Gouveia",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2702306",
+            "name": "Coruripe",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2708006",
+            "name": "Santana do Ipanema",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2709152",
+            "name": "Teotônio Vilela",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2700409",
+            "name": "Atalaia",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2702900",
+            "name": "Girau do Ponciano",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2706901",
+            "name": "Pilar",
+            "isActive": true
+          }
+        ]
+      },
+      {
+        "code": "AM",
+        "name": "Amazonas",
+        "isActive": true,
+        "cities": [
+          {
+            "ibgeCode": "1302603",
+            "name": "Manaus",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1301902",
+            "name": "Itacoatiara",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1302504",
+            "name": "Manacapuru",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1303403",
+            "name": "Parintins",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1304203",
+            "name": "Tefé",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1301209",
+            "name": "Coari",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1304062",
+            "name": "Tabatinga",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1302900",
+            "name": "Maués",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1301852",
+            "name": "Iranduba",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1301704",
+            "name": "Humaitá",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1302702",
+            "name": "Manicoré",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1303809",
+            "name": "São Gabriel da Cachoeira",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1302405",
+            "name": "Lábrea",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1300300",
+            "name": "Autazes",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1300607",
+            "name": "Benjamin Constant",
+            "isActive": true
+          }
+        ]
+      },
+      {
+        "code": "AP",
+        "name": "Amapá",
+        "isActive": true,
+        "cities": [
+          {
+            "ibgeCode": "1600303",
+            "name": "Macapá",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1600600",
+            "name": "Santana",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1600279",
+            "name": "Laranjal do Jari",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1600501",
+            "name": "Oiapoque",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1600402",
+            "name": "Mazagão",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1600535",
+            "name": "Porto Grande",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1600709",
+            "name": "Tartarugalzinho",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1600154",
+            "name": "Pedra Branca do Amapari",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1600808",
+            "name": "Vitória do Jari",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1600204",
+            "name": "Calçoene",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1600105",
+            "name": "Amapá",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1600238",
+            "name": "Ferreira Gomes",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1600253",
+            "name": "Itaubal",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1600055",
+            "name": "Serra do Navio",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1600212",
+            "name": "Cutias",
+            "isActive": true
+          }
+        ]
+      },
+      {
+        "code": "BA",
+        "name": "Bahia",
+        "isActive": true,
+        "cities": [
+          {
+            "ibgeCode": "2927408",
+            "name": "Salvador",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2910800",
+            "name": "Feira de Santana",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2933307",
+            "name": "Vitória da Conquista",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2905701",
+            "name": "Camaçari",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2918407",
+            "name": "Juazeiro",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2919207",
+            "name": "Lauro de Freitas",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2914802",
+            "name": "Itabuna",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2913606",
+            "name": "Ilhéus",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2925303",
+            "name": "Porto Seguro",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2903201",
+            "name": "Barreiras",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2918001",
+            "name": "Jequié",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2900702",
+            "name": "Alagoinhas",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2931350",
+            "name": "Teixeira de Freitas",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2930709",
+            "name": "Simões Filho",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2910727",
+            "name": "Eunápolis",
+            "isActive": true
+          }
+        ]
+      },
+      {
+        "code": "CE",
+        "name": "Ceará",
+        "isActive": true,
+        "cities": [
+          {
+            "ibgeCode": "2304400",
+            "name": "Fortaleza",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2303709",
+            "name": "Caucaia",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2307304",
+            "name": "Juazeiro do Norte",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2307650",
+            "name": "Maracanaú",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2312908",
+            "name": "Sobral",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2306405",
+            "name": "Itapipoca",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2304202",
+            "name": "Crato",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2307700",
+            "name": "Maranguape",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2305506",
+            "name": "Iguatu",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2311306",
+            "name": "Quixadá",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2311405",
+            "name": "Quixeramobim",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2309706",
+            "name": "Pacatuba",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2313401",
+            "name": "Tianguá",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2301000",
+            "name": "Aquiraz",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2304103",
+            "name": "Crateús",
+            "isActive": true
+          }
+        ]
+      },
+      {
+        "code": "DF",
+        "name": "Distrito Federal",
+        "isActive": true,
+        "cities": [
+          {
+            "ibgeCode": "5300108",
+            "name": "Brasília",
+            "isActive": true
+          }
+        ]
+      },
+      {
+        "code": "ES",
+        "name": "Espírito Santo",
+        "isActive": true,
+        "cities": [
+          {
+            "ibgeCode": "3205002",
+            "name": "Serra",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "3205200",
+            "name": "Vila Velha",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "3201308",
+            "name": "Cariacica",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "3205309",
+            "name": "Vitória",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "3201209",
+            "name": "Cachoeiro de Itapemirim",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "3203205",
+            "name": "Linhares",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "3202405",
+            "name": "Guarapari",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "3204906",
+            "name": "São Mateus",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "3201506",
+            "name": "Colatina",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "3200607",
+            "name": "Aracruz",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "3205101",
+            "name": "Viana",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "3203908",
+            "name": "Nova Venécia",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "3200904",
+            "name": "Barra de São Francisco",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "3203320",
+            "name": "Marataízes",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "3204559",
+            "name": "Santa Maria de Jetibá",
+            "isActive": true
+          }
+        ]
+      },
+      {
+        "code": "GO",
+        "name": "Goiás",
+        "isActive": true,
+        "cities": [
+          {
+            "ibgeCode": "5208707",
+            "name": "Goiânia",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "5201405",
+            "name": "Aparecida de Goiânia",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "5201108",
+            "name": "Anápolis",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "5218805",
+            "name": "Rio Verde",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "5200258",
+            "name": "Águas Lindas de Goiás",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "5212501",
+            "name": "Luziânia",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "5221858",
+            "name": "Valparaíso de Goiás",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "5220454",
+            "name": "Senador Canedo",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "5221403",
+            "name": "Trindade",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "5208004",
+            "name": "Formosa",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "5205109",
+            "name": "Catalão",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "5211503",
+            "name": "Itumbiara",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "5211909",
+            "name": "Jataí",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "5217609",
+            "name": "Planaltina",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "5215231",
+            "name": "Novo Gama",
+            "isActive": true
+          }
+        ]
+      },
+      {
+        "code": "MA",
+        "name": "Maranhão",
+        "isActive": true,
+        "cities": [
+          {
+            "ibgeCode": "2111300",
+            "name": "São Luís",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2105302",
+            "name": "Imperatriz",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2111201",
+            "name": "São José de Ribamar",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2112209",
+            "name": "Timon",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2103000",
+            "name": "Caxias",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2107506",
+            "name": "Paço do Lumiar",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2103307",
+            "name": "Codó",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2100055",
+            "name": "Açailândia",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2101202",
+            "name": "Bacabal",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2101400",
+            "name": "Balsas",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2109908",
+            "name": "Santa Inês",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2108603",
+            "name": "Pinheiro",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2101608",
+            "name": "Barra do Corda",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2103208",
+            "name": "Chapadinha",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2104800",
+            "name": "Grajaú",
+            "isActive": true
+          }
+        ]
+      },
+      {
+        "code": "MG",
+        "name": "Minas Gerais",
+        "isActive": true,
+        "cities": [
+          {
+            "ibgeCode": "3106200",
+            "name": "Belo Horizonte",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "3170206",
+            "name": "Uberlândia",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "3118601",
+            "name": "Contagem",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "3136702",
+            "name": "Juiz de Fora",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "3143302",
+            "name": "Montes Claros",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "3106705",
+            "name": "Betim",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "3170107",
+            "name": "Uberaba",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "3154606",
+            "name": "Ribeirão das Neves",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "3127701",
+            "name": "Governador Valadares",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "3122306",
+            "name": "Divinópolis",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "3131307",
+            "name": "Ipatinga",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "3167202",
+            "name": "Sete Lagoas",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "3157807",
+            "name": "Santa Luzia",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "3129806",
+            "name": "Ibirité",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "3151800",
+            "name": "Poços de Caldas",
+            "isActive": true
+          }
+        ]
+      },
+      {
+        "code": "MS",
+        "name": "Mato Grosso do Sul",
+        "isActive": true,
+        "cities": [
+          {
+            "ibgeCode": "5002704",
+            "name": "Campo Grande",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "5003702",
+            "name": "Dourados",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "5008305",
+            "name": "Três Lagoas",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "5003207",
+            "name": "Corumbá",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "5006606",
+            "name": "Ponta Porã",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "5005707",
+            "name": "Naviraí",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "5006200",
+            "name": "Nova Andradina",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "5007901",
+            "name": "Sidrolândia",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "5001102",
+            "name": "Aquidauana",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "5005400",
+            "name": "Maracaju",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "5006309",
+            "name": "Paranaíba",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "5000609",
+            "name": "Amambai",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "5007208",
+            "name": "Rio Brilhante",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "5003306",
+            "name": "Coxim",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "5002951",
+            "name": "Chapadão do Sul",
+            "isActive": true
+          }
+        ]
+      },
+      {
+        "code": "MT",
+        "name": "Mato Grosso",
+        "isActive": true,
+        "cities": [
+          {
+            "ibgeCode": "5103403",
+            "name": "Cuiabá",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "5108402",
+            "name": "Várzea Grande",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "5107602",
+            "name": "Rondonópolis",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "5107909",
+            "name": "Sinop",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "5107925",
+            "name": "Sorriso",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "5107958",
+            "name": "Tangará da Serra",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "5102504",
+            "name": "Cáceres",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "5107040",
+            "name": "Primavera do Leste",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "5105259",
+            "name": "Lucas do Rio Verde",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "5101803",
+            "name": "Barra do Garças",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "5100250",
+            "name": "Alta Floresta",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "5106224",
+            "name": "Nova Mutum",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "5106752",
+            "name": "Pontes e Lacerda",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "5102637",
+            "name": "Campo Novo do Parecis",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "5105150",
+            "name": "Juína",
+            "isActive": true
+          }
+        ]
+      },
+      {
+        "code": "PA",
+        "name": "Pará",
+        "isActive": true,
+        "cities": [
+          {
+            "ibgeCode": "1501402",
+            "name": "Belém",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1500800",
+            "name": "Ananindeua",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1506807",
+            "name": "Santarém",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1505536",
+            "name": "Parauapebas",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1504208",
+            "name": "Marabá",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1502400",
+            "name": "Castanhal",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1500107",
+            "name": "Abaetetuba",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1502103",
+            "name": "Cametá",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1501303",
+            "name": "Barcarena",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1500602",
+            "name": "Altamira",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1503606",
+            "name": "Itaituba",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1501709",
+            "name": "Bragança",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1504422",
+            "name": "Marituba",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1501808",
+            "name": "Breves",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1505502",
+            "name": "Paragominas",
+            "isActive": true
+          }
+        ]
+      },
+      {
+        "code": "PB",
+        "name": "Paraíba",
+        "isActive": true,
+        "cities": [
+          {
+            "ibgeCode": "2507507",
+            "name": "João Pessoa",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2504009",
+            "name": "Campina Grande",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2513703",
+            "name": "Santa Rita",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2510808",
+            "name": "Patos",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2501807",
+            "name": "Bayeux",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2516201",
+            "name": "Sousa",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2503209",
+            "name": "Cabedelo",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2503704",
+            "name": "Cajazeiras",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2506301",
+            "name": "Guarabira",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2515302",
+            "name": "Sapé",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2512507",
+            "name": "Queimadas",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2508901",
+            "name": "Mamanguape",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2512101",
+            "name": "Pombal",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2509701",
+            "name": "Monteiro",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2513901",
+            "name": "São Bento",
+            "isActive": true
+          }
+        ]
+      },
+      {
+        "code": "PE",
+        "name": "Pernambuco",
+        "isActive": true,
+        "cities": [
+          {
+            "ibgeCode": "2611606",
+            "name": "Recife",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2607901",
+            "name": "Jaboatão dos Guararapes",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2611101",
+            "name": "Petrolina",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2604106",
+            "name": "Caruaru",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2609600",
+            "name": "Olinda",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2610707",
+            "name": "Paulista",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2602902",
+            "name": "Cabo de Santo Agostinho",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2603454",
+            "name": "Camaragibe",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2606002",
+            "name": "Garanhuns",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2616407",
+            "name": "Vitória de Santo Antão",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2606804",
+            "name": "Igarassu",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2613701",
+            "name": "São Lourenço da Mata",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2607208",
+            "name": "Ipojuca",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2600054",
+            "name": "Abreu e Lima",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2612505",
+            "name": "Santa Cruz do Capibaribe",
+            "isActive": true
+          }
+        ]
+      },
+      {
+        "code": "PI",
+        "name": "Piauí",
+        "isActive": true,
+        "cities": [
+          {
+            "ibgeCode": "2211001",
+            "name": "Teresina",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2207702",
+            "name": "Parnaíba",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2208007",
+            "name": "Picos",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2208403",
+            "name": "Piripiri",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2203909",
+            "name": "Floriano",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2201200",
+            "name": "Barras",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2200400",
+            "name": "Altos",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2211100",
+            "name": "União",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2202208",
+            "name": "Campo Maior",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2205508",
+            "name": "José de Freitas",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2203701",
+            "name": "Esperantina",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2210607",
+            "name": "São Raimundo Nonato",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2207009",
+            "name": "Oeiras",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2207900",
+            "name": "Pedro II",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2206209",
+            "name": "Miguel Alves",
+            "isActive": true
+          }
+        ]
+      },
+      {
+        "code": "PR",
+        "name": "Paraná",
+        "isActive": true,
+        "cities": [
+          {
+            "ibgeCode": "4106902",
+            "name": "Curitiba",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "4113700",
+            "name": "Londrina",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "4115200",
+            "name": "Maringá",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "4119905",
+            "name": "Ponta Grossa",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "4104808",
+            "name": "Cascavel",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "4125506",
+            "name": "São José dos Pinhais",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "4108304",
+            "name": "Foz do Iguaçu",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "4105805",
+            "name": "Colombo",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "4109401",
+            "name": "Guarapuava",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "4101804",
+            "name": "Araucária",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "4127700",
+            "name": "Toledo",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "4107652",
+            "name": "Fazenda Rio Grande",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "4118204",
+            "name": "Paranaguá",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "4104204",
+            "name": "Campo Largo",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "4101408",
+            "name": "Apucarana",
+            "isActive": true
+          }
+        ]
+      },
+      {
+        "code": "RJ",
+        "name": "Rio de Janeiro",
+        "isActive": true,
+        "cities": [
+          {
+            "ibgeCode": "3304557",
+            "name": "Rio de Janeiro",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "3304904",
+            "name": "São Gonçalo",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "3301702",
+            "name": "Duque de Caxias",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "3303500",
+            "name": "Nova Iguaçu",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "3301009",
+            "name": "Campos dos Goytacazes",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "3300456",
+            "name": "Belford Roxo",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "3303302",
+            "name": "Niterói",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "3305109",
+            "name": "São João de Meriti",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "3303906",
+            "name": "Petrópolis",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "3306305",
+            "name": "Volta Redonda",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "3302403",
+            "name": "Macaé",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "3302502",
+            "name": "Magé",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "3301900",
+            "name": "Itaboraí",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "3300704",
+            "name": "Cabo Frio",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "3302700",
+            "name": "Maricá",
+            "isActive": true
+          }
+        ]
+      },
+      {
+        "code": "RN",
+        "name": "Rio Grande do Norte",
+        "isActive": true,
+        "cities": [
+          {
+            "ibgeCode": "2408102",
+            "name": "Natal",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2408003",
+            "name": "Mossoró",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2403251",
+            "name": "Parnamirim",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2412005",
+            "name": "São Gonçalo do Amarante",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2407104",
+            "name": "Macaíba",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2402600",
+            "name": "Ceará-Mirim",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2403608",
+            "name": "Extremoz",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2402006",
+            "name": "Caicó",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2400208",
+            "name": "Assú",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2412203",
+            "name": "São José de Mipibu",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2403103",
+            "name": "Currais Novos",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2411205",
+            "name": "Santa Cruz",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2401008",
+            "name": "Apodi",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2408300",
+            "name": "Nova Cruz",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2405801",
+            "name": "João Câmara",
+            "isActive": true
+          }
+        ]
+      },
+      {
+        "code": "RO",
+        "name": "Rondônia",
+        "isActive": true,
+        "cities": [
+          {
+            "ibgeCode": "1100205",
+            "name": "Porto Velho",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1100122",
+            "name": "Ji-Paraná",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1100023",
+            "name": "Ariquemes",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1100304",
+            "name": "Vilhena",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1100049",
+            "name": "Cacoal",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1100288",
+            "name": "Rolim de Moura",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1100114",
+            "name": "Jaru",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1100106",
+            "name": "Guajará-Mirim",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1100189",
+            "name": "Pimenta Bueno",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1100155",
+            "name": "Ouro Preto do Oeste",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1100130",
+            "name": "Machadinho D'Oeste",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1100098",
+            "name": "Espigão D'Oeste",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1100452",
+            "name": "Buritis",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1100338",
+            "name": "Nova Mamoré",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1100809",
+            "name": "Candeias do Jamari",
+            "isActive": true
+          }
+        ]
+      },
+      {
+        "code": "RR",
+        "name": "Roraima",
+        "isActive": true,
+        "cities": [
+          {
+            "ibgeCode": "1400100",
+            "name": "Boa Vista",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1400472",
+            "name": "Rorainópolis",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1400050",
+            "name": "Alto Alegre",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1400209",
+            "name": "Caracaraí",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1400456",
+            "name": "Pacaraima",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1400175",
+            "name": "Cantá",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1400308",
+            "name": "Mucajaí",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1400407",
+            "name": "Normandia",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1400027",
+            "name": "Amajari",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1400159",
+            "name": "Bonfim",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1400704",
+            "name": "Uiramutã",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1400233",
+            "name": "Caroebe",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1400282",
+            "name": "Iracema",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1400506",
+            "name": "São João da Baliza",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1400605",
+            "name": "São Luiz do Anauá",
+            "isActive": true
+          }
+        ]
+      },
+      {
+        "code": "RS",
+        "name": "Rio Grande do Sul",
+        "isActive": true,
+        "cities": [
+          {
+            "ibgeCode": "4314902",
+            "name": "Porto Alegre",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "4305108",
+            "name": "Caxias do Sul",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "4304606",
+            "name": "Canoas",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "4314407",
+            "name": "Pelotas",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "4316907",
+            "name": "Santa Maria",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "4309209",
+            "name": "Gravataí",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "4313409",
+            "name": "Novo Hamburgo",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "4323002",
+            "name": "Viamão",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "4318705",
+            "name": "São Leopoldo",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "4314100",
+            "name": "Passo Fundo",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "4315602",
+            "name": "Rio Grande",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "4300604",
+            "name": "Alvorada",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "4303103",
+            "name": "Cachoeirinha",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "4316808",
+            "name": "Santa Cruz do Sul",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "4320008",
+            "name": "Sapucaia do Sul",
+            "isActive": true
+          }
+        ]
+      },
+      {
+        "code": "SC",
+        "name": "Santa Catarina",
+        "isActive": true,
+        "cities": [
+          {
+            "ibgeCode": "4209102",
+            "name": "Joinville",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "4205407",
+            "name": "Florianópolis",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "4202404",
+            "name": "Blumenau",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "4216602",
+            "name": "São José",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "4208203",
+            "name": "Itajaí",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "4204202",
+            "name": "Chapecó",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "4211900",
+            "name": "Palhoça",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "4204608",
+            "name": "Criciúma",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "4208906",
+            "name": "Jaraguá do Sul",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "4209300",
+            "name": "Lages",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "4202909",
+            "name": "Brusque",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "4202008",
+            "name": "Balneário Camboriú",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "4218707",
+            "name": "Tubarão",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "4203204",
+            "name": "Camboriú",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "4211306",
+            "name": "Navegantes",
+            "isActive": true
+          }
+        ]
+      },
+      {
+        "code": "SE",
+        "name": "Sergipe",
+        "isActive": true,
+        "cities": [
+          {
+            "ibgeCode": "2800308",
+            "name": "Aracaju",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2804805",
+            "name": "Nossa Senhora do Socorro",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2802908",
+            "name": "Itabaiana",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2803500",
+            "name": "Lagarto",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2806701",
+            "name": "São Cristóvão",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2802106",
+            "name": "Estância",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2807402",
+            "name": "Tobias Barreto",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2807105",
+            "name": "Simão Dias",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2800605",
+            "name": "Barra dos Coqueiros",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2804508",
+            "name": "Nossa Senhora da Glória",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2803005",
+            "name": "Itabaianinha",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2803203",
+            "name": "Itaporanga d'Ajuda",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2805406",
+            "name": "Poço Redondo",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2801306",
+            "name": "Capela",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "2801207",
+            "name": "Canindé de São Francisco",
+            "isActive": true
+          }
+        ]
+      },
+      {
+        "code": "SP",
+        "name": "São Paulo",
+        "isActive": true,
+        "cities": [
+          {
+            "ibgeCode": "3550308",
+            "name": "São Paulo",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "3518800",
+            "name": "Guarulhos",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "3509502",
+            "name": "Campinas",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "3548708",
+            "name": "São Bernardo do Campo",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "3547809",
+            "name": "Santo André",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "3534401",
+            "name": "Osasco",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "3552205",
+            "name": "Sorocaba",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "3543402",
+            "name": "Ribeirão Preto",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "3549904",
+            "name": "São José dos Campos",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "3549805",
+            "name": "São José do Rio Preto",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "3530607",
+            "name": "Mogi das Cruzes",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "3525904",
+            "name": "Jundiaí",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "3538709",
+            "name": "Piracicaba",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "3548500",
+            "name": "Santos",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "3529401",
+            "name": "Mauá",
+            "isActive": true
+          }
+        ]
+      },
+      {
+        "code": "TO",
+        "name": "Tocantins",
+        "isActive": true,
+        "cities": [
+          {
+            "ibgeCode": "1721000",
+            "name": "Palmas",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1702109",
+            "name": "Araguaína",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1709500",
+            "name": "Gurupi",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1718204",
+            "name": "Porto Nacional",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1716109",
+            "name": "Paraíso do Tocantins",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1705508",
+            "name": "Colinas do Tocantins",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1702208",
+            "name": "Araguatins",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1709302",
+            "name": "Guaraí",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1721208",
+            "name": "Tocantinópolis",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1708205",
+            "name": "Formoso do Araguaia",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1713205",
+            "name": "Miracema do Tocantins",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1707009",
+            "name": "Dianópolis",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1702554",
+            "name": "Augustinópolis",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1711902",
+            "name": "Lagoa da Confusão",
+            "isActive": true
+          },
+          {
+            "ibgeCode": "1716505",
+            "name": "Pedro Afonso",
+            "isActive": true
+          }
+        ]
+      }
+    ]
+  }
+}

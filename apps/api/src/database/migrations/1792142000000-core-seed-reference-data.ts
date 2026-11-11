@@ -1,32 +1,6 @@
 import type { MigrationInterface, QueryRunner } from 'typeorm';
 
-const languages = [
-  { code: 'pt', name: 'Português (Brasil)', region: 'BR' },
-  { code: 'en', name: 'English (United States)', region: 'US' },
-  { code: 'es', name: 'Español (España)', region: 'ES' },
-] as const;
-
-const actions = [
-  ['criar', 'Criar', 'Create', 'Crear'],
-  ['editar', 'Editar', 'Edit', 'Editar'],
-  ['excluir', 'Excluir', 'Delete', 'Eliminar'],
-  ['visualizar', 'Visualizar', 'View', 'Visualizar'],
-  ['exportar', 'Exportar', 'Export', 'Exportar'],
-  ['importar', 'Importar', 'Import', 'Importar'],
-  ['publicar', 'Publicar', 'Publish', 'Publicar'],
-  ['despublicar', 'Despublicar', 'Unpublish', 'Despublicar'],
-  ['ativar', 'Ativar', 'Activate', 'Activar'],
-  ['desativar', 'Desativar', 'Deactivate', 'Desactivar'],
-  ['aprovar', 'Aprovar', 'Approve', 'Aprobar'],
-  ['reprovar', 'Reprovar', 'Reject', 'Rechazar'],
-  ['enviar', 'Enviar', 'Send', 'Enviar'],
-  ['receber', 'Receber', 'Receive', 'Recibir'],
-  ['conceder', 'Conceder', 'Grant', 'Conceder'],
-  ['revogar', 'Revogar', 'Revoke', 'Revocar'],
-  ['iniciar', 'Iniciar', 'Start', 'Iniciar'],
-  ['finalizar', 'Finalizar', 'Finish', 'Finalizar'],
-  ['alterar_status', 'Alterar status', 'Change status', 'Cambiar estado'],
-] as const;
+import referenceDataSeed from '../seeds/1792142000000-core-reference-data.json';
 
 export class CoreSeedReferenceData1792142000000 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
@@ -37,10 +11,10 @@ export class CoreSeedReferenceData1792142000000 implements MigrationInterface {
         FROM jsonb_to_recordset($1::jsonb) AS data("name" text, "code" text, "region" text)
         RETURNING "id", "codigo_idioma"
       `,
-      [JSON.stringify(languages)],
+      [JSON.stringify(referenceDataSeed.languages)],
     )) as Array<{ codigo_idioma: string; id: number }>;
 
-    if (insertedLanguages.length !== languages.length) {
+    if (insertedLanguages.length !== referenceDataSeed.languages.length) {
       throw new Error('Reference data seed did not create all languages.');
     }
 
@@ -51,10 +25,10 @@ export class CoreSeedReferenceData1792142000000 implements MigrationInterface {
         FROM jsonb_to_recordset($1::jsonb) AS data("type" text)
         RETURNING "id", "tipo"
       `,
-      [JSON.stringify(actions.map(([type]) => ({ type })))],
+      [JSON.stringify(referenceDataSeed.actions.map(({ type }) => ({ type })))],
     )) as Array<{ id: number; tipo: string }>;
 
-    if (insertedActions.length !== actions.length) {
+    if (insertedActions.length !== referenceDataSeed.actions.length) {
       throw new Error('Reference data seed did not create all actions.');
     }
 
@@ -62,11 +36,14 @@ export class CoreSeedReferenceData1792142000000 implements MigrationInterface {
       insertedLanguages.map((language) => [language.codigo_idioma, language.id]),
     );
     const actionIdByType = new Map(insertedActions.map((action) => [action.tipo, action.id]));
-    const translations = actions.flatMap(([type, pt, en, es]) => [
-      { actionId: actionIdByType.get(type), code: 'pt', name: pt },
-      { actionId: actionIdByType.get(type), code: 'en', name: en },
-      { actionId: actionIdByType.get(type), code: 'es', name: es },
-    ]);
+    const translations = referenceDataSeed.actions.flatMap(({ translations: actionTranslations, type }) =>
+      actionTranslations.map(({ description, locale, name }) => ({
+        actionId: actionIdByType.get(type),
+        code: locale,
+        description,
+        name,
+      })),
+    );
 
     if (
       translations.some(
@@ -79,9 +56,9 @@ export class CoreSeedReferenceData1792142000000 implements MigrationInterface {
     await queryRunner.query(
       `
         INSERT INTO "acoes_traducoes" ("nome", "descricao", "acao_id", "idioma_id")
-        SELECT data."name", NULL, data."actionId", language."id"
+        SELECT data."name", data."description", data."actionId", language."id"
         FROM jsonb_to_recordset($1::jsonb)
-          AS data("actionId" integer, "code" text, "name" text)
+          AS data("actionId" integer, "code" text, "description" text, "name" text)
         INNER JOIN "idiomas" language ON language."codigo_idioma" = data."code"
       `,
       [JSON.stringify(translations)],
@@ -89,8 +66,8 @@ export class CoreSeedReferenceData1792142000000 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    const actionTypes = actions.map(([type]) => type);
-    const languageCodes = languages.map(({ code }) => code);
+    const actionTypes = referenceDataSeed.actions.map(({ type }) => type);
+    const languageCodes = referenceDataSeed.languages.map(({ code }) => code);
 
     await queryRunner.query(
       `DELETE FROM "acoes" WHERE "tipo"::text = ANY($1::text[])`,

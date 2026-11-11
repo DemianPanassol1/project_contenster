@@ -32,10 +32,14 @@ Essa decisão é de autorização HTTP e não deve ser reimplementada nos contro
 
 ## Bootstrap e evolução
 
-O seed inicial materializa módulos, funcionalidades, idiomas e ações. As funcionalidades iniciais
-cobrem clientes, usuários, perfis, funcionalidades, módulos, cidades, estados, países,
-armazenamento do cliente e logs do cliente. Idiomas e ações são registros globais necessários para
-traduções e RBAC, mas não são funcionalidades catalogadas nem recebem binding ou permissão de cliente.
+O seed inicial materializa idiomas, ações e um modelo de acesso administrativo global. O modelo
+declara módulos, funcionalidades, ícones, estados, ordem e traduções em português, inglês e
+espanhol para clientes, usuários, perfis, funcionalidades, módulos, cidades, estados, países,
+armazenamento do cliente e logs do cliente. Ele não cria recursos vinculados a nenhum cliente:
+essas funcionalidades são materializadas somente quando o modelo é aplicado ao cliente.
+
+Idiomas e ações são registros globais necessários para traduções e RBAC, mas não são funcionalidades
+catalogadas nem recebem binding ou permissão de cliente.
 
 `client-storage` reúne configurações de provedor, regras por tipo de arquivo e consulta dos arquivos
 do cliente. `client-logs` reúne a consulta dos logs de requisição acessíveis ao cliente ativo — logs
@@ -44,4 +48,6 @@ funcionalidades administrativas únicas; a separação em listas ou abas é resp
 
 Ao adicionar uma funcionalidade, registre sua identidade no Shared, materialize-a por migration ou fluxo autorizado, associe ações por permissões de perfil e crie tela somente quando houver uma superfície real.
 
-Migrations guardam seu próprio snapshot de dados. Uma migration histórica nunca deve importar o catálogo atual em runtime, pois mudanças futuras não podem alterar seu significado.
+Migrations guardam seu próprio snapshot de dados em conjunto com o JSON versionado em
+`apps/api/src/database/seeds`. Uma migration histórica nunca deve importar o catálogo atual em runtime,
+pois mudanças futuras não podem alterar seu significado.

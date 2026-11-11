@@ -1,13 +1,6 @@
 import type { MigrationInterface, QueryRunner } from 'typeorm';
 
-const superuser = {
-  email: 'admin@contenster.local',
-  name: 'Contenster Administrator',
-  passwordHash:
-    '$argon2id$v=19$m=65536,p=4,t=3$6WNyi5uZU3eVDU+MU4a9RQ$979CVRljry3iKh2OphJOrTlYXwiz0+4txEalhc/rYXI',
-  phone: '00000000000',
-  username: 'admin',
-} as const;
+import superuserSeed from '../seeds/1792142000002-core-superuser.json';
 
 export class CoreSeedSuperuser1792142000002 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
@@ -17,15 +10,21 @@ export class CoreSeedSuperuser1792142000002 implements MigrationInterface {
           "nome", "email", "nome_usuario", "telefone_principal", "telefone_secundario",
           "senha_hash", "eh_ativo", "eh_bloqueado", "eh_super_usuario", "ultimo_login_em", "imagem_id"
         )
-        VALUES ($1, $2, $3, $4, NULL, $5, true, false, true, NULL, NULL)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
         RETURNING "id"
       `,
       [
-        superuser.name,
-        superuser.email,
-        superuser.username,
-        superuser.phone,
-        superuser.passwordHash,
+        superuserSeed.name,
+        superuserSeed.email,
+        superuserSeed.username,
+        superuserSeed.phone,
+        superuserSeed.secondaryPhone,
+        superuserSeed.passwordHash,
+        superuserSeed.isActive,
+        superuserSeed.isBlocked,
+        superuserSeed.isSuperuser,
+        superuserSeed.lastLoginAt,
+        superuserSeed.imageId,
       ],
     )) as Array<{ id: number }>;
 
@@ -43,21 +42,27 @@ export class CoreSeedSuperuser1792142000002 implements MigrationInterface {
           AND "email" = $2
           AND "nome_usuario" = $3
           AND "telefone_principal" = $4
-          AND "telefone_secundario" IS NULL
-          AND "senha_hash" = $5
-          AND "eh_ativo" = true
-          AND "eh_bloqueado" = false
-          AND "eh_super_usuario" = true
-          AND "ultimo_login_em" IS NULL
+          AND "telefone_secundario" IS NOT DISTINCT FROM $5
+          AND "senha_hash" = $6
+          AND "eh_ativo" = $7
+          AND "eh_bloqueado" = $8
+          AND "eh_super_usuario" = $9
+          AND "ultimo_login_em" IS NOT DISTINCT FROM $10
           AND "deletado_em" IS NULL
-          AND "imagem_id" IS NULL
+          AND "imagem_id" IS NOT DISTINCT FROM $11
       `,
       [
-        superuser.name,
-        superuser.email,
-        superuser.username,
-        superuser.phone,
-        superuser.passwordHash,
+        superuserSeed.name,
+        superuserSeed.email,
+        superuserSeed.username,
+        superuserSeed.phone,
+        superuserSeed.secondaryPhone,
+        superuserSeed.passwordHash,
+        superuserSeed.isActive,
+        superuserSeed.isBlocked,
+        superuserSeed.isSuperuser,
+        superuserSeed.lastLoginAt,
+        superuserSeed.imageId,
       ],
     )) as Array<{ id: number }>;
 

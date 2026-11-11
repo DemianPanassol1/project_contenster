@@ -1,0 +1,401 @@
+{
+  "languages": [
+    {
+      "code": "pt",
+      "name": "Português (Brasil)",
+      "region": "BR"
+    },
+    {
+      "code": "en",
+      "name": "English (United States)",
+      "region": "US"
+    },
+    {
+      "code": "es",
+      "name": "Español (España)",
+      "region": "ES"
+    }
+  ],
+  "actions": [
+    {
+      "type": "criar",
+      "translations": [
+        {
+          "locale": "pt",
+          "name": "Criar",
+          "description": null
+        },
+        {
+          "locale": "en",
+          "name": "Create",
+          "description": null
+        },
+        {
+          "locale": "es",
+          "name": "Crear",
+          "description": null
+        }
+      ]
+    },
+    {
+      "type": "editar",
+      "translations": [
+        {
+          "locale": "pt",
+          "name": "Editar",
+          "description": null
+        },
+        {
+          "locale": "en",
+          "name": "Edit",
+          "description": null
+        },
+        {
+          "locale": "es",
+          "name": "Editar",
+          "description": null
+        }
+      ]
+    },
+    {
+      "type": "excluir",
+      "translations": [
+        {
+          "locale": "pt",
+          "name": "Excluir",
+          "description": null
+        },
+        {
+          "locale": "en",
+          "name": "Delete",
+          "description": null
+        },
+        {
+          "locale": "es",
+          "name": "Eliminar",
+          "description": null
+        }
+      ]
+    },
+    {
+      "type": "visualizar",
+      "translations": [
+        {
+          "locale": "pt",
+          "name": "Visualizar",
+          "description": null
+        },
+        {
+          "locale": "en",
+          "name": "View",
+          "description": null
+        },
+        {
+          "locale": "es",
+          "name": "Visualizar",
+          "description": null
+        }
+      ]
+    },
+    {
+      "type": "exportar",
+      "translations": [
+        {
+          "locale": "pt",
+          "name": "Exportar",
+          "description": null
+        },
+        {
+          "locale": "en",
+          "name": "Export",
+          "description": null
+        },
+        {
+          "locale": "es",
+          "name": "Exportar",
+          "description": null
+        }
+      ]
+    },
+    {
+      "type": "importar",
+      "translations": [
+        {
+          "locale": "pt",
+          "name": "Importar",
+          "description": null
+        },
+        {
+          "locale": "en",
+          "name": "Import",
+          "description": null
+        },
+        {
+          "locale": "es",
+          "name": "Importar",
+          "description": null
+        }
+      ]
+    },
+    {
+      "type": "publicar",
+      "translations": [
+        {
+          "locale": "pt",
+          "name": "Publicar",
+          "description": null
+        },
+        {
+          "locale": "en",
+          "name": "Publish",
+          "description": null
+        },
+        {
+          "locale": "es",
+          "name": "Publicar",
+          "description": null
+        }
+      ]
+    },
+    {
+      "type": "despublicar",
+      "translations": [
+        {
+          "locale": "pt",
+          "name": "Despublicar",
+          "description": null
+        },
+        {
+          "locale": "en",
+          "name": "Unpublish",
+          "description": null
+        },
+        {
+          "locale": "es",
+          "name": "Despublicar",
+          "description": null
+        }
+      ]
+    },
+    {
+      "type": "ativar",
+      "translations": [
+        {
+          "locale": "pt",
+          "name": "Ativar",
+          "description": null
+        },
+        {
+          "locale": "en",
+          "name": "Activate",
+          "description": null
+        },
+        {
+          "locale": "es",
+          "name": "Activar",
+          "description": null
+        }
+      ]
+    },
+    {
+      "type": "desativar",
+      "translations": [
+        {
+          "locale": "pt",
+          "name": "Desativar",
+          "description": null
+        },
+        {
+          "locale": "en",
+          "name": "Deactivate",
+          "description": null
+        },
+        {
+          "locale": "es",
+          "name": "Desactivar",
+          "description": null
+        }
+      ]
+    },
+    {
+      "type": "aprovar",
+      "translations": [
+        {
+          "locale": "pt",
+          "name": "Aprovar",
+          "description": null
+        },
+        {
+          "locale": "en",
+          "name": "Approve",
+          "description": null
+        },
+        {
+          "locale": "es",
+          "name": "Aprobar",
+          "description": null
+        }
+      ]
+    },
+    {
+      "type": "reprovar",
+      "translations": [
+        {
+          "locale": "pt",
+          "name": "Reprovar",
+          "description": null
+        },
+        {
+          "locale": "en",
+          "name": "Reject",
+          "description": null
+        },
+        {
+          "locale": "es",
+          "name": "Rechazar",
+          "description": null
+        }
+      ]
+    },
+    {
+      "type": "enviar",
+      "translations": [
+        {
+          "locale": "pt",
+          "name": "Enviar",
+          "description": null
+        },
+        {
+          "locale": "en",
+          "name": "Send",
+          "description": null
+        },
+        {
+          "locale": "es",
+          "name": "Enviar",
+          "description": null
+        }
+      ]
+    },
+    {
+      "type": "receber",
+      "translations": [
+        {
+          "locale": "pt",
+          "name": "Receber",
+          "description": null
+        },
+        {
+          "locale": "en",
+          "name": "Receive",
+          "description": null
+        },
+        {
+          "locale": "es",
+          "name": "Recibir",
+          "description": null
+        }
+      ]
+    },
+    {
+      "type": "conceder",
+      "translations": [
+        {
+          "locale": "pt",
+          "name": "Conceder",
+          "description": null
+        },
+        {
+          "locale": "en",
+          "name": "Grant",
+          "description": null
+        },
+        {
+          "locale": "es",
+          "name": "Conceder",
+          "description": null
+        }
+      ]
+    },
+    {
+      "type": "revogar",
+      "translations": [
+        {
+          "locale": "pt",
+          "name": "Revogar",
+          "description": null
+        },
+        {
+          "locale": "en",
+          "name": "Revoke",
+          "description": null
+        },
+        {
+          "locale": "es",
+          "name": "Revocar",
+          "description": null
+        }
+      ]
+    },
+    {
+      "type": "iniciar",
+      "translations": [
+        {
+          "locale": "pt",
+          "name": "Iniciar",
+          "description": null
+        },
+        {
+          "locale": "en",
+          "name": "Start",
+          "description": null
+        },
+        {
+          "locale": "es",
+          "name": "Iniciar",
+          "description": null
+        }
+      ]
+    },
+    {
+      "type": "finalizar",
+      "translations": [
+        {
+          "locale": "pt",
+          "name": "Finalizar",
+          "description": null
+        },
+        {
+          "locale": "en",
+          "name": "Finish",
+          "description": null
+        },
+        {
+          "locale": "es",
+          "name": "Finalizar",
+          "description": null
+        }
+      ]
+    },
+    {
+      "type": "alterar_status",
+      "translations": [
+        {
+          "locale": "pt",
+          "name": "Alterar status",
+          "description": null
+        },
+        {
+          "locale": "en",
+          "name": "Change status",
+          "description": null
+        },
+        {
+          "locale": "es",
+          "name": "Cambiar estado",
+          "description": null
+        }
+      ]
+    }
+  ]
+}

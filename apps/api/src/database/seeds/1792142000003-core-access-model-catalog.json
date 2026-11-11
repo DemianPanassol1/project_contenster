@@ -1,0 +1,358 @@
+{
+  "isActive": true,
+  "translations": [
+    {
+      "locale": "pt",
+      "name": "Catálogo administrativo do Core",
+      "description": "Estrutura inicial dos módulos e funcionalidades administrativas do Core."
+    },
+    {
+      "locale": "en",
+      "name": "Core administrative catalog",
+      "description": "Initial structure of the Core administrative modules and functionalities."
+    },
+    {
+      "locale": "es",
+      "name": "Catálogo administrativo del Core",
+      "description": "Estructura inicial de los módulos y funcionalidades administrativas del Core."
+    }
+  ],
+  "structure": {
+    "modules": [
+      {
+        "key": "MOD_CORE0001",
+        "order": 0,
+        "isActive": true,
+        "translations": [
+          {
+            "locale": "pt",
+            "name": "Administração",
+            "description": "Funcionalidades para administrar os recursos do cliente."
+          },
+          {
+            "locale": "en",
+            "name": "Administration",
+            "description": "Functionalities for managing client resources."
+          },
+          {
+            "locale": "es",
+            "name": "Administración",
+            "description": "Funcionalidades para administrar los recursos del cliente."
+          }
+        ],
+        "functionalities": [
+          {
+            "slug": "access-models",
+            "parentSlug": null,
+            "icon": "shield-check",
+            "order": 0,
+            "isNavigationGroup": false,
+            "isActive": true,
+            "enabledLanguageCodes": ["pt", "en", "es"],
+            "translations": [
+              {
+                "locale": "pt",
+                "name": "Modelos de acesso",
+                "description": "Aplique modelos de acesso à estrutura do cliente."
+              },
+              {
+                "locale": "en",
+                "name": "Access models",
+                "description": "Apply access models to the client structure."
+              },
+              {
+                "locale": "es",
+                "name": "Modelos de acceso",
+                "description": "Aplique modelos de acceso a la estructura del cliente."
+              }
+            ]
+          },
+          {
+            "slug": "client-storage",
+            "parentSlug": null,
+            "icon": "folder-cog",
+            "order": 1,
+            "isNavigationGroup": false,
+            "isActive": true,
+            "enabledLanguageCodes": ["pt", "en", "es"],
+            "translations": [
+              {
+                "locale": "pt",
+                "name": "Armazenamento",
+                "description": "Configure os provedores e as regras de armazenamento do cliente."
+              },
+              {
+                "locale": "en",
+                "name": "Storage",
+                "description": "Configure the client storage providers and rules."
+              },
+              {
+                "locale": "es",
+                "name": "Almacenamiento",
+                "description": "Configure los proveedores y las reglas de almacenamiento del cliente."
+              }
+            ]
+          },
+          {
+            "slug": "client-logs",
+            "parentSlug": null,
+            "icon": "scroll-text",
+            "order": 2,
+            "isNavigationGroup": false,
+            "isActive": true,
+            "enabledLanguageCodes": ["pt", "en", "es"],
+            "translations": [
+              {
+                "locale": "pt",
+                "name": "Logs do cliente",
+                "description": "Consulte os logs de requisições e rotinas do cliente."
+              },
+              {
+                "locale": "en",
+                "name": "Client logs",
+                "description": "Review the client request and routine logs."
+              },
+              {
+                "locale": "es",
+                "name": "Registros del cliente",
+                "description": "Consulte los registros de solicitudes y rutinas del cliente."
+              }
+            ]
+          },
+          {
+            "slug": "clients",
+            "parentSlug": null,
+            "icon": "building",
+            "order": 3,
+            "isNavigationGroup": false,
+            "isActive": true,
+            "enabledLanguageCodes": ["pt", "en", "es"],
+            "translations": [
+              {
+                "locale": "pt",
+                "name": "Clientes",
+                "description": "Consulte os dados cadastrais do cliente ativo."
+              },
+              {
+                "locale": "en",
+                "name": "Clients",
+                "description": "Review the active client registration data."
+              },
+              {
+                "locale": "es",
+                "name": "Clientes",
+                "description": "Consulte los datos de registro del cliente activo."
+              }
+            ]
+          },
+          {
+            "slug": "users",
+            "parentSlug": null,
+            "icon": "users",
+            "order": 4,
+            "isNavigationGroup": false,
+            "isActive": true,
+            "enabledLanguageCodes": ["pt", "en", "es"],
+            "translations": [
+              {
+                "locale": "pt",
+                "name": "Usuários",
+                "description": "Gerencie os usuários vinculados ao cliente."
+              },
+              {
+                "locale": "en",
+                "name": "Users",
+                "description": "Manage the users linked to the client."
+              },
+              {
+                "locale": "es",
+                "name": "Usuarios",
+                "description": "Gestione los usuarios vinculados al cliente."
+              }
+            ]
+          },
+          {
+            "slug": "profiles",
+            "parentSlug": null,
+            "icon": "badge-check",
+            "order": 5,
+            "isNavigationGroup": false,
+            "isActive": true,
+            "enabledLanguageCodes": ["pt", "en", "es"],
+            "translations": [
+              {
+                "locale": "pt",
+                "name": "Perfis de acesso",
+                "description": "Defina os perfis e as permissões do cliente."
+              },
+              {
+                "locale": "en",
+                "name": "Access profiles",
+                "description": "Define the client profiles and permissions."
+              },
+              {
+                "locale": "es",
+                "name": "Perfiles de acceso",
+                "description": "Defina los perfiles y permisos del cliente."
+              }
+            ]
+          },
+          {
+            "slug": "modules",
+            "parentSlug": null,
+            "icon": "layers",
+            "order": 6,
+            "isNavigationGroup": false,
+            "isActive": true,
+            "enabledLanguageCodes": ["pt", "en", "es"],
+            "translations": [
+              {
+                "locale": "pt",
+                "name": "Módulos",
+                "description": "Organize as funcionalidades nos módulos do cliente."
+              },
+              {
+                "locale": "en",
+                "name": "Modules",
+                "description": "Organize the functionalities into client modules."
+              },
+              {
+                "locale": "es",
+                "name": "Módulos",
+                "description": "Organice las funcionalidades en los módulos del cliente."
+              }
+            ]
+          },
+          {
+            "slug": "functionalities",
+            "parentSlug": null,
+            "icon": "list-checks",
+            "order": 7,
+            "isNavigationGroup": false,
+            "isActive": true,
+            "enabledLanguageCodes": ["pt", "en", "es"],
+            "translations": [
+              {
+                "locale": "pt",
+                "name": "Funcionalidades",
+                "description": "Gerencie as funcionalidades disponíveis para o cliente."
+              },
+              {
+                "locale": "en",
+                "name": "Functionalities",
+                "description": "Manage the functionalities available to the client."
+              },
+              {
+                "locale": "es",
+                "name": "Funcionalidades",
+                "description": "Gestione las funcionalidades disponibles para el cliente."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "key": "MOD_CORE0002",
+        "order": 1,
+        "isActive": true,
+        "translations": [
+          {
+            "locale": "pt",
+            "name": "Cadastros gerais",
+            "description": "Dados de localização disponíveis para o cliente."
+          },
+          {
+            "locale": "en",
+            "name": "General records",
+            "description": "Location data available to the client."
+          },
+          {
+            "locale": "es",
+            "name": "Registros generales",
+            "description": "Datos de ubicación disponibles para el cliente."
+          }
+        ],
+        "functionalities": [
+          {
+            "slug": "countries",
+            "parentSlug": null,
+            "icon": "globe-2",
+            "order": 0,
+            "isNavigationGroup": false,
+            "isActive": true,
+            "enabledLanguageCodes": ["pt", "en", "es"],
+            "translations": [
+              {
+                "locale": "pt",
+                "name": "Países",
+                "description": "Gerencie os países disponíveis para o cliente."
+              },
+              {
+                "locale": "en",
+                "name": "Countries",
+                "description": "Manage the countries available to the client."
+              },
+              {
+                "locale": "es",
+                "name": "Países",
+                "description": "Gestione los países disponibles para el cliente."
+              }
+            ]
+          },
+          {
+            "slug": "states",
+            "parentSlug": null,
+            "icon": "map",
+            "order": 1,
+            "isNavigationGroup": false,
+            "isActive": true,
+            "enabledLanguageCodes": ["pt", "en", "es"],
+            "translations": [
+              {
+                "locale": "pt",
+                "name": "Estados",
+                "description": "Gerencie os estados disponíveis para o cliente."
+              },
+              {
+                "locale": "en",
+                "name": "States",
+                "description": "Manage the states available to the client."
+              },
+              {
+                "locale": "es",
+                "name": "Estados",
+                "description": "Gestione los estados disponibles para el cliente."
+              }
+            ]
+          },
+          {
+            "slug": "cities",
+            "parentSlug": null,
+            "icon": "map-pin",
+            "order": 2,
+            "isNavigationGroup": false,
+            "isActive": true,
+            "enabledLanguageCodes": ["pt", "en", "es"],
+            "translations": [
+              {
+                "locale": "pt",
+                "name": "Cidades",
+                "description": "Gerencie as cidades disponíveis para o cliente."
+              },
+              {
+                "locale": "en",
+                "name": "Cities",
+                "description": "Manage the cities available to the client."
+              },
+              {
+                "locale": "es",
+                "name": "Ciudades",
+                "description": "Gestione las ciudades disponibles para el cliente."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

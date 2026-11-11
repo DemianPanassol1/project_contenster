@@ -277,13 +277,33 @@ const assertBootstrapBaseline = async (): Promise<void> => {
 
   try {
     await dataSource.initialize();
-    const [{ clients, functionalities, languages }] = await dataSource.query<
-      { clients: string; functionalities: string; languages: string }[]
-    >(
-      'SELECT (SELECT COUNT(*) FROM clientes)::text AS clients, (SELECT COUNT(*) FROM idiomas)::text AS languages, (SELECT COUNT(*) FROM funcionalidades)::text AS functionalities',
-    );
+    const [{ accessModels, accessModelTranslations, clients, functionalities, languages }] =
+      await dataSource.query<
+        {
+          accessModels: string;
+          accessModelTranslations: string;
+          clients: string;
+          functionalities: string;
+          languages: string;
+        }[]
+      >(
+        `
+          SELECT
+            (SELECT COUNT(*) FROM "modelos_acesso")::text AS "accessModels",
+            (SELECT COUNT(*) FROM "modelos_acesso_traducoes")::text AS "accessModelTranslations",
+            (SELECT COUNT(*) FROM "clientes")::text AS "clients",
+            (SELECT COUNT(*) FROM "idiomas")::text AS "languages",
+            (SELECT COUNT(*) FROM "funcionalidades")::text AS "functionalities"
+        `,
+      );
 
-    if (clients !== '1' || languages !== '3' || functionalities !== '11') {
+    if (
+      accessModels !== '1' ||
+      accessModelTranslations !== '3' ||
+      clients !== '1' ||
+      languages !== '3' ||
+      functionalities !== '11'
+    ) {
       throw new Error('Bootstrap migrations did not create the expected Slim Core baseline.');
     }
   } finally {

@@ -27,6 +27,40 @@ describe('database and session integration', () => {
   });
 
   it('applies the bootstrap migrations with the expected core baseline', async () => {
+    const [accessModel] = await dataSource.query<
+      {
+        structure: {
+          modules: Array<{
+            functionalities: Array<{
+              enabledLanguageCodes: string[];
+              icon: string;
+              slug: string;
+              translations: Array<{ description: string; locale: string; name: string }>;
+            }>;
+            translations: Array<{ description: string; locale: string; name: string }>;
+          }>;
+        };
+        translations: Array<{ description: string; locale: string; name: string }>;
+      }[]
+    >(
+      `
+        SELECT
+          model."estrutura" AS "structure",
+          jsonb_agg(
+            jsonb_build_object(
+              'description', translation."descricao",
+              'locale', language."codigo_idioma",
+              'name', translation."nome"
+            )
+            ORDER BY language."codigo_idioma"
+          ) AS "translations"
+        FROM "modelos_acesso" model
+        LEFT JOIN "modelos_acesso_traducoes" translation
+          ON translation."modelo_acesso_id" = model."id"
+        LEFT JOIN "idiomas" language ON language."id" = translation."idioma_id"
+        GROUP BY model."id"
+      `,
+    );
     const [{ clients }] = await dataSource.query<{ clients: string }[]>(
       'SELECT COUNT(*)::text AS clients FROM clientes',
     );
@@ -40,6 +74,52 @@ describe('database and session integration', () => {
     expect(Number(clients)).toBeGreaterThanOrEqual(1);
     expect(Number(languages)).toBeGreaterThanOrEqual(3);
     expect(Number(functionalities)).toBeGreaterThanOrEqual(11);
+    expect(accessModel.translations).toHaveLength(3);
+    expect(accessModel.translations).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ locale: 'pt' }),
+        expect.objectContaining({ locale: 'en' }),
+        expect.objectContaining({ locale: 'es' }),
+      ]),
+    );
+    expect(accessModel.translations.every((translation) => translation.description.trim())).toBe(
+      true,
+    );
+    expect(accessModel.structure.modules).toHaveLength(2);
+    expect(
+      accessModel.structure.modules.every(
+        (module) =>
+          module.translations.length === 3 &&
+          module.translations.every((translation) => translation.description.trim()),
+      ),
+    ).toBe(true);
+    expect(
+      accessModel.structure.modules.flatMap((module) =>
+        module.functionalities.map(({ icon, slug }) => ({ icon, slug })),
+      ),
+    ).toEqual([
+      { icon: 'shield-check', slug: 'access-models' },
+      { icon: 'folder-cog', slug: 'client-storage' },
+      { icon: 'scroll-text', slug: 'client-logs' },
+      { icon: 'building', slug: 'clients' },
+      { icon: 'users', slug: 'users' },
+      { icon: 'badge-check', slug: 'profiles' },
+      { icon: 'layers', slug: 'modules' },
+      { icon: 'list-checks', slug: 'functionalities' },
+      { icon: 'globe-2', slug: 'countries' },
+      { icon: 'map', slug: 'states' },
+      { icon: 'map-pin', slug: 'cities' },
+    ]);
+    expect(
+      accessModel.structure.modules
+        .flatMap((module) => module.functionalities)
+        .every(
+          (functionality) =>
+            functionality.enabledLanguageCodes.join(',') === 'pt,en,es' &&
+            functionality.translations.length === 3 &&
+            functionality.translations.every((translation) => translation.description.trim()),
+        ),
+    ).toBe(true);
   });
 
   it('uses the configured operational timezone for application connections', async () => {
