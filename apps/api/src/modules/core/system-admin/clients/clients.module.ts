@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { Profile } from '@/modules/core/access-control/profiles/entities/profiles.entity';
 import { AuthenticationModule } from '@/modules/core/identity/authentication/authentication.module';
+import { ClientsModule as IdentityClientsModule } from '@/modules/core/identity/clients/clients.module';
 import { Client } from '@/modules/core/identity/clients/entities/client.entity';
 import { UserProfile } from '@/modules/core/identity/users/entities/user-profile.entity';
 import { CitiesModule } from '@/modules/core/locations/cities/cities.module';
@@ -21,6 +22,7 @@ import { ClientsService } from './clients.service';
     ClientStorageModule,
     CitiesModule,
     FileModule,
+    IdentityClientsModule,
     SystemAdminLanguagesModule,
     TypeOrmModule.forFeature([Client, Language, Profile, UserProfile]),
   ],

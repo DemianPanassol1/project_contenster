@@ -730,7 +730,6 @@ describe('authentication and authorization', () => {
           neighborhood: 'Centro',
           primaryPhone: '11999999999',
           secondaryPhone: null,
-          slug: 'cliente-provisionado-e2e',
           tradeName: 'Cliente Provisionado',
           zipCode: '01000000',
         },
@@ -777,6 +776,7 @@ describe('authentication and authorization', () => {
         adminProfile: { translations: Array<{ locale: string; name: string }> };
         imageId: number | null;
         languageLinks: Array<{ id: number; languageId: number }>;
+        slug: string;
         storage: {
           configurations: Array<{ id: number }>;
           rules: Array<{ id: number }>;
@@ -788,6 +788,7 @@ describe('authentication and authorization', () => {
       { description: null, locale: 'pt', name: 'Administrador' },
     ]);
     expect(detail.imageId).toBe(uploadedImage.id);
+    expect(detail.slug).toBe('cliente-provisionado-33333333333');
     expect(detail.storage.configurations).toHaveLength(1);
     expect(detail.storage.rules).toHaveLength(1);
 
@@ -818,7 +819,6 @@ describe('authentication and authorization', () => {
           neighborhood: 'Centro',
           primaryPhone: '11999999999',
           secondaryPhone: null,
-          slug: 'cliente-provisionado-e2e',
           tradeName: 'Cliente Provisionado',
           zipCode: '01000000',
         },
@@ -840,6 +840,7 @@ describe('authentication and authorization', () => {
       updatedDetailResponse.body as ApiResponse<{
         adminProfile: { translations: Array<{ description: string | null; name: string }> };
         corporateName: string;
+        slug: string;
         storage: { configurations: unknown[]; rules: unknown[] };
       }>
     ).body;
@@ -854,6 +855,7 @@ describe('authentication and authorization', () => {
         ],
       },
       corporateName: 'Cliente Provisionado Atualizado LTDA',
+      slug: 'cliente-provisionado-33333333333',
       storage: { configurations: [], rules: [] },
     });
 

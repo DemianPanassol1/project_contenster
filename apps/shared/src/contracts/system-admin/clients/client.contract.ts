@@ -29,7 +29,7 @@ export interface SystemAdminClientStorageRuleRequest extends Omit<
 
 export interface SaveSystemAdminClientRequest {
   adminProfile: { translations: SystemAdminTranslationRequest[] };
-  client: SaveClientRequest;
+  client: Omit<SaveClientRequest, 'slug'>;
   storage: {
     configurations: SystemAdminClientStorageConfigurationRequest[];
     deletedConfigurationIds: number[];

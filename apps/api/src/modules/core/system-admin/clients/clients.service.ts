@@ -18,6 +18,7 @@ import {
 } from '@contenster/shared';
 import type { I18nTranslations } from '@/i18n/translations';
 import { SessionSynchronizationService } from '@/modules/core/identity/authentication/session/session-synchronization.service';
+import { ClientsService as IdentityClientsService } from '@/modules/core/identity/clients/clients.service';
 import type { Client } from '@/modules/core/identity/clients/entities/client.entity';
 import { CitiesRepository } from '@/modules/core/locations/cities/cities.repository';
 import { ClientStorageService } from '@/modules/core/media/client-storage/client-storage.service';
@@ -44,6 +45,7 @@ export class ClientsService {
     private readonly citiesRepository: CitiesRepository,
     private readonly languagesRepository: LanguagesRepository,
     private readonly clientStorageService: ClientStorageService,
+    private readonly identityClientsService: IdentityClientsService,
     private readonly fileService: FileService,
     private readonly i18n: I18nService<I18nTranslations>,
     private readonly sessionSynchronizationService: SessionSynchronizationService,
@@ -253,7 +255,7 @@ export class ClientsService {
     }
   }
 
-  private saveClient(
+  private async saveClient(
     manager: EntityManager,
     existing: Client | null,
     request: SaveSystemAdminClientRequest,
@@ -271,6 +273,13 @@ export class ClientsService {
       {
         ...(existing === null ? {} : { id: existing.id }),
         ...clientData,
+        slug:
+          existing?.slug ??
+          (await this.identityClientsService.generateUniqueSlug(
+            manager,
+            clientData.tradeName,
+            clientData.document,
+          )),
         city: cityId === null ? null : { id: cityId },
         image: imageId === null ? null : { id: imageId },
         availableLanguageLinks: request.client.languageLinks.map(({ id, languageId }) => ({

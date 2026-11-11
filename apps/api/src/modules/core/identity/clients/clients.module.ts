@@ -21,6 +21,6 @@ import { ClientsService } from './clients.service';
   ],
   controllers: [ClientsController],
   providers: [ClientsRepository, ClientsService],
-  exports: [ClientsRepository],
+  exports: [ClientsRepository, ClientsService],
 })
 export class ClientsModule {}

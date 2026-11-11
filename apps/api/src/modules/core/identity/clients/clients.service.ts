@@ -6,6 +6,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
+import type { EntityManager } from 'typeorm';
 
 import type { I18nTranslations } from '@/i18n/translations';
 import { SessionSynchronizationService } from '@/modules/core/identity/authentication/session/session-synchronization.service';
@@ -20,6 +21,8 @@ import type { SaveClientRequestDto } from './dto/req/save-client.request.dto';
 import { GetClientByIdResponseDto } from './dto/res/get-client-by-id.response.dto';
 import type { Client } from './entities/client.entity';
 import { ClientsRepository } from './clients.repository';
+
+const CLIENT_SLUG_MAX_LENGTH = 75;
 
 @Injectable()
 export class ClientsService {
@@ -36,6 +39,30 @@ export class ClientsService {
       GetClientByIdResponseDto,
       this.toResponse(await this.getEntityByIdOrFail(id)),
     );
+  }
+
+  async generateUniqueSlug(
+    manager: EntityManager,
+    tradeName: string,
+    document: string,
+  ): Promise<string> {
+    const base = this.createSlugBase(tradeName, document);
+
+    // The lock covers overlapping bases and the sequence allocated for each one.
+    await this.repository.acquireSlugAllocationLock(manager);
+
+    let sequence = 1;
+
+    while (true) {
+      const candidate = this.withSlugSequence(base, sequence);
+      const existing = await this.repository.findBySlug(candidate, manager);
+
+      if (!existing) {
+        return candidate;
+      }
+
+      sequence += 1;
+    }
   }
 
   async listCityOptions(request: PaginateRequestDto): Promise<AppOption[]> {
@@ -130,6 +157,42 @@ export class ClientsService {
     }
 
     return client;
+  }
+
+  private createSlugBase(tradeName: string, document: string): string {
+    const normalizedName = this.normalizeSlugValue(tradeName)
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+    const normalizedDocument = this.normalizeSlugValue(document).replace(/[^a-z0-9]/g, '');
+    const readableName = normalizedName || 'client';
+
+    if (!normalizedDocument) {
+      return readableName.slice(0, CLIENT_SLUG_MAX_LENGTH).replace(/-+$/g, '');
+    }
+
+    const maxNameLength = CLIENT_SLUG_MAX_LENGTH - normalizedDocument.length - 1;
+    const name = readableName.slice(0, maxNameLength).replace(/-+$/g, '') || 'client';
+
+    return `${name}-${normalizedDocument}`;
+  }
+
+  private normalizeSlugValue(value: string): string {
+    return value
+      .normalize('NFKD')
+      .replace(/\p{Diacritic}/gu, '')
+      .toLowerCase()
+      .trim();
+  }
+
+  private withSlugSequence(base: string, sequence: number): string {
+    if (sequence === 1) {
+      return base;
+    }
+
+    const suffix = `-${sequence}`;
+    const truncatedBase = base.slice(0, CLIENT_SLUG_MAX_LENGTH - suffix.length).replace(/-+$/g, '');
+
+    return `${truncatedBase}${suffix}`;
   }
 
   private toResponse(client: Client) {

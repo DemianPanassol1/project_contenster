@@ -1,7 +1,7 @@
 import type { PaginateRequest } from '@contenster/shared';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { type DeepPartial, In, Repository } from 'typeorm';
+import { type DeepPartial, type EntityManager, In, Repository } from 'typeorm';
 
 import { City } from '@/modules/core/locations/cities/entities/city.entity';
 import { Language } from '@/modules/core/system-admin/languages/entities/language.entity';
@@ -16,6 +16,8 @@ const AVAILABLE_LANGUAGE_FIELDS: QueryFieldMap = {
   name: 'language.nome',
   regionCode: 'language.codigo_regiao',
 };
+
+const CLIENT_SLUG_ALLOCATION_LOCK = 'clients.slug-allocation';
 
 @Injectable()
 export class ClientsRepository {
@@ -38,6 +40,20 @@ export class ClientsRepository {
 
   findLanguages(ids: number[]): Promise<Language[]> {
     return this.languages.findBy({ id: In(ids) });
+  }
+
+  acquireSlugAllocationLock(manager: EntityManager): Promise<unknown> {
+    return manager.query('SELECT pg_advisory_xact_lock(hashtext($1))', [
+      CLIENT_SLUG_ALLOCATION_LOCK,
+    ]);
+  }
+
+  findBySlug(slug: string, manager: EntityManager): Promise<Client | null> {
+    return manager.getRepository(Client).findOne({
+      select: { id: true },
+      where: { slug },
+      withDeleted: true,
+    });
   }
 
   listAvailableLanguages(

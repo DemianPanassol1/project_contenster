@@ -118,6 +118,7 @@ export const mapSystemAdminClientPayload = (
     initialStorageRuleIds,
     languageIds,
     languageLinks: _languageLinks,
+    slug: _slug,
     storageConfigurations,
     storageRules,
     ...client

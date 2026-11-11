@@ -1,4 +1,4 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional, OmitType } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
 import {
   IsArray,
@@ -13,6 +13,7 @@ import {
 
 import {
   FileType,
+  type SaveClientRequest,
   type SaveSystemAdminClientRequest,
   type SystemAdminClientStorageConfigurationRequest,
   type SystemAdminClientStorageRuleRequest,
@@ -107,11 +108,15 @@ class SystemAdminProfileRequestDto {
   declare translations: SystemAdminTranslationRequestDto[];
 }
 
+class SystemAdminClientRequestDto
+  extends OmitType(SaveClientRequestDto, ['slug'] as const)
+  implements Omit<SaveClientRequest, 'slug'> {}
+
 export class SaveSystemAdminClientRequestDto implements SaveSystemAdminClientRequest {
   @ValidateNested()
-  @Type(() => SaveClientRequestDto)
-  @ApiProperty({ type: SaveClientRequestDto })
-  declare client: SaveClientRequestDto;
+  @Type(() => SystemAdminClientRequestDto)
+  @ApiProperty({ type: SystemAdminClientRequestDto })
+  declare client: SystemAdminClientRequestDto;
 
   @ValidateNested()
   @Type(() => SystemAdminProfileRequestDto)
