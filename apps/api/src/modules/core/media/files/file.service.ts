@@ -2,7 +2,13 @@ import { BadRequestException, Injectable, Logger, NotFoundException } from '@nes
 import { I18nService } from 'nestjs-i18n';
 import sharp from 'sharp';
 
-import { type FileResponse, FileType, PORTAL_UPLOAD_MIME_TYPES } from '@contenster/shared';
+import {
+  type AuthenticatedSession,
+  type FileResponse,
+  FileType,
+  PORTAL_UPLOAD_MIME_TYPES,
+  SessionContextType,
+} from '@contenster/shared';
 import type { I18nPath, I18nTranslations } from '@/i18n/translations';
 import { settings } from '@/infrastructure/config/app.config';
 import { serializeApplicationDateTime } from '@/infrastructure/date-time';
@@ -42,23 +48,10 @@ export class FileService {
     private readonly svgSanitizer: SvgSanitizerService,
   ) {}
 
-  async findById(id: number, clientId: number): Promise<FileResponseDto> {
+  async findById(id: number, session: AuthenticatedSession): Promise<FileResponseDto> {
+    const clientId =
+      session.context.type === SessionContextType.client ? session.context.client.id : null;
     const file = await this.fileRepository.findById(id, clientId);
-    if (!file) throw new NotFoundException(this.i18n.t('errors.media.file_not_found'));
-
-    return this.toResponse(file);
-  }
-
-  async findGlobalById(id: number): Promise<FileResponseDto> {
-    const file = await this.fileRepository.findGlobalById(id);
-
-    if (!file) throw new NotFoundException(this.i18n.t('errors.media.file_not_found'));
-
-    return this.toResponse(file);
-  }
-
-  async findByIdForSystemAdministration(id: number): Promise<FileResponseDto> {
-    const file = await this.fileRepository.findByIdForSystemAdministration(id);
 
     if (!file) throw new NotFoundException(this.i18n.t('errors.media.file_not_found'));
 
@@ -67,16 +60,19 @@ export class FileService {
 
   async upload(
     file: UploadedMultipartFile | undefined,
-    clientId: number,
-    uploadedByUserId: number,
+    session: AuthenticatedSession,
   ): Promise<FileResponseDto> {
+    if (session.context.type === SessionContextType.global) {
+      return this.uploadGlobal(file, session.user.id);
+    }
+
     const validation = validateUploadedFile(file, settings.MAX_UPLOAD_FILE_SIZE_BYTES);
     if (!validation.ok) {
       throw new BadRequestException(this.i18n.t(fileValidationErrorKeys[validation.code]));
     }
 
     const rule = await this.fileRepository.findActiveStorageFileTypeRule(
-      clientId,
+      session.context.client.id,
       validation.file.fileType,
     );
     if (!rule?.storageConfiguration) {
@@ -84,15 +80,15 @@ export class FileService {
     }
 
     const client = new Client();
-    client.id = clientId;
+    client.id = session.context.client.id;
     const uploadedBy = new User();
-    uploadedBy.id = uploadedByUserId;
+    uploadedBy.id = session.user.id;
     const stored = await this.store(validation.file, client, uploadedBy, rule.storageConfiguration);
 
     return this.toResponse(stored);
   }
 
-  async uploadGlobal(
+  private async uploadGlobal(
     file: UploadedMultipartFile | undefined,
     uploadedByUserId: number,
   ): Promise<FileResponseDto> {

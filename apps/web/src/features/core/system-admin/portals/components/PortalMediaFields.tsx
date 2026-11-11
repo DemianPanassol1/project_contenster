@@ -11,7 +11,6 @@ import {
   portalLoginMediaTypeDictionary,
 } from '@contenster/shared';
 import { portalFontSize } from '@/core/theme';
-import { API_ROUTES } from '@/routes';
 import { FormFileUpload, FormImageUpload, FormSelect } from '@/shared';
 
 import type { PortalFormValues } from '../types/portal-form.types';
@@ -72,32 +71,26 @@ function PortalMediaSlot({ slot }: { slot: PortalLoginMediaSlot }) {
         {mediaType === PortalLoginMediaType.video ? (
           <FormFileUpload<PortalFormValues>
             accept="video/mp4,video/quicktime,video/webm"
-            fileEndpoint={API_ROUTES.SYSTEM_ADMIN.GET_PORTAL_MEDIA}
             helperText={t('helpers.media_file')}
             label={t('fields.media_file')}
             name={`loginMedia.${slot}.fileId`}
-            uploadEndpoint={API_ROUTES.SYSTEM_ADMIN.POST_PORTAL_MEDIA}
           />
         ) : (
           <FormImageUpload<PortalFormValues>
             accept="image/gif,image/jpeg,image/png,image/svg+xml,image/webp"
-            fileEndpoint={API_ROUTES.SYSTEM_ADMIN.GET_PORTAL_MEDIA}
             helperText={t('helpers.media_file')}
             label={t('fields.media_file')}
             name={`loginMedia.${slot}.fileId`}
             previewMode="uploaded"
-            uploadEndpoint={API_ROUTES.SYSTEM_ADMIN.POST_PORTAL_MEDIA}
           />
         )}
         {mediaType === PortalLoginMediaType.video && (
           <FormImageUpload<PortalFormValues>
             accept="image/gif,image/jpeg,image/png,image/svg+xml,image/webp"
-            fileEndpoint={API_ROUTES.SYSTEM_ADMIN.GET_PORTAL_MEDIA}
             helperText={t('helpers.poster')}
             label={t('fields.poster')}
             name={`loginMedia.${slot}.posterFileId`}
             previewMode="uploaded"
-            uploadEndpoint={API_ROUTES.SYSTEM_ADMIN.POST_PORTAL_MEDIA}
           />
         )}
       </Stack>

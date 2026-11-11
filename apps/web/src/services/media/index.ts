@@ -1,5 +1,6 @@
 import type { FileResponse } from '@contenster/shared';
 
+import { API_ROUTES } from '@/routes';
 import type { ApiRequestActionResponse } from '@/services/actions';
 
 type ApiRequest = <TBody>(request: {
@@ -10,12 +11,12 @@ type ApiRequest = <TBody>(request: {
 
 export type MediaFileEndpointResolver = (id: number) => string;
 
-export const getMediaFileEndpoint: MediaFileEndpointResolver = (id) => `media/files/${id}`;
+export const getMediaFileEndpoint: MediaFileEndpointResolver = API_ROUTES.MEDIA.GET_FILE;
 
 export const uploadMediaFile = async (
   apiRequest: ApiRequest,
   file: File,
-  endpoint = 'media/files/upload',
+  endpoint: string = API_ROUTES.MEDIA.POST_FILE_UPLOAD,
 ): Promise<FileResponse | null> => {
   const body = new FormData();
   body.append('file', file);

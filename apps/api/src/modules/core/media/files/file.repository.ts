@@ -16,24 +16,16 @@ export class FileRepository {
     private readonly rules: Repository<StorageFileTypeRule>,
   ) {}
 
-  findById(id: number, clientId: number): Promise<File | null> {
+  findById(id: number, clientId: number | null): Promise<File | null> {
     return this.files.findOne({
       relations: { client: true, storageConfiguration: true, uploadedBy: true },
-      where: { id, client: { id: clientId } },
-    });
-  }
-
-  findGlobalById(id: number): Promise<File | null> {
-    return this.files.findOne({
-      relations: { client: true, storageConfiguration: true, uploadedBy: true },
-      where: { client: IsNull(), id },
-    });
-  }
-
-  findByIdForSystemAdministration(id: number): Promise<File | null> {
-    return this.files.findOne({
-      relations: { client: true, storageConfiguration: true, uploadedBy: true },
-      where: { id },
+      where:
+        clientId === null
+          ? { id }
+          : [
+              { client: { id: clientId }, id },
+              { client: IsNull(), id },
+            ],
     });
   }
 

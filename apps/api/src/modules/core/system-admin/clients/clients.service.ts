@@ -9,7 +9,6 @@ import { DataSource, type EntityManager } from 'typeorm';
 
 import {
   type AppOption,
-  type FileResponse,
   type GetSystemAdminClientResponse,
   type PaginatedBody,
   type PaginateRequest,
@@ -23,9 +22,7 @@ import type { Client } from '@/modules/core/identity/clients/entities/client.ent
 import { CitiesRepository } from '@/modules/core/locations/cities/cities.repository';
 import { ClientStorageService } from '@/modules/core/media/client-storage/client-storage.service';
 import { StorageProviderConfiguration } from '@/modules/core/media/files/entities/storage-provider-configuration.entity';
-import { FileService } from '@/modules/core/media/files/file.service';
 import { resolveFilePublicUrl } from '@/modules/core/media/files/helpers/file-public-url.helper';
-import type { UploadedMultipartFile } from '@/modules/core/media/files/types/uploaded-multipart-file.type';
 import { LanguagesRepository } from '@/modules/core/system-admin/languages/languages.repository';
 import { isPostgreSqlForeignKeyViolation } from '@/shared/database/postgres-error.helper';
 import type { PaginateRequestDto } from '@/shared/dtos';
@@ -46,7 +43,6 @@ export class ClientsService {
     private readonly languagesRepository: LanguagesRepository,
     private readonly clientStorageService: ClientStorageService,
     private readonly identityClientsService: IdentityClientsService,
-    private readonly fileService: FileService,
     private readonly i18n: I18nService<I18nTranslations>,
     private readonly sessionSynchronizationService: SessionSynchronizationService,
   ) {}
@@ -101,17 +97,6 @@ export class ClientsService {
       metadata: { locale: language.languageCode },
       value: language.id,
     }));
-  }
-
-  getImageById(id: number): Promise<FileResponse> {
-    return this.fileService.findByIdForSystemAdministration(id);
-  }
-
-  uploadImage(
-    file: UploadedMultipartFile | undefined,
-    uploadedByUserId: number,
-  ): Promise<FileResponse> {
-    return this.fileService.uploadGlobal(file, uploadedByUserId);
   }
 
   async create(request: SaveSystemAdminClientRequest): Promise<Client> {

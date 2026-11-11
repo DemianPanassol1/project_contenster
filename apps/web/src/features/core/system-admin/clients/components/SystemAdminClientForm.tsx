@@ -63,8 +63,6 @@ export function SystemAdminClientForm({ languages }: SystemAdminClientFormProps)
         <ClientForm<SystemAdminClientFormValues>
           cityOptionsEndpoint={API_ROUTES.SYSTEM_ADMIN.POST_CLIENT_CITY_OPTIONS}
           documentType={documentType}
-          imageFileEndpoint={API_ROUTES.SYSTEM_ADMIN.GET_CLIENT_IMAGE}
-          imageUploadEndpoint={API_ROUTES.SYSTEM_ADMIN.POST_CLIENT_IMAGE}
           languageOptionsEndpoint={API_ROUTES.SYSTEM_ADMIN.POST_CLIENT_LANGUAGE_OPTIONS}
         />
       </FormSection>

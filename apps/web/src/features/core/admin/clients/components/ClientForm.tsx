@@ -7,7 +7,6 @@ import type { FieldPath } from 'react-hook-form';
 import { type DocumentType, documentTypeDictionary } from '@contenster/shared';
 import { useValidationRules } from '@/hooks';
 import { API_ROUTES } from '@/routes';
-import type { MediaFileEndpointResolver } from '@/services/media';
 import { FormImageUpload, FormInput, FormMaskedInput, FormSelect } from '@/shared';
 
 import type { ClientFormValues } from '../types/client-form.types';
@@ -21,8 +20,6 @@ const OPTIONS_BODY = {
 interface ClientFormProps {
   cityOptionsEndpoint?: string;
   documentType: DocumentType;
-  imageFileEndpoint?: MediaFileEndpointResolver;
-  imageUploadEndpoint?: string;
   languageOptionsEndpoint?: string;
 }
 
@@ -32,8 +29,6 @@ const clientField = <_TForm extends ClientFormValues>(name: keyof ClientFormValu
 export function ClientForm<TForm extends ClientFormValues = ClientFormValues>({
   cityOptionsEndpoint = API_ROUTES.ADMIN.POST_CLIENT_CITY_OPTIONS,
   documentType,
-  imageFileEndpoint,
-  imageUploadEndpoint,
   languageOptionsEndpoint = API_ROUTES.ADMIN.POST_CLIENT_LANGUAGE_OPTIONS,
 }: ClientFormProps) {
   const t = useTranslations('protected.clients');
@@ -167,10 +162,8 @@ export function ClientForm<TForm extends ClientFormValues = ClientFormValues>({
       />
       <FormImageUpload<TForm>
         accept="image/*"
-        fileEndpoint={imageFileEndpoint}
         label={t('image')}
         name={clientField<TForm>('imageId')}
-        uploadEndpoint={imageUploadEndpoint}
       />
     </Box>
   );

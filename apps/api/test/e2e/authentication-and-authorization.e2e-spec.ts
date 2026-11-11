@@ -316,6 +316,27 @@ describe('authentication and authorization', () => {
       .expect(201);
 
     await secondaryAgent.get(`/media/files/${uploaded.id}`).expect(404);
+
+    await dataSource.getRepository(User).update({ id: 1 }, { isSuperuser: true });
+
+    const globalAgent = request.agent(httpServer);
+
+    await globalAgent
+      .post('/auth/sign-in-global')
+      .send({ password: '123456', staySignedIn: false, username: 'admin' })
+      .expect(201);
+
+    const globalUpload = await globalAgent
+      .post('/media/files/upload')
+      .attach('file', image, { contentType: 'image/png', filename: 'global-pixel.png' })
+      .expect(201);
+    const globalFile = (globalUpload.body as ApiResponse<{ clientId: number | null; id: number }>)
+      .body;
+
+    expect(globalFile.clientId).toBeNull();
+    await globalAgent.get(`/media/files/${globalFile.id}`).expect(200);
+    await agent.get(`/media/files/${globalFile.id}`).expect(200);
+    await secondaryAgent.get(`/media/files/${globalFile.id}`).expect(200);
   });
 
   it('executes global CRUDs for languages and actions and client administrative CRUDs', async () => {
@@ -699,7 +720,7 @@ describe('authentication and authorization', () => {
       'base64',
     );
     const imageUploadResponse = await globalAgent
-      .post('/system-admin/clients/image/upload')
+      .post('/media/files/upload')
       .attach('file', image, { contentType: 'image/png', filename: 'client-image.png' })
       .expect(201);
     const uploadedImage = (
@@ -707,7 +728,7 @@ describe('authentication and authorization', () => {
     ).body;
 
     expect(uploadedImage.clientId).toBeNull();
-    await globalAgent.get(`/system-admin/clients/image/${uploadedImage.id}`).expect(200);
+    await globalAgent.get(`/media/files/${uploadedImage.id}`).expect(200);
 
     const response = await globalAgent
       .post('/system-admin/clients')

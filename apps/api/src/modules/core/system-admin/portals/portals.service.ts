@@ -8,7 +8,6 @@ import { I18nService } from 'nestjs-i18n';
 
 import {
   type AppOption,
-  type FileResponse,
   isPortalAssetCompatible,
   normalizePortalHost,
   type PaginatedBody,
@@ -23,9 +22,7 @@ import {
 import type { I18nTranslations } from '@/i18n/translations';
 import { serializeApplicationDateTime } from '@/infrastructure/date-time';
 import { File } from '@/modules/core/media/files/entities/file.entity';
-import { FileService } from '@/modules/core/media/files/file.service';
 import { resolveFilePublicUrl } from '@/modules/core/media/files/helpers/file-public-url.helper';
-import type { UploadedMultipartFile } from '@/modules/core/media/files/types/uploaded-multipart-file.type';
 import { Language } from '@/modules/core/system-admin/languages/entities/language.entity';
 import {
   type DeleteRecordsRequestDto,
@@ -50,7 +47,6 @@ const TRANSLATION_FIELDS = [
 @Injectable()
 export class PortalsService {
   constructor(
-    private readonly fileService: FileService,
     private readonly i18n: I18nService<I18nTranslations>,
     private readonly repository: PortalsRepository,
   ) {}
@@ -82,10 +78,6 @@ export class PortalsService {
 
   async getById(id: number): Promise<PortalDetail> {
     return this.toDetail(await this.getEntityOrFail(id));
-  }
-
-  getMediaById(id: number): Promise<FileResponse> {
-    return this.fileService.findGlobalById(id);
   }
 
   async save(request: SavePortalRequestDto): Promise<PortalDetail> {
@@ -133,13 +125,6 @@ export class PortalsService {
     }
 
     return { ids: await this.repository.delete(portals) };
-  }
-
-  async uploadMedia(
-    file: UploadedMultipartFile | undefined,
-    uploadedByUserId: number,
-  ): Promise<FileResponse> {
-    return this.fileService.uploadGlobal(file, uploadedByUserId);
   }
 
   private async getEntityOrFail(id: number): Promise<Portal> {

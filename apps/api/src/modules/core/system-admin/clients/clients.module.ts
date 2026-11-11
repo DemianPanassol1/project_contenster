@@ -8,7 +8,6 @@ import { Client } from '@/modules/core/identity/clients/entities/client.entity';
 import { UserProfile } from '@/modules/core/identity/users/entities/user-profile.entity';
 import { CitiesModule } from '@/modules/core/locations/cities/cities.module';
 import { ClientStorageModule } from '@/modules/core/media/client-storage/client-storage.module';
-import { FileModule } from '@/modules/core/media/files/file.module';
 import { Language } from '@/modules/core/system-admin/languages/entities/language.entity';
 import { SystemAdminLanguagesModule } from '@/modules/core/system-admin/languages/languages.module';
 
@@ -21,7 +20,6 @@ import { ClientsService } from './clients.service';
     AuthenticationModule,
     ClientStorageModule,
     CitiesModule,
-    FileModule,
     IdentityClientsModule,
     SystemAdminLanguagesModule,
     TypeOrmModule.forFeature([Client, Language, Profile, UserProfile]),

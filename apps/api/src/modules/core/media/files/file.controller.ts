@@ -1,3 +1,4 @@
+import type { AuthenticatedSession } from '@contenster/shared';
 import {
   Controller,
   Get,
@@ -19,8 +20,7 @@ import {
 } from '@nestjs/swagger';
 
 import { Authenticate } from '@/common/decorators/authenticate.decorator';
-import { CurrentClientId } from '@/common/decorators/current-client-id.decorator';
-import { CurrentUserId } from '@/common/decorators/current-user-id.decorator';
+import { CurrentSession } from '@/common/decorators/current-session.decorator';
 import { settings } from '@/infrastructure/config/app.config';
 
 import { FileResponseDto } from './dto/res/file.response.dto';
@@ -54,10 +54,9 @@ export class FileController {
   )
   upload(
     @UploadedFile() file: UploadedMultipartFile | undefined,
-    @CurrentClientId() clientId: number,
-    @CurrentUserId() userId: number,
+    @CurrentSession() session: AuthenticatedSession,
   ): Promise<FileResponseDto> {
-    return this.service.upload(file, clientId, userId);
+    return this.service.upload(file, session);
   }
 
   @Get(':id')
@@ -66,8 +65,8 @@ export class FileController {
   @ApiOkResponse({ type: FileResponseDto })
   findById(
     @Param('id', ParseIntPipe) id: number,
-    @CurrentClientId() clientId: number,
+    @CurrentSession() session: AuthenticatedSession,
   ): Promise<FileResponseDto> {
-    return this.service.findById(id, clientId);
+    return this.service.findById(id, session);
   }
 }

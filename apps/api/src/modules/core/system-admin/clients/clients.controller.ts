@@ -1,22 +1,7 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  ParseIntPipe,
-  Patch,
-  Post,
-  UploadedFile,
-  UseInterceptors,
-} from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiBody, ApiConsumes, ApiParam, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 
-import { CurrentUserId } from '@/common/decorators/current-user-id.decorator';
 import { RequireSuperuser } from '@/common/decorators/require-superuser.decorator';
-import { settings } from '@/infrastructure/config/app.config';
-import type { UploadedMultipartFile } from '@/modules/core/media/files/types/uploaded-multipart-file.type';
 import { PaginateRequestDto } from '@/shared/dtos';
 
 import { SaveSystemAdminClientRequestDto } from './dto/req/save-system-admin-client.request.dto';
@@ -42,31 +27,6 @@ export class ClientsController {
   @Post('languages/options')
   listLanguageOptions(@Body() request: PaginateRequestDto) {
     return this.service.listLanguageOptions(request);
-  }
-
-  @Get('image/:id')
-  @ApiParam({ name: 'id', type: Number })
-  getImageById(@Param('id', ParseIntPipe) id: number) {
-    return this.service.getImageById(id);
-  }
-
-  @Post('image/upload')
-  @ApiConsumes('multipart/form-data')
-  @ApiBody({
-    schema: {
-      properties: { file: { format: 'binary', type: 'string' } },
-      required: ['file'],
-      type: 'object',
-    },
-  })
-  @UseInterceptors(
-    FileInterceptor('file', { limits: { fileSize: settings.MAX_UPLOAD_FILE_SIZE_BYTES } }),
-  )
-  uploadImage(
-    @UploadedFile() file: UploadedMultipartFile | undefined,
-    @CurrentUserId() userId: number,
-  ) {
-    return this.service.uploadImage(file, userId);
   }
 
   @Post()

@@ -230,10 +230,8 @@ export function SystemAdminAccessLinksView() {
             />
             <Box sx={{ gridColumn: { md: '1 / -1' } }}>
               <FormImageUpload<CreateSystemAdminAccessLinkUserRequest>
-                fileEndpoint={API_ROUTES.SYSTEM_ADMIN.GET_ACCESS_LINK_USER_IMAGE}
                 label={tUsers('image')}
                 name="imageId"
-                uploadEndpoint={API_ROUTES.SYSTEM_ADMIN.POST_ACCESS_LINK_USER_IMAGE}
               />
             </Box>
             <FormSwitch<CreateSystemAdminAccessLinkUserRequest>

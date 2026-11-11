@@ -12,7 +12,6 @@ import {
   SVG_MIME_TYPE,
 } from '@contenster/shared';
 import { portalFontSize } from '@/core/theme';
-import { API_ROUTES } from '@/routes';
 import { FormImageUpload, FormSelect } from '@/shared';
 
 import type { PortalFormValues } from '../types/portal-form.types';
@@ -256,26 +255,21 @@ export function PortalIdentityFields() {
             accept={['image/png', SVG_MIME_TYPE, ...ICO_MIME_TYPES, '.ico'].join(',')}
             emptyStateDescription={t('identity.favicon_upload.description')}
             emptyStateTitle={t('identity.favicon_upload.title')}
-            fileEndpoint={API_ROUTES.SYSTEM_ADMIN.GET_PORTAL_MEDIA}
             helperText={t('helpers.favicon')}
             label={t('fields.favicon')}
             name="faviconFileId"
             previewMode="uploaded"
             uploadButtonLabel={t('identity.favicon_upload.action')}
-            uploadEndpoint={API_ROUTES.SYSTEM_ADMIN.POST_PORTAL_MEDIA}
           />
           <FormImageUpload<PortalFormValues>
             accept={[SVG_MIME_TYPE, ...ICO_MIME_TYPES].join(',')}
-            fileEndpoint={API_ROUTES.SYSTEM_ADMIN.GET_PORTAL_MEDIA}
             helperText={t('helpers.header_icon')}
             label={t('fields.header_icon')}
             name="headerIconFileId"
             previewMode="uploaded"
-            uploadEndpoint={API_ROUTES.SYSTEM_ADMIN.POST_PORTAL_MEDIA}
           />
           <FormImageUpload<PortalFormValues>
             accept="image/gif,image/jpeg,image/png,image/svg+xml,image/webp"
-            fileEndpoint={API_ROUTES.SYSTEM_ADMIN.GET_PORTAL_MEDIA}
             helperText={t('helpers.brand_asset')}
             label={t('fields.brand_asset')}
             name="brandAssetFileId"
@@ -286,7 +280,6 @@ export function PortalIdentityFields() {
                 value !== null ||
                 t('validation.brand_asset_required'),
             }}
-            uploadEndpoint={API_ROUTES.SYSTEM_ADMIN.POST_PORTAL_MEDIA}
           />
         </Box>
       </PortalFormSection>
