@@ -109,6 +109,12 @@ As páginas genéricas em `app/[locale]/(protected)/admin/[functionality]` resol
 apresentação da funcionalidade e o binding. A action do binding deve ser checada com
 `hasPermissionAction(presentation.actions, binding.action)` antes de renderizar a view.
 
+O registry usa `FunctionalitySlug`, não somente identidades do Core. Em uma aplicação derivada,
+features e bindings ficam sob `features/<application>/admin` e `registry/admin/<application>`; a
+composição é estática e explícita. Um binding derivado pode substituir um slug Core quando a
+aplicação precisa especializar sua experiência, mas não deve registrar dois bindings para o mesmo
+slug.
+
 Use os helpers de `features/shared/navigation` para paths administrativos e parâmetros:
 
 ```ts

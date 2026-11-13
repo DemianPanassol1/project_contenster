@@ -16,14 +16,14 @@ import {
   type SystemAdminClientListItem,
 } from '@contenster/shared';
 import type { I18nTranslations } from '@/i18n/translations';
-import { SessionSynchronizationService } from '@/modules/core/identity/authentication/session/session-synchronization.service';
+import { ProfilesService } from '@/modules/core/access-control/profiles/profiles.service';
 import { ClientsService as IdentityClientsService } from '@/modules/core/identity/clients/clients.service';
 import type { Client } from '@/modules/core/identity/clients/entities/client.entity';
-import { CitiesRepository } from '@/modules/core/locations/cities/cities.repository';
+import { CitiesService } from '@/modules/core/locations/cities/cities.service';
 import { ClientStorageService } from '@/modules/core/media/client-storage/client-storage.service';
 import { StorageProviderConfiguration } from '@/modules/core/media/files/entities/storage-provider-configuration.entity';
 import { resolveFilePublicUrl } from '@/modules/core/media/files/helpers/file-public-url.helper';
-import { LanguagesRepository } from '@/modules/core/system-admin/languages/languages.repository';
+import { LanguagesService } from '@/modules/core/system-admin/languages/languages.service';
 import { isPostgreSqlForeignKeyViolation } from '@/shared/database/postgres-error.helper';
 import type { PaginateRequestDto } from '@/shared/dtos';
 import { getCurrentLocale } from '@/shared/i18n';
@@ -39,12 +39,12 @@ export class ClientsService {
   constructor(
     private readonly dataSource: DataSource,
     private readonly repository: ClientsRepository,
-    private readonly citiesRepository: CitiesRepository,
-    private readonly languagesRepository: LanguagesRepository,
+    private readonly citiesService: CitiesService,
+    private readonly languagesService: LanguagesService,
     private readonly clientStorageService: ClientStorageService,
     private readonly identityClientsService: IdentityClientsService,
+    private readonly profilesService: ProfilesService,
     private readonly i18n: I18nService<I18nTranslations>,
-    private readonly sessionSynchronizationService: SessionSynchronizationService,
   ) {}
 
   async list(
@@ -74,7 +74,7 @@ export class ClientsService {
 
   async listCityOptions(request: PaginateRequestDto): Promise<AppOption[]> {
     const locale = getCurrentLocale();
-    const [cities] = await this.citiesRepository.list(request, locale);
+    const [cities] = await this.citiesService.listEntities(request, locale);
 
     return cities.map((city) => ({
       disabled: !city.isActive,
@@ -89,7 +89,7 @@ export class ClientsService {
   }
 
   async listLanguageOptions(request: PaginateRequestDto): Promise<AppOption[]> {
-    const [languages] = await this.languagesRepository.list(request);
+    const [languages] = await this.languagesService.listEntities(request);
 
     return languages.map((language) => ({
       disabled: false,
@@ -126,7 +126,7 @@ export class ClientsService {
 
     const saved = await this.repository.save(client);
 
-    await this.sessionSynchronizationService.synchronizeAll();
+    await this.identityClientsService.synchronizeMutation();
 
     return saved;
   }
@@ -140,7 +140,7 @@ export class ClientsService {
 
     await this.repository.softDelete(client);
 
-    await this.sessionSynchronizationService.synchronizeAll();
+    await this.identityClientsService.synchronizeMutation();
 
     return { id };
   }
@@ -163,15 +163,15 @@ export class ClientsService {
       throw new BadRequestException(this.i18n.t('errors.clients.language_required'));
     }
 
-    const languages = await this.repository.findLanguagesByIds(languageIds);
+    const languages = await this.identityClientsService.findLanguagesByIds(languageIds);
 
     if (languages.length !== languageIds.length) {
       throw new BadRequestException(this.i18n.t('errors.system_admin.language_not_found'));
     }
 
     this.assertClientLanguageLinks(request, existing);
+    this.getAdminProfile(existing);
 
-    const languageById = new Map(languages.map((language) => [language.id, language]));
     const languageByCode = new Map(languages.map((language) => [language.languageCode, language]));
     const existingConfigurationById = new Map(
       (existing?.storageConfigurations ?? []).map((configuration) => [
@@ -196,22 +196,12 @@ export class ClientsService {
 
     try {
       const saved = await this.dataSource.transaction(async (manager) => {
-        const client = await this.saveClient(manager, existing, request, languageById);
-        const profile = this.getAdminProfile(existing);
+        const client = await this.identityClientsService.saveInTransaction(request.client, manager);
 
-        await this.repository.saveProfile(
+        await this.profilesService.saveAdminProfileInTransaction(
           {
-            ...(profile === null ? {} : { id: profile.id }),
-            client,
-            isActive: true,
-            isAdmin: true,
-            translations: request.adminProfile.translations.map((translation) => ({
-              ...(profile?.translations.find(
-                (item) => item.language.languageCode === translation.locale,
-              ) ?? {}),
-              ...translation,
-              language: languageByCode.get(translation.locale)!,
-            })),
+            clientId: client.id,
+            translations: request.adminProfile.translations,
           },
           manager,
         );
@@ -228,7 +218,7 @@ export class ClientsService {
         return client;
       });
 
-      await this.sessionSynchronizationService.synchronizeAll();
+      await this.identityClientsService.synchronizeMutation();
 
       return saved;
     } catch (error) {
@@ -238,42 +228,6 @@ export class ClientsService {
 
       throw error;
     }
-  }
-
-  private async saveClient(
-    manager: EntityManager,
-    existing: Client | null,
-    request: SaveSystemAdminClientRequest,
-    languageById: Map<number, Awaited<ReturnType<ClientsRepository['findLanguagesByIds']>>[number]>,
-  ): Promise<Client> {
-    const {
-      cityId,
-      id: _id,
-      imageId,
-      languageLinks: _languageLinks,
-      ...clientData
-    } = request.client;
-
-    return this.repository.saveClient(
-      {
-        ...(existing === null ? {} : { id: existing.id }),
-        ...clientData,
-        slug:
-          existing?.slug ??
-          (await this.identityClientsService.generateUniqueSlug(
-            manager,
-            clientData.tradeName,
-            clientData.document,
-          )),
-        city: cityId === null ? null : { id: cityId },
-        image: imageId === null ? null : { id: imageId },
-        availableLanguageLinks: request.client.languageLinks.map(({ id, languageId }) => ({
-          ...(id === null ? {} : { id }),
-          language: languageById.get(languageId)!,
-        })),
-      },
-      manager,
-    );
   }
 
   private async saveConfigurations(

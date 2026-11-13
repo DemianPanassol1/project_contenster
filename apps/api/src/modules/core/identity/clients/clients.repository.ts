@@ -27,19 +27,19 @@ export class ClientsRepository {
     @InjectRepository(City) private readonly cities: Repository<City>,
   ) {}
 
-  findById(id: number): Promise<Client | null> {
-    return this.clients.findOne({
+  findById(id: number, manager?: EntityManager): Promise<Client | null> {
+    return (manager?.getRepository(Client) ?? this.clients).findOne({
       where: { id },
       relations: { image: true, city: true, availableLanguageLinks: { language: true } },
     });
   }
 
-  findCity(id: number): Promise<City | null> {
-    return this.cities.findOneBy({ id });
+  findCity(id: number, manager?: EntityManager): Promise<City | null> {
+    return (manager?.getRepository(City) ?? this.cities).findOneBy({ id });
   }
 
-  findLanguages(ids: number[]): Promise<Language[]> {
-    return this.languages.findBy({ id: In(ids) });
+  findLanguages(ids: number[], manager?: EntityManager): Promise<Language[]> {
+    return (manager?.getRepository(Language) ?? this.languages).findBy({ id: In(ids) });
   }
 
   acquireSlugAllocationLock(manager: EntityManager): Promise<unknown> {
@@ -91,7 +91,8 @@ export class ClientsRepository {
 
   async save(
     client: DeepPartial<Client> & { availableLanguageLinks: DeepPartial<ClientLanguage>[] },
+    manager?: EntityManager,
   ): Promise<Client> {
-    return this.clients.save(client);
+    return (manager?.getRepository(Client) ?? this.clients).save(client);
   }
 }

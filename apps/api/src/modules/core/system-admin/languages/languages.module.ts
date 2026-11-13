@@ -12,6 +12,6 @@ import { LanguagesService } from './languages.service';
   imports: [AuthenticationModule, TypeOrmModule.forFeature([Language])],
   controllers: [SystemAdminLanguagesController],
   providers: [LanguagesRepository, LanguagesService],
-  exports: [LanguagesRepository, LanguagesService],
+  exports: [LanguagesService],
 })
 export class SystemAdminLanguagesModule {}

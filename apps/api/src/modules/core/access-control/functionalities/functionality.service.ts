@@ -8,9 +8,9 @@ import {
 import { I18nService } from 'nestjs-i18n';
 
 import type { I18nTranslations } from '@/i18n/translations';
-import { SystemModulesRepository } from '@/modules/core/access-control/modules/system-module.repository';
+import { SystemModulesService } from '@/modules/core/access-control/modules/system-module.service';
 import { SessionSynchronizationService } from '@/modules/core/identity/authentication/session/session-synchronization.service';
-import { ClientsRepository } from '@/modules/core/identity/clients/clients.repository';
+import { ClientsService } from '@/modules/core/identity/clients/clients.service';
 import {
   type DeleteRecordsRequestDto,
   DeleteRecordsResponseDto,
@@ -32,8 +32,8 @@ import { FunctionalityRepository } from './functionality.repository';
 export class FunctionalityService {
   constructor(
     private readonly repository: FunctionalityRepository,
-    private readonly modulesRepository: SystemModulesRepository,
-    private readonly clientsRepository: ClientsRepository,
+    private readonly systemModulesService: SystemModulesService,
+    private readonly clientsService: ClientsService,
     private readonly i18n: I18nService<I18nTranslations>,
     private readonly sessionSynchronizationService: SessionSynchronizationService,
   ) {}
@@ -56,7 +56,7 @@ export class FunctionalityService {
 
   async listModuleOptions(clientId: number, request: PaginateRequestDto): Promise<AppOption[]> {
     const locale = getCurrentLocale();
-    const [modules] = await this.modulesRepository.list(clientId, request, locale);
+    const [modules] = await this.systemModulesService.listEntities(clientId, request, locale);
 
     return modules.map((module) => ({
       disabled: !module.isActive,
@@ -79,7 +79,7 @@ export class FunctionalityService {
   }
 
   async listLanguageOptions(clientId: number, request: PaginateRequestDto): Promise<AppOption[]> {
-    const [languages] = await this.clientsRepository.listAvailableLanguages(clientId, request);
+    const [languages] = await this.clientsService.listAvailableLanguageEntities(clientId, request);
 
     return languages.map((language) => ({
       disabled: false,
@@ -123,7 +123,7 @@ export class FunctionalityService {
       }
     }
 
-    const module = await this.repository.findModule(clientId, request.moduleId);
+    const module = await this.systemModulesService.findByClientId(clientId, request.moduleId);
     if (!module) {
       throw new BadRequestException(this.i18n.t('errors.common.record_not_found'));
     }
@@ -152,10 +152,7 @@ export class FunctionalityService {
       throw new BadRequestException(this.i18n.t('errors.translations.language_not_found'));
     }
 
-    const languages = await this.clientsRepository.findAvailableLanguagesByIds(
-      clientId,
-      languageIds,
-    );
+    const languages = await this.clientsService.findAvailableLanguagesByIds(clientId, languageIds);
 
     if (languages.length !== languageIds.length) {
       throw new BadRequestException(
@@ -216,6 +213,14 @@ export class FunctionalityService {
     await this.sessionSynchronizationService.synchronizeAll();
 
     return toResponseDto(DeleteRecordsResponseDto, { ids: result });
+  }
+
+  findByIds(clientId: number, ids: number[]) {
+    return this.repository.findByIds(clientId, ids);
+  }
+
+  listEntities(clientId: number, request: PaginateRequestDto, locale: string) {
+    return this.repository.list(clientId, request, locale);
   }
 
   private async getEntityByIdOrFail(clientId: number, id: number): Promise<Functionality> {

@@ -46,6 +46,14 @@ export class SystemModulesService {
     };
   }
 
+  findByClientId(clientId: number, id: number) {
+    return this.repository.findById(clientId, id);
+  }
+
+  listEntities(clientId: number, request: PaginateRequestDto, locale: string) {
+    return this.repository.list(clientId, request, locale);
+  }
+
   async getById(clientId: number, id: number): Promise<GetSystemModuleByIdResponseDto> {
     const module = await this.getEntityByIdOrFail(clientId, id);
     const locale = getCurrentLocale();

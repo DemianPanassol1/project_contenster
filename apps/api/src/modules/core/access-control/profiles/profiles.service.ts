@@ -6,11 +6,12 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
+import type { EntityManager } from 'typeorm';
 
 import type { I18nTranslations } from '@/i18n/translations';
-import { FunctionalityRepository } from '@/modules/core/access-control/functionalities/functionality.repository';
+import { FunctionalityService } from '@/modules/core/access-control/functionalities/functionality.service';
 import { SessionSynchronizationService } from '@/modules/core/identity/authentication/session/session-synchronization.service';
-import { ActionsRepository } from '@/modules/core/system-admin/actions/actions.repository';
+import { ActionsService } from '@/modules/core/system-admin/actions/actions.service';
 import {
   type DeleteRecordsRequestDto,
   DeleteRecordsResponseDto,
@@ -26,17 +27,19 @@ import type { SaveProfileRequestDto } from './dto/req/save-profile-request.js';
 import { GetProfileByIdResponseDto } from './dto/res/get-profile-by-id-response.js';
 import { ProfileListItemResponseDto } from './dto/res/profile-list-item-response.js';
 import type { Profile } from './entities/profiles.entity';
+import type { SaveAdminProfileInTransactionInput } from './types/save-admin-profile-in-transaction.input';
 import { ProfilesRepository } from './profiles.repository';
 
 @Injectable()
 export class ProfilesService {
   constructor(
     private readonly repository: ProfilesRepository,
-    private readonly functionalityRepository: FunctionalityRepository,
-    private readonly actionsRepository: ActionsRepository,
+    private readonly functionalityService: FunctionalityService,
+    private readonly actionsService: ActionsService,
     private readonly i18n: I18nService<I18nTranslations>,
     private readonly sessionSynchronizationService: SessionSynchronizationService,
   ) {}
+
   async list(
     clientId: number,
     request: PaginateRequestDto,
@@ -57,7 +60,11 @@ export class ProfilesService {
     request: PaginateRequestDto,
   ): Promise<AppOption[]> {
     const locale = getCurrentLocale();
-    const [functionalities] = await this.functionalityRepository.list(clientId, request, locale);
+    const [functionalities] = await this.functionalityService.listEntities(
+      clientId,
+      request,
+      locale,
+    );
 
     return functionalities.map((functionality) => ({
       disabled: !functionality.isActive,
@@ -69,7 +76,7 @@ export class ProfilesService {
 
   async listActionOptions(request: PaginateRequestDto): Promise<AppOption[]> {
     const locale = getCurrentLocale();
-    const [actions] = await this.actionsRepository.list(request, locale);
+    const [actions] = await this.actionsService.listEntities(request, locale);
 
     return actions.map((action) => ({
       disabled: null,
@@ -97,6 +104,14 @@ export class ProfilesService {
         actionId: permission.action.id,
       })),
     });
+  }
+
+  findAssignableProfile(clientId: number, id: number, manager?: EntityManager) {
+    return this.repository.findById(clientId, id, manager);
+  }
+
+  listEntities(clientId: number, request: PaginateRequestDto, locale: string) {
+    return this.repository.list(clientId, request, locale);
   }
 
   async save(clientId: number, request: SaveProfileRequestDto): Promise<GetProfileByIdResponseDto> {
@@ -131,7 +146,7 @@ export class ProfilesService {
     );
     const functionalityIds = request.permissions.map((permission) => permission.functionalityId);
 
-    const functionalities = await this.repository.findFunctionalities(clientId, functionalityIds);
+    const functionalities = await this.functionalityService.findByIds(clientId, functionalityIds);
 
     if (functionalities.length !== new Set(functionalityIds).size) {
       throw new BadRequestException(
@@ -150,7 +165,7 @@ export class ProfilesService {
       );
     }
 
-    const actions = await this.repository.findActions(actionIds);
+    const actions = await this.actionsService.findByIds(actionIds);
 
     if (actions.length !== new Set(actionIds).size) {
       throw new BadRequestException(this.i18n.t('errors.access_control.profile_action_not_found'));
@@ -181,6 +196,39 @@ export class ProfilesService {
     await this.sessionSynchronizationService.synchronizeAll();
 
     return this.getById(clientId, profile.id);
+  }
+
+  async saveAdminProfileInTransaction(
+    input: SaveAdminProfileInTransactionInput,
+    manager: EntityManager,
+  ): Promise<Profile> {
+    const profiles = await this.repository.findActiveAdminByClientId(input.clientId, manager);
+
+    if (profiles.length > 1) {
+      throw new BadRequestException(this.i18n.t('errors.access_models.admin_profile_invalid'));
+    }
+
+    const locales = input.translations.map((translation) => translation.locale);
+    const languages = await this.repository.findLanguagesByCodesInTransaction(locales, manager);
+    const languageByCode = resolveTranslationLanguages(locales, languages);
+    const profile = profiles[0] ?? null;
+
+    return this.repository.saveInTransaction(
+      {
+        ...(profile === null ? {} : { id: profile.id }),
+        client: { id: input.clientId },
+        isActive: true,
+        isAdmin: true,
+        translations: input.translations.map((translation) => ({
+          ...(profile?.translations.find(
+            (item) => item.language.languageCode === translation.locale,
+          ) ?? {}),
+          ...translation,
+          language: languageByCode.get(translation.locale)!,
+        })),
+      },
+      manager,
+    );
   }
 
   async delete(

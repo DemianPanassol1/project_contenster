@@ -1,12 +1,10 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { Functionality } from '@/modules/core/access-control/functionalities/entities/functionality.entity';
 import { FunctionalityModule } from '@/modules/core/access-control/functionalities/functionality.module';
 import { AuthenticationModule } from '@/modules/core/identity/authentication/authentication.module';
 import { UserProfile } from '@/modules/core/identity/users/entities/user-profile.entity';
 import { SystemAdminActionsModule } from '@/modules/core/system-admin/actions/actions.module';
-import { Action } from '@/modules/core/system-admin/actions/entities/action.entity';
 import { Language } from '@/modules/core/system-admin/languages/entities/language.entity';
 
 import { ProfilePermission } from './entities/profile-permission.entity';
@@ -21,8 +19,6 @@ import { ProfilesService } from './profiles.service';
       Profile,
       ProfileTranslation,
       ProfilePermission,
-      Functionality,
-      Action,
       Language,
       UserProfile,
     ]),
@@ -32,6 +28,6 @@ import { ProfilesService } from './profiles.service';
   ],
   controllers: [ProfilesController],
   providers: [ProfilesRepository, ProfilesService],
-  exports: [ProfilesRepository],
+  exports: [ProfilesService],
 })
 export class ProfilesModule {}

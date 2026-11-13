@@ -46,6 +46,10 @@ export class LanguagesService {
     );
   }
 
+  listEntities(request: PaginateRequestDto) {
+    return this.repository.list(request);
+  }
+
   async listOptions(request: PaginateRequestDto): Promise<AppOption[]> {
     const [languages] = await this.repository.list(request);
 

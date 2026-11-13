@@ -7,6 +7,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
+import { DataSource, type EntityManager } from 'typeorm';
 
 import type { I18nTranslations } from '@/i18n/translations';
 import { serializeApplicationDateTime } from '@/infrastructure/date-time';
@@ -14,7 +15,7 @@ import {
   generatePasswordHash,
   validatePasswordHash,
 } from '@/infrastructure/security/password.util';
-import { ProfilesRepository } from '@/modules/core/access-control/profiles/profiles.repository';
+import { ProfilesService } from '@/modules/core/access-control/profiles/profiles.service';
 import { SessionAuthenticationService } from '@/modules/core/identity/authentication/session/session-authentication.service';
 import { SessionSynchronizationService } from '@/modules/core/identity/authentication/session/session-synchronization.service';
 import {
@@ -36,13 +37,15 @@ import { CurrentUserProfileResponseDto } from './dto/res/current-user-profile-re
 import { GetUserByIdResponseDto } from './dto/res/get-user-by-id-response.js';
 import { UserListItemResponseDto } from './dto/res/user-list-item-response.js';
 import { User } from './entities/user.entity';
+import type { SaveUserInTransactionInput } from './types/save-user-in-transaction.input';
 import { UsersRepository } from './users.repository';
 
 @Injectable()
 export class UsersService {
   constructor(
+    private readonly dataSource: DataSource,
     private readonly repository: UsersRepository,
-    private readonly profilesRepository: ProfilesRepository,
+    private readonly profilesService: ProfilesService,
     private readonly i18n: I18nService<I18nTranslations>,
     private readonly sessionSynchronizationService: SessionSynchronizationService,
     private readonly sessionAuthenticationService: SessionAuthenticationService,
@@ -64,7 +67,7 @@ export class UsersService {
 
   async listProfileOptions(clientId: number, request: PaginateRequestDto): Promise<AppOption[]> {
     const locale = getCurrentLocale();
-    const [profiles] = await this.profilesRepository.list(clientId, request, locale);
+    const [profiles] = await this.profilesService.listEntities(clientId, request, locale);
 
     return profiles.map((profile) => ({
       disabled: !profile.isActive,
@@ -95,8 +98,22 @@ export class UsersService {
   }
 
   async save(clientId: number, request: SaveUserRequestDto): Promise<GetUserByIdResponseDto> {
+    const saved = await this.dataSource.transaction((manager) =>
+      this.saveInTransaction(clientId, request, manager),
+    );
+
+    await this.synchronizeMutation();
+
+    return this.getById(clientId, saved.id);
+  }
+
+  async saveInTransaction(
+    clientId: number,
+    request: SaveUserInTransactionInput,
+    manager: EntityManager,
+  ): Promise<User> {
     const existing =
-      request.id === null ? null : await this.getEntityByIdOrFail(clientId, request.id);
+      request.id === null ? null : await this.getEntityByIdOrFail(clientId, request.id, manager);
 
     if (!existing && request.password === null) {
       throw new BadRequestException(this.i18n.t('validation.required'));
@@ -116,7 +133,11 @@ export class UsersService {
       }
     }
 
-    const profile = await this.repository.findProfile(clientId, request.profileId);
+    const profile = await this.profilesService.findAssignableProfile(
+      clientId,
+      request.profileId,
+      manager,
+    );
 
     if (!profile) {
       throw new BadRequestException(this.i18n.t('errors.users.profile_not_found'));
@@ -137,11 +158,11 @@ export class UsersService {
       user.passwordHash = await generatePasswordHash(request.password);
     }
 
-    const saved = await this.repository.save(user, request.userProfileId, clientId, profile);
+    return this.repository.saveWithProfile(user, request.userProfileId, clientId, profile, manager);
+  }
 
+  async synchronizeMutation(): Promise<void> {
     await this.sessionSynchronizationService.synchronizeAll();
-
-    return this.getById(clientId, saved.id);
   }
 
   async delete(
@@ -163,7 +184,7 @@ export class UsersService {
 
     const result = await this.repository.delete(users);
 
-    await this.sessionSynchronizationService.synchronizeAll();
+    await this.synchronizeMutation();
 
     return toResponseDto(DeleteRecordsResponseDto, { ids: result });
   }
@@ -224,13 +245,17 @@ export class UsersService {
 
     const saved = await this.repository.saveCurrentUserProfile(user);
 
-    await this.sessionSynchronizationService.synchronizeAll();
+    await this.synchronizeMutation();
 
     return toResponseDto(CurrentUserProfileResponseDto, this.toCurrentUserProfile(saved));
   }
 
-  private async getEntityByIdOrFail(clientId: number, id: number): Promise<User> {
-    const user = await this.repository.findById(clientId, id);
+  private async getEntityByIdOrFail(
+    clientId: number,
+    id: number,
+    manager?: EntityManager,
+  ): Promise<User> {
+    const user = await this.repository.findById(clientId, id, manager);
 
     if (!user) {
       throw new NotFoundException(this.i18n.t('errors.users.user_not_found'));

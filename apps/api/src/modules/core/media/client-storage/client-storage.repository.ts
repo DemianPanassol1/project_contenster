@@ -121,20 +121,6 @@ export class ClientStorageRepository {
   async saveConfiguration(
     configuration: DeepPartial<StorageProviderConfiguration>,
     credential: DeepPartial<StorageProviderCredential> | null,
-    manager?: EntityManager,
-  ): Promise<StorageProviderConfiguration> {
-    if (manager) {
-      return this.saveConfigurationWithManager(configuration, credential, manager);
-    }
-
-    return this.configurations.manager.transaction((transactionManager) =>
-      this.saveConfigurationWithManager(configuration, credential, transactionManager),
-    );
-  }
-
-  private async saveConfigurationWithManager(
-    configuration: DeepPartial<StorageProviderConfiguration>,
-    credential: DeepPartial<StorageProviderCredential> | null,
     manager: EntityManager,
   ): Promise<StorageProviderConfiguration> {
     const saved = await manager.save(StorageProviderConfiguration, configuration);

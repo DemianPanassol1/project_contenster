@@ -36,6 +36,8 @@ Na API, as capacidades da base ficam em `modules/core`, agrupadas em domínios c
 `system-admin` e `public-portal`. `CoreModule` as compõe para a aplicação. Um domínio de uma
 aplicação derivada fica como irmão de `core`, sem misturar sua implementação com a base. Essa
 divisão orienta a composição dos módulos; ela não autoriza dependências arbitrárias entre recursos.
+Uma derivação consome services públicos dos módulos Core, nunca repositories estrangeiros. As regras
+de composição estão em [Extensibilidade](./extensibilidade.md).
 
 `system-admin` é um agregador de capacidades globais: `access-links`, `actions`, `clients`,
 `files`, `job-logs`, `languages`, `locations`, `portals` e `request-logs`. `locations` agrega

@@ -3,7 +3,7 @@ import { Cron } from '@nestjs/schedule';
 
 import { CronExecutionStatus, RequestLogLevel } from '@contenster/shared';
 import { settings } from '@/infrastructure/config/app.config';
-import { RequestLogRepository } from '@/modules/core/observability/request-logs/request-log.repository';
+import { RequestLogService } from '@/modules/core/observability/request-logs/request-log.service';
 
 import { CronExecutionLogService } from '../cron-execution-log/cron-execution-log.service';
 
@@ -12,7 +12,7 @@ const daysAgo = (days: number): Date => new Date(Date.now() - days * 86_400_000)
 @Injectable()
 export class RequestLogCleanupService {
   constructor(
-    private readonly requestLogRepository: RequestLogRepository,
+    private readonly requestLogService: RequestLogService,
     private readonly cronExecutionLogService: CronExecutionLogService,
   ) {}
 
@@ -22,19 +22,19 @@ export class RequestLogCleanupService {
 
     try {
       const totals = await Promise.all([
-        this.requestLogRepository.deleteByLevelAndCreatedAt(
+        this.requestLogService.deleteByLevelAndCreatedAt(
           RequestLogLevel.info,
           daysAgo(settings.REQUEST_LOG_RETENTION_INFO_DAYS),
         ),
-        this.requestLogRepository.deleteByLevelAndCreatedAt(
+        this.requestLogService.deleteByLevelAndCreatedAt(
           RequestLogLevel.warning,
           daysAgo(settings.REQUEST_LOG_RETENTION_WARNING_DAYS),
         ),
-        this.requestLogRepository.deleteByLevelAndCreatedAt(
+        this.requestLogService.deleteByLevelAndCreatedAt(
           RequestLogLevel.error,
           daysAgo(settings.REQUEST_LOG_RETENTION_ERROR_DAYS),
         ),
-        this.requestLogRepository.deleteByLevelAndCreatedAt(
+        this.requestLogService.deleteByLevelAndCreatedAt(
           RequestLogLevel.fatal,
           daysAgo(settings.REQUEST_LOG_RETENTION_FATAL_DAYS),
         ),

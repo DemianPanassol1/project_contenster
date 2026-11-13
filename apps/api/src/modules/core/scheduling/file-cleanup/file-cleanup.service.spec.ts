@@ -26,14 +26,14 @@ describe('FileCleanupService', () => {
       storageKey: 'second',
       storageProvider: 'local',
     };
-    const filesRepository = {
+    const fileService = {
       findCleanupCandidates: vi.fn().mockResolvedValue([firstFile, secondFile]),
-      remove: vi.fn().mockRejectedValueOnce(retainedError).mockResolvedValueOnce(undefined),
+      removeMetadata: vi.fn().mockRejectedValueOnce(retainedError).mockResolvedValueOnce(undefined),
     };
     const cronExecutionLogs = { record: vi.fn() };
     const storageService = { delete: vi.fn().mockResolvedValue(undefined) };
     const service = new FileCleanupService(
-      filesRepository as never,
+      fileService as never,
       cronExecutionLogs as never,
       storageService as never,
     );

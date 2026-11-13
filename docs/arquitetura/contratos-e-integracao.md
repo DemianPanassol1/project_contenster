@@ -26,6 +26,18 @@ de compatibilidade.
 Rotas usadas pelo Web são centralizadas em `apps/web/src/routes`. A URL base, credenciais de sessão,
 idioma e normalização de respostas pertencem à infraestrutura de requisições, não às features.
 
+## Aplicações derivadas
+
+Uma aplicação derivada adiciona contratos próprios ao Shared e os consome na sua API e no seu Web.
+Ela não expõe DTOs decorados, entidades ou repositories Core como contratos. Quando especializa um
+agregado Core, a integração ocorre por service público e input de domínio interno à API; a fronteira
+HTTP da aplicação continua usando contratos Shared próprios.
+
+O catálogo combinado produz o tipo `FunctionalitySlug` usado por controllers e pelo registry Web.
+Isso identifica uma funcionalidade implementada, mas não a materializa no banco nem concede
+permissão. Consulte [Extensibilidade](./extensibilidade.md) e
+[Catálogo de funcionalidades](./catalogo-de-funcionalidades.md).
+
 ## Limites de autorização
 
 O Shared pode representar identidades de funcionalidades e ações. Isso não concede permissão. A API

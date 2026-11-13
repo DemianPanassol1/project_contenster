@@ -42,6 +42,14 @@ export class ActionsService {
     };
   }
 
+  listEntities(request: PaginateRequestDto, locale: string) {
+    return this.repository.list(request, locale);
+  }
+
+  findByIds(ids: number[]) {
+    return this.repository.findByIds(ids);
+  }
+
   async getById(id: number): Promise<GetActionByIdResponseDto> {
     const locale = getCurrentLocale();
     const action = await this.getEntityByIdOrFail(id);

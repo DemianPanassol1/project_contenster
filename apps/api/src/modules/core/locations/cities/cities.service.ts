@@ -3,7 +3,7 @@ import { ConflictException, Injectable, NotFoundException } from '@nestjs/common
 import { I18nService } from 'nestjs-i18n';
 
 import type { I18nTranslations } from '@/i18n/translations';
-import { StatesRepository } from '@/modules/core/locations/states/states.repository';
+import { StatesService } from '@/modules/core/locations/states/states.service';
 import type { Language } from '@/modules/core/system-admin/languages/entities/language.entity';
 import {
   type DeleteRecordsRequestDto,
@@ -26,7 +26,7 @@ import { CitiesRepository } from './cities.repository';
 export class CitiesService {
   constructor(
     private readonly repository: CitiesRepository,
-    private readonly statesRepository: StatesRepository,
+    private readonly statesService: StatesService,
     private readonly i18n: I18nService<I18nTranslations>,
   ) {}
 
@@ -45,7 +45,7 @@ export class CitiesService {
 
   async listStateOptions(request: PaginateRequestDto): Promise<AppOption[]> {
     const locale = getCurrentLocale();
-    const [states] = await this.statesRepository.list(request, locale);
+    const [states] = await this.statesService.listEntities(request, locale);
 
     return states.map((state) => ({
       disabled: !state.isActive,
@@ -67,6 +67,10 @@ export class CitiesService {
         name: translation.name,
       })),
     });
+  }
+
+  listEntities(request: PaginateRequestDto, locale: string) {
+    return this.repository.list(request, locale);
   }
 
   async save(request: SaveCityRequestDto): Promise<GetCityByIdResponseDto> {

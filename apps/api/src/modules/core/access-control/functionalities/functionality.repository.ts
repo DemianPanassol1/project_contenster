@@ -3,7 +3,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { type DeepPartial, In, Repository } from 'typeorm';
 
-import { SystemModule } from '@/modules/core/access-control/modules/entities/system-module.entity';
 import { applyPaginatedQueryBuilder, type QueryFieldMap } from '@/shared/pagination';
 import {
   buildTranslatedLabelExpression,
@@ -33,7 +32,6 @@ const LIST_FIELDS: QueryFieldMap = {
 export class FunctionalityRepository {
   constructor(
     @InjectRepository(Functionality) private readonly functionalities: Repository<Functionality>,
-    @InjectRepository(SystemModule) private readonly modules: Repository<SystemModule>,
   ) {}
 
   list(
@@ -71,10 +69,6 @@ export class FunctionalityRepository {
 
   findByIds(clientId: number, ids: number[]): Promise<Functionality[]> {
     return this.functionalities.find({ where: { id: In(ids), client: { id: clientId } } });
-  }
-
-  findModule(clientId: number, id: number): Promise<SystemModule | null> {
-    return this.modules.findOneBy({ id, client: { id: clientId } });
   }
 
   findParent(clientId: number, id: number): Promise<Functionality | null> {

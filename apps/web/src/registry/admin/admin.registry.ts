@@ -1,4 +1,4 @@
-import { type CoreFunctionalitySlug, isFunctionalitySlug } from '@contenster/shared';
+import { type FunctionalitySlug, isFunctionalitySlug } from '@contenster/shared';
 
 import { CORE_ADMIN_FEATURE_BINDINGS } from './core/core-admin.registry';
 import type {
@@ -8,7 +8,7 @@ import type {
 } from './admin.registry.type';
 
 const bindings = [...CORE_ADMIN_FEATURE_BINDINGS] satisfies readonly AdminFeatureBinding[];
-const registry = new Map<CoreFunctionalitySlug, AdminFeatureBinding>();
+const registry = new Map<FunctionalitySlug, AdminFeatureBinding>();
 
 for (const binding of bindings) {
   if (registry.has(binding.slug)) {

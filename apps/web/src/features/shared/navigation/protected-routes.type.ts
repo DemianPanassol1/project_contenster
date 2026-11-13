@@ -1,4 +1,4 @@
-import type { CoreFunctionalitySlug } from '@contenster/shared';
+import type { FunctionalitySlug } from '@contenster/shared';
 
 export type ProtectedRouteId = string | number;
-export type ProtectedRouteSlug = CoreFunctionalitySlug;
+export type ProtectedRouteSlug = FunctionalitySlug;

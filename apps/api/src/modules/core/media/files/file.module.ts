@@ -24,6 +24,6 @@ import { SvgSanitizerService } from './svg-sanitizer.service';
   ],
   controllers: [FileController],
   providers: [FileRepository, FileService, SvgSanitizerService],
-  exports: [FileRepository, FileService],
+  exports: [FileService],
 })
 export class FileModule {}

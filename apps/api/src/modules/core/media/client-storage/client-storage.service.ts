@@ -6,7 +6,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
-import type { DeepPartial, EntityManager } from 'typeorm';
+import { DataSource, type DeepPartial, type EntityManager } from 'typeorm';
 
 import type { I18nTranslations } from '@/i18n/translations';
 import { serializeApplicationDateTime } from '@/infrastructure/date-time';
@@ -42,6 +42,7 @@ import { ClientStorageRepository } from './client-storage.repository';
 @Injectable()
 export class ClientStorageService {
   constructor(
+    private readonly dataSource: DataSource,
     private readonly repository: ClientStorageRepository,
     private readonly storageService: StorageService,
     private readonly i18n: I18nService<I18nTranslations>,
@@ -143,10 +144,8 @@ export class ClientStorageService {
 
     await this.validateConfiguration(request, existing?.credential ?? null);
 
-    const saved = await this.saveConfigurationInTransaction(
-      clientId,
-      request,
-      existing?.credential ?? null,
+    const saved = await this.dataSource.transaction((manager) =>
+      this.saveConfigurationInTransaction(clientId, request, existing?.credential ?? null, manager),
     );
 
     return toResponseDto(StorageConfigurationListItemResponseDto, {
@@ -177,7 +176,7 @@ export class ClientStorageService {
     clientId: number,
     request: SaveStorageConfigurationRequestDto,
     existingCredential: StorageProviderCredential | null,
-    manager?: EntityManager,
+    manager: EntityManager,
   ): Promise<StorageProviderConfiguration> {
     const configuration = this.buildConfiguration(request, clientId);
 

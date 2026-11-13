@@ -1,12 +1,10 @@
 import type { PaginateRequest } from '@contenster/shared';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { type DeepPartial, EntityManager, In, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 
-import { Profile } from '@/modules/core/access-control/profiles/entities/profiles.entity';
 import { Client } from '@/modules/core/identity/clients/entities/client.entity';
 import { UserProfile } from '@/modules/core/identity/users/entities/user-profile.entity';
-import { Language } from '@/modules/core/system-admin/languages/entities/language.entity';
 import { applyPaginatedQueryBuilder } from '@/shared/pagination';
 
 const CLIENT_LIST_FIELDS = {
@@ -20,7 +18,6 @@ const CLIENT_LIST_FIELDS = {
 export class ClientsRepository {
   constructor(
     @InjectRepository(Client) private readonly clients: Repository<Client>,
-    @InjectRepository(Language) private readonly languages: Repository<Language>,
     @InjectRepository(UserProfile) private readonly userProfiles: Repository<UserProfile>,
   ) {}
 
@@ -71,23 +68,11 @@ export class ClientsRepository {
     });
   }
 
-  findLanguagesByIds(ids: number[], manager?: EntityManager): Promise<Language[]> {
-    return (manager?.getRepository(Language) ?? this.languages).find({ where: { id: In(ids) } });
-  }
-
   save(client: Client): Promise<Client> {
     return this.clients.save(client);
   }
 
   softDelete(client: Client): Promise<Client> {
     return this.clients.softRemove(client);
-  }
-
-  saveClient(data: DeepPartial<Client>, manager: EntityManager): Promise<Client> {
-    return manager.getRepository(Client).save(data);
-  }
-
-  saveProfile(data: DeepPartial<Profile>, manager: EntityManager): Promise<Profile> {
-    return manager.getRepository(Profile).save(data);
   }
 }

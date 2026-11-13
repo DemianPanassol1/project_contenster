@@ -14,6 +14,6 @@ import { ActionsService } from './actions.service';
   imports: [AuthenticationModule, TypeOrmModule.forFeature([Action, ActionTranslation, Language])],
   controllers: [SystemAdminActionsController],
   providers: [ActionsRepository, ActionsService],
-  exports: [ActionsRepository, ActionsService],
+  exports: [ActionsService],
 })
 export class SystemAdminActionsModule {}

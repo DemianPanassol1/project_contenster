@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { SystemModule } from '@/modules/core/access-control/modules/entities/system-module.entity';
 import { SystemModulesModule } from '@/modules/core/access-control/modules/system-module.module';
 import { AuthenticationModule } from '@/modules/core/identity/authentication/authentication.module';
 import { ClientsModule } from '@/modules/core/identity/clients/clients.module';
@@ -20,7 +19,6 @@ import { FunctionalityService } from './functionality.service';
       Functionality,
       FunctionalityTranslation,
       FunctionalityClientLanguage,
-      SystemModule,
       Language,
     ]),
     AuthenticationModule,
@@ -29,6 +27,6 @@ import { FunctionalityService } from './functionality.service';
   ],
   controllers: [FunctionalityController],
   providers: [FunctionalityRepository, FunctionalityService],
-  exports: [FunctionalityRepository],
+  exports: [FunctionalityService],
 })
 export class FunctionalityModule {}

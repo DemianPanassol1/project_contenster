@@ -88,6 +88,14 @@ export class FileService {
     return this.toResponse(stored);
   }
 
+  findCleanupCandidates(createdBefore: Date): Promise<File[]> {
+    return this.fileRepository.findCleanupCandidates(createdBefore);
+  }
+
+  removeMetadata(file: File): Promise<File> {
+    return this.fileRepository.remove(file);
+  }
+
   private async uploadGlobal(
     file: UploadedMultipartFile | undefined,
     uploadedByUserId: number,

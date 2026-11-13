@@ -3,7 +3,7 @@ import { Cron } from '@nestjs/schedule';
 
 import { CronExecutionStatus } from '@contenster/shared';
 import { settings } from '@/infrastructure/config/app.config';
-import { FileRepository } from '@/modules/core/media/files/file.repository';
+import { FileService } from '@/modules/core/media/files/file.service';
 import { StorageService } from '@/modules/core/media/storage/storage.service';
 import { isPostgreSqlForeignKeyViolation } from '@/shared/database/postgres-error.helper';
 
@@ -14,7 +14,7 @@ export class FileCleanupService {
   private readonly logger = new Logger(FileCleanupService.name);
 
   constructor(
-    private readonly fileRepository: FileRepository,
+    private readonly fileService: FileService,
     private readonly cronExecutionLogService: CronExecutionLogService,
     private readonly storageService: StorageService,
   ) {}
@@ -25,14 +25,14 @@ export class FileCleanupService {
     const createdBefore = new Date(
       Date.now() - settings.FILE_CLEANUP_SAFETY_WINDOW_MINUTES * 60_000,
     );
-    const candidates = await this.fileRepository.findCleanupCandidates(createdBefore);
+    const candidates = await this.fileService.findCleanupCandidates(createdBefore);
     let removed = 0;
     let retained = 0;
     let failed = 0;
 
     for (const file of candidates) {
       try {
-        await this.fileRepository.remove(file);
+        await this.fileService.removeMetadata(file);
       } catch (error) {
         if (isPostgreSqlForeignKeyViolation(error)) {
           retained += 1;

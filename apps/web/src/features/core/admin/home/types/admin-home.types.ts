@@ -1,4 +1,4 @@
-import type { CoreFunctionalitySlug } from '@contenster/shared';
+import type { FunctionalitySlug } from '@contenster/shared';
 
 import type { IconName } from '@/shared';
 
@@ -6,7 +6,7 @@ export interface AdminQuickAccessItem {
   description: string | null;
   icon: IconName;
   id: number;
-  slug: CoreFunctionalitySlug;
+  slug: FunctionalitySlug;
   title: string;
 }
 

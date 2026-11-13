@@ -42,6 +42,10 @@ export class RequestLogService {
     this.record(level, request, response, body, startedAt, statusCode, error);
   }
 
+  deleteByLevelAndCreatedAt(level: RequestLogLevel, createdBefore: Date): Promise<number> {
+    return this.repository.deleteByLevelAndCreatedAt(level, createdBefore);
+  }
+
   private record(
     level: RequestLogLevel,
     request: ApiHttpRequest,

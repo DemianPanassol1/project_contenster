@@ -17,6 +17,11 @@ O `*.module.ts` compõe entidades, serviços e dependências. O controller adapt
 decorators de rota e permissão. O service coordena validação de domínio, contexto, transações e
 conversão para response DTOs. Repositories concentram consultas, filtros, paginação e persistência.
 
+Módulos proprietários não exportam repositories. Quando outro módulo precisa de uma capacidade, ele
+importa o módulo proprietário e consome um service público com método de intenção explícita. A
+exceção não é a aplicação derivada: ela também não acessa diretamente persistência do Core. Consulte
+[Extensibilidade](../arquitetura/extensibilidade.md).
+
 Nem todo módulo tem a mesma estrutura: autenticação, armazenamento, tarefas agendadas e portal
 público possuem responsabilidades próprias. Não force um recurso a adotar diretórios que não
 resolvam uma necessidade real.
@@ -477,6 +482,12 @@ Todos os acessos que participam da transação usam o `EntityManager` recebido, 
 injetado fora dela. O repository pode receber esse manager como argumento e obter a operação TypeORM
 necessária; não introduza Unit of Work, executor transacional ou camada equivalente sem uma repetição
 concreta que os justifique.
+
+Quando uma aplicação precisa compor um agregado Core com entidade própria, o service proprietário
+pode expor uma operação como `saveInTransaction(input, manager)`. O service convencional abre a
+transação e a reutiliza; o consumidor externo abre a sua própria transação e chama a mesma operação.
+Sincronização de sessão, envio de e-mail, fila ou outro efeito posterior só ocorre depois do commit.
+Não transforme isso em convenção obrigatória para CRUDs sem composição real.
 
 ```typescript
 // Incorreto no service: persistência direta dentro da transação.

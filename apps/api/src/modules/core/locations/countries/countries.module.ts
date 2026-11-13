@@ -14,6 +14,6 @@ import { CountriesService } from './countries.service';
   imports: [TypeOrmModule.forFeature([Country, CountryTranslation, Language, State])],
   controllers: [CountriesController],
   providers: [CountriesRepository, CountriesService],
-  exports: [CountriesRepository, CountriesService],
+  exports: [CountriesService],
 })
 export class CountriesModule {}

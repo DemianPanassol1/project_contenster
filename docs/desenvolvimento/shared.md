@@ -76,6 +76,11 @@ O catálogo é uma fonte estática de identidade técnica; não é uma lista de 
 um substituto para dados persistidos. Consulte
 [Catálogo de funcionalidades](../arquitetura/catalogo-de-funcionalidades.md) para essa separação.
 
+Em uma aplicação derivada, o catálogo da aplicação é composto estaticamente com o do Core e produz
+`FunctionalitySlug`. O Shared continua sem conhecer NestJS, Next.js ou o mecanismo de composição da
+API/Web: ele apenas publica as identidades e contratos finais da derivação. A derivação não deve
+alterar a semântica de um slug Core nem reutilizar uma identidade para outra capacidade.
+
 ## Evolução
 
 Exporte apenas o que precisa ser consumido pelas aplicações. Ao mudar um contrato, revise API e Web

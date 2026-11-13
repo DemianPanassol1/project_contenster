@@ -6,12 +6,12 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
-import type { EntityManager } from 'typeorm';
+import { DataSource, type EntityManager } from 'typeorm';
 
 import type { I18nTranslations } from '@/i18n/translations';
 import { SessionSynchronizationService } from '@/modules/core/identity/authentication/session/session-synchronization.service';
-import { CitiesRepository } from '@/modules/core/locations/cities/cities.repository';
-import { LanguagesRepository } from '@/modules/core/system-admin/languages/languages.repository';
+import { CitiesService } from '@/modules/core/locations/cities/cities.service';
+import { LanguagesService } from '@/modules/core/system-admin/languages/languages.service';
 import type { PaginateRequestDto } from '@/shared/dtos';
 import { getCurrentLocale } from '@/shared/i18n';
 import { toResponseDto } from '@/shared/responses';
@@ -20,6 +20,7 @@ import { resolveTranslation } from '@/shared/translations';
 import type { SaveClientRequestDto } from './dto/req/save-client.request.dto';
 import { GetClientByIdResponseDto } from './dto/res/get-client-by-id.response.dto';
 import type { Client } from './entities/client.entity';
+import type { SaveClientInTransactionInput } from './types/save-client-in-transaction.input';
 import { ClientsRepository } from './clients.repository';
 
 const CLIENT_SLUG_MAX_LENGTH = 75;
@@ -27,9 +28,10 @@ const CLIENT_SLUG_MAX_LENGTH = 75;
 @Injectable()
 export class ClientsService {
   constructor(
+    private readonly dataSource: DataSource,
     private readonly repository: ClientsRepository,
-    private readonly citiesRepository: CitiesRepository,
-    private readonly languagesRepository: LanguagesRepository,
+    private readonly citiesService: CitiesService,
+    private readonly languagesService: LanguagesService,
     private readonly i18n: I18nService<I18nTranslations>,
     private readonly sessionSynchronizationService: SessionSynchronizationService,
   ) {}
@@ -67,7 +69,7 @@ export class ClientsService {
 
   async listCityOptions(request: PaginateRequestDto): Promise<AppOption[]> {
     const locale = getCurrentLocale();
-    const [cities] = await this.citiesRepository.list(request, locale);
+    const [cities] = await this.citiesService.listEntities(request, locale);
 
     return cities.map((city) => ({
       disabled: !city.isActive,
@@ -78,7 +80,7 @@ export class ClientsService {
   }
 
   async listLanguageOptions(request: PaginateRequestDto): Promise<AppOption[]> {
-    const [languages] = await this.languagesRepository.list(request);
+    const [languages] = await this.languagesService.listEntities(request);
 
     return languages.map((language) => ({
       disabled: false,
@@ -86,6 +88,18 @@ export class ClientsService {
       metadata: { locale: language.languageCode },
       value: language.id,
     }));
+  }
+
+  findAvailableLanguagesByIds(clientId: number, ids: number[]) {
+    return this.repository.findAvailableLanguagesByIds(clientId, ids);
+  }
+
+  findLanguagesByIds(ids: number[]) {
+    return this.repository.findLanguages(ids);
+  }
+
+  listAvailableLanguageEntities(clientId: number, request: PaginateRequestDto) {
+    return this.repository.listAvailableLanguages(clientId, request);
   }
 
   async save(clientId: number, request: SaveClientRequestDto): Promise<GetClientByIdResponseDto> {
@@ -99,11 +113,32 @@ export class ClientsService {
       throw new ForbiddenException(this.i18n.t('errors.clients.status_change_not_allowed'));
     }
 
+    await this.dataSource.transaction((manager) =>
+      this.saveInTransaction({ ...request, id: clientId }, manager),
+    );
+
+    await this.synchronizeMutation();
+
+    return this.getById(clientId);
+  }
+
+  async saveInTransaction(
+    request: SaveClientInTransactionInput,
+    manager: EntityManager,
+  ): Promise<Client> {
+    const existing =
+      request.id === null ? null : await this.repository.findById(request.id, manager);
+
+    if (request.id !== null && !existing) {
+      throw new NotFoundException(this.i18n.t('errors.clients.client_not_found'));
+    }
+
     if (request.languageLinks.length === 0) {
       throw new BadRequestException(this.i18n.t('errors.clients.language_required'));
     }
 
-    const city = request.cityId === null ? null : await this.repository.findCity(request.cityId);
+    const city =
+      request.cityId === null ? null : await this.repository.findCity(request.cityId, manager);
 
     if (request.cityId !== null && !city) {
       throw new BadRequestException(this.i18n.t('errors.clients.city_not_found'));
@@ -115,38 +150,46 @@ export class ClientsService {
       throw new BadRequestException(this.i18n.t('errors.clients.language_duplicate'));
     }
 
-    const languages = await this.repository.findLanguages(languageIds);
+    const languages = await this.repository.findLanguages(languageIds, manager);
 
     if (languages.length !== languageIds.length) {
       throw new BadRequestException(this.i18n.t('errors.clients.language_not_found'));
     }
 
-    await this.repository.save({
-      ...client,
-      corporateName: request.corporateName,
-      tradeName: request.tradeName,
-      document: request.document,
-      documentType: request.documentType,
-      email: request.email,
-      primaryPhone: request.primaryPhone,
-      secondaryPhone: request.secondaryPhone,
-      address: request.address,
-      addressNumber: request.addressNumber,
-      zipCode: request.zipCode,
-      neighborhood: request.neighborhood,
-      slug: request.slug,
-      city,
-      isActive: request.isActive,
-      image: request.imageId === null ? null : { id: request.imageId },
-      availableLanguageLinks: request.languageLinks.map((link) => ({
-        ...(link.id === null ? {} : { id: link.id }),
-        language: { id: link.languageId },
-      })),
-    });
+    const slug =
+      request.slug ??
+      existing?.slug ??
+      (await this.generateUniqueSlug(manager, request.tradeName, request.document));
 
+    return this.repository.save(
+      {
+        ...(existing ?? {}),
+        corporateName: request.corporateName,
+        tradeName: request.tradeName,
+        document: request.document,
+        documentType: request.documentType,
+        email: request.email,
+        primaryPhone: request.primaryPhone,
+        secondaryPhone: request.secondaryPhone,
+        address: request.address,
+        addressNumber: request.addressNumber,
+        zipCode: request.zipCode,
+        neighborhood: request.neighborhood,
+        slug,
+        city,
+        isActive: request.isActive,
+        image: request.imageId === null ? null : { id: request.imageId },
+        availableLanguageLinks: request.languageLinks.map((link) => ({
+          ...(link.id === null ? {} : { id: link.id }),
+          language: { id: link.languageId },
+        })),
+      },
+      manager,
+    );
+  }
+
+  async synchronizeMutation(): Promise<void> {
     await this.sessionSynchronizationService.synchronizeAll();
-
-    return this.getById(clientId);
   }
 
   private async getEntityByIdOrFail(id: number): Promise<Client> {
@@ -221,7 +264,7 @@ export class ClientsService {
   }
 
   private toCityOptionLabel(
-    city: Awaited<ReturnType<CitiesRepository['list']>>[0][number],
+    city: Awaited<ReturnType<CitiesService['listEntities']>>[0][number],
     locale: string,
   ): string {
     const cityName = resolveTranslation(city.translations, locale, 'name');

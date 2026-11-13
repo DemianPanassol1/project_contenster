@@ -1,11 +1,9 @@
 import type { PaginateRequest } from '@contenster/shared';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { type DeepPartial, In, Repository } from 'typeorm';
+import { type DeepPartial, type EntityManager, In, Repository } from 'typeorm';
 
-import { Functionality } from '@/modules/core/access-control/functionalities/entities/functionality.entity';
 import { UserProfile } from '@/modules/core/identity/users/entities/user-profile.entity';
-import { Action } from '@/modules/core/system-admin/actions/entities/action.entity';
 import { Language } from '@/modules/core/system-admin/languages/entities/language.entity';
 import { applyPaginatedQueryBuilder, type QueryFieldMap } from '@/shared/pagination';
 import {
@@ -13,6 +11,7 @@ import {
   buildTranslationQueryParameters,
 } from '@/shared/translations';
 
+import { ProfilePermission } from './entities/profile-permission.entity';
 import { Profile } from './entities/profiles.entity';
 import { ProfileTranslation } from './entities/profiles-translation.entity';
 
@@ -34,8 +33,6 @@ export class ProfilesRepository {
   constructor(
     @InjectRepository(Profile) private readonly profiles: Repository<Profile>,
     @InjectRepository(Language) private readonly languages: Repository<Language>,
-    @InjectRepository(Functionality) private readonly functionalities: Repository<Functionality>,
-    @InjectRepository(Action) private readonly actions: Repository<Action>,
     @InjectRepository(UserProfile) private readonly userProfiles: Repository<UserProfile>,
   ) {}
 
@@ -54,8 +51,8 @@ export class ProfilesRepository {
     });
   }
 
-  findById(clientId: number, id: number): Promise<Profile | null> {
-    return this.profiles.findOne({
+  findById(clientId: number, id: number, manager?: EntityManager): Promise<Profile | null> {
+    return (manager?.getRepository(Profile) ?? this.profiles).findOne({
       where: { id, client: { id: clientId } },
       relations: {
         translations: { language: true },
@@ -72,21 +69,28 @@ export class ProfilesRepository {
     return this.languages.find({ where: { languageCode: In(codes) } });
   }
 
-  findFunctionalities(clientId: number, ids: number[]): Promise<Functionality[]> {
-    return this.functionalities.find({ where: { id: In(ids), client: { id: clientId } } });
+  findActiveAdminByClientId(clientId: number, manager: EntityManager): Promise<Profile[]> {
+    return manager.getRepository(Profile).find({
+      where: { client: { id: clientId }, isActive: true, isAdmin: true },
+      relations: { translations: { language: true } },
+    });
   }
 
-  findActions(ids: number[]): Promise<Action[]> {
-    return this.actions.findBy({ id: In(ids) });
+  findLanguagesByCodesInTransaction(codes: string[], manager: EntityManager): Promise<Language[]> {
+    return manager.getRepository(Language).find({ where: { languageCode: In(codes) } });
   }
 
   async save(
     profile: DeepPartial<Profile> & {
       translations: DeepPartial<ProfileTranslation>[];
-      permissions: { functionality: Functionality; action: Action }[];
+      permissions: DeepPartial<ProfilePermission>[];
     },
   ): Promise<Profile> {
     return this.profiles.save(profile);
+  }
+
+  saveInTransaction(data: DeepPartial<Profile>, manager: EntityManager): Promise<Profile> {
+    return manager.getRepository(Profile).save(data);
   }
 
   hasUsers(ids: number[]): Promise<boolean> {

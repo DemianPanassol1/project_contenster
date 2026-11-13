@@ -1,9 +1,9 @@
 import type { PaginateRequest } from '@contenster/shared';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { IsNull, Repository } from 'typeorm';
+import { type EntityManager, IsNull, Repository } from 'typeorm';
 
-import { Profile } from '@/modules/core/access-control/profiles/entities/profiles.entity';
+import type { Profile } from '@/modules/core/access-control/profiles/entities/profiles.entity';
 import { applyPaginatedQueryBuilder, type QueryFieldMap } from '@/shared/pagination';
 
 import { User } from './entities/user.entity';
@@ -23,7 +23,6 @@ export class UsersRepository {
   constructor(
     @InjectRepository(User) private readonly users: Repository<User>,
     @InjectRepository(UserProfile) private readonly userProfiles: Repository<UserProfile>,
-    @InjectRepository(Profile) private readonly profiles: Repository<Profile>,
   ) {}
 
   list(clientId: number, request: PaginateRequest): Promise<[User[], number]> {
@@ -43,8 +42,8 @@ export class UsersRepository {
     });
   }
 
-  findById(clientId: number, id: number): Promise<User | null> {
-    return this.users.findOne({
+  findById(clientId: number, id: number, manager?: EntityManager): Promise<User | null> {
+    return (manager?.getRepository(User) ?? this.users).findOne({
       where: { id, userProfiles: { client: { id: clientId } } },
       relations: { image: true, userProfiles: { client: true, profile: true } },
     });
@@ -72,28 +71,23 @@ export class UsersRepository {
     });
   }
 
-  findProfile(clientId: number, id: number): Promise<Profile | null> {
-    return this.profiles.findOneBy({ id, client: { id: clientId } });
-  }
-
-  async save(
+  async saveWithProfile(
     user: User,
     userProfileId: number | null,
     clientId: number,
     profile: Profile,
+    manager: EntityManager,
   ): Promise<User> {
-    return this.users.manager.transaction(async (manager) => {
-      const saved = await manager.save(User, user);
+    const saved = await manager.save(User, user);
 
-      await manager.save(UserProfile, {
-        ...(userProfileId === null ? {} : { id: userProfileId }),
-        user: saved,
-        client: { id: clientId },
-        profile,
-      });
-
-      return saved;
+    await manager.save(UserProfile, {
+      ...(userProfileId === null ? {} : { id: userProfileId }),
+      user: saved,
+      client: { id: clientId },
+      profile,
     });
+
+    return saved;
   }
 
   async delete(users: User[]): Promise<number[]> {

@@ -19,7 +19,7 @@ antecipam soluções sem implementação ou decisão confirmada.
 - [Persistência](./arquitetura/persistencia.md): modelo de dados, ownership, migrations, bootstrap e
   operação local de PostgreSQL e Redis.
 - [Contratos e integração](./arquitetura/contratos-e-integracao.md): fronteiras entre Shared, API e Web.
-- [Extensibilidade](./arquitetura/extensibilidade.md): **Pendente**.
+- [Extensibilidade](./arquitetura/extensibilidade.md): composição de aplicações derivadas e fronteiras públicas do Core.
 
 ## Desenvolvimento
 

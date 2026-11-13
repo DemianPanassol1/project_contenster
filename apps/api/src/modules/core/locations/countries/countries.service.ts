@@ -41,6 +41,10 @@ export class CountriesService {
     };
   }
 
+  listEntities(request: PaginateRequestDto, locale: string) {
+    return this.repository.list(request, locale);
+  }
+
   async getById(id: number): Promise<GetCountryByIdResponseDto> {
     const country = await this.getEntityByIdOrFail(id);
     const locale = getCurrentLocale();

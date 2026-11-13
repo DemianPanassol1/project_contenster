@@ -8,6 +8,6 @@ import { RequestLogService } from './request-log.service';
 @Module({
   imports: [TypeOrmModule.forFeature([RequestLog])],
   providers: [RequestLogRepository, RequestLogService],
-  exports: [RequestLogRepository, RequestLogService],
+  exports: [RequestLogService],
 })
 export class RequestLogModule {}

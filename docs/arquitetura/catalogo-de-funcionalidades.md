@@ -48,6 +48,18 @@ funcionalidades administrativas únicas; a separação em listas ou abas é resp
 
 Ao adicionar uma funcionalidade, registre sua identidade no Shared, materialize-a por migration ou fluxo autorizado, associe ações por permissões de perfil e crie tela somente quando houver uma superfície real.
 
+## Aplicações derivadas
+
+Uma aplicação derivada compõe seu catálogo estático sobre o Core. Seus slugs passam a integrar
+`FunctionalitySlug`, permitindo que controllers, guards e bindings administrativos usem a mesma
+identidade tipada. A derivação deve incluir também as definições completas no seed ou modelo de
+acesso correspondente; a existência do slug isoladamente não cria registros de módulo ou
+funcionalidade para cliente algum.
+
+Uma derivação pode substituir explicitamente a view Web associada a um slug Core, mas não deve
+duplicar sua identidade técnica. Consulte [Extensibilidade](./extensibilidade.md) para os limites de
+composição.
+
 Migrations guardam seu próprio snapshot de dados em conjunto com o JSON versionado em
 `apps/api/src/database/seeds`. Uma migration histórica nunca deve importar o catálogo atual em runtime,
 pois mudanças futuras não podem alterar seu significado.
